@@ -1,0 +1,16 @@
+#!/bin/bash
+
+declare -a PACKAGES=(
+			"cpupower"
+			"qt5-tools"
+			"vscode"
+			"kde5"
+			"xorg"
+			"konsole"
+			"dolphin"
+			"rsync"
+			"xorg"
+			"kde5"
+		    )
+
+echo "${PACKAGES[@]}"

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sudo cpupower -c all frequency-set -g performance
+qdbus org.kde.KWin /Compositor suspend
+
+
+__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia "$@"
+
+
+sudo cpupower -c all frequency-set -g powersave
+qdbus org.kde.KWin /Compositor resume

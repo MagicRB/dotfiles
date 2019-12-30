@@ -1,0 +1,12 @@
+#!/bin/bash
+
+ABSPATH=`readlink -f $0`
+DIRPATH=`dirname "$0"`
+
+shopt -s dotglob
+
+ls "${DIRPATH}/configs"
+
+read -p "Please specify which config you want to install: " config
+
+sudo rsync -r --perms --chmod=D775,F664 --chown=root:root "${DIRPATH}/configs/${config}/"* "/"
