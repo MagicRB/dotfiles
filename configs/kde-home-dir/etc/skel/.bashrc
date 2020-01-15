@@ -21,5 +21,9 @@ alias grep='grep --color=auto'
 ## Add .local/bin to path
 export PATH="${HOME}/.local/bin:${PATH}"
 
+if [[ -d "${HOME}/.cargo/bin" ]]; then
+    export PATH="${HOME}/.cargo/bin:${PATH}"
+fi
+
 ## Set prompt
 export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "

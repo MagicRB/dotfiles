@@ -3,3 +3,5 @@
 shopt -s dotglob
 
 rsync -r --perms --chmod=D770,F660 --chown="${USER}:${USER}" "/etc/skel/"* "/home/${USER}"
+
+chmod u+x,g+x ~/.local/bin/*

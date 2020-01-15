@@ -10,3 +10,21 @@ sudo mv "/opt/clion-"* "/opt/clion"
 
 sudo chown -R ${usergroup} "/opt/clion"
 sudo chmod -R u+r,g+r,o+r "/opt/clion"
+
+cat << EOF > /tmp/clion.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CLion
+Icon=clion
+Exec=/opt/clion/bin/clion.sh %f
+Comment=Develop with pleasure!
+Categories=Development;IDE;
+Terminal=false
+StartupWMClass=jetbrains-clion
+
+EOF
+
+sudo mv "/tmp/clion.desktop" "/usr/share/applications"
+sudo chown -R root:root "/usr/share/applications/clion.desktop"
+sudo chmod -R u+r,g+r,o+r "/usr/share/applications/clion.desktop"

@@ -11,6 +11,12 @@ declare -a PACKAGES=(
 			"rsync"
 			"xorg"
 			"kde5"
+			"google-fonts-ttf"
+			"upower"
+			"vlc"
+			"libva"
+			"libva-intel-driver"
+			"autofs"
 		    )
 
 echo "${PACKAGES[@]}"
