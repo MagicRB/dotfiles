@@ -17,6 +17,7 @@ declare -a PACKAGES=(
 			"libva"
 			"libva-intel-driver"
 			"autofs"
+			"pulseaudio"
 		    )
 
 echo "${PACKAGES[@]}"
