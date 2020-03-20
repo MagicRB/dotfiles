@@ -22,8 +22,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode))))
+   '(telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -83,7 +82,13 @@ There are two things you can do about this warning:
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
   (add-hook 'rust-mode-hook 'lsp))
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t)
+
+(use-package telephone-line
+  :ensure t
+  :config
+  (telephone-line-mode 1))
 
 (use-package doom-themes
   :ensure t
@@ -133,6 +138,9 @@ There are two things you can do about this warning:
 
 ;; set font
 (set-frame-font "Droid Sans Mono 12" nil t)
+
+;; enable parenthesis and quotes pairing thing
+(enable-pair-mode)
 
 ;; fullscreen
 (defun fullscreen ()
