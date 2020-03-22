@@ -22,7 +22,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
+   '(lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -51,7 +51,8 @@ There are two things you can do about this warning:
   :ensure t)
 
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :init (global-flycheck-mode))
 (use-package flycheck-pos-tip
   :ensure t)
 
@@ -68,6 +69,11 @@ There are two things you can do about this warning:
   :config
   (setq rust-format-on-save t))
 
+(use-package elcord
+  :ensure t
+  :config
+  (elcord-mode))
+
 (use-package magit
   :ensure t)
 
@@ -77,10 +83,15 @@ There are two things you can do about this warning:
 (use-package lsp-mode
   :ensure t
   :config
-  ;(setq lsp-rust-server 'rust-analyzer)
-  (setq lsp-rust-server 'rls)
+  (setq lsp-rust-server 'rust-analyzer)
+  ;(setq lsp-rust-server 'rls)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
   (add-hook 'rust-mode-hook 'lsp))
+
+(use-package lsp-treemacs
+  :ensure t
+  :config
+  (lsp-treemacs-sync-mode 1))
 
 (use-package all-the-icons
   :ensure t)
@@ -115,6 +126,7 @@ There are two things you can do about this warning:
 (global-set-key (kbd "M-RET w") 'ace-window)
 (global-set-key (kbd "M-RET c") 'rust-compile)
 (global-set-key (kbd "M-RET r") 'rust-run)
+(global-set-key (kbd "M-RET e") 'lsp-execute-code-action)
 (global-set-key (kbd "<f11>") 'fullscreen)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
@@ -140,7 +152,7 @@ There are two things you can do about this warning:
 (set-frame-font "Droid Sans Mono 12" nil t)
 
 ;; enable parenthesis and quotes pairing thing
-(enable-pair-mode)
+(electric-pair-mode)
 
 ;; fullscreen
 (defun fullscreen ()
