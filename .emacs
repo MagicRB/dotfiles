@@ -22,7 +22,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
+   '(scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -121,12 +121,14 @@ There are two things you can do about this warning:
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-(global-set-key (kbd "M-RET t") 'treemacs-select-window)
+(global-set-key (kbd "M-RET t") 'treemacs)
 (global-set-key (kbd "M-RET s") 'treemacs-switch-workspace)
 (global-set-key (kbd "M-RET w") 'ace-window)
 (global-set-key (kbd "M-RET c") 'rust-compile)
-(global-set-key (kbd "M-RET r") 'rust-run)
+(global-set-key (kbd "M-RET R") 'rust-run)
 (global-set-key (kbd "M-RET e") 'lsp-execute-code-action)
+(global-set-key (kbd "M-RET r") 'lsp-rename)
+(global-set-key (kbd "M-RET m") 'magit-status)
 (global-set-key (kbd "<f11>") 'fullscreen)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
