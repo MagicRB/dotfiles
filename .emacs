@@ -22,7 +22,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
+   '(yaml-mode scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -59,7 +59,10 @@ There are two things you can do about this warning:
 (use-package company-lsp
   :ensure t
   :config
-  (push 'company-lsp company-backends))
+  (push '(company-lsp company-lua) company-backends)
+  (setq company-lsp-enable-recompletion t)
+  (setq lsp-auto-configure nil)
+  )
 
 ;(use-package company-box
 ;  :hook (company-mode . company-box-mode))
@@ -82,16 +85,45 @@ There are two things you can do about this warning:
 
 (use-package lsp-mode
   :ensure t
+  :hook ((lua-mode) . lsp)
   :config
   (setq lsp-rust-server 'rust-analyzer)
   ;(setq lsp-rust-server 'rls)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
-  (add-hook 'rust-mode-hook 'lsp))
+;  (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
+  (add-hook 'rust-mode-hook 'lsp)
+;  (add-hook 'lua-mode-hook 'lsp)
+  )
+
 
 (use-package lsp-treemacs
   :ensure t
   :config
   (lsp-treemacs-sync-mode 1))
+
+(use-package yaml-mode
+  :ensure t)
+
+;(use-package lsp-lua-emmy
+;  :demand
+;  :ensure nil
+;  :load-path "~/.emacs.d/lsp-lua-emmy"
+;  :hook (lua-mode . lsp)
+;  :config
+;  (setq lsp-lua-emmy-jar-path (expand-file-name "EmmyLua-LS-all.jar" user-emacs-directory))
+;  )
+
+;(use-package lua-mode
+;  :ensure t
+;  :mode "\\.lua$"
+;  :interpreter "lua"
+;  :config
+;  (setq lua-indent-level 4)
+;  (setq lua-indent-string-contents t)
+;  (setq lua-prefix-key nil)
+;  )
+
+;(add-to-list 'company-lsp-filter-candidates '(lsp-emmy-lua . t))
 
 (use-package all-the-icons
   :ensure t)
