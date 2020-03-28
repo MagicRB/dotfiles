@@ -1,0 +1,56 @@
+
+! URxvt
+
+!URxvt*termName: screeN-256coloR
+URxvt*termName: rxvt-unicode-256color
+
+!! Colorscheme
+
+! special
+*.foreground:   #aaaaaa
+*.background:   #171717
+*.cursorColor:  #cccccc
+
+! black
+*.color0:       #282a2e
+*.color8:       #373b41
+
+! red
+*.color1:       #c53030
+*.color9:       #d14e4e
+
+! green
+*.color2:       #b7c52c
+*.color10:      #b8c34f
+
+! yellow
+*.color3:       #e17a33
+*.color11:      #f4bc4e
+
+! blue
+*.color4:       #4292d4
+*.color12:      #6e9cc2
+
+! magenta
+*.color5:       #aa4aca
+*.color13:      #b37ec3
+
+! cyan
+*.color6:       #50cebe
+*.color14:      #72c1b6
+
+! white
+*.color7:       #6d99c5
+*.color15:      #aaaaaa
+
+!! Fonts
+
+URxvt.font: xft:DroidSansMono:pixelsize=12
+!*.font: xft:DroidSansMono:style=Regular:size=8
+!*.boldFont: xft:DroidSans-Bold:style=Bold:size=8
+!*.italicFont: xft:DroidSans:style=Italic:size=8
+!*.boldItalicFont: xft:DroidSans:style=Bold Italic:size=8
+
+!! Scrollbar
+URxvt.scrollBar: false
+URxvt.scrollBar_right: false

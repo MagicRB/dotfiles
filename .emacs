@@ -22,7 +22,7 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yaml-mode scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
+   '(scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -59,10 +59,7 @@ There are two things you can do about this warning:
 (use-package company-lsp
   :ensure t
   :config
-  (push '(company-lsp company-lua) company-backends)
-  (setq company-lsp-enable-recompletion t)
-  (setq lsp-auto-configure nil)
-  )
+  (push 'company-lsp company-backends))
 
 ;(use-package company-box
 ;  :hook (company-mode . company-box-mode))
@@ -85,45 +82,16 @@ There are two things you can do about this warning:
 
 (use-package lsp-mode
   :ensure t
-  :hook ((lua-mode) . lsp)
   :config
   (setq lsp-rust-server 'rust-analyzer)
   ;(setq lsp-rust-server 'rls)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
-;  (add-to-list 'auto-mode-alist '("\\.lua\\'" . lua-mode))
-  (add-hook 'rust-mode-hook 'lsp)
-;  (add-hook 'lua-mode-hook 'lsp)
-  )
-
+  (add-hook 'rust-mode-hook 'lsp))
 
 (use-package lsp-treemacs
   :ensure t
   :config
   (lsp-treemacs-sync-mode 1))
-
-(use-package yaml-mode
-  :ensure t)
-
-;(use-package lsp-lua-emmy
-;  :demand
-;  :ensure nil
-;  :load-path "~/.emacs.d/lsp-lua-emmy"
-;  :hook (lua-mode . lsp)
-;  :config
-;  (setq lsp-lua-emmy-jar-path (expand-file-name "EmmyLua-LS-all.jar" user-emacs-directory))
-;  )
-
-;(use-package lua-mode
-;  :ensure t
-;  :mode "\\.lua$"
-;  :interpreter "lua"
-;  :config
-;  (setq lua-indent-level 4)
-;  (setq lua-indent-string-contents t)
-;  (setq lua-prefix-key nil)
-;  )
-
-;(add-to-list 'company-lsp-filter-candidates '(lsp-emmy-lua . t))
 
 (use-package all-the-icons
   :ensure t)
@@ -133,25 +101,25 @@ There are two things you can do about this warning:
   :config
   (telephone-line-mode 1))
 
-(use-package doom-themes
-  :ensure t
-  :config
+;(use-package doom-themes
+;  :ensure t
+;  :config
   ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
+;  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+;        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+;  (load-theme 'doom-one t)
 
   ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
+;  (doom-themes-visual-bell-config)
   
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   ;(doom-themes-neotree-config)
   ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config)
+  ;(setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  ;(doom-themes-treemacs-config)
   
   ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+;  (doom-themes-org-config))
 
 (global-set-key (kbd "M-RET t") 'treemacs)
 (global-set-key (kbd "M-RET s") 'treemacs-switch-workspace)
