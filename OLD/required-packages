@@ -1,0 +1,26 @@
+#!/bin/bash
+
+declare -a PACKAGES=(
+			"cpupower"
+			"qt5-tools"
+			"vscode"
+			"kde5"
+			"xorg"
+			"konsole"
+			"dolphin"
+			"rsync"
+			"xorg"
+			"kde5"
+			"google-fonts-ttf"
+			"upower"
+			"vlc"
+			"libva"
+			"libva-intel-driver"
+			"autofs"
+			"pulseaudio"
+			"gvfs"
+			"htop"
+			"icoutils"
+		    )
+
+echo "${PACKAGES[@]}"

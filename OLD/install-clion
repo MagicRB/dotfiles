@@ -1,0 +1,30 @@
+!/bin/bash
+
+CLION_DOWNLOAD_LINK=https://download.jetbrains.com/cpp/CLion-2019.3.2.tar.gz
+
+read -p "Please specify the name and group of the user that should own CLion [user:group]: " usergroup
+
+wget -qO- ${CLION_DOWNLOAD_LINK} | sudo tar xvz -C /opt
+
+sudo mv "/opt/clion-"* "/opt/clion"
+
+sudo chown -R ${usergroup} "/opt/clion"
+sudo chmod -R u+r,g+r,o+r "/opt/clion"
+
+cat << EOF > /tmp/clion.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CLion
+Icon=clion
+Exec=/opt/clion/bin/clion.sh %f
+Comment=Develop with pleasure!
+Categories=Development;IDE;
+Terminal=false
+StartupWMClass=jetbrains-clion
+
+EOF
+
+sudo mv "/tmp/clion.desktop" "/usr/share/applications"
+sudo chown -R root:root "/usr/share/applications/clion.desktop"
+sudo chmod -R u+r,g+r,o+r "/usr/share/applications/clion.desktop"

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+RIDER_DOWNLOAD_LINK=https://download-cf.jetbrains.com/rider/JetBrains.Rider-2019.3.1.tar.gz
+
+read -p "Please specify the name and group of the user that should own Rider [user:group]: " usergroup
+
+wget -qO- ${RIDER_DOWNLOAD_LINK} | sudo tar xvz -C /opt
+
+sudo mv "/opt/Jetbrains Rider-*"* "/opt/rider"
+
+sudo chown -R ${usergroup} "/opt/rider"
+sudo chmod -R u+r,g+r,o+r "/opt/rider"
+
+cat << EOF > /tmp/rider.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Rider
+Icon=rider
+Exec=/opt/rider/bin/rider.sh %f
+Comment=Develop with pleasure!
+Categories=Development;IDE;
+Terminal=false
+StartupWMClass=jetbrains-rider
+
+EOF
+
+sudo mv "/tmp/rider.desktop" "/usr/share/applications"
+sudo chown -R root:root "/usr/share/applications/rider.desktop"
+sudo chmod -R u+r,g+r,o+r "/usr/share/applications/rider.desktop"
