@@ -1,3 +1,9 @@
+;;; package --- Summary
+
+;;; Commentary:
+
+
+;;; Code:
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -22,7 +28,8 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil rust-mode)))
+   (quote
+    (rustic scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -62,12 +69,16 @@ There are two things you can do about this warning:
   (push 'company-lsp company-backends))
 
 ;(use-package company-box
+;  :ensure t
 ;  :hook (company-mode . company-box-mode))
 
-(use-package rust-mode
-  :ensure t
-  :config
-  (setq rust-format-on-save t))
+;(use-package rust-mode
+;  :ensure t
+;  :config
+;  (setq rust-format-on-save t))
+
+(use-package rustic
+  :ensure t)
 
 (use-package elcord
   :ensure t
@@ -78,6 +89,7 @@ There are two things you can do about this warning:
   :ensure t)
 
 (use-package lsp-ui
+  
   :ensure t)
 
 (use-package lsp-mode
@@ -85,7 +97,7 @@ There are two things you can do about this warning:
   :config
   (setq lsp-rust-server 'rust-analyzer)
   ;(setq lsp-rust-server 'rls)
-  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
   (add-hook 'rust-mode-hook 'lsp))
 
 (use-package lsp-treemacs
