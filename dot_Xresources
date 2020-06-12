@@ -5,12 +5,14 @@
 URxvt*termName: rxvt-unicode-256color
 
 URxvt*depth: 32
+URxvt*blurRadius: 30
 
 !! Colorscheme
 
 ! special
 *.foreground:   #aaaaaa
-*.background:   [90]#171717
+*.background:    #171717
+URxvt.background:   [90]#171717
 *.cursorColor:  #cccccc
 
 ! black

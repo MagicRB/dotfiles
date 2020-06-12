@@ -1,0 +1,16 @@
+#!/bin/bash
+
+for file in *.flac; do
+	BASENAME="`basename "${file}" .flac`"
+	COVER="${BASENAME}-cover.jpg"
+	METADATA="${BASENAME}.meta"
+
+	echo "${BASENAME}"
+
+	ffmpeg -y -i "${file}" -an -c:v copy "${COVER}"
+	ffmpeg -i "${file}" -f ffmetadata "${METADATA}"
+	ogg-cover-art "${COVER}" >> "${METADATA}"
+	ffmpeg -i "${METADATA}" -i "${file}" -map_metadata 0 -b:a 320k -c:a libopus -map 1:a:0 "${BASENAME}.ogg"
+	rm "${COVER}"
+	rm "${METADATA}"
+done
