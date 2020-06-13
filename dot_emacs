@@ -96,9 +96,10 @@ There are two things you can do about this warning:
   :ensure t
   :config
   (setq rustic-lsp-server 'rust-analyzer)
-  ;(setq lsp-rust-server 'rls)
+  (setq rustic-compile-command "cargo build")
+  (setq rustic-format-trigger 'on-save)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
-  (add-hook 'rust-mode-hook 'lsp))
+  (add-hook 'rustic-hook 'lsp))
 
 (use-package lsp-treemacs
   :ensure t
@@ -133,12 +134,25 @@ There are two things you can do about this warning:
   ;; Corrects (and improves) org-mode's native fontification.
 ;  (doom-themes-org-config))
 
+(use-package heaven-and-hell
+  :ensure t
+  :init
+  (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
+  (setq heaven-and-hell-themes
+        '((light . doom-one-light)
+          (dark . doom-one))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+
+  ;; Optionall, load themes without asking for confirmation.
+  (setq heaven-and-hell-load-theme-no-confirm t)
+  :hook (after-init . heaven-and-hell-init-hook)
+  :bind (("<f6>" . heaven-and-hell-toggle-theme)))
+
 (global-set-key (kbd "M-RET T") 'treemacs)
 (global-set-key (kbd "M-RET t") 'treemacs-select-window)
 (global-set-key (kbd "M-RET s") 'treemacs-switch-workspace)
 (global-set-key (kbd "M-RET w") 'ace-window)
-(global-set-key (kbd "M-RET c") 'rust-compile)
-(global-set-key (kbd "M-RET R") 'rust-run)
+(global-set-key (kbd "M-RET c") 'rustic-cargo-build)
+(global-set-key (kbd "M-RET R") 'rustic-cargo-run)
 (global-set-key (kbd "M-RET e") 'lsp-execute-code-action)
 (global-set-key (kbd "M-RET r") 'lsp-rename)
 (global-set-key (kbd "M-RET m") 'magit-status)
