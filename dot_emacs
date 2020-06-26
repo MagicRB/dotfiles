@@ -206,6 +206,11 @@ There are two things you can do about this warning:
  (set-frame-parameter nil 'fullscreen
    (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 
+;; :q should kill the current buffer rather than quitting emacs entirely
+(evil-ex-define-cmd "q" 'kill-this-buffer)
+;; Need to type out :quit to close emacs
+(evil-ex-define-cmd "quit" 'evil-quit)
+
 ;; compositor based transparency
 (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
 
