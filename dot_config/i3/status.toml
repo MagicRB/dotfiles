@@ -1,0 +1,36 @@
+theme = "space-villain"
+icons = "awesome5"
+
+[[block]]
+block = "battery"
+interval = 30
+format = "{percentage}% {time} {power}W"
+
+[[block]]
+block = "networkmanager"
+on_click = "nm-connection-editor"
+
+[[block]]
+block = "memory"
+display_type = "memory"
+format_mem = "{Mup}%"
+format_swap = "{SUp}%"
+
+[[block]]
+block = "nvidia_gpu"
+label = "GTX 1050"
+show_memory = true
+show_clocks = true
+interval = 1
+
+[[block]]
+block = "cpu"
+interval = 1
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "time"
+interval = 60
+format = "%a %d/%m %R"
