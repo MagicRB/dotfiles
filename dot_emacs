@@ -102,6 +102,11 @@ There are two things you can do about this warning:
 (use-package magit
   :ensure t)
 
+(use-package magit-todos
+  :ensure t
+  :config
+  (add-hook 'rustic-hook 'hl-todo-mode))
+
 (use-package lsp-ui
   
   :ensure t)
@@ -168,10 +173,12 @@ There are two things you can do about this warning:
 (global-set-key (kbd "M-RET t") 'treemacs-select-window)
 (global-set-key (kbd "M-RET s") 'treemacs-switch-workspace)
 (global-set-key (kbd "M-RET w") 'ace-window)
-(global-set-key (kbd "M-RET c") 'rustic-cargo-build)
-(global-set-key (kbd "M-RET R") 'rustic-cargo-run)
+(global-set-key (kbd "M-RET r b") 'rustic-cargo-build)
+(global-set-key (kbd "M-RET r r") 'rustic-cargo-run)
+(global-set-key (kbd "M-RET r c") 'rustic-cargo-clippy)
+(global-set-key (kbd "M-RET r f") 'rustic-cargo-fmt)
 (global-set-key (kbd "M-RET e") 'lsp-execute-code-action)
-(global-set-key (kbd "M-RET r") 'lsp-rename)
+(global-set-key (kbd "M-RET R") 'lsp-rename)
 (global-set-key (kbd "M-RET m") 'magit-status)
 (global-set-key (kbd "<f11>") 'fullscreen)
 
