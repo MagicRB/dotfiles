@@ -223,3 +223,6 @@ client.unfocused        #2c2c2c #111111 #3e3e3e #111111 #111111
 client.urgent           #2c2c2c #111111 #ffffff #111111 #111111
 client.placeholder      ##2c2c2c #111111 #ffffff #111111 #111111
 client.background       #111111
+
+# emacs tooltip fix
+no_focus [window_role="pop-up"] 
