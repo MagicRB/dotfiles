@@ -40,7 +40,7 @@ exec --no-startup-id /mnt/data3/Programs/bin/nextcloud
 # Set keyboard layouts
 exec --no-startup-id setxkbmap -layout us,sk -variant ,qwerty -option 'grp:lalt_lshift_toggle'
 # Set wallpaper
-exec --no-startup-id feh --bg-max /mnt/data3/Nextcloud/Multimedia/Wallpapers/Space1.jpg
+exec --no-startup-id feh --bg-max /mnt/data3/Nextcloud/Multimedia/Wallpapers/8o3pkhggcwb51.png 
 
 for_window [class="^.*"] border normal 1
 
