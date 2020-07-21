@@ -50,6 +50,11 @@ There are two things you can do about this warning:
   :config
   (evil-mode 1))
 
+;(use-package evil-surround
+;  :ensure t
+;  :config
+;  (global-evil-surround-mode 1))
+
 (use-package yasnippet
   :ensure t
   :config
@@ -114,7 +119,7 @@ There are two things you can do about this warning:
 (use-package lsp-mode
   :ensure t
   :config
-  (setq rustic-lsp-server 'rust-analyzer)
+  (setq rustic-lsp-server 'rls)
   (setq rustic-compile-command "cargo build")
   (setq rustic-format-trigger 'on-save)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
@@ -172,8 +177,10 @@ There are two things you can do about this warning:
 (global-set-key (kbd "M-RET T") 'treemacs)
 (global-set-key (kbd "M-RET t") 'treemacs-select-window)
 (global-set-key (kbd "M-RET s") 'treemacs-switch-workspace)
+(global-set-key (kbd "M-RET S") 'treemacs-edit-workspaces)
 (global-set-key (kbd "M-RET w") 'ace-window)
 (global-set-key (kbd "M-RET r b") 'rustic-cargo-build)
+(global-set-key (kbd "M-RET r t") 'rustic-cargo-test)
 (global-set-key (kbd "M-RET r r") 'rustic-cargo-run)
 (global-set-key (kbd "M-RET r c") 'rustic-cargo-clippy)
 (global-set-key (kbd "M-RET r f") 'rustic-cargo-fmt)
@@ -186,6 +193,27 @@ There are two things you can do about this warning:
 
 ;; show matching parenthesis
 (show-paren-mode 1)
+
+;(use-package key-chord
+  :ensure t
+  :init
+  ;;Exit insert mode by pressing j and then j quickly
+;  (setq key-chord-two-keys-delay 0.5)
+;  (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+;  (key-chord-mode 1))
+
+;; move hjkl to jkl;
+(define-key evil-motion-state-map "h" nil)
+(define-key evil-motion-state-map "j" 'evil-backward-char)
+(define-key evil-motion-state-map "k" 'evil-next-line)
+(define-key evil-motion-state-map "l" 'evil-previous-line)
+(define-key evil-motion-state-map ";" 'evil-forward-char)
+
+(define-key treemacs-mode-map "h" nil)
+(define-key evil-treemacs-state-map "j" 'treemacs-root-up)
+(define-key evil-treemacs-state-map "k" 'treemacs-next-line)
+(define-key treemacs-mode-map "l" 'treemacs-previous-line)
+(define-key evil-treemacs-state-map ";" 'treemacs-root-down)
 
 ;; optimizations for emacs-lsp
 (setq gc-cons-threshold 100000000)
