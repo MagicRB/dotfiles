@@ -50,10 +50,10 @@ There are two things you can do about this warning:
   :config
   (evil-mode 1))
 
-;(use-package evil-surround
-;  :ensure t
-;  :config
-;  (global-evil-surround-mode 1))
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
 (use-package yasnippet
   :ensure t
@@ -194,13 +194,13 @@ There are two things you can do about this warning:
 ;; show matching parenthesis
 (show-paren-mode 1)
 
-;(use-package key-chord
+(use-package key-chord
   :ensure t
   :init
   ;;Exit insert mode by pressing j and then j quickly
-;  (setq key-chord-two-keys-delay 0.5)
-;  (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
-;  (key-chord-mode 1))
+  (setq key-chord-two-keys-delay 0.5)
+  (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+  (key-chord-mode 1))
 
 ;; move hjkl to jkl;
 (define-key evil-motion-state-map "h" nil)
