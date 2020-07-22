@@ -46,7 +46,7 @@ There are two things you can do about this warning:
   (require 'use-package))
 
 (use-package evil
-  :ensure t
+u :ensure t
   :config
   (evil-mode 1))
 
@@ -113,7 +113,9 @@ There are two things you can do about this warning:
   (add-hook 'rustic-hook 'hl-todo-mode))
 
 (use-package lsp-ui
-  
+  :ensure t)
+
+(use-package js2-mode
   :ensure t)
 
 (use-package lsp-mode
@@ -123,7 +125,13 @@ There are two things you can do about this warning:
   (setq rustic-compile-command "cargo build")
   (setq rustic-format-trigger 'on-save)
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
-  (add-hook 'rustic-hook 'lsp))
+  (add-hook 'rustic-hook 'lsp)
+  (add-hook 'js2-mode-hook 'lsp)
+  (add-hook 'php-mode 'lsp)
+  (add-hook 'jsx-mode 'lsp)
+  (add-hook 'css-mode 'lsp)
+  (add-hook 'web-mode 'lsp)
+  (require 'lsp-clients))
 
 (use-package lsp-treemacs
   :ensure t
@@ -160,6 +168,7 @@ There are two things you can do about this warning:
   
   ;; Corrects (and improves) org-mode's native fontification.
 ;  (doom-themes-org-config))
+
 
 (use-package heaven-and-hell
   :ensure t
@@ -198,7 +207,7 @@ There are two things you can do about this warning:
   :ensure t
   :init
   ;;Exit insert mode by pressing j and then j quickly
-  (setq key-chord-two-keys-delay 0.5)
+  (setq key-chord-two-keys-delay 0.15)
   (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
   (key-chord-mode 1))
 
