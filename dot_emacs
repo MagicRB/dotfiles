@@ -46,7 +46,7 @@ There are two things you can do about this warning:
   (require 'use-package))
 
 (use-package evil
-u :ensure t
+  :ensure t
   :config
   (evil-mode 1))
 
@@ -97,7 +97,9 @@ u :ensure t
   (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode)))
 
 (use-package rustic
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode)))
 
 (use-package elcord
   :ensure t
@@ -116,15 +118,32 @@ u :ensure t
   :ensure t)
 
 (use-package js2-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
+(use-package rjsx-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode)))
+
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.xhtml\\'" . web-mode)))
+
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.css\\'" . css-mode)))
 
 (use-package lsp-mode
   :ensure t
   :config
   (setq rustic-lsp-server 'rls)
   (setq rustic-compile-command "cargo build")
-  (setq rustic-format-trigger 'on-save)
-  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
+  (setq rustic-format-trigger 'on-save) 
   (add-hook 'rustic-hook 'lsp)
   (add-hook 'js2-mode-hook 'lsp)
   (add-hook 'php-mode 'lsp)
