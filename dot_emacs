@@ -140,7 +140,7 @@ There are two things you can do about this warning:
   (add-hook 'css-mode-hook 'lsp)
   (add-hook 'web-mode-hook 'lsp)
   (add-hook 'js2-mode-hook 'lsp)
-  (add-hook 'typescript-hook 'lsp)
+  (add-hook 'typescript-mode-hook 'lsp)
   (require 'lsp-clients))
 
 (use-package typescript-mode
