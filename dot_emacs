@@ -15,6 +15,7 @@ There are two things you can do about this warning:
 1. Install an Emacs version that does support SSL and be safe.
 2. Remove this warning from your init file so you won't see it again."))
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/"))
   ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
   ;; and `package-pinned-packages`. Most users will not need or want to do this.
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
@@ -115,6 +116,14 @@ There are two things you can do about this warning:
 (use-package lsp-ui
   :ensure t)
 
+(use-package tree-sitter
+  :ensure t)
+(use-package tree-sitter-langs
+  :ensure t)
+
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
 
@@ -124,6 +133,7 @@ There are two things you can do about this warning:
   (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.xhtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.css\\'" . css-mode))
+  (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
   
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   )
