@@ -1,0 +1,3 @@
+[submodule "org"]
+	path = org
+	url = https://gitea.redalder.org/Magic_RB/org
