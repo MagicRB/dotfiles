@@ -40,7 +40,12 @@ exec --no-startup-id /mnt/data3/Programs/bin/nextcloud
 # Set keyboard layouts
 exec --no-startup-id setxkbmap -layout us,sk -variant ,qwerty -option 'grp:lalt_lshift_toggle'
 # Set wallpaper
+
+{{ if eq .chezmoi.hostname "heater" -}}
 exec --no-startup-id feh --bg-max /mnt/data3/Nextcloud/Multimedia/Wallpapers/8o3pkhggcwb51.png 
+{{else if eq .chezmoi.hostname "omen" -}}
+exec --no-startup-id feh --bg-max /home/main/stalker2_art_2.jpg
+{{end -}}
 
 for_window [class="^.*"] border normal 1
 
@@ -158,11 +163,17 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
+{{ if eq .chezmoi.hostname "heater" -}}
 # move workspace to monitor
 bindsym $mod+Ctrl+1 move workspace to output HDMI-0
-
 # move workspace to monitor
 bindsym $mod+Ctrl+2 move workspace to output HDMI-1
+{{else if eq .chezmoi.hostname "omen" -}}
+# move workspace to monitor
+bindsym $mod+Ctrl+1 move workspace to output eDP-1
+# move workspace to monitor
+bindsym $mod+Ctrl+2 move workspace to output HDMI-1-0
+{{end -}}
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
