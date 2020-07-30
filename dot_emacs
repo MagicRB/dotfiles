@@ -69,10 +69,6 @@ There are two things you can do about this warning:
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
-;(use-package flycheck-inline
-;  :ensure t
-;  :config
-;  (add-hook 'flycheck-mode-hook 'flycheck-inline-mode))
 
 (use-package company-lsp
   :ensure t
@@ -138,20 +134,45 @@ There are two things you can do about this warning:
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   )
 
+(use-package scala-mode
+  :ensure t
+  :mode "\\.s\\(cala\\|bt\\)$")
+
+(use-package sbt-mode
+  :ensure t
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+   (setq sbt:program-options '("-Dsbt.supershell=false"))
+)
+
+(use-package lsp-metals
+  :ensure t)
+
 (use-package lsp-mode
   :ensure t
   :config
   (setq rustic-lsp-server 'rls)
   (setq rustic-compile-command "cargo build")
-  (setq rustic-format-trigger 'on-save) 
-  (add-hook 'rustic-hook 'lsp)
-  (add-hook 'php-mode-hook 'lsp)
-  (add-hook 'rjsx-mode-hook 'lsp)
-  (add-hook 'css-mode-hook 'lsp)
-  (add-hook 'web-mode-hook 'lsp)
-  (add-hook 'js2-mode-hook 'lsp)
-  (add-hook 'typescript-mode-hook 'lsp)
-  (require 'lsp-clients))
+  (setq rustic-format-trigger 'on-save)
+  (setq lsp-prefer-flymake nil)
+  (require 'lsp-clients)
+  :hook
+  (rustic . lsp)
+  (php-mode . lsp)
+  (rjsx-mode . lsp)
+  (css-mode . lsp)
+  (web-mode . lsp)
+  (js2-mode . lsp)
+  (lsp-mode . lsp-lens-mode)
+  (typescript-mode . lsp)
+  (scala-mode . lsp))
 
 (use-package typescript-mode
   :ensure t
