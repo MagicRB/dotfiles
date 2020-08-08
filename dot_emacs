@@ -188,6 +188,16 @@ There are two things you can do about this warning:
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
   )
 
+(use-package vterm
+  :ensure t)
+(defun evil-collection-vterm-escape-stay ()
+  "Go back to normal state but don't move cursor backwards.
+Moving cursor backwards is the default vim behavior but
+it is not appropriate in some cases like terminals."
+  (setq-local evil-move-cursor-back nil))
+
+(add-hook 'vterm-mode-hook #'evil-collection-vterm-escape-stay)
+
 (use-package lsp-treemacs
   :ensure t
   :config

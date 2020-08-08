@@ -22,6 +22,24 @@ if [[ -d "${HOME}/.yarn/bin" ]]; then
     export PATH="${HOME}/.yarn/bin:${PATH}"
 fi
 
+vterm_printf(){
+    if [ -n "$TMUX" ]; then
+        # Tell tmux to pass the escape sequences through
+        # (Source: http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324)
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
+
+vterm_prompt_end(){
+    vterm_printf "\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
+}
+PS1=$PS1'\[$(vterm_prompt_end)\]'
+
 #if [[ -d "/mnt/data3/Programs/bin" ]]; then
 #    export PATH="/mnt/data3/Programs/bin:${PATH}"
 #fi
@@ -29,5 +47,5 @@ fi
 ## Set prompt
 export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
 
-export EDITOR="vim"
+export EDITOR="emacsclient"
 export BROWSER="firefox-nightly"
