@@ -188,6 +188,8 @@ There are two things you can do about this warning:
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . rjsx-mode))
   )
 
+(setq display-line-numbers-type 'relative)
+
 (use-package vterm
   :ensure t)
 (defun evil-collection-vterm-escape-stay ()
