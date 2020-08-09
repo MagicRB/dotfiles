@@ -312,6 +312,8 @@ it is not appropriate in some cases like terminals."
 ;; enable parenthesis and quotes pairing thing
 (electric-pair-mode)
 
+(server-start)
+
 ;; fullscreen
 (defun fullscreen ()
  (interactive)
