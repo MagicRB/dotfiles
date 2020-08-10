@@ -1,4 +1,4 @@
-;;; package --- Summary
+;; package --- Summary
 
 ;;; Commentary:
 
@@ -328,6 +328,14 @@ it is not appropriate in some cases like terminals."
 (evil-ex-define-cmd "q" 'kill-this-buffer)
 ;; Need to type out :quit to close emacs
 (evil-ex-define-cmd "quit" 'evil-quit)
+
+;; save and close buffer
+(defun liu233w/ex-save-kill-buffer-and-close ()
+    (interactive)
+    (save-buffer)
+    (kill-this-buffer)
+    )
+(evil-ex-define-cmd "wq" 'liu233w/ex-save-kill-buffer-and-close)
 
 ;; compositor based transparency
 (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
