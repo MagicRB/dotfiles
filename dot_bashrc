@@ -43,6 +43,8 @@ PS1=$PS1'\[$(vterm_prompt_end)\]'
 alias E="SUDO_EDITOR=\"emacsclient -a emacs\" sudoedit"
 alias e="emacsclient"
 
+[[ ! -z "${INSIDE_EMACS}" ]] && alias vim="e"
+
 #if [[ -d "/mnt/data3/Programs/bin" ]]; then
 #    export PATH="/mnt/data3/Programs/bin:${PATH}"
 #fi
