@@ -212,11 +212,17 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-       font pango:DejaVu Sans Mono, FontAwesome 10
-       position bottom
-       status_command /usr/bin/i3status-rs /home/main/.config/i3/status.toml
-       colors {
-           separator #666666
+       	font pango:DejaVu Sans Mono, FontAwesome 10
+      	position bottom
+{{ if eq .chezmoi.hostname "heater" -}}      
+  	status_command /usr/bin/i3status-rs /home/main/.config/i3/status.toml
+{{ else if eq .chezmoi.hostname "omen" -}}
+	status_command /usr/bin/i3status-rs /home/main/.config/i3/status.toml
+{{ else if eq .chezmoi.hostname "fractal" -}}
+        status_command /home/main/.cargo/bin/i3status-rs /home/main/.config/i3/status.toml
+{{ end -}}
+       	colors {
+	   separator #666666
            background #222222
            statusline #dddddd
            focused_workspace #555555 #555555 #ffffff

@@ -295,7 +295,7 @@ There are two things you can do about this warning:
 (scroll-bar-mode -1) ;; no scroll bar
 
 ;; set font
-(set-frame-font "Droid Sans Mono 12" nil t)
+(set-frame-font "Noto Mono 12" nil t)
 
 ;; enable parenthesis and quotes pairing thing
 (electric-pair-mode)

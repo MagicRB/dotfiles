@@ -18,16 +18,21 @@ display_type = "memory"
 format_mem = "{Mup}%"
 format_swap = "{SUp}%"
 
+{{ if eq .chezmoi.hostname "omen" -}}
 [[block]]
 block = "nvidia_gpu"
-{{ if eq .chezmoi.hostname "omen" -}}
 label = "GTX 1050"
-{{else if eq .chezmoi.hostname "heater" -}}
-label = "GTX 1060"
-{{end -}}
 show_memory = true
 show_clocks = true
 interval = 1
+{{else if eq .chezmoi.hostname "heater" -}}
+[[block]]
+block = "nvidia_gpu"
+label = "GTX 1060"
+show_memory = true
+show_clocks = true
+interval = 1
+{{ end -}}
 
 [[block]]
 block = "cpu"
