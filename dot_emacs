@@ -200,6 +200,10 @@ it is not appropriate in some cases like terminals."
 
 (add-hook 'vterm-mode-hook #'evil-collection-vterm-escape-stay)
 
+(use-package evil-collection
+  :ensure t)
+(evil-collection-init 'vterm)
+
 (use-package lsp-treemacs
   :ensure t
   :config
