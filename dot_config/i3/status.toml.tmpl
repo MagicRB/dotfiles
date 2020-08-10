@@ -1,5 +1,9 @@
 theme = "modern"
-icons = "awesome5"
+{{ if eq .chezmoi.hostname "fractal" -}}
+icons = "awesome"
+{{ else -}}
+icons = "aswesome5"
+{{ end -}}
 
 {{ if eq .chezmoi.hostname "omen" -}}
 [[block]]
