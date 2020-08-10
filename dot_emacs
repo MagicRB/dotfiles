@@ -307,7 +307,7 @@ it is not appropriate in some cases like terminals."
 (scroll-bar-mode -1) ;; no scroll bar
 
 ;; set font
-(set-frame-font "Noto Mono 12" nil t)
+(set-frame-font "Source Code Pro 12" nil t)
 
 ;; enable parenthesis and quotes pairing thing
 (electric-pair-mode)
