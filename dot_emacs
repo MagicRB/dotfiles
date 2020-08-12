@@ -340,6 +340,10 @@ it is not appropriate in some cases like terminals."
     )
 (evil-ex-define-cmd "wq" 'liu233w/ex-save-kill-buffer-and-close)
 
+;; positional window movement
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
 ;; compositor based transparency
 (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
 
