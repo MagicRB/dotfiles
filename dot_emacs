@@ -46,6 +46,9 @@ There are two things you can do about this warning:
   (package-install 'use-package)
   (require 'use-package))
 
+(use-package scad-mode
+  :ensure t)
+
 (use-package evil
   :ensure t
   :config
