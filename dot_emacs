@@ -70,10 +70,11 @@ There are two things you can do about this warning:
   :ensure t
   :init (global-flycheck-mode))
 
-(use-package company-lsp
-  :ensure t
-  :config
-  (push 'company-lsp company-backends))
+;; Deprecated
+;(use-package company-lsp
+;  :ensure t
+;  :config
+;  (push 'company-lsp company-backends))
 
 (use-package company-box
   :ensure t
