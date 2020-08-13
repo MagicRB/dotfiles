@@ -45,6 +45,8 @@ exec --no-startup-id setxkbmap -layout us,sk -variant ,qwerty -option 'grp:lalt_
 exec --no-startup-id feh --bg-max /mnt/data3/Nextcloud/Multimedia/Wallpapers/8o3pkhggcwb51.png 
 {{else if eq .chezmoi.hostname "omen" -}}
 exec --no-startup-id feh --bg-max /home/main/stalker2_art_2.jpg
+{{else if eq .chezmoi.hostname "fractal" -}}
+exec --no-startup-id feh --bg-fill /home/main/wallpaper.jpg
 {{end -}}
 
 for_window [class="^.*"] border normal 1
