@@ -294,10 +294,11 @@ it is not appropriate in some cases like terminals."
 (define-key evil-motion-state-map "l" 'evil-previous-line)
 (define-key evil-motion-state-map ";" 'evil-forward-char)
 
-(define-key treemacs-mode-map "h" nil)
+
+(add-hook 'treemacs-mode-hook (lambda () (local-set-key (kbd "h") nil)))
 (define-key evil-treemacs-state-map "j" 'treemacs-root-up)
 (define-key evil-treemacs-state-map "k" 'treemacs-next-line)
-(define-key treemacs-mode-map "l" 'treemacs-previous-line)
+(add-hook 'treemacs-mode-hook (lambda () (local-set-key (kbd "j") 'treemacs-previous-line)))
 (define-key evil-treemacs-state-map ";" 'treemacs-root-down)
 
 ;; optimizations for emacs-lsp
