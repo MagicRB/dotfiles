@@ -295,11 +295,11 @@ it is not appropriate in some cases like terminals."
 (define-key evil-motion-state-map ";" 'evil-forward-char)
 
 
-(add-hook 'treemacs-mode-hook (lambda () (local-set-key (kbd "h") nil)))
-(define-key evil-treemacs-state-map "j" 'treemacs-root-up)
-(define-key evil-treemacs-state-map "k" 'treemacs-next-line)
-(add-hook 'treemacs-mode-hook (lambda () (local-set-key (kbd "j") 'treemacs-previous-line)))
-(define-key evil-treemacs-state-map ";" 'treemacs-root-down)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "h") nil)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "j") 'treemacs-root-up)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "k") 'treemacs-next-line)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "l") 'treemacs-previous-line)
+(evil-define-key 'treemacs treemacs-mode-map (kbd ";") 'treemacs-root-down)
 
 ;; optimizations for emacs-lsp
 (setq gc-cons-threshold 100000000)
@@ -316,7 +316,7 @@ it is not appropriate in some cases like terminals."
 (scroll-bar-mode -1) ;; no scroll bar
 
 ;; set font
-(set-frame-font "Source Code Pro 12" nil t)
+(set-frame-font "Fira Code 12" nil t)
 
 ;; enable parenthesis and quotes pairing thing
 (electric-pair-mode)
