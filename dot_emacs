@@ -162,9 +162,9 @@ There are two things you can do about this warning:
 (use-package lsp-mode
   :ensure t
   :config
-  (setq rustic-lsp-server 'rls)
+  (setq rustic-lsp-server 'rust-analyzer)
   (setq rustic-compile-command "cargo build")
-  (setq rustic-format-trigger 'on-save)
+  (setq rustic-format-trigger nil); 'on-save)
   (setq lsp-prefer-flymake nil)
   (require 'lsp-clients)
   :hook
@@ -316,7 +316,17 @@ it is not appropriate in some cases like terminals."
 (scroll-bar-mode -1) ;; no scroll bar
 
 ;; set font
-(set-frame-font "Fira Code 12" nil t)
+(set-frame-font "Free Pixel 12" nil t)
+(set-face-attribute 'default nil :font "Free Pixel" )
+(custom-set-faces
+ '(default ((t (:family "Free Pixel"))))
+ ;; I should be able to set this just in treemacs...
+ '(variable-pitch ((t (:family "Free Pixel"))))
+ )
+
+;; disable focus on mouse over
+(push '(no-accept-focus . t) lsp-ui-doc-frame-parameters)
+(push '(no-accept-focus . t) company-box-frame-parameters)
 
 ;; enable parenthesis and quotes pairing thing
 (electric-pair-mode)
