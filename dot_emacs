@@ -316,7 +316,12 @@ it is not appropriate in some cases like terminals."
 (scroll-bar-mode -1) ;; no scroll bar
 
 ;; set font
-(set-frame-font "Free Pixel 12" nil t)
+(when (string= (system-name) "omen")
+  (set-frame-font "Free Pixel 12" nil t))
+(when (string= (system-name) "heater")
+  (set-frame-font "Free Pixel 14" nil t))
+(when (string= (system-name) "fractal")
+  (set-frame-font "Free Pixel 12" nil t))
 (set-face-attribute 'default nil :font "Free Pixel" )
 (custom-set-faces
  '(default ((t (:family "Free Pixel"))))
