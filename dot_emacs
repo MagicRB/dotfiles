@@ -317,16 +317,16 @@ it is not appropriate in some cases like terminals."
 
 ;; set font
 (when (string= (system-name) "omen")
-  (set-frame-font "Free Pixel 12" nil t))
+  (set-frame-font "Fira Code 12" nil t))
 (when (string= (system-name) "heater")
-  (set-frame-font "Free Pixel 14" nil t))
+  (set-frame-font "Fira Code 14" nil t))
 (when (string= (system-name) "fractal")
-  (set-frame-font "Free Pixel 12" nil t))
-(set-face-attribute 'default nil :font "Free Pixel" )
+  (set-frame-font "Fira Code 12" nil t))
+(set-face-attribute 'default nil :font "Fira Code" )
 (custom-set-faces
- '(default ((t (:family "Free Pixel"))))
+ '(default ((t (:family "Fira Code"))))
  ;; I should be able to set this just in treemacs...
- '(variable-pitch ((t (:family "Free Pixel"))))
+ '(variable-pitch ((t (:family "Fira Code"))))
  )
 
 ;; disable focus on mouse over
