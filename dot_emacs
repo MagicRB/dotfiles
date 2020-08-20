@@ -196,6 +196,8 @@ There are two things you can do about this warning:
 
 (use-package vterm
   :ensure t)
+
+(setq evil-want-keybinding nil)
 (defun evil-collection-vterm-escape-stay ()
   "Go back to normal state but don't move cursor backwards.
 Moving cursor backwards is the default vim behavior but
@@ -319,7 +321,7 @@ it is not appropriate in some cases like terminals."
 (when (string= (system-name) "omen")
   (set-frame-font "Fira Code 12" nil t))
 (when (string= (system-name) "heater")
-  (set-frame-font "Fira Code 14" nil t))
+  (set-frame-font "Fira Code 12" nil t))
 (when (string= (system-name) "fractal")
   (set-frame-font "Fira Code 12" nil t))
 (set-face-attribute 'default nil :font "Fira Code" )
