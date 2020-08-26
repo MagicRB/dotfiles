@@ -176,7 +176,8 @@ There are two things you can do about this warning:
   (js2-mode . lsp)
   (lsp-mode . lsp-lens-mode)
   (typescript-mode . lsp)
-  (scala-mode . lsp))
+  (scala-mode . lsp)
+  (tex-mode . lsp))
 
 (use-package typescript-mode
   :ensure t
