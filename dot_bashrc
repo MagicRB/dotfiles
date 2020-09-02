@@ -22,7 +22,7 @@ if [[ -d "${HOME}/.yarn/bin" ]]; then
     export PATH="${HOME}/.yarn/bin:${PATH}"
 fi
 
-vterm_printf(){
+vterm_printf() {
     if [ -n "$TMUX" ]; then
         # Tell tmux to pass the escape sequences through
         # (Source: http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324)
@@ -35,13 +35,26 @@ vterm_printf(){
     fi
 }
 
-vterm_prompt_end(){
+vterm_prompt_end() {
     vterm_printf "\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
 }
 PS1=$PS1'\[$(vterm_prompt_end)\]'
 
 alias E="SUDO_EDITOR=\"emacsclient -a emacs\" sudoedit"
 alias e="emacsclient"
+
+essh() {
+    ssh -MNf -S ~/.ssh/controlmasters/%r@%h:%p $1 > /dev/null 2>&1
+
+    ssh -S ~/.ssh/controlmasters/%r@%h:%p $1 "mkdir -p /tmp/bin"
+    ssh -S ~/.ssh/controlmasters/%r@%h:%p $1 "echo $1 > /tmp/hostname"
+    scp -o "ControlPath ~/.ssh/controlmasters/%r@%h:%p" $(which emacsclient) $1:/tmp/bin/emacsclient > /dev/null
+    scp -o "ControlPath ~/.ssh/controlmasters/%r@%h:%p" $(which emacsclient-remote) $1:/tmp/bin/emacsclient-remote > /dev/null
+    ssh -S ~/.ssh/controlmasters/%r@%h:%p -R ~/.ssh/emacs-server:/run/user/1000/emacs/server  $1 -t 'export PATH=/tmp/bin:$PATH ; bash -l'
+    ssh -S ~/.ssh/controlmasters/%r@%h:%p $1 "rm -r /tmp/bin/ /tmp/hostname ~/.ssh/emacs-server"
+    ssh -S ~/.ssh/controlmasters/%r@%h:%p -O stop $1 > /dev/null 2>&1
+}
+complete -F _known_hosts essh
 
 [[ ! -z "${INSIDE_EMACS}" ]] && alias vim="e"
 

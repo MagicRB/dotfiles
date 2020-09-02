@@ -41,6 +41,8 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  )
 
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package)
@@ -219,10 +221,15 @@ it is not appropriate in some cases like terminals."
 (use-package all-the-icons
   :ensure t)
 
-(use-package telephone-line
+(use-package doom-modeline
   :ensure t
   :config
-  (telephone-line-mode 1))
+  (doom-modeline-mode))
+
+;(use-package telephone-line
+;  :ensure t
+;  :config
+;  (telephone-line-mode 1))
 
 (use-package chess
   :ensure t)
@@ -343,8 +350,6 @@ it is not appropriate in some cases like terminals."
 ;; enable parenthesis and quotes pairing thing
 (electric-pair-mode)
 
-(server-start)
-
 ;; fullscreen
 (defun fullscreen ()
  (interactive)
@@ -371,4 +376,5 @@ it is not appropriate in some cases like terminals."
 ;; compositor based transparency
 (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
 
-;(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(server-start)
+
