@@ -6,6 +6,9 @@ params=()
 sudo=0
 local=0
 
+host=$(echo $SSH_CONNECTION | cut -d' ' -f3)
+port=$(echo $SSH_CONNECTION | cut -d' ' -f4)
+
 for p in "${@}"; do
     if [[ "${p}" == "-n" ]]; then
         params+=( "${p}" )
@@ -26,12 +29,12 @@ for p in "${@}"; do
 
         if [[ $(id -u) -eq 0 || ${sudo} -eq 1 ]]; then
             if [[ ${local} -eq 0 ]]; then
-                params+=( "/ssh:$(cat /tmp/hostname)|sudo:$(hostname -f):"$(realpath -m "${p}") )
+                params+=( "/ssh:${host}:${port}|sudo::"$(realpath -m "${p}") )
             else
                 params+=( "/sudo:localhost:"$(realpath -m "${p}") )
             fi
         else
-            params+=( "/ssh:$(cat /tmp/hostname):"$(realpath "${p}") )
+            params+=( "/ssh:${host}:${port}:"$(realpath "${p}") )
         fi
 
         IFS=${OLDIFS}

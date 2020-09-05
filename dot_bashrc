@@ -40,28 +40,38 @@ vterm_prompt_end() {
 }
 PS1=$PS1'\[$(vterm_prompt_end)\]'
 
-alias E="SUDO_EDITOR=\"emacsclient -a emacs\" sudoedit"
-alias e="emacsclient"
+if [[ ! -z "${INSIDE_EMACS+x}" ]] && [[ ! -z "${SSH_CONNECTION}" ]]
+then
+    alias E="emacsclient-remote --sudo"
+    alias e="emacsclient"
+else
+    alias E="SUDO_EDITOR=\"emacsclient -a emacs\" sudoedit"
+    alias e="emacsclient"
+fi
 
 
 [[ ! -z "${INSIDE_EMACS+x}" ]] && alias vim="e"
 
-essh() {
+ssh() {
     if [[ ! -z "${INSIDE_EMACS+x}" ]]
     then
-	#ssh -MNf -S ~/.ssh/controlmasters/%r@%h:%p $1 > /dev/null 2>&1
-    
-	#ssh -S ~/.ssh/controlmasters/%r@%h:%p "rm ~/.ssh/emacs-server" 
 	ssh \
-	    -o 'SendEnv=INSIDE_EMACS' -o 'StreamLocalBindUnlink=yes' \
+	    -o "SendEnv INSIDE_EMACS" \
+	    -o "StreamLocalBindUnlink yes" \
+	    -o "ControlMaster auto" \
+	    -o "ControlPath ~/.ssh/controlmasters/%r@%h:%p" \
+	    -Nf \
 	    -R ~/.ssh/emacs-server:/run/user/1000/emacs/server \
+	    $1
+	ssh \
+	    -S ~/.ssh/controlmasters/%r@%h:%p \
+	    -o 'SendEnv=INSIDE_EMACS' \
 	    $@
     else
 	ssh $@
     fi
 }
-alias ssh="essh"
-	
+
 #if [[ -d "/mnt/data3/Programs/bin" ]]; then
 #    export PATH="/mnt/data3/Programs/bin:${PATH}"
 #fi
@@ -71,3 +81,5 @@ export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
 
 export EDITOR="emacsclient"
 export BROWSER="firefox-nightly"
+
+trap finish EXIT

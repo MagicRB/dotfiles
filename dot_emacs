@@ -377,4 +377,3 @@ it is not appropriate in some cases like terminals."
 (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
 
 (server-start)
-
