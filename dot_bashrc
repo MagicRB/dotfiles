@@ -40,10 +40,10 @@ vterm_prompt_end() {
 }
 PS1=$PS1'\[$(vterm_prompt_end)\]'
 
-if [[ ! -z "${INSIDE_EMACS+x}" ]] && [[ ! -z "${SSH_CONNECTION}" ]]
+if [[ ! -z "${INSIDE_EMACS+x}" ]] && [[ ! -z "${SSH_CONNECTION+x}" ]]
 then
     alias E="emacsclient-remote --sudo"
-    alias e="emacsclient"
+    alias e="emacsclient-remote"
 else
     alias E="SUDO_EDITOR=\"emacsclient -a emacs\" sudoedit"
     alias e="emacsclient"
