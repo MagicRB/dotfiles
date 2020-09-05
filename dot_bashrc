@@ -81,5 +81,3 @@ export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
 
 export EDITOR="emacsclient"
 export BROWSER="firefox-nightly"
-
-trap finish EXIT
