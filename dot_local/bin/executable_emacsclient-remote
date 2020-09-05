@@ -34,7 +34,7 @@ for p in "${@}"; do
                 params+=( "/sudo:localhost:"$(realpath -m "${p}") )
             fi
         else
-            params+=( "/ssh:${host}:${port}:"$(realpath "${p}") )
+            params+=( "/ssh:${host}#${port}:"$(realpath "${p}") )
         fi
 
         IFS=${OLDIFS}
