@@ -52,10 +52,11 @@ fi
 
 [[ ! -z "${INSIDE_EMACS+x}" ]] && alias vim="e"
 
+SSH=$(which ssh)
 ssh() {
     if [[ ! -z "${INSIDE_EMACS+x}" ]]
     then
-	ssh \
+	"${SSH}" \
 	    -o "SendEnv INSIDE_EMACS" \
 	    -o "StreamLocalBindUnlink yes" \
 	    -o "ControlMaster auto" \
@@ -63,12 +64,12 @@ ssh() {
 	    -Nf \
 	    -R ~/.ssh/emacs-server:/run/user/1000/emacs/server \
 	    $1
-	ssh \
+	"${SSH}" \
 	    -S ~/.ssh/controlmasters/%r@%h:%p \
 	    -o 'SendEnv=INSIDE_EMACS' \
 	    $@
     else
-	ssh $@
+	"${SSH}" $@
     fi
 }
 
