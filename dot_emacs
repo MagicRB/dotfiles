@@ -268,6 +268,8 @@ it is not appropriate in some cases like terminals."
   ;; Corrects (and improves) org-mode's native fontification.
 ;  (doom-themes-org-config))
 
+(use-package man-preview
+  :ensure t)
 
 (use-package heaven-and-hell
   :ensure t
@@ -275,7 +277,7 @@ it is not appropriate in some cases like terminals."
   (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
   (setq heaven-and-hell-themes
         '((light . doom-one-light)
-          (dark . doom-one))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+          (dark . doom-peacock))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
 
   ;; Optionall, load themes without asking for confirmation.
   (setq heaven-and-hell-load-theme-no-confirm t)

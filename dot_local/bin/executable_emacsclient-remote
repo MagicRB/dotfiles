@@ -29,12 +29,12 @@ for p in "${@}"; do
 
         if [[ $(id -u) -eq 0 || ${sudo} -eq 1 ]]; then
             if [[ ${local} -eq 0 ]]; then
-                params+=( "/ssh:${host}#${port}|sudo::"$(realpath -m "${p}") )
+                params+=( "/ssh:${USER}@${host}#${port}|sudo::"$(realpath -m "${p}") )
             else
                 params+=( "/sudo:localhost:"$(realpath -m "${p}") )
             fi
         else
-            params+=( "/ssh:${host}#${port}:"$(realpath "${p}") )
+            params+=( "/ssh:${USER}@${host}#${port}:"$(realpath "${p}") )
         fi
 
         IFS=${OLDIFS}
