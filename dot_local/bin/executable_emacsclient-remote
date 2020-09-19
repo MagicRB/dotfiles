@@ -41,4 +41,4 @@ for p in "${@}"; do
     fi
 done
 
-emacsclient -s ~/.ssh/emacs-server "${params[@]}"
+"emacsclient-$(uname -m)" -s ~/.ssh/emacs-server "${params[@]}"
