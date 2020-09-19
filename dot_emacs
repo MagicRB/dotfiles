@@ -197,7 +197,20 @@ There are two things you can do about this warning:
 
 (setq display-line-numbers-type 'relative)
 
+(use-package impatient-mode
+  :ensure t)
+
+(defun markdown-html (buffer)
+  (princ (with-current-buffer buffer
+    (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+	 (current-buffer)))
+
+(httpd-start)
+
 (use-package vterm
+  :ensure t)
+
+(use-package w3m
   :ensure t)
 
 (setq evil-want-keybinding nil)
