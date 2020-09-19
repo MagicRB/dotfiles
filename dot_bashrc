@@ -44,9 +44,13 @@ if [[ ! -z "${INSIDE_EMACS+x}" ]] && [[ ! -z "${SSH_CONNECTION+x}" ]]
 then
     alias E="emacsclient-remote --sudo"
     alias e="emacsclient-remote"
+elif [[ ! -z "${INSIDE_EMACS}" ]]
+then
+    alias E="SUDO_EDITOR=\"emacsclient-$(uname -m) -a emacs\" sudoedit"
+    alias e="emacsclient-$(uname -m)"
 else
-    alias E="SUDO_EDITOR=\"emacsclient -a emacs\" sudoedit"
-    alias e="emacsclient"
+    alias E="SUDO_EDITOR=\"emacsclient-$(uname -m) -a emacs -t\" sudoedit"
+    alias e="emacsclient-$(uname -m) -t"
 fi
 
 

@@ -224,7 +224,9 @@ it is not appropriate in some cases like terminals."
 (use-package doom-modeline
   :ensure t
   :config
-  (doom-modeline-mode))
+  (doom-modeline-mode)
+  :init
+  (setq doom-modeline-icon t))
 
 ;(use-package telephone-line
 ;  :ensure t
@@ -329,11 +331,11 @@ it is not appropriate in some cases like terminals."
 
 ;; set font
 (when (string= (system-name) "omen")
-  (set-frame-font "Fira Code 12" nil t))
+  (add-to-list 'default-frame-alist '(font . "Fira Code 12")))
 (when (string= (system-name) "heater")
-  (set-frame-font "Fira Code 12" nil t))
+  (add-to-list 'default-frame-alist '(font . "Fira Code 12")))
 (when (string= (system-name) "fractal")
-  (set-frame-font "Fira Code 12" nil t))
+  (add-to-list 'default-frame-alist '(font . "Fira Code 12")))
 (set-face-attribute 'default nil :font "Fira Code" )
 (custom-set-faces
  '(default ((t (:family "Fira Code"))))
@@ -351,6 +353,11 @@ it is not appropriate in some cases like terminals."
 
 ;; enable parenthesis and quotes pairing thing
 (electric-pair-mode)
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (select-frame frame)
+            (load-theme 'doom-peacock)))
 
 ;; fullscreen
 (defun fullscreen ()
@@ -376,6 +383,6 @@ it is not appropriate in some cases like terminals."
   (windmove-default-keybindings))
 
 ;; compositor based transparency
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha 90 90))
 
 (server-start)
