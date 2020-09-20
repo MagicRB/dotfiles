@@ -238,8 +238,11 @@ it is not appropriate in some cases like terminals."
   :ensure t
   :config
   (doom-modeline-mode)
-  :init
-  (setq doom-modeline-icon t))
+
+(make-variable-buffer-local 'doom-modeline-icon)
+(add-hook 'after-make-frame-hook
+ (lambda ()
+    (setq doom-modeline-icon (display-graphic-p))))
 
 ;(use-package telephone-line
 ;  :ensure t
@@ -357,8 +360,8 @@ it is not appropriate in some cases like terminals."
  )
 
 ;; disable focus on mouse over
-;(push '(no-accept-focus . t) lsp-ui-doc-frame-parameters)
-;(push '(no-accept-focus . t) company-box-frame-parameters)
+(push '(no-accept-focus . t) lsp-ui-doc-frame-parameters)
+(push '(no-accept-focus . t) company-box-frame-parameters)
 
 (add-to-list 'lsp-ui-doc-frame-parameters '(no-accept-focus . t))
 (add-to-list 'company-box-frame-parameters '(no-accept-focus . t))
