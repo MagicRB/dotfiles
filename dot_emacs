@@ -118,13 +118,14 @@ There are two things you can do about this warning:
 (use-package lsp-ui
   :ensure t)
 
+(when (not (string= (system-name) "localhost"))
 (use-package tree-sitter
   :ensure t)
 (use-package tree-sitter-langs
   :ensure t)
 
 (global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
@@ -242,7 +243,7 @@ it is not appropriate in some cases like terminals."
 (make-variable-buffer-local 'doom-modeline-icon)
 (add-hook 'after-make-frame-hook
  (lambda ()
-    (setq doom-modeline-icon (display-graphic-p))))
+    (setq doom-modeline-icon (display-graphic-p)))))
 
 ;(use-package telephone-line
 ;  :ensure t
