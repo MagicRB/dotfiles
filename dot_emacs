@@ -140,6 +140,19 @@ There are two things you can do about this warning:
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   )
 
+;; (use-package lsp-pyright
+;;   :ensure t
+;;   :hook (python-mode . (lambda ()
+;;                           (require 'lsp-pyright)
+;;                           (lsp))))  ; or lsp-deferred
+
+(use-package lsp-jedi
+  :ensure t
+  :config
+  (with-eval-after-load "lsp-mode"
+    (add-to-list 'lsp-disabled-clients 'pyls)
+    (add-to-list 'lsp-enabled-clients 'jedi)))
+
 (use-package scala-mode
   :ensure t
   :mode "\\.s\\(cala\\|bt\\)$")
@@ -179,7 +192,8 @@ There are two things you can do about this warning:
   (lsp-mode . lsp-lens-mode)
   (typescript-mode . lsp)
   (scala-mode . lsp)
-  (tex-mode . lsp))
+  (tex-mode . lsp)
+  (python-mode . lsp))
 
 (use-package typescript-mode
   :ensure t
