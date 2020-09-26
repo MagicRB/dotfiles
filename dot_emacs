@@ -1,4 +1,4 @@
-;; package --- Summary
+; package --- Summary
 
 ;;; Commentary:
 
@@ -16,6 +16,7 @@ There are two things you can do about this warning:
 2. Remove this warning from your init file so you won't see it again."))
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
   (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/"))
+  (add-to-list 'package-archives '("celpa" . "https://celpa.conao3.com/packages/"))
   ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
   ;; and `package-pinned-packages`. Most users will not need or want to do this.
   ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
@@ -187,7 +188,8 @@ There are two things you can do about this warning:
   (typescript-mode . lsp)
   (scala-mode . lsp)
   (tex-mode . lsp)
-  (python-mode . lsp))
+  (python-mode . lsp)
+  (lsp-mode . origami-mode))
 
 (use-package typescript-mode
   :ensure t
@@ -260,6 +262,9 @@ it is not appropriate in some cases like terminals."
 (use-package chess
   :ensure t)
 
+(use-package origami
+  :ensure t)
+
 (use-package doom-themes
   :ensure t
   :config
@@ -317,9 +322,39 @@ it is not appropriate in some cases like terminals."
 ;; show matching parenthesis
 (show-paren-mode 1)
 
+(use-package hydra
+  :ensure t
+  :init
+  (defhydra chord-menu (:timeout 1.0)
+    ("a" ace-window)
+    ("j" windmove-left)
+    ("k" windmove-up)
+    ("l" windmove-down)
+    (";" windmove-right)
+    ("s" treemacs-switch-workspace)
+    ("S" treemacs-edit-workspaces)
+    ("t" treemacs-select-window)
+    ("T" treemacs)
+    ("r b" rustic-cargo-build)
+    ("r r" rustic-cargo-run)
+    ("RET" nil "Cancel")
+    ("SPC" nil "Cancel"))
+  (global-set-key (kbd "C-'") #'chord-menu/body))
+
 (use-package key-chord
   :ensure t
   :init
+  (defun key-chord-define-nonsymmetric (keymap keys command)
+  (if (/= 2 (length keys))
+      (error "Key-chord keys must have two elements"))
+  (let ((key1 (logand 255 (aref keys 0)))
+        (key2 (logand 255 (aref keys 1))))
+    (if (eq key1 key2)
+        (define-key keymap (vector 'key-chord key1 key2) command)
+      (define-key keymap (vector 'key-chord key1 key2) command)
+      ;; just remove this line:
+      ;(define-key keymap (vector 'key-chord key2 key1) command)
+      )))
   ;;Exit insert mode by pressing j and then j quickly
   (setq key-chord-two-keys-delay 0.15)
   (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
@@ -328,15 +363,15 @@ it is not appropriate in some cases like terminals."
 ;; move hjkl to jkl;
 (define-key evil-motion-state-map "h" nil)
 (define-key evil-motion-state-map "j" 'evil-backward-char)
-(define-key evil-motion-state-map "k" 'evil-next-line)
-(define-key evil-motion-state-map "l" 'evil-previous-line)
+(define-key evil-motion-state-map "k" 'evil-previous-line)
+(define-key evil-motion-state-map "l" 'evil-next-line)
 (define-key evil-motion-state-map ";" 'evil-forward-char)
 
 
 (evil-define-key 'treemacs treemacs-mode-map (kbd "h") nil)
 (evil-define-key 'treemacs treemacs-mode-map (kbd "j") 'treemacs-root-up)
-(evil-define-key 'treemacs treemacs-mode-map (kbd "k") 'treemacs-next-line)
-(evil-define-key 'treemacs treemacs-mode-map (kbd "l") 'treemacs-previous-line)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "k") 'treemacs-previous-line)
+(evil-define-key 'treemacs treemacs-mode-map (kbd "l") 'treemacs-next-line)
 (evil-define-key 'treemacs treemacs-mode-map (kbd ";") 'treemacs-root-down)
 
 ;; optimizations for emacs-lsp
