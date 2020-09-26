@@ -41,6 +41,8 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  )
 
+(setq backup-directory-alist `(("." . "~/.emacs.d/saves")))
+
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (unless (package-installed-p 'use-package)
@@ -51,6 +53,7 @@ There are two things you can do about this warning:
 (use-package scad-mode
   :ensure t)
 
+(setq evil-want-keybinding nil)
 (use-package evil
   :ensure t
   :config
@@ -166,9 +169,8 @@ There are two things you can do about this warning:
   :config
   (setq rustic-lsp-server 'rust-analyzer)
   (setq rustic-compile-command "cargo build")
-  (setq rustic-format-trigger nil); 'on-save)
+  (setq rustic-format-trigger nil);'on-save)
   (setq lsp-prefer-flymake nil)
-  (require 'lsp-clients)
   :hook
   (rustic . lsp)
   (php-mode . lsp)
@@ -179,7 +181,8 @@ There are two things you can do about this warning:
   (lsp-mode . lsp-lens-mode)
   (typescript-mode . lsp)
   (scala-mode . lsp)
-  (tex-mode . lsp))
+  (tex-mode . lsp)
+  (lsp-mode . display-fill-column-indicator-mode))
 
 (use-package typescript-mode
   :ensure t
@@ -213,7 +216,6 @@ There are two things you can do about this warning:
 (use-package w3m
   :ensure t)
 
-(setq evil-want-keybinding nil)
 (defun evil-collection-vterm-escape-stay ()
   "Go back to normal state but don't move cursor backwards.
 Moving cursor backwards is the default vim behavior but
@@ -237,7 +239,7 @@ it is not appropriate in some cases like terminals."
 (use-package doom-modeline
   :ensure t
   :config
-  (doom-modeline-mode)
+  (doom-modeline-mode))
 
 (make-variable-buffer-local 'doom-modeline-icon)
 (add-hook 'after-make-frame-hook
@@ -273,8 +275,8 @@ it is not appropriate in some cases like terminals."
   ;; Corrects (and improves) org-mode's native fontification.
 ;  (doom-themes-org-config))
 
-(use-package man-preview
-  :ensure t)
+;(use-package man-preview
+;  :ensure t)
 
 (use-package heaven-and-hell
   :ensure t
@@ -400,5 +402,8 @@ it is not appropriate in some cases like terminals."
 
 ;; compositor based transparency
 (add-to-list 'default-frame-alist '(alpha 90 90))
+
+;; set fill column indicator column number
+(setq-default display-fill-column-indicator-column 100)
 
 (server-start)
