@@ -7,7 +7,7 @@ case "$OPT" in
 		scrot '/tmp/%F_%T_$wx$h.png' -e 'mkdir -p ~/screenshot/ ; mv $f ~/screenshot ; xclip -selection clipboard -target image/png -i ~/screenshot/`basename $f`'
 		;;
 	select)
-		scrot '/tmp/%F_%T_$wx$h.png' -s -e 'mkdir -p ~/screenshot/ ; mv $f ~/screenshot ; xclip -selection clipboard -target image/png -i ~/screenshot/`basename $f`'
+		scrot '/tmp/%F_%T_$wx$h.png' -f -s -e 'mkdir -p ~/screenshot/ ; mv $f ~/screenshot ; xclip -selection clipboard -target image/png -i ~/screenshot/`basename $f`'
 		;;
 	focused)
 		scrot '/tmp/%F_%T_$wx$h.png' -f -e 'mkdir -p ~/screenshot/ ; mv $f ~/screenshot ; xclip -selection clipboard -target image/png -i ~/screenshot/`basename $f`'

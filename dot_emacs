@@ -254,7 +254,7 @@ it is not appropriate in some cases like terminals."
 (make-variable-buffer-local 'doom-modeline-icon)
 (add-hook 'after-make-frame-hook
  (lambda ()
-    (setq doom-modeline-icon (display-graphic-p)))))
+    (setq doom-modeline-icon (display-graphic-p))))
 
 ;(use-package telephone-line
 ;  :ensure t
