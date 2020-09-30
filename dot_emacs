@@ -327,7 +327,7 @@ it is not appropriate in some cases like terminals."
 (use-package hydra
   :ensure t
   :init
-  (defhydra chord-menu (:timeout 1.0)
+  (defhydra magic_rb/hydra-menu ()
     ("a" ace-window)
     ("j" windmove-left)
     ("k" windmove-up)
@@ -337,11 +337,21 @@ it is not appropriate in some cases like terminals."
     ("S" treemacs-edit-workspaces)
     ("t" treemacs-select-window)
     ("T" treemacs)
-    ("r b" rustic-cargo-build)
-    ("r r" rustic-cargo-run)
     ("RET" nil "Cancel")
     ("SPC" nil "Cancel"))
-  (global-set-key (kbd "C-'") #'chord-menu/body))
+  (defhydra magic_rb/hydra-menu-rust (:color red :inherit (magic_rb/hydra-menu/heads))
+    ("b" rustic-cargo-build)
+    ("r" rustic-cargo-run))
+
+  (defun magic_rb/hydra-launcher ()
+    "A launcher for hydras based on current context."
+    (interactive)
+    (cl-case major-mode
+      ('rustic-mode (magic_rb/hydra-menu-rust/body))
+      (t (magic_rb/hydra-menu/body))
+      ))
+  
+  (global-set-key (kbd "C-'") 'magic_rb/hydra-launcher))
 
 (use-package key-chord
   :ensure t
