@@ -109,7 +109,9 @@ There are two things you can do about this warning:
 (use-package elcord
   :ensure t
   :config
-  (elcord-mode))
+  (when (not (string= (system-name) "fractal"))
+    (elcord-mode))
+  )
 
 (use-package magit
   :ensure t)
