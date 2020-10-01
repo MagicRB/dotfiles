@@ -116,6 +116,14 @@ There are two things you can do about this warning:
 (use-package magit
   :ensure t)
 
+(use-package evil-magit
+  :ensure t
+  :config
+  (setq evil-magit-state 'motion)
+  (evil-define-key evil-magit-state magit-mode-map ";" 'magit-log)
+  (evil-define-key evil-magit-state magit-mode-map "k" 'evil-previous-line)
+  (evil-define-key evil-magit-state magit-status-mode-map "l" 'evil-next-line))
+
 (use-package magit-todos
   :ensure t
   :config
@@ -339,6 +347,7 @@ it is not appropriate in some cases like terminals."
     ("S" treemacs-edit-workspaces)
     ("t" treemacs-select-window)
     ("T" treemacs)
+    ("m" magit)
     ("RET" nil "Cancel")
     ("SPC" nil "Cancel"))
   (defhydra magic_rb/hydra-menu-rust (:color red :inherit (magic_rb/hydra-menu/heads))
