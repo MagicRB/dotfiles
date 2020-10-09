@@ -1,4 +1,4 @@
-; package --- Summary
+					; package --- Summary
 
 ;;; Commentary:
 
@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
+		    (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
   (when no-ssl (warn "\
 Your version of Emacs does not support SSL connections,
@@ -80,10 +80,10 @@ There are two things you can do about this warning:
   :init (global-flycheck-mode))
 
 ;; Deprecated
-;(use-package company-lsp
-;  :ensure t
-;  :config
-;  (push 'company-lsp company-backends))
+					;(use-package company-lsp
+					;  :ensure t
+					;  :config
+					;  (push 'company-lsp company-backends))
 
 (use-package company-box
   :ensure t
@@ -133,13 +133,13 @@ There are two things you can do about this warning:
   :ensure t)
 
 (when (not (string= (system-name) "localhost"))
-(use-package tree-sitter
-  :ensure t)
-(use-package tree-sitter-langs
-  :ensure t)
+  (use-package tree-sitter
+    :ensure t)
+  (use-package tree-sitter-langs
+    :ensure t)
 
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
@@ -158,8 +158,8 @@ There are two things you can do about this warning:
 (use-package lsp-pyright
   :ensure t
   :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
+			 (require 'lsp-pyright)
+			 (lsp))))  ; or lsp-deferred
 
 (use-package scala-mode
   :ensure t
@@ -175,9 +175,9 @@ There are two things you can do about this warning:
    'minibuffer-complete-word
    'self-insert-command
    minibuffer-local-completion-map)
-   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-   (setq sbt:program-options '("-Dsbt.supershell=false"))
-)
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+  (setq sbt:program-options '("-Dsbt.supershell=false"))
+  )
 
 (use-package lsp-metals
   :ensure t)
@@ -225,7 +225,7 @@ There are two things you can do about this warning:
 
 (defun markdown-html (buffer)
   (princ (with-current-buffer buffer
-    (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+	   (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
 	 (current-buffer)))
 
 (httpd-start)
@@ -263,13 +263,13 @@ it is not appropriate in some cases like terminals."
 
 (make-variable-buffer-local 'doom-modeline-icon)
 (add-hook 'after-make-frame-hook
- (lambda ()
-    (setq doom-modeline-icon (display-graphic-p))))
+	  (lambda ()
+	    (setq doom-modeline-icon (display-graphic-p))))
 
-;(use-package telephone-line
-;  :ensure t
-;  :config
-;  (telephone-line-mode 1))
+					;(use-package telephone-line
+					;  :ensure t
+					;  :config
+					;  (telephone-line-mode 1))
 
 (use-package chess
   :ensure t)
@@ -281,33 +281,33 @@ it is not appropriate in some cases like terminals."
   :ensure t
   :config
   ;; Global settings (defaults)
-;  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+					;  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+					;        doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-one t)
 
   ;; Enable flashing mode-line on errors
-;  (doom-themes-visual-bell-config)
+					;  (doom-themes-visual-bell-config)
   
   ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;(doom-themes-neotree-config)
+					;(doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
   (doom-themes-treemacs-config))
 
-  
-  ;; Corrects (and improves) org-mode's native fontification.
-;  (doom-themes-org-config))
 
-;(use-package man-preview
-;  :ensure t)
+;; Corrects (and improves) org-mode's native fontification.
+					;  (doom-themes-org-config))
+
+					;(use-package man-preview
+					;  :ensure t)
 
 (use-package heaven-and-hell
   :ensure t
   :init
   (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
   (setq heaven-and-hell-themes
-        '((light . doom-one-light)
-          (dark . doom-peacock))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+	'((light . doom-one-light)
+	  (dark . doom-peacock))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
 
   ;; Optionall, load themes without asking for confirmation.
   (setq heaven-and-hell-load-theme-no-confirm t)
@@ -335,49 +335,83 @@ it is not appropriate in some cases like terminals."
 (show-paren-mode 1)
 
 (use-package hydra
-  :ensure t
-  :init
-  (defhydra magic_rb/hydra-menu ()
-    ("a" ace-window)
-    ("j" windmove-left)
-    ("k" windmove-up)
-    ("l" windmove-down)
-    (";" windmove-right)
-    ("s" treemacs-switch-workspace)
-    ("S" treemacs-edit-workspaces)
-    ("t" treemacs-select-window)
-    ("T" treemacs)
-    ("m" magit)
-    ("RET" nil "Cancel")
-    ("SPC" nil "Cancel"))
-  (defhydra magic_rb/hydra-menu-rust (:color red :inherit (magic_rb/hydra-menu/heads))
-    ("b" rustic-cargo-build)
-    ("r" rustic-cargo-run))
+  :ensure t)
 
-  (defun magic_rb/hydra-launcher ()
-    "A launcher for hydras based on current context."
-    (interactive)
-    (cl-case major-mode
-      ('rustic-mode (magic_rb/hydra-menu-rust/body))
-      (t (magic_rb/hydra-menu/body))
-      ))
-  
-  (global-set-key (kbd "C-'") 'magic_rb/hydra-launcher))
+(defvar hydra-stack nil)
+
+(defun hydra-push (expr)
+  (push `(lambda () ,expr) hydra-stack))
+
+(defun hydra-pop ()
+  (interactive)
+  (let ((x (pop hydra-stack)))
+    (when x
+      (funcall x))))
+
+
+(defun magic_rb/hydra-launcher ()
+  "A launcher for hydras based on current context."
+  (interactive)
+  (cl-case major-mode
+    ('rustic-mode (magic_rb/hydra-rust/body))
+    (t (magic_rb/hydra-base/body)))
+  )
+
+(global-set-key (kbd "C-'") 'magic_rb/hydra-launcher)
+
+(defhydra magic_rb/hydra-base (:color red :body-pre (setq hydra-stack nil))
+  ("w" (progn
+	 (magic_rb/hydra-window-sub/body)
+	 (hydra-push '(magic_rb/hydra-launcher)))
+   "visit magic_rb/hydra-window-sub" :color teal)
+  ("s" treemacs-switch-workspace)
+  ("S" treemacs-edit-workspaces)
+  ("t" treemacs-select-window)
+  ("T" treemacs)
+  ("m" magit)
+  ("x" delete-window)
+  ("RET" (progn (setq hydra-stack nil)) "Cancel" :color blue)
+  ("SPC" (progn (setq hydra-stack nil)) "Cancel" :color blue))
+
+(defhydra magic_rb/hydra-window-sub (:color red)
+  ("a" ace-window)
+  ("j" windmove-left)
+  ("k" windmove-up)
+  ("l" windmove-down)
+  (";" windmove-right)
+  ("RET" hydra-pop "exit" :color blue)
+  ("SPC" hydra-pop "exit" :color blue)
+  ("q" (progn (setq hydra-stack nil)) "Cancel" :color blue)
+  )
+
+(defhydra magic_rb/hydra-rust (:color red :inherit (magic_rb/hydra-base/heads))
+  ("r" (progn
+         (magic_rb/hydra-rust-sub/body)
+         (hydra-push '(magic_rb/hydra-launcher)))
+   "visit magic_rb/hydra-rust-sub" :color teal)
+  )
+(defhydra magic_rb/hydra-rust-sub ()
+  ("b" rustic-cargo-build)
+  ("r" rustic-cargo-run)
+  ("RET" hydra-pop "exit" :color blue)
+  ("SPC" hydra-pop "exit" :color blue)
+  ("q" (progn (setq hydra-stack nil)) "Cancel" :color blue)
+  )
 
 (use-package key-chord
   :ensure t
   :init
   (defun key-chord-define-nonsymmetric (keymap keys command)
-  (if (/= 2 (length keys))
-      (error "Key-chord keys must have two elements"))
-  (let ((key1 (logand 255 (aref keys 0)))
-        (key2 (logand 255 (aref keys 1))))
-    (if (eq key1 key2)
-        (define-key keymap (vector 'key-chord key1 key2) command)
-      (define-key keymap (vector 'key-chord key1 key2) command)
-      ;; just remove this line:
-      ;(define-key keymap (vector 'key-chord key2 key1) command)
-      )))
+    (if (/= 2 (length keys))
+	(error "Key-chord keys must have two elements"))
+    (let ((key1 (logand 255 (aref keys 0)))
+	  (key2 (logand 255 (aref keys 1))))
+      (if (eq key1 key2)
+	  (define-key keymap (vector 'key-chord key1 key2) command)
+	(define-key keymap (vector 'key-chord key1 key2) command)
+	;; just remove this line:
+					;(define-key keymap (vector 'key-chord key2 key1) command)
+	)))
   ;;Exit insert mode by pressing j and then j quickly
   (setq key-chord-two-keys-delay 0.15)
   (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
@@ -437,15 +471,15 @@ it is not appropriate in some cases like terminals."
 (electric-pair-mode)
 
 (add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (select-frame frame)
-            (load-theme 'doom-peacock)))
+	  (lambda (frame)
+	    (select-frame frame)
+	    (load-theme 'doom-peacock)))
 
 ;; fullscreen
 (defun fullscreen ()
- (interactive)
- (set-frame-parameter nil 'fullscreen
-   (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
+  (interactive)
+  (set-frame-parameter nil 'fullscreen
+		       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 
 ;; :q should kill the current buffer rather than quitting emacs entirely
 (evil-ex-define-cmd "q" 'kill-this-buffer)
@@ -454,10 +488,10 @@ it is not appropriate in some cases like terminals."
 
 ;; save and close buffer
 (defun liu233w/ex-save-kill-buffer-and-close ()
-    (interactive)
-    (save-buffer)
-    (kill-this-buffer)
-    )
+  (interactive)
+  (save-buffer)
+  (kill-this-buffer)
+  )
 (evil-ex-define-cmd "wq" 'liu233w/ex-save-kill-buffer-and-close)
 
 ;; positional window movement
