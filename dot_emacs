@@ -281,22 +281,20 @@ it is not appropriate in some cases like terminals."
   :ensure t
   :config
   ;; Global settings (defaults)
-;  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
   ;; Enable flashing mode-line on errors
-;  (doom-themes-visual-bell-config)
+  (doom-themes-visual-bell-config)
   
   ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;(doom-themes-neotree-config)
+  (doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config))
+  (doom-themes-treemacs-config)
 
   
   ;; Corrects (and improves) org-mode's native fontification.
-;  (doom-themes-org-config))
+  (doom-themes-org-config))
 
 ;(use-package man-preview
 ;  :ensure t)
@@ -307,7 +305,7 @@ it is not appropriate in some cases like terminals."
   (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
   (setq heaven-and-hell-themes
         '((light . doom-one-light)
-          (dark . doom-peacock))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+          (dark . doom-one))); Themes can be the list: (dark . (tsdh-dark wombat))
 
   ;; Optionall, load themes without asking for confirmation.
   (setq heaven-and-hell-load-theme-no-confirm t)
@@ -383,6 +381,10 @@ it is not appropriate in some cases like terminals."
   (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
   (key-chord-mode 1))
 
+;(use-package jetbrains-darcula-theme
+;  :config
+;  (load-theme 'jetbrains-darcula t))
+
 ;; move hjkl to jkl;
 (define-key evil-motion-state-map "h" nil)
 (define-key evil-motion-state-map "j" 'evil-backward-char)
@@ -439,7 +441,7 @@ it is not appropriate in some cases like terminals."
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (select-frame frame)
-            (load-theme 'doom-peacock)))
+            (load-theme 'doom-one t)))
 
 ;; fullscreen
 (defun fullscreen ()
