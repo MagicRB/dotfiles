@@ -1,0 +1,91 @@
+* Hydra
+** Base
+   #+NAME: hydra-base
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (defhydra magic_rb/hydra-base (:color red :body-pre (setq hydra-stack nil))
+       ("w" (progn
+	      (magic_rb/hydra-window-sub/body)
+	      (hydra-push '(magic_rb/hydra-launcher)))
+	"visit magic_rb/hydra-window-sub" :color teal)
+       ("s" treemacs-switch-workspace)
+       ("S" treemacs-edit-workspaces)
+       ("t" treemacs-select-window)
+       ("T" treemacs)
+       ("v" vterm)
+       ("m" magit)
+       ("RET" (progn (setq hydra-stack nil)) "Cancel" :color blue)
+       ("SPC" (progn (setq hydra-stack nil)) "Cancel" :color blue))
+
+     (defhydra magic_rb/hydra-rust (:color red :inherit (magic_rb/hydra-base/heads))
+       ("r" (progn
+	      (magic_rb/hydra-rust-sub/body)
+	      (hydra-push '(magic_rb/hydra-launcher)))
+	"visit magic_rb/hydra-rust-sub" :color teal)
+       ("e" lsp-execute-code-action))
+
+     (defhydra magic_rb/hydra-lsp (:color red :inherit (magic_rb/hydra-base/heads))
+	 ("e" lsp-execute-code-action))
+   #+END_SRC
+** Subs
+*** Window
+    #+NAME: hydra-window
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (defhydra magic_rb/hydra-window-sub (:color red)
+	  ("a" ace-window)
+	  ("j" windmove-left)
+	  ("k" windmove-up)
+	  ("l" windmove-down)
+	  (";" windmove-right)
+	  ("x" delete-window)
+	  ("RET" hydra-pop "exit" :color blue)
+	  ("SPC" hydra-pop "exit" :color blue)
+	  ("q" (progn (setq hydra-stack nil)) "Cancel" :color blue))
+    #+END_SRC
+*** Rust
+    #+NAME: hydra-rust-sub
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (defhydra magic_rb/hydra-rust-sub ()
+	("b" rustic-cargo-build)
+	("r" rustic-cargo-run)
+	("t" rustic-cargo-test)
+	("f" rustic-format-buffer)
+	("RET" hydra-pop "exit" :color blue)
+	("SPC" hydra-pop "exit" :color blue)
+	("q" (progn (setq hydra-stack nil)) "Cancel" :color blue))
+    #+END_SRC
+*** LSP
+  #+NAME: hydra
+  #+BEGIN_SRC emacs-lisp :noweb yes
+    (use-package hydra
+      :ensure t
+      :after (vterm magit treemacs lsp-mode rustic)
+      :config
+      (defvar hydra-stack nil)
+
+      (defun hydra-push (expr)
+	(push `(lambda () ,expr) hydra-stack))
+
+      (defun hydra-pop ()
+	(interactive)
+	(let ((x (pop hydra-stack)))
+	  (when x
+	    (funcall x))))
+
+
+      (defun magic_rb/hydra-launcher ()
+	"A launcher for hydras based on current context."
+	(interactive)
+	(cl-case major-mode
+	  ('rustic-mode (magic_rb/hydra-rust/body))
+	  ('lsp-mode (magic_rb/hydra-rust/body))
+	  (t (magic_rb/hydra-base/body)))
+	)
+
+      <<hydra-base>>
+
+      <<hydra-window>> 
+
+      <<hydra-rust>>
+  
+      :bind (("C-'" . magic_rb/hydra-launcher)))
+  #+END_SRC

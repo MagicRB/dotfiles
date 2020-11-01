@@ -1,0 +1,55 @@
+#+NAME: evil
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-keybinding nil) 
+    :bind (:map evil-motion-state-map
+		("h" . nil)
+		("j" . evil-backward-char)
+		("k" . evil-previous-line)
+		("l" . evil-next-line)
+		(";" . evil-forward-char))
+    :config
+    (evil-mode 1)
+    (with-eval-after-load "treemacs"
+      (evil-define-key 'treemacs treemacs-mode-map (kbd "h") nil)
+      (evil-define-key 'treemacs treemacs-mode-map (kbd "j") 'treemacs-root-up)
+      (evil-define-key 'treemacs treemacs-mode-map (kbd "k") 'treemacs-previous-line)
+      (evil-define-key 'treemacs treemacs-mode-map (kbd "l") 'treemacs-next-line)
+      (evil-define-key 'treemacs treemacs-mode-map (kbd ";") 'treemacs-root-down)))
+
+  (use-package evil-collection
+    :ensure t
+    :config
+    (evil-collection-init 'vterm)
+    (defun evil-collection-vterm-escape-stay ()
+      "Go back to normal state but don't move cursor backwards.
+      Moving cursor backwards is the default vim behavior but
+      it is not appropriate in some cases like terminals."
+      (setq-local evil-move-cursor-back nil))
+
+    (add-hook 'vterm-mode-hook #'evil-collection-vterm-escape-stay))
+
+  (use-package evil-surround
+    :ensure t
+    :after evil
+    :config
+    (global-evil-surround-mode 1))
+
+  (use-package key-chord
+    :ensure t
+    :config
+    (defun magic_rb/key-chord-define-nonsymmetric (keymap keys command)
+      (if (/= 2 (length keys))
+	  (error "Key-chord keys must have two elements"))
+      (let ((key1 (logand 255 (aref keys 0)))
+	    (key2 (logand 255 (aref keys 1))))
+	(if (eq key1 key2)
+	    (define-key keymap (vector 'key-chord key1 key2) command)
+	  (define-key keymap (vector 'key-chord key1 key2) command)
+	  )))
+    (setq key-chord-two-keys-delay 0.15)
+    (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
+    (key-chord-mode 1))
+#+END_SRC

@@ -1,0 +1,147 @@
+* LSP and IDE setup
+** Languages
+*** YAML
+    #+NAME: yaml
+    #+BEGIN_SRC emacs-lisp
+      (use-package yaml-mode
+	:ensure t
+	:mode ("\\.yml\\'" . yaml-mode)
+	:mode ("\\.yaml\\'" . yaml-mode))
+    #+END_SRC
+*** Dockerfile
+    #+NAME: dockefile
+    #+BEGIN_SRC emacs-lisp
+      (use-package dockerfile-mode
+	:ensure t
+	:mode ("Dockerfile\\'" . dockerfile-mode))
+    #+END_SRC
+*** Rust
+    #+NAME: rust
+    #+BEGIN_SRC emacs-lisp
+      (use-package rustic
+	:ensure t
+	:mode ("\\.rs\\'" . rustic-mode))
+    #+END_SRC
+*** SCAD
+    #+NAME: scad
+    #+BEGIN_SRC emacs-lisp
+      (use-package scad-mode
+	:ensure t) 
+    #+END_SRC
+*** Scala
+    #+NAME: scala
+    #+BEGIN_SRC emacs-lisp
+      (use-package scala-mode
+	:ensure t
+	:mode ("\\.s\\(cala\\|bt\\)$" . scala-mode))
+
+      (use-package sbt-mode
+	:ensure t
+	:commands sbt-start sbt-command
+	:config
+	;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+	;; allows using SPACE when in the minibuffer
+	(substitute-key-definition
+	 'minibuffer-complete-word
+	 'self-insert-command
+	 minibuffer-local-completion-map)
+	;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+	(setq sbt:program-options '("-Dsbt.supershell=false")))
+    #+END_SRC
+*** Web - HTML + CSS
+    #+NAME: web
+    #+BEGIN_SRC emacs-lisp
+      (use-package web-mode
+	:ensure t
+	:mode ("\\.html\\'" . web-mode)
+	:mode ("\\.xhtml\\'" . web-mode)
+	:mode ("\\.css\\'" . css-mode)
+	:mode ("\\.scss\\'" . css-mode)
+	:config
+	(with-eval-after-load "flycheck"
+	  (flycheck-add-mode 'javascript-eslint 'web-mode)))
+    #+END_SRC
+*** Javascript
+    #+NAME: javascript
+    #+BEGIN_SRC emacs-lisp
+      (use-package rjsx-mode
+	:ensure t
+	:config
+	:mode ("\\.js\\'" . rjsx-mode)
+	:mode ("\\.jsx\\'" . rjsx-mode))
+    #+END_SRC
+*** Typescript
+    #+NAME: typescript
+    #+BEGIN_SRC emacs-lisp
+      (use-package typescript-mode
+	:ensure t
+	:config
+	:mode ("\\.ts\\'" . typescript-mode)
+	:mode ("\\.tsx\\'" . typescript-mode))
+    #+END_SRC
+** LSP
+*** lsp-mode
+    #+NAME: lsp-mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-mode
+	:ensure t
+	:after (rustic
+		rjsx-mode
+		typescript-mode
+		web-mode
+		scala-mode)
+	:config
+	(setq rustic-lsp-server 'rust-analyzer)
+	(setq rustic-compile-command "cargo build")
+	(setq rustic-format-trigger nil);'on-save)
+	(setq lsp-prefer-flymake nil)
+	:hook
+	(rustic . lsp)
+	(php-mode . lsp)
+	(rjsx-mode . lsp)
+	(css-mode . lsp)
+	(web-mode . lsp)
+	(lsp-mode . lsp-lens-mode)
+	(typescript-mode . lsp)
+	(scala-mode . lsp)
+	(tex-mode . lsp)
+	(lsp-mode . display-fill-column-indicator-mode)
+	(python-mode . lsp)
+	(lsp-mode . origami-mode))
+    #+END_SRC
+*** lsp-metals 
+    #+NAME: lsp-metals
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-metals
+	:ensure t)
+    #+END_SRC
+*** lsp-ui
+    #+NAME: lsp-ui
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-ui
+	  :ensure t)
+    #+END_SRC
+*** lsp-pyright
+    #+NAME: lsp-pyright
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-pyright
+	:ensure t
+	:hook (python-mode . (lambda ()
+			       (require 'lsp-pyright)
+			       (lsp))))  ; or lsp-deferred
+    #+END_SRC
+*** yassnippet
+    #+NAME: yasnippet
+    #+BEGIN_SRC emacs-lisp
+      (use-package yasnippet
+	:ensure t
+	:config
+	(yas-global-mode 1)) 
+    #+END_SRC
+*** flycheck
+    #+NAME: flycheck
+    #+BEGIN_SRC emacs-lisp
+      (use-package flycheck
+	:ensure t
+	:init (global-flycheck-mode))
+    #+END_SRC

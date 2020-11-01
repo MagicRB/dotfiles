@@ -1,0 +1,15 @@
+* Treemacs
+
+#+NAME: treemacs
+#+BEGIN_SRC emacs-lisp
+  (use-package treemacs
+    :ensure t)
+  (use-package treemacs-evil
+    :after (treemacs evil)
+    :ensure t)
+  (use-package lsp-treemacs
+    :ensure t
+    :after (lsp-mode treemacs)
+    :config
+    (lsp-treemacs-sync-mode 1))
+#+END_SRC
