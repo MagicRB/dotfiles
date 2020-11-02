@@ -85,7 +85,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package lsp-mode
 	:ensure t
-	:after (rustic
+	:after (; rustic
 		rjsx-mode
 		typescript-mode
 		web-mode
@@ -119,7 +119,16 @@
     #+NAME: lsp-ui
     #+BEGIN_SRC emacs-lisp
       (use-package lsp-ui
-	  :ensure t)
+	:ensure t
+	:after (company-box)
+	:config
+	;; disable focus on mouse over
+	(push '(no-accept-focus . t) lsp-ui-doc-frame-parameters)
+	(push '(no-accept-focus . t) company-box-frame-parameters)
+
+	(add-to-list 'lsp-ui-doc-frame-parameters '(no-accept-focus . t))
+	(add-to-list 'company-box-frame-parameters '(no-accept-focus . t))
+	(setq mouse-autoselect-window nil))
     #+END_SRC
 *** lsp-pyright
     #+NAME: lsp-pyright

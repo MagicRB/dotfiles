@@ -152,14 +152,6 @@
   (when (string= (system-name) "fractal")
     (set-frame-font "Fira Code 12" nil t))
 
-  ;; disable focus on mouse over
-  (push '(no-accept-focus . t) lsp-ui-doc-frame-parameters)
-  (push '(no-accept-focus . t) company-box-frame-parameters)
-
-  (add-to-list 'lsp-ui-doc-frame-parameters '(no-accept-focus . t))
-  (add-to-list 'company-box-frame-parameters '(no-accept-focus . t))
-  (setq mouse-autoselect-window nil)
-
   ;; enable parenthesis and quotes pairing thing
   (electric-pair-mode)
 
