@@ -24,7 +24,10 @@
        ("e" lsp-execute-code-action))
 
      (defhydra magic_rb/hydra-lsp (:color red :inherit (magic_rb/hydra-base/heads))
-	 ("e" lsp-execute-code-action))
+       ("e" lsp-execute-code-action))
+
+     (defhydra magic_rb/hydra-org (:color red :inherit (magic_rb/hydra-base/heads))
+       ("'" org-cycle-agenda-files :color blue))
    #+END_SRC
 ** Subs
 *** Window
@@ -55,12 +58,15 @@
     #+END_SRC
 *** LSP
   #+NAME: hydra
-  #+BEGIN_SRC emacs-lisp :noweb yes
+  #+BEGIN_SRC emacs-lisp :noweb yes :tangle yes
     (use-package hydra
       :ensure t
-      :after (vterm magit treemacs lsp-mode rustic)
+      :after (vterm magit treemacs lsp-mode) ; rustic
       :config
       (defvar hydra-stack nil)
+      :bind (("C-'" . magic_rb/hydra-launcher)
+	     :map org-mode-map
+	     ("C-'" . magic_rb/hydra-launcher)))
 
       (defun hydra-push (expr)
 	(push `(lambda () ,expr) hydra-stack))
@@ -78,14 +84,13 @@
 	(cl-case major-mode
 	  ('rustic-mode (magic_rb/hydra-rust/body))
 	  ('lsp-mode (magic_rb/hydra-rust/body))
-	  (t (magic_rb/hydra-base/body)))
-	)
+	  ('org-mode (magic_rb/hydra-org/body))
+	  (t (magic_rb/hydra-base/body))))
 
       <<hydra-base>>
 
       <<hydra-window>> 
 
       <<hydra-rust>>
-  
-      :bind (("C-'" . magic_rb/hydra-launcher)))
   #+END_SRC
+  

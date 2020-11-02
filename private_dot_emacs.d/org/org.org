@@ -1,0 +1,41 @@
+* ORG
+** ORG Linkz
+   Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]]
+   Remove validation link from exported html file
+
+   #+NAME: org-linkz-html-validation-link
+   #+BEGIN_SRC emacs-lisp
+     (setq org-html-validation-link nil)
+   #+END_SRC
+   #+NAME: org-linkz
+   #+BEGIN_SRC emacs-lisp
+     (require 'org-protocol)
+     (setq org-capture-templates
+	     '(
+	       ("o" "Link capture" entry
+		(file+headline "~/.local/share/chezmoi/org/linkz.org" "INBOX")
+		"* %a %U"
+		:immediate-finish t)
+     ))
+     (setq org-protocol-default-template-key "o")
+   #+END_SRC
+   
+   Then a .desktop file is needed for firefox
+
+   #+NAME: org-protocol-desktop
+   #+BEGIN_SRC conf-desktop :tangle ~/.local/share/applications/org-protocol.desktop
+     [Desktop Entry]
+     Name=org-protocol
+     Exec=emacsclient -n %u
+     Type=Application
+     Terminal=false
+     Categories=System;
+     MimeType=x-scheme-handler/org-protocol;
+   #+END_SRC
+   
+   Then a bookmark must be added into firefox with this location
+
+   #+NAME: bookmark
+   #+BEGIN_SRC javascript :tangle no
+     javascript:location.href="org-protocol:///capture?url="+encodeURIComponent(location.href)+"&title="+encodeURIComponent(document.title||"[untitled page]")
+   #+END_SRC
