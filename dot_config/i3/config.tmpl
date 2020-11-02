@@ -58,6 +58,8 @@ exec --no-startup-id feh --bg-fill /home/main/wallpaper.jpg
 
 for_window [class="^.*"] border normal 1
 
+for_window [title=".*Helm.*"] floating enable border pixel 1
+
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
