@@ -60,8 +60,8 @@
     ;; automatically annotate highlights
     (setq pdf-annot-activate-created-annotations t))
 
-  (use-package auxtex
-    :ensure t)
+;  (use-package auctex
+;    :ensure t)
 
   (use-package vterm
     :ensure t)
@@ -176,6 +176,6 @@
   (setq-default display-fill-column-indicator-column 100)
 
 
-  (unless (server-running-p)
-    (server-start))
+  ;(unless (server-running-p)
+    (server-start) ;)
 #+END_SRC
