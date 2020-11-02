@@ -172,20 +172,7 @@
   (defun fullscreen ()
     (interactive)
     (set-frame-parameter nil 'fullscreen
-			 (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
-
-  ;; :q should kill the current buffer rather than quitting emacs entirely
-  (evil-ex-define-cmd "q" 'kill-this-buffer)
-  ;; Need to type out :quit to close emacs
-  (evil-ex-define-cmd "quit" 'evil-quit)
-
-  ;; save and close buffer
-  (defun liu233w/ex-save-kill-buffer-and-close ()
-    (interactive)
-    (save-buffer)
-    (kill-this-buffer)
-    )
-  (evil-ex-define-cmd "wq" 'liu233w/ex-save-kill-buffer-and-close)
+			 (if (frame-parameter nil 'fullscreen) nil 'fullboth)))  
 
   (setq backup-directory-alist
 	`(("." . ,(concat user-emacs-directory "backups"))))
