@@ -1,0 +1,126 @@
+* Digraph
+  #+NAME: digraph
+  #+BEGIN_SRC emacs-lisp
+    ;; (defun register-digraphs (key digraphs &rest _description)
+    ;;  "Given a list of 2-char digraphs, and a resulting (unicode) character, enable each digraph via prefix-command `digraph-map`"
+    ;;  (mapc (lambda (d) (define-key digraph-map d `(lambda () (interactive) (insert ,key)))) ,digraphs))
+
+    ;; (lambda () (interactive) (insert ,keyseq))
+    ;; (lambda () (interactive) (insert ,key))
+    ;; (progn (message ,val))
+    ;; `(,keyseq (lambda () (interactive) (insert ,val)) "Description"))
+    ;; (eval `(mapc (lambda (keyseq) `(keyseq (lambda () (interactive (insert ,val)) "Description"))) ,keyseqs )))
+    ;; `(keyseq (lambda () (interactive) (insert ,val)) "Description")
+
+    (with-eval-after-load "hydra"
+      (defmacro create-digraph (val keyseq)
+	`(,keyseq (lambda () (interactive) (insert ,val)) ,val))
+
+      (eval `(defhydra magic_rb/hydra-digraph-sub (:color red)
+	       ,(macroexpand '(create-digraph "◊" "<>"))
+	       ,(macroexpand '(create-digraph "␣" "sp"))
+	       ,(macroexpand '(create-digraph "ď" "'d"))
+	       ,(macroexpand '(create-digraph "ť" "'t"))
+	       ,(macroexpand '(create-digraph "ň" "'n"))
+	       ,(macroexpand '(create-digraph "ľ" "'l"))
+	       ,(macroexpand '(create-digraph "č" "'c"))
+	       ,(macroexpand '(create-digraph "š" "'s"))
+	       ,(macroexpand '(create-digraph "ž" "'z"))
+
+	       ,(macroexpand '(create-digraph "Ö" "O:"))
+	       ,(macroexpand '(create-digraph "ö" "o:"))
+	       ,(macroexpand '(create-digraph "Ü" "U:"))
+	       ,(macroexpand '(create-digraph "ü" "u:"))
+	       ,(macroexpand '(create-digraph "Ä" "A:"))
+	       ,(macroexpand '(create-digraph "ä" "a:"))
+	       ("RET" hydra-pop "exit" :color blue)
+	       ("SPC" hydra-pop "exit" :color blue)
+	       ("q" (progn (setq hydra-stack nil)) "Cancel" :color blue))))
+  #+END_SRC
+  
+  #+NAME: digraph-defs
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (with-eval-after-load "hydra"
+      (register-digraphs "◊" '("<>" "()"))
+      (register-digraphs "␣" '("sp" "  "))
+      (register-digraphs "—" '("--" "em" "-m" "-3")) ; mdash
+      (register-digraphs "–" '("en" "-n" "-2")) ; ndash
+      (register-digraphs "°" '("dg" "^o")) ; deg
+      (register-digraphs "±" '("+-")) ; pm
+      (register-digraphs "∓" '("-+")) ; mp
+
+      (register-digraphs "ß" '("ss" "sz"))
+
+      (register-digraphs "¢" '("c|"))
+      (register-digraphs "£" '("$$" "lb"))
+      (register-digraphs "¥" '("Y="))
+      (register-digraphs "¤" '("ox"))
+      (register-digraphs "€" '("E="))
+
+      (register-digraphs "©" '("cO")) ; copy
+      (register-digraphs "®" '("rO")) ; reg
+      (register-digraphs "™" '("TM")) ; trade
+      (register-digraphs "℠" '("SM"))
+      (register-digraphs "℅" '("co")) ; (c/o)
+      (register-digraphs "№" '("N0"))
+      (register-digraphs "℗" '("PO"))
+      (register-digraphs "℞" '("Rx"))
+
+					    ; greek letters
+      (register-digraphs "Α" '("gA"))
+      (register-digraphs "Β" '("gB"))
+      (register-digraphs "Γ" '("gG"))
+      (register-digraphs "Δ" '("gD"))
+      (register-digraphs "Ε" '("gE"))
+      (register-digraphs "Ζ" '("gZ"))
+      (register-digraphs "Η" '("gY"))
+      (register-digraphs "Θ" '("gH"))
+      (register-digraphs "Ι" '("gI"))
+      (register-digraphs "Κ" '("gK"))
+      (register-digraphs "Λ" '("gL"))
+      (register-digraphs "Μ" '("gM"))
+      (register-digraphs "Ν" '("gN"))
+      (register-digraphs "Ξ" '("gC"))
+      (register-digraphs "Ο" '("gO"))
+      (register-digraphs "Π" '("gP"))
+      (register-digraphs "Ρ" '("gR"))
+      (register-digraphs "Σ" '("gS"))
+      (register-digraphs "Τ" '("gT"))
+      (register-digraphs "Υ" '("gU"))
+      (register-digraphs "Φ" '("gF"))
+      (register-digraphs "Χ" '("gX"))
+      (register-digraphs "Ψ" '("gQ"))
+      (register-digraphs "Ω" '("gW"))
+
+
+      (register-digraphs "α" '("ga"))
+      (register-digraphs "β" '("gb"))
+      (register-digraphs "γ" '("gg"))
+      (register-digraphs "δ" '("gd"))
+      (register-digraphs "ε" '("ge"))
+      (register-digraphs "ζ" '("gz"))
+      (register-digraphs "η" '("gy"))
+      (register-digraphs "θ" '("gh"))
+      (register-digraphs "ι" '("gi"))
+      (register-digraphs "κ" '("gk"))
+      (register-digraphs "λ" '("gl"))
+      (register-digraphs "μ" '("gm"))
+      (register-digraphs "ν" '("gn"))
+      (register-digraphs "ξ" '("gc"))
+      (register-digraphs "ο" '("go"))
+      (register-digraphs "π" '("gp"))
+      (register-digraphs "ρ" '("gr"))
+      (register-digraphs "σ" '("gs"))
+      (register-digraphs "τ" '("gt"))
+      (register-digraphs "υ" '("gu"))
+      (register-digraphs "φ" '("gf"))
+      (register-digraphs "χ" '("gx"))
+      (register-digraphs "ψ" '("gq"))
+      (register-digraphs "ω" '("gw"))
+
+      (register-digraphs "∆" '("DE"))
+
+      (register-digraphs "≤" '("<=" "le"))
+      (register-digraphs "≥" '(">=" "ge"))
+      (register-digraphs "≠" '("!=" "ne")))
+  #+END_SRC
