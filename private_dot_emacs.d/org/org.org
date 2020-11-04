@@ -1,6 +1,6 @@
 * ORG
 ** ORG Linkz
-   Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]]
+   Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]].
    Remove validation link from exported html file
 
    #+NAME: org-linkz-html-validation-link
@@ -11,12 +11,12 @@
    #+BEGIN_SRC emacs-lisp
      (require 'org-protocol)
      (setq org-capture-templates
-	     '(
-	       ("o" "Link capture" entry
-		(file+headline "~/.local/share/chezmoi/org/linkz.org" "INBOX")
-		"* %a %U"
-		:immediate-finish t)
-     ))
+	   '(
+	     ("o" "Link capture" entry
+	      (file+headline "~/.local/share/chezmoi/org/linkz.org" "INBOX")
+	      "* %a %U"
+	      :immediate-finish t)
+	     ))
      (setq org-protocol-default-template-key "o")
    #+END_SRC
    
