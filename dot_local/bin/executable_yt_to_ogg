@@ -1,0 +1,3 @@
+#!/bin/bash
+
+youtube-dl -f 251 "${1}" --exec 'ffmpeg -i {} -acodec copy "$(basename {} .webm).ogg" && rm "$(basename {})"'

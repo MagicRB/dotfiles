@@ -1,0 +1,11 @@
+#!/bin/bash
+
+pactl load-module module-null-sink sink_name=separate-cable \
+      sink_properties="device.description='Separate'"
+
+pactl load-module module-loopback rate=44000 adjust_time=0 \
+      source=separate-cable.monitor sink=alsa_output.pci-0000_0a_00.3.analog-stereo \
+      latency_msec=1
+
+## alsa_output.pci-0000_0a_00.3.analog-stereo.monitor
+      
