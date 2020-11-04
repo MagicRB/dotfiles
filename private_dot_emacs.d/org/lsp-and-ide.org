@@ -85,11 +85,11 @@
     #+BEGIN_SRC emacs-lisp
       (use-package lsp-mode
 	:ensure t
-	:after (; rustic
-		rjsx-mode
-		typescript-mode
-		web-mode
-		scala-mode)
+	;:after (; rustic
+	;	  rjsx-mode
+	;	  typescript-mode
+	;	  web-mode
+	;	  scala-mode)
 	:config
 	(setq rustic-lsp-server 'rust-analyzer)
 	(setq rustic-compile-command "cargo build")
@@ -109,11 +109,53 @@
 	(python-mode . lsp)
 	(lsp-mode . origami-mode))
     #+END_SRC
-*** lsp-metals 
-    #+NAME: lsp-metals
+*** company
+    #+NAME: company
     #+BEGIN_SRC emacs-lisp
+      (use-package company
+	:ensure t
+	:config
+	(add-hook 'after-init-hook 'global-company-mode))
+    #+END_SRC
+*** lsp-metals 
+    #+NAME: lsp-metals-tramp
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (lsp-register-client
+       (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-metals--server-command)
+			:major-modes '(scala-mode)
+			:priority -1
+			:initialization-options '((decorationProvider . t)
+						  (inlineDecorationProvider . t)
+						  (didFocusProvider . t)
+						  (executeClientCommandProvider . t)
+						  (doctorProvider . "html")
+						  (statusBarProvider . "on")
+						  (debuggingProvider . t)
+						  (treeViewProvider . t))
+			:notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
+						   ("metals/publishDecorations" #'lsp-metals--publish-decorations)
+						   ("metals/treeViewDidChange" #'lsp-metals-treeview--did-change)
+						   ("metals-model-refresh" #'lsp-metals--model-refresh)
+						   ("metals/status" #'lsp-metals--status-string))
+			:action-handlers (ht ("metals-debug-session-start" (-partial #'lsp-metals--debug-start :json-false))
+					     ("metals-run-session-start" (-partial #'lsp-metals--debug-start t)))
+			:server-id 'metals
+			:remote? t
+			:initialized-fn (lambda (workspace)
+					  (lsp-metals--add-focus-hooks)
+					  (with-lsp-workspace workspace
+					    (lsp--set-configuration
+					     (lsp-configuration-section "metals"))))
+			:after-open-fn (lambda ()
+					 (add-hook 'lsp-on-idle-hook #'lsp-metals--did-focus nil t))
+			:completion-in-comments? t))
+    #+END_SRC
+    #+NAME: lsp-metals
+    #+BEGIN_SRC emacs-lisp :noweb yes
       (use-package lsp-metals
-	:ensure t)
+	:ensure t
+	:config
+	<<lsp-metals-tramp>>)
     #+END_SRC
 *** lsp-ui
     #+NAME: lsp-ui
@@ -129,6 +171,7 @@
 	(add-to-list 'lsp-ui-doc-frame-parameters '(no-accept-focus . t))
 	(add-to-list 'company-box-frame-parameters '(no-accept-focus . t))
 	(setq mouse-autoselect-window nil))
+      (add-hook 'after-init-hook 'global-company-mode)
     #+END_SRC
 *** lsp-pyright
     #+NAME: lsp-pyright
