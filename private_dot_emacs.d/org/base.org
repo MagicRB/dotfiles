@@ -88,6 +88,8 @@
   (use-package origami
     :ensure t)
 
+  (load-theme 'doom-gruvbox t) 
+  
   (use-package doom-themes
     :ensure t
     :config
@@ -158,7 +160,7 @@
   (add-hook 'after-make-frame-functions
 	    (lambda (frame)
 	      (select-frame frame)
-	      (load-theme 'doom-one t)))
+	      (load-theme 'doom-gruvbox t)))
 
   ;; fullscreen
   (defun fullscreen ()

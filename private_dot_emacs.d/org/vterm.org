@@ -1,0 +1,35 @@
+* VTerm
+#+NAME: vterm-evil-fix
+#+BEGIN_SRC emacs-lisp
+  (defun pos-at-prompt (pos)
+    (and
+     (>= (line-number-at-pos pos) (line-number-at-pos (vterm--get-cursor-point)))
+     (>= pos (vterm--get-prompt-point)) (<= pos (vterm--get-end-of-line))))
+
+  (defun move-cursor (amount)
+    (message "%s" amount)
+    (if (< amount 0)
+	(cl-loop repeat (* amount -1) do (vterm-send-left))
+      (cl-loop repeat amount do (vterm-send-right))))
+
+  (defun delete-selection-evilterm ()
+    (when (and
+	 (pos-at-prompt (point))
+	 (pos-at-prompt (mark)))
+	(let ((amount (- (max (point) (mark)) (vterm--get-cursor-point)))) 
+	  (progn
+	    (deactivate-mark)
+	    (move-cursor amount)
+	    (cl-loop repeat (- (max (point) (mark)) (min (point) (mark))) do (vterm-send-backspace))
+	    ))
+      (message "No selection")))
+
+  (defun move-cursor-to-point ()
+    (when (pos-at-prompt (point))
+	(move-cursor (- (point) (vterm--get-cursor-point)))))
+
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "d") (lambda () (interactive) (delete-selection-evilterm)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "i") (lambda () (interactive) (move-cursor-to-point) (evil-insert 1)))
+#+END_SRC

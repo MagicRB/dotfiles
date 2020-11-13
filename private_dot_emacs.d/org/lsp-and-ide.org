@@ -95,6 +95,10 @@
 	(setq rustic-compile-command "cargo build")
 	(setq rustic-format-trigger nil);'on-save)
 	(setq lsp-prefer-flymake nil)
+
+	(setq lsp-rust-analyzer-display-chaining-hints nil)
+	(setq lsp-rust-analyzer-display-parameter-hints nil)
+	(setq lsp-rust-analyzer-server-display-inlay-hints t)
 	:hook
 	(rustic . lsp)
 	(php-mode . lsp)
@@ -107,7 +111,8 @@
 	(tex-mode . lsp)
 	(lsp-mode . display-fill-column-indicator-mode)
 	(python-mode . lsp)
-	(lsp-mode . origami-mode))
+	(lsp-mode . origami-mode)
+	(lsp-mode . lsp-rust-analyzer-inlay-hints-mode))
     #+END_SRC
 *** company
     #+NAME: company

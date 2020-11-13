@@ -48,6 +48,8 @@
 	(helm-log-run-hook 'helm-window-configuration-hook)))
 
     (setq helm-display-function 'my-helm-display-frame-center)
+    (setq helm-display-buffer-reuse-frame t
+     helm-display-buffer-width 80)
     (helm-mode)
     :bind (("M-x" . helm-M-x)
 	   ("C-x r b" . helm-filtered-bookmarks)

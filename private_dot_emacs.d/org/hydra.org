@@ -1,6 +1,6 @@
 * Hydra
 ** Base
-  #+NAME: hydra-base
+  #+name: hydra-base
   #+BEGIN_SRC emacs-lisp :tangle no
     (defhydra magic_rb/hydra-base (:color red :body-pre (setq hydra-stack nil))
       ("w" (progn
