@@ -1,4 +1,28 @@
 * ORG
+** Org Agenda
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files '("~/org"))
+  (add-hook 'org-mode-hook (lambda ()
+			     (set-fill-column 120)
+			     (display-fill-column-indicator-mode)))
+
+  (setq org-agenda-custom-commands
+	'(("h" "Agenda and Home-related tasks"
+	   ((agenda "")
+	    (tags-todo "home")
+	    (tags "garden")))
+	  ("o" "Agenda and Office-related tasks"
+	   ((agenda "")
+	    (tags-todo "work")
+	    (tags "office")))
+	  ("i" "Agenda and School-related tasks"
+	   ((agenda "")
+	    (tags-todo "school")
+	    (tags "school")))))
+
+  (require 'org-alert)
+  (require 'notifications)
+#+END_SRC
 ** ORG Linkz
    Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]].
    Remove validation link from exported html file
@@ -13,14 +37,14 @@
      (setq org-capture-templates
 	   '(
 	     ("o" "Link capture" entry
-	      (file+headline "~/.local/share/chezmoi/org/linkz.org" "INBOX")
+	      (file+headline "~/org/linkz.org" "INBOX")
 	      "* %a %U"
 	      :immediate-finish t)
 	     ))
      (setq org-protocol-default-template-key "o")
    #+END_SRC
    
-   Then a .desktop file is needed for firefox
+   Then a .desktop file is needed for Firefox/Chromium
 
    #+NAME: org-protocol-desktop
    #+BEGIN_SRC conf-desktop :tangle ~/.local/share/applications/org-protocol.desktop

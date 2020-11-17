@@ -11,6 +11,7 @@
 	     (magic_rb/hydra-digraph-sub/body)
 	     (hydra-push '(magic_rb/hydra-launcher)))
        "visit magic_rb/hydra-window-sub" :color teal)
+      ("a" org-agenda :color teal)
       ("s" treemacs-switch-workspace)
       ("S" treemacs-edit-workspaces)
       ("t" treemacs-select-window)

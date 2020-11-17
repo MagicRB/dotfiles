@@ -1,6 +1,6 @@
-* EXWM
+* Evil
 #+NAME: evil
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package evil
     :ensure t
     :init

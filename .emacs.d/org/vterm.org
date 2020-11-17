@@ -32,4 +32,21 @@
     (kbd "d") (lambda () (interactive) (delete-selection-evilterm)))
   (evil-define-key 'normal vterm-mode-map
     (kbd "i") (lambda () (interactive) (move-cursor-to-point) (evil-insert 1)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+
 #+END_SRC

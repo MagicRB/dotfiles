@@ -7,9 +7,12 @@
 
 [ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
 
-## Enable color on ls and grep
-alias ls='ls --color=auto'
+## Enable color on grep
 alias grep='grep --color=auto'
+
+## Replace ls and cat with exa and bat respectively
+alias ls='exa'
+alias cat='bat'
 
 ## Add .local/bin to path
 #export PATH="${HOME}/.local/bin:${PATH}"
@@ -46,11 +49,15 @@ then
     alias e="emacsclient-remote"
 elif [[ ! -z "${INSIDE_EMACS}" ]]
 then
-    alias E="SUDO_EDITOR=\"emacsclient-$(uname -m) -a emacs\" sudoedit"
-    alias e="emacsclient-$(uname -m)"
+    EMACSCLIENT="`command -v -- emacsclient >/dev/null 2>&1 && printf emacsclient || printf emacsclient-$(uname -m)`"
+    echo "${EMACSCLIENT}"
+    alias E="SUDO_EDITOR=\"${EMACSCLIENT} -a emacs\" sudoedit"
+    alias e="${EMACSCLIENT}"
 else
-    alias E="SUDO_EDITOR=\"emacsclient-$(uname -m) -a emacs -t\" sudoedit"
-    alias e="emacsclient-$(uname -m) -t"
+    EMACSCLIENT="`command -v -- emacsclient >/dev/null 2>&1 && printf emacsclient || printf emacsclient-$(uname -m)`"
+    echo "${EMACSCLIENT}"
+    alias E="SUDO_EDITOR=\"${EMACSCLIENT} -a emacs -t\" sudoedit"
+    alias e="${EMACSCLIENT} -t"
 fi
 
 
