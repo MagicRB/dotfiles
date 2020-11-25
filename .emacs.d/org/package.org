@@ -1,6 +1,0 @@
-#+NAME: package
-#+BEGIN_SRC emacs-lisp
-
-; yoinkted
-
-#+END_SRC

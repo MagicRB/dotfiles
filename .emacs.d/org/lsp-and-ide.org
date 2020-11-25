@@ -4,7 +4,7 @@
     #+NAME: yaml
     #+BEGIN_SRC emacs-lisp
       (use-package yaml-mode
-	:ensure t
+	:straight t
 	:mode ("\\.yml\\'" . yaml-mode)
 	:mode ("\\.yaml\\'" . yaml-mode))
     #+END_SRC
@@ -12,31 +12,31 @@
     #+NAME: dockefile
     #+BEGIN_SRC emacs-lisp
       (use-package dockerfile-mode
-	:ensure t
+	:straight t
 	:mode ("Dockerfile\\'" . dockerfile-mode))
     #+END_SRC
 *** Rust
     #+NAME: rust
     #+BEGIN_SRC emacs-lisp
       (use-package rustic
-	:ensure t
+	:straight t
 	:mode ("\\.rs\\'" . rustic-mode))
     #+END_SRC
 *** SCAD
     #+NAME: scad
     #+BEGIN_SRC emacs-lisp
       (use-package scad-mode
-	:ensure t) 
+	:straight t) 
     #+END_SRC
 *** Scala
     #+NAME: scala
     #+BEGIN_SRC emacs-lisp
       (use-package scala-mode
-	:ensure t
+	:straight t
 	:mode ("\\.s\\(cala\\|bt\\)$" . scala-mode))
 
       (use-package sbt-mode
-	:ensure t
+	:straight t
 	:commands sbt-start sbt-command
 	:config
 	;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
@@ -52,7 +52,7 @@
     #+NAME: web
     #+BEGIN_SRC emacs-lisp
       (use-package web-mode
-	:ensure t
+	:straight t
 	:mode ("\\.html\\'" . web-mode)
 	:mode ("\\.xhtml\\'" . web-mode)
 	:mode ("\\.css\\'" . css-mode)
@@ -65,7 +65,7 @@
     #+NAME: javascript
     #+BEGIN_SRC emacs-lisp
       (use-package rjsx-mode
-	:ensure t
+	:straight t
 	:config
 	:mode ("\\.js\\'" . rjsx-mode)
 	:mode ("\\.jsx\\'" . rjsx-mode))
@@ -74,22 +74,39 @@
     #+NAME: typescript
     #+BEGIN_SRC emacs-lisp
       (use-package typescript-mode
-	:ensure t
+	:straight t
 	:config
 	:mode ("\\.ts\\'" . typescript-mode)
 	:mode ("\\.tsx\\'" . typescript-mode))
+      (with-eval-after-load "lsp-mode"
+	)
+
     #+END_SRC
 ** LSP
+*** COMMENT smart-tabs
+    #+NAME: tabs
+    #+BEGIN_SRC emacs-lisp
+      (setq whitespace-display-mappings
+	    '((tab-mark 9 [65293] [92 9])))
+      (setq whitespace-style '(tab-mark))
+      (use-package smart-tabs-mode
+	:straight t
+	:config
+	(smart-tabs-add-language-support rust rustic-hook
+					 ((c-indent-line . c-basic-offset)
+					  (c-indent-region . c-basic-offset)))
+	(smart-tabs-insinuate 'c 'javascript 'rust))
+    #+END_SRC
 *** lsp-mode
     #+NAME: lsp-mode
     #+BEGIN_SRC emacs-lisp
       (use-package lsp-mode
-	:ensure t
-	;:after (; rustic
-	;	  rjsx-mode
-	;	  typescript-mode
-	;	  web-mode
-	;	  scala-mode)
+	:straight t
+	;; :after (; rustic
+	;; rjsx-mode
+	;; typescript-mode
+	;; web-mode
+	;; scala-mode)
 	:config
 	(setq rustic-lsp-server 'rust-analyzer)
 	(setq rustic-compile-command "cargo build")
@@ -112,14 +129,33 @@
 	(lsp-mode . display-fill-column-indicator-mode)
 	(python-mode . lsp)
 	(lsp-mode . origami-mode)
-	(lsp-mode . lsp-rust-analyzer-inlay-hints-mode))
+	(lsp-mode . lsp-rust-analyzer-inlay-hints-mode)
+	:config
+	(lsp-register-client
+	 (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
+								  `("typescript-language-server"
+								    "--tsserver-path"
+								    "tsserver"
+								    ,@lsp-clients-typescript-server-args)))
+			  :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
+			  :priority -2
+			  :completion-in-comments? t
+			  :initialization-options (lambda ()
+						    (list :plugins lsp-clients-typescript-plugins
+							  :logVerbosity lsp-clients-typescript-log-verbosity
+							  :tsServerPath (lsp-package-path 'typescript)))
+			  :ignore-messages '("readFile .*? requested by TypeScript but content not available")
+			  :server-id 'ts-ls
+			  :remote? t)))
     #+END_SRC
 *** company
     #+NAME: company
     #+BEGIN_SRC emacs-lisp
       (use-package company
-	:ensure t
+	:straight t
 	:config
+	;; aligns annotation to the right hand side
+	(setq company-tooltip-align-annotations t)   
 	(add-hook 'after-init-hook 'global-company-mode))
     #+END_SRC
 *** lsp-metals 
@@ -158,7 +194,7 @@
     #+NAME: lsp-metals
     #+BEGIN_SRC emacs-lisp :noweb yes
       (use-package lsp-metals
-	:ensure t
+	:straight t
 	:config
 	<<lsp-metals-tramp>>)
     #+END_SRC
@@ -166,7 +202,7 @@
     #+NAME: lsp-ui
     #+BEGIN_SRC emacs-lisp
       (use-package lsp-ui
-	:ensure t
+	:straight t
 	:after (company-box)
 	:config
 	;; disable focus on mouse over
@@ -182,7 +218,7 @@
     #+NAME: lsp-pyright
     #+BEGIN_SRC emacs-lisp
       (use-package lsp-pyright
-	:ensure t
+	:straight t
 	:hook (python-mode . (lambda ()
 			       (require 'lsp-pyright)
 			       (lsp))))  ; or lsp-deferred
@@ -191,7 +227,7 @@
     #+NAME: yasnippet
     #+BEGIN_SRC emacs-lisp
       (use-package yasnippet
-	:ensure t
+	:straight t
 	:config
 	(yas-global-mode 1)) 
     #+END_SRC
@@ -199,6 +235,6 @@
     #+NAME: flycheck
     #+BEGIN_SRC emacs-lisp
       (use-package flycheck
-	:ensure t
+	:straight t
 	:init (global-flycheck-mode))
     #+END_SRC

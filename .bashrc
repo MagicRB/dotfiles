@@ -50,12 +50,10 @@ then
 elif [[ ! -z "${INSIDE_EMACS}" ]]
 then
     EMACSCLIENT="`command -v -- emacsclient >/dev/null 2>&1 && printf emacsclient || printf emacsclient-$(uname -m)`"
-    echo "${EMACSCLIENT}"
     alias E="SUDO_EDITOR=\"${EMACSCLIENT} -a emacs\" sudoedit"
     alias e="${EMACSCLIENT}"
 else
     EMACSCLIENT="`command -v -- emacsclient >/dev/null 2>&1 && printf emacsclient || printf emacsclient-$(uname -m)`"
-    echo "${EMACSCLIENT}"
     alias E="SUDO_EDITOR=\"${EMACSCLIENT} -a emacs -t\" sudoedit"
     alias e="${EMACSCLIENT} -t"
 fi

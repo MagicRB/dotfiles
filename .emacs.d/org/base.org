@@ -1,26 +1,23 @@
 #+NAME: base
 #+BEGIN_SRC emacs-lisp
-  (use-package elcord
-    :ensure t
-    :config
-    (when (not (string= (system-name) "fractal"))
-      (elcord-mode))
-    )
+  (when (not (string= (system-name) "fractal"))
+    (use-package elcord
+      :straight t
+      :config
+      (elcord-mode)))
 
   (when (not (string= (system-name) "localhost"))
     (use-package tree-sitter
-      :ensure t)
+      :straight t
+      :after (tree-sitter-langs)
+      :config
+      (global-tree-sitter-mode)
+      (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
     (use-package tree-sitter-langs
-      :ensure t)
-
-    (global-tree-sitter-mode)
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
-  ;; aligns annotation to the right hand side
-  (setq company-tooltip-align-annotations t)   
+      :straight t))
 
   (use-package edit-server
-    :ensure t
+    :straight t
     :commands edit-server-start
     :init (if after-init-time
 	      (edit-server-start)
@@ -39,7 +36,7 @@
   (setq display-line-numbers-type 'relative)
 
   (use-package impatient-mode
-    :ensure t)
+    :straight t)
 
   (defun markdown-html (buffer)
     (princ (with-current-buffer buffer
@@ -49,7 +46,7 @@
   (httpd-start)
 
   (use-package pdf-tools
-    :ensure t
+    :straight t
     :hook (('TeX-mode-hook . visual-line-mode))
     :config
     ;; initialise
@@ -60,20 +57,17 @@
     ;; automatically annotate highlights
     (setq pdf-annot-activate-created-annotations t))
 
-;  (use-package auctex
-;    :ensure t)
-
-  (use-package vterm
-    :ensure t)
+					  ;  (use-package auctex
+					  ;    :ensure t)
 
   (use-package w3m
-    :ensure t) 
+    :straight t) 
 
   (use-package all-the-icons
-    :ensure t)
+    :straight t)
 
   (use-package doom-modeline
-    :ensure t
+    :straight t
     :config
     (doom-modeline-mode)
     (make-variable-buffer-local 'doom-modeline-icon)
@@ -82,16 +76,16 @@
 		(setq doom-modeline-icon (display-graphic-p))))
     )
 
-  (use-package chess
-    :ensure t)
-
   (use-package origami
-    :ensure t)
+    :straight t)
+   
 
-  (load-theme 'doom-gruvbox t) 
-  
+  (setq modus-vivendi-theme-override-colors-alist 
+    '(("bg-main" . "#111519")))
+  (load-theme 'modus-vivendi t) 
+
   (use-package doom-themes
-    :ensure t
+    :straight t
     :config
     ;; Global settings (defaults)
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -99,8 +93,6 @@
     ;; Enable flashing mode-line on errors
     (doom-themes-visual-bell-config)
 
-    ;; Enable custom neotree theme (all-the-icons must be installed!)
-    (doom-themes-neotree-config)
     ;; or for treemacs users
     (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
     (doom-themes-treemacs-config)
@@ -111,16 +103,17 @@
     :config
     (defhydra magic_rb/theme-select (:color blue)
       ("od" (progn
-	      (load-theme 'doom-one t)
-	      (set-frame-font "Fira Code 12" nil t)
-	      )
-       )
+	    (load-theme 'doom-one t)
+	    (set-frame-font "Fira Code 12" nil t)))
       ("ol" (progn
-	      (load-theme 'doom-one-light t)
-	      (set-frame-font "Fira Code 12" nil t)
-	      )
-       )
-      )
+	    (load-theme 'doom-one-light t)
+	    (set-frame-font "Fira Code 12" nil t)))
+      ("mv" (progn
+	    (load-theme 'modus-vivendi t)
+	    (set-frame-font "Fira Code 12" nil t)))
+      ("mo" (progn
+	    (load-theme 'modus-operandi t)
+	    (set-frame-font "Fira Code 12" nil t))))
     :bind ("<f6>" . magic_rb/theme-select/body))
 
   (global-set-key (kbd "<f11>") 'fullscreen)
@@ -136,17 +129,12 @@
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024))
 
-  ;; enable ido
-  (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)
-  (ido-mode 1)
-
   ;; disable gtk stuff
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))  ;; no toolbar
   (menu-bar-mode -1) ;;no menubar
   (scroll-bar-mode -1) ;; no scroll bar
 
-  ;; set ont
+  ;; set font
   (when (string= (system-name) "omen")
     (set-frame-font "Fira Code 12" nil t))
   (when (string= (system-name) "heater")
@@ -160,7 +148,7 @@
   (add-hook 'after-make-frame-functions
 	    (lambda (frame)
 	      (select-frame frame)
-	      (load-theme 'doom-gruvbox t)))
+	      (load-theme 'modus-vivendi t)))
 
   ;; fullscreen
   (defun fullscreen ()
@@ -178,6 +166,11 @@
   (setq-default display-fill-column-indicator-column 100)
 
 
-  ;(unless (server-running-p)
-    (server-start) ;)
+  (setq inhibit-startup-screen t
+	initial-scratch-message ";; ready\n\n"
+	package-enable-at-startup nil
+	gc-cons-threshold 64000000)
+
+					  ;(unless (server-running-p)
+  (server-start) ;)
 #+END_SRC

@@ -1,8 +1,8 @@
 * Helm
 #+NAME: helm
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb yes
   (use-package helm
-    :ensure t
+    :straight t
     :config
     (defun my-helm-display-frame-center (buffer &optional resume)
       "Display `helm-buffer' in a separate frame which centered in parent frame."
@@ -55,4 +55,6 @@
 	   ("C-x r b" . helm-filtered-bookmarks)
 	   ("C-x C-f" . helm-find-files)
 	   ("C-x b" . helm-buffers-list)))
+
+    ; <<helm-bufler>>
 #+END_SRC

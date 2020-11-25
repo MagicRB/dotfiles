@@ -2,25 +2,34 @@
 #+NAME: magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :ensure t)
+    :straight t)
 #+END_SRC
 ** Evil Magit
-*** TODO The keybindings for <hjkl> to <jkl;> are kind of broken..
-
    #+NAME: evil-magit
    #+BEGIN_SRC emacs-lisp
      (use-package evil-magit
-       :ensure t
+       :straight t
+       :after (evil magit)
        :config
        (setq evil-magit-state 'motion)
-       (evil-define-key evil-magit-state magit-mode-map ";" 'magit-log)
-       (evil-define-key evil-magit-state magit-mode-map "k" 'evil-previous-line)
-       (evil-define-key evil-magit-state magit-status-mode-map "l" 'evil-next-line))
+       (evil-define-key 'motion magit-status-mode-map ";" 'magit-log)
+       (evil-define-key 'motion magit-status-mode-map "k" 'evil-previous-line)
+       (evil-define-key 'motion magit-status-mode-map "l" 'evil-next-line)
+       (evil-define-key 'normal magit-status-mode-map "l" 'evil-next-line)
+       (evil-define-key 'visual magit-status-mode-map "l" 'evil-next-line)
+
+       (evil-define-key 'motion magit-log-mode-map ";" 'magit-log)
+       (evil-define-key 'motion magit-log-mode-map "k" 'evil-previous-line)
+       (evil-define-key 'motion magit-log-mode-map "l" 'evil-next-line)
+       (evil-define-key 'normal magit-log-mode-map "l" 'evil-next-line)
+       (evil-define-key 'visual magit-log-mode-map "l" 'evil-next-line))
    #+END_SRC
 ** Magit Todos
    #+NAME: magit-todos
    #+BEGIN_SRC emacs-lisp
      (use-package magit-todos
-       :ensure t
-       :hook (rustic . hl-todo-mode))
+       :straight t
+       :hook
+       (lsp-mode . hl-todo-mode)
+       (org-mode . hl-todo-mode))
    #+END_SRC

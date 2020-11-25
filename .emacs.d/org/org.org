@@ -1,7 +1,15 @@
 * ORG
+** Org Roam
+#+BEGIN_SRC emacs-lisp
+  (use-package org-roam
+    :straight t
+    :config
+    (setq org-roam-directory "~/org")
+    (add-hook 'after-init-hook 'org-roam-mode))
+#+END_SRC
 ** Org Agenda
 #+BEGIN_SRC emacs-lisp
-  (setq org-agenda-files '("~/org"))
+  (setq org-agenda-files '("~/org" "~/org/school"))
   (add-hook 'org-mode-hook (lambda ()
 			     (set-fill-column 120)
 			     (display-fill-column-indicator-mode)))
@@ -19,6 +27,10 @@
 	   ((agenda "")
 	    (tags-todo "school")
 	    (tags "school")))))
+
+  (setq org-highest-priority ?A)
+  (setq org-lowest-priority ?E)
+  (setq org-default-priority ?B)
 
   (require 'org-alert)
   (require 'notifications)
@@ -52,7 +64,7 @@
      Name=org-protocol
      Exec=emacsclient -n %u
      Type=Application
-     Terminal=false
+     Terminal=fale
      Categories=System;
      MimeType=x-scheme-handler/org-protocol;
    #+END_SRC

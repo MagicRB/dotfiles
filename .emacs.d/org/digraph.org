@@ -1,17 +1,6 @@
 * Digraph
   #+NAME: digraph
   #+BEGIN_SRC emacs-lisp
-    ;; (defun register-digraphs (key digraphs &rest _description)
-    ;;  "Given a list of 2-char digraphs, and a resulting (unicode) character, enable each digraph via prefix-command `digraph-map`"
-    ;;  (mapc (lambda (d) (define-key digraph-map d `(lambda () (interactive) (insert ,key)))) ,digraphs))
-
-    ;; (lambda () (interactive) (insert ,keyseq))
-    ;; (lambda () (interactive) (insert ,key))
-    ;; (progn (message ,val))
-    ;; `(,keyseq (lambda () (interactive) (insert ,val)) "Description"))
-    ;; (eval `(mapc (lambda (keyseq) `(keyseq (lambda () (interactive (insert ,val)) "Description"))) ,keyseqs )))
-    ;; `(keyseq (lambda () (interactive) (insert ,val)) "Description")
-
     (with-eval-after-load "hydra"
       (defmacro create-digraph (val keyseq)
 	`(,keyseq (lambda () (interactive) (insert ,val)) ,val))
@@ -40,6 +29,13 @@
 	       ,(macroexpand '(create-digraph "ó" "'o"))
 	       ,(macroexpand '(create-digraph "ú" "'u"))
 	       ,(macroexpand '(create-digraph "ý" "'y"))
+	       
+	       ,(macroexpand '(create-digraph "Á" "'A"))
+	       ,(macroexpand '(create-digraph "É" "'E"))
+	       ,(macroexpand '(create-digraph "Í" "'I"))
+	       ,(macroexpand '(create-digraph "Ó" "'O"))
+	       ,(macroexpand '(create-digraph "Ú" "'U"))
+	       ,(macroexpand '(create-digraph "Ý" "'Y"))
 	       ("RET" hydra-pop "exit" :color blue)
 	       ("SPC" hydra-pop "exit" :color blue)
 	       ("q" (progn (setq hydra-stack nil)) "Cancel" :color blue))))

@@ -1,6 +1,6 @@
 * VTerm
 #+NAME: vterm-evil-fix
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defun pos-at-prompt (pos)
     (and
      (>= (line-number-at-pos pos) (line-number-at-pos (vterm--get-cursor-point)))
@@ -49,4 +49,11 @@
   (evil-define-key 'insert vterm-mode-map
     (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
 
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (use-package vterm
+    :straight t
+    :config
+    <<vterm-evil-fix>>)
 #+END_SRC

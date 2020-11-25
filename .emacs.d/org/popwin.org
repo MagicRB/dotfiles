@@ -3,9 +3,10 @@
 #+NAME: popwin
 #+BEGIN_SRC emacs-lisp
   (use-package popwin
-    :ensure t
+    :straight t
     :config
     (push '(rustic-compilation-mode :noselect t) popwin:special-display-config)
     (push '(rustic-cargo-test-mode :noselect t) popwin:special-display-config)
+    (push '("*Warnings*" :noselect t) popwin:special-display-config)
     (popwin-mode 1))
 #+END_SRC

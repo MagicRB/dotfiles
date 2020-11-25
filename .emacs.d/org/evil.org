@@ -1,8 +1,8 @@
 * Evil
 #+NAME: evil
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp
   (use-package evil
-    :ensure t
+    :straight t
     :init
     (setq evil-want-keybinding nil) 
     :bind (:map evil-motion-state-map
@@ -41,7 +41,7 @@
     (evil-ex-define-cmd "wq" 'liu233w/ex-save-kill-buffer-and-close))
 
   (use-package evil-collection
-    :ensure t
+    :straight t
     :config
     (evil-collection-init 'vterm)
     (defun evil-collection-vterm-escape-stay ()
@@ -53,13 +53,13 @@
     (add-hook 'vterm-mode-hook #'evil-collection-vterm-escape-stay))
 
   (use-package evil-surround
-    :ensure t
+    :straight t
     :after evil
     :config
     (global-evil-surround-mode 1))
 
   (use-package key-chord
-    :ensure t
+    :straight t
     :config
     (defun magic_rb/key-chord-define-nonsymmetric (keymap keys command)
       (if (/= 2 (length keys))
@@ -73,4 +73,23 @@
     (setq key-chord-two-keys-delay 0.15)
     (key-chord-define evil-insert-state-map "jj" 'evil-normal-state)
     (key-chord-mode 1))
+#+END_SRC
+
+** Evil org-mode
+#+NAME: evil-ord-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-org
+    :straight t
+    :after org
+    :config
+    (add-hook 'org-mode-hook 'evil-org-mode)
+    (add-hook 'evil-org-mode-hook
+	      (lambda ()
+		(evil-org-set-key-theme)))
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys)
+    (evil-define-key 'motion org-agenda-mode-map (kbd "h") nil)
+    (evil-define-key 'motion org-agenda-mode-map (kbd "j") 'evil-backward-char)
+    (evil-define-key 'motion org-agenda-mode-map (kbd "k") 'org-agenda-previous-line)
+    (evil-define-key 'motion org-agenda-mode-map (kbd "l") 'org-agenda-next-line))
 #+END_SRC

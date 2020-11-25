@@ -12,12 +12,15 @@
 	     (hydra-push '(magic_rb/hydra-launcher)))
        "visit magic_rb/hydra-window-sub" :color teal)
       ("a" org-agenda :color teal)
+      ("f" org-roam-find-file :color teal)
+      ("c" org-roam-capture :color teal)
+      ("r" org-roam :color teal)
       ("s" treemacs-switch-workspace)
-      ("S" treemacs-edit-workspaces)
+      ("S" treemacs-edit-workspaces :color teal)
       ("t" treemacs-select-window)
       ("T" treemacs)
       ("v" vterm)
-      ("m" magit)
+      ("m" magit :color teal)
       ("RET" (progn (setq hydra-stack nil)) "Cancel" :color blue)
       ("SPC" (progn (setq hydra-stack nil)) "Cancel" :color blue))
 
@@ -77,9 +80,9 @@
     #+END_SRC
 *** LSP
     #+NAME: hydra
-    #+BEGIN_SRC emacs-lisp :noweb yes :tangle yes
+    #+BEGIN_SRC emacs-lisp :noweb yes
       (use-package hydra
-	:ensure t
+	:straight t
 	:after (vterm magit treemacs lsp-mode) ; rustic
 	:config
 	(defvar hydra-stack nil)

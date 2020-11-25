@@ -1,0 +1,9 @@
+* Projectile
+#+NAME: projectile
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :straight t
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+#+END_SRC
