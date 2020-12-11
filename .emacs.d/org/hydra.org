@@ -83,7 +83,7 @@
     #+BEGIN_SRC emacs-lisp :noweb yes
       (use-package hydra
 	:straight t
-	:after (vterm magit treemacs lsp-mode) ; rustic
+	; :after (vterm magit treemacs lsp-mode) ; rustic
 	:config
 	(defvar hydra-stack nil)
 	:bind (("C-'" . magic_rb/hydra-launcher)
