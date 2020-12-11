@@ -47,4 +47,5 @@
   :straight t)
 
 (setq org-file-dir "~/.emacs.d/org")
+(mapc #'delete-file (directory-files org-file-dir t "\\.el$"))
 (mapc #'org-babel-load-file (directory-files org-file-dir t "\\.org$"))
