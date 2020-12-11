@@ -1,0 +1,42 @@
+{
+  "nodes": {
+    "linux-tkg": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1607518239,
+        "narHash": "sha256-aigY3n9srfdKQFiZAXxlBqhqmNkxxgTQ1e3r6LgBeYY=",
+        "ref": "master",
+        "rev": "6c8f87426bd923d205d04549c93189e2d058e4a7",
+        "revCount": 352,
+        "type": "git",
+        "url": "https://github.com/Frogging-Family/linux-tkg"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/Frogging-Family/linux-tkg"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1607549296,
+        "narHash": "sha256-cmAsHyhgOhfhiSj6N87hF65uAqrcWEGx/5ImNKYYCYo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9c266ae4f6c761d370402d8fcbbb3ac5758f8058",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "linux-tkg": "linux-tkg",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

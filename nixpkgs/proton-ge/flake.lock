@@ -1,0 +1,42 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1607608141,
+        "narHash": "sha256-/G8iryuOt3txFK7e8qgR9Dl6JLcXEVS6axmtZLl6r0A=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "bc9c9cd6da3512885a71f06ffb8c33930c3e9c74",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "proton-ge": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1607298197,
+        "narHash": "sha256-21UtKw8yQk+04GuZCqeEvU0itFSdSLWPOfiu3kyrV1w=",
+        "ref": "master",
+        "rev": "b1daa38ca93c9e24e1b4b7fb599ae83ff22bc44a",
+        "revCount": 1337,
+        "type": "git",
+        "url": "https://github.com/GloriousEggroll/proton-ge-custom"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/GloriousEggroll/proton-ge-custom"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "proton-ge": "proton-ge"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
