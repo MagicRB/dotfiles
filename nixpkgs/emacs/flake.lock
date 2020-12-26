@@ -3,11 +3,11 @@
     "emacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1607355781,
-        "narHash": "sha256-ysOH3vbNHLahVHkn0V4XR3XOryoauyeoRuq2gn61YpE=",
+        "lastModified": 1608749398,
+        "narHash": "sha256-mEsBoTY4vu4BaLKug7FeptetnndDGIfqovvQ7klFRME=",
         "ref": "feature/native-comp",
-        "rev": "be907b0ba82c2a65e0468d50653cae8a7cf5f16b",
-        "revCount": 145363,
+        "rev": "b99a4744822a11e4af098b63db18f54a4e323d58",
+        "revCount": 145769,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/emacs.git"
       },
@@ -19,11 +19,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1607502287,
-        "narHash": "sha256-HBthY4A+reSbIppxlwLK/prLUR0UBzmY4HXBjiUZpuI=",
+        "lastModified": 1608754820,
+        "narHash": "sha256-Zgsn6sdICFrwfNdy9jkur8XDHZ6nSmc+9rgXRBkA+ik=",
         "ref": "master",
-        "rev": "45cb40f4c573a4805f5e32a3ea7359167dc30b53",
-        "revCount": 4265,
+        "rev": "2585a0d0357f23fca934adb759d78c78ed073484",
+        "revCount": 4369,
         "type": "git",
         "url": "https://github.com/nix-community/emacs-overlay"
       },
@@ -34,11 +34,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1607474171,
-        "narHash": "sha256-hAHjWGeSVN/wG8zb3JOKLuXk/6ynU5a0AkJrDPfOgdw=",
+        "lastModified": 1608763692,
+        "narHash": "sha256-TLwIyNZcVn/wOHd77xjbogxrDx+xOSbl6V7AP7wZMrI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "4e5fc1ed865139d585ecb92e5091e736cdae3a4e",
+        "rev": "1d364e5138acf29127539657159e6cf16f47c1ca",
         "type": "github"
       },
       "original": {

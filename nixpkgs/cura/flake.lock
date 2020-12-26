@@ -1,0 +1,63 @@
+{
+  "nodes": {
+    "cura": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1605004206,
+        "narHash": "sha256-NemSXFoepCLEzl11tF2bu/Iisz8y2wj0HKneePXHDhg=",
+        "ref": "4.8",
+        "rev": "58bae31d903b868463ae5c3650301a8e559d8cb9",
+        "revCount": 24662,
+        "type": "git",
+        "url": "https://github.com/Ultimaker/Cura"
+      },
+      "original": {
+        "ref": "4.8",
+        "type": "git",
+        "url": "https://github.com/Ultimaker/Cura"
+      }
+    },
+    "materials": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1605089480,
+        "narHash": "sha256-Y7A1vIbd+0k+rfCX66TcoaLVNFUjt743yPQrq13gKUI=",
+        "ref": "4.8",
+        "rev": "933c9b3897acf49bf3918d0d5c9607135e379579",
+        "revCount": 695,
+        "type": "git",
+        "url": "https://github.com/Ultimaker/fdm_materials"
+      },
+      "original": {
+        "ref": "4.8",
+        "type": "git",
+        "url": "https://github.com/Ultimaker/fdm_materials"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1608062904,
+        "narHash": "sha256-QVaxOnGwZoBtNTlnAV0aeC30ASeJpo583wjotmhpOtg=",
+        "ref": "nixos-20.09",
+        "rev": "647cc06986c1ae4a2bb05298e0cf598723e42970",
+        "revCount": 245050,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs"
+      },
+      "original": {
+        "ref": "nixos-20.09",
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs"
+      }
+    },
+    "root": {
+      "inputs": {
+        "cura": "cura",
+        "materials": "materials",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

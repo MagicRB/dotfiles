@@ -52,9 +52,9 @@
           "-DUSE_SYSTEM_LIBVTERM=ON"
         ];
         installPhase = ''
-      mkdir -p $out/lib
-            install ../vterm-module.so $out/lib
-          '';
+          mkdir -p $out/lib
+          install ../vterm-module.so $out/lib
+        '';
       };
     in
       rec {
@@ -69,7 +69,6 @@
               ln -s ${emacs}/bin/emacsclient $out/bin/emacsclient
               makeWrapper ${emacs}/bin/emacs $out/bin/emacs --prefix PATH : ${lib.makeBinPath [
                 nodePackages.pyright
-                python38Full
                 nodePackages.typescript-language-server
 
                 fira-code
@@ -85,7 +84,7 @@
 
                 ghostscript
                 imagemagick
-                (texlive.combine { inherit (texlive) scheme-small siunitx amsmath ulem dvipng wrapfig cancel capt-of; })
+                (texlive.combine { inherit (texlive) scheme-small siunitx amsmath ulem dvipng wrapfig cancel capt-of pgfplots; })
                 texlab
               ]} --prefix EMACSLOADPATH : ${vtermModule final}/lib:
             '';
