@@ -1,6 +1,0 @@
-* Nix
-  #+BEGIN_SRC emacs-lisp
-    (use-package nix-mode
-      :straight t
-      :mode ("\\.nix\\'" . nix-mode))
-  #+END_SRC
