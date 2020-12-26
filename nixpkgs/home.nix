@@ -20,6 +20,7 @@ let
     };
   };
   emacs = import ./emacs;
+  cura = import ./cura;
 in {
 
   home.packages = with pkgs; [
@@ -31,10 +32,16 @@ in {
 
     steam
 
+    rxvt-unicode
     zip
+    tree
+    rename
+    pixz
+    xorg.xinit
 
 #    svt-av1
 #    ffmpeg-svt-av1
+    ffmpeg
 
     fira-code
 
@@ -53,7 +60,8 @@ in {
     rustup
 
 #    blender
-#    openscad
+    freecad
+    openscad
 
 #    libreoffice
     discord
@@ -63,6 +71,7 @@ in {
     exa
     bat
 
+    (python38Full.withPackages (python-packages: with python-packages; [ jellyfin-apiclient-python ]))
     nix-du
     graphviz
 
@@ -72,6 +81,7 @@ in {
     mpv
 
     emacs.defaultPackage."x86_64-linux"
+    cura.defaultPackage."x86_64-linux"
   ];
 
   home.file = {
@@ -93,6 +103,14 @@ in {
       source = "${dotfiles}/.local/bin/screenshot";
       executable = true;
     };
+    ".local/bin/ogg-cover-art" = {
+      source = "${dotfiles}/.local/bin/ogg-cover-art";
+      executable = true;
+    };
+    ".local/bin/flac-to-ogg" = {
+      source = "${dotfiles}/.local/bin/flac-to-ogg";
+      executable = true;
+    };
 
     ".config/picom.conf".source = "${dotfiles}/.config/picom.conf";
     ".config/i3/config".text = (import "${dotfiles}/.config/i3/config.nix" { inherit config; inherit pkgs; }).config;
@@ -101,5 +119,6 @@ in {
     ".config/dunst/dunstrc".source = "${dotfiles}/.config/dunst/dunstrc";
 
     ".bashrc".source = "${dotfiles}/.bashrc";
+    ".xinitrc".source = "${dotfiles}/.xinitrc";
   };
 }
