@@ -1,7 +1,0 @@
-#!/bin/bash
-
-qdbus org.kde.KWin /Compositor suspend
-
-DXVK_HUD=1 __NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia "$@"
-
-qdbus org.kde.KWin /Compositor resume

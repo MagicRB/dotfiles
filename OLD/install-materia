@@ -1,9 +1,0 @@
-#!/bin/bash
-
-wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/materia-kde/master/install.sh | sh
-
-for dir in "aurorae" "color-schemes" "konsole" "Kvantum" "plasma" "yakuake"; do
-    sudo chmod -R u+r,g+r,o+r "/usr/share/${dir}"
-    sudo find "/usr/share/${dir}" -type d -exec chmod u+x,g+x,o+x {} +
-    sudo chown root:root "/usr/share/${dir}"
-done
