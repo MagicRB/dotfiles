@@ -1,4 +1,6 @@
-#!/bin/sh
+# -*- mode: sh -*-
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p unixtools.xxd
 
 usage(){
 	fmt <<EOF

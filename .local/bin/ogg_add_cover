@@ -1,5 +1,6 @@
+# -*- mode: sh -*-
 #! /usr/bin/env nix-shell
-#! nix-shell -i ffmpeg
+#! nix-shell -i bash -p ffmpeg
 
 LINK="${1}"
 FILE="${2}"
