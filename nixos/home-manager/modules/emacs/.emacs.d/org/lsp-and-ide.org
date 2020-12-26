@@ -1,0 +1,240 @@
+* LSP and IDE setup
+** Languages
+*** YAML
+    #+NAME: yaml
+    #+BEGIN_SRC emacs-lisp
+      (use-package yaml-mode
+	:straight t
+	:mode ("\\.yml\\'" . yaml-mode)
+	:mode ("\\.yaml\\'" . yaml-mode))
+    #+END_SRC
+*** Dockerfile
+    #+NAME: dockefile
+    #+BEGIN_SRC emacs-lisp
+      (use-package dockerfile-mode
+	:straight t
+	:mode ("Dockerfile\\'" . dockerfile-mode))
+    #+END_SRC
+*** Rust
+    #+NAME: rust
+    #+BEGIN_SRC emacs-lisp
+      (use-package rustic
+	:straight t
+	:mode ("\\.rs\\'" . rustic-mode))
+    #+END_SRC
+*** SCAD
+    #+NAME: scad
+    #+BEGIN_SRC emacs-lisp
+      (use-package scad-mode
+	:straight t) 
+    #+END_SRC
+*** Scala
+    #+NAME: scala
+    #+BEGIN_SRC emacs-lisp
+      (use-package scala-mode
+	:straight t
+	:mode ("\\.s\\(cala\\|bt\\)$" . scala-mode))
+
+      (use-package sbt-mode
+	:straight t
+	:commands sbt-start sbt-command
+	:config
+	;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+	;; allows using SPACE when in the minibuffer
+	(substitute-key-definition
+	 'minibuffer-complete-word
+	 'self-insert-command
+	 minibuffer-local-completion-map)
+	;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+	(setq sbt:program-options '("-Dsbt.supershell=false")))
+    #+END_SRC
+*** Web - HTML + CSS
+    #+NAME: web
+    #+BEGIN_SRC emacs-lisp
+      (use-package web-mode
+	:straight t
+	:mode ("\\.html\\'" . web-mode)
+	:mode ("\\.xhtml\\'" . web-mode)
+	:mode ("\\.css\\'" . css-mode)
+	:mode ("\\.scss\\'" . css-mode)
+	:config
+	(with-eval-after-load "flycheck"
+	  (flycheck-add-mode 'javascript-eslint 'web-mode)))
+    #+END_SRC
+*** Javascript
+    #+NAME: javascript
+    #+BEGIN_SRC emacs-lisp
+      (use-package rjsx-mode
+	:straight t
+	:config
+	:mode ("\\.js\\'" . rjsx-mode)
+	:mode ("\\.jsx\\'" . rjsx-mode))
+    #+END_SRC
+*** Typescript
+    #+NAME: typescript
+    #+BEGIN_SRC emacs-lisp
+      (use-package typescript-mode
+	:straight t
+	:config
+	:mode ("\\.ts\\'" . typescript-mode)
+	:mode ("\\.tsx\\'" . typescript-mode))
+      (with-eval-after-load "lsp-mode"
+	)
+
+    #+END_SRC
+** LSP
+*** COMMENT smart-tabs
+    #+NAME: tabs
+    #+BEGIN_SRC emacs-lisp
+      (setq whitespace-display-mappings
+	    '((tab-mark 9 [65293] [92 9])))
+      (setq whitespace-style '(tab-mark))
+      (use-package smart-tabs-mode
+	:straight t
+	:config
+	(smart-tabs-add-language-support rust rustic-hook
+					 ((c-indent-line . c-basic-offset)
+					  (c-indent-region . c-basic-offset)))
+	(smart-tabs-insinuate 'c 'javascript 'rust))
+    #+END_SRC
+*** lsp-mode
+    #+NAME: lsp-mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-mode
+	:straight t
+	;; :after (; rustic
+	;; rjsx-mode
+	;; typescript-mode
+	;; web-mode
+	;; scala-mode)
+	:config
+	(setq rustic-lsp-server 'rust-analyzer)
+	(setq rustic-compile-command "cargo build")
+	(setq rustic-format-trigger nil);'on-save)
+	(setq lsp-prefer-flymake nil)
+
+	(setq lsp-rust-analyzer-display-chaining-hints nil)
+	(setq lsp-rust-analyzer-display-parameter-hints nil)
+	(setq lsp-rust-analyzer-server-display-inlay-hints t)
+	:hook
+	(rustic . lsp)
+	(php-mode . lsp)
+	(rjsx-mode . lsp)
+	(css-mode . lsp)
+	(web-mode . lsp)
+	(lsp-mode . lsp-lens-mode)
+	(typescript-mode . lsp)
+	(scala-mode . lsp)
+	(tex-mode . lsp)
+	(lsp-mode . display-fill-column-indicator-mode)
+	(python-mode . lsp)
+	(lsp-mode . origami-mode)
+	(lsp-mode . lsp-rust-analyzer-inlay-hints-mode)
+	:config
+	(lsp-register-client
+	 (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
+								  `("typescript-language-server"
+								    "--tsserver-path"
+								    "tsserver"
+								    ,@lsp-clients-typescript-server-args)))
+			  :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
+			  :priority -2
+			  :completion-in-comments? t
+			  :initialization-options (lambda ()
+						    (list :plugins lsp-clients-typescript-plugins
+							  :logVerbosity lsp-clients-typescript-log-verbosity
+							  :tsServerPath (lsp-package-path 'typescript)))
+			  :ignore-messages '("readFile .*? requested by TypeScript but content not available")
+			  :server-id 'ts-ls
+			  :remote? t)))
+    #+END_SRC
+*** company
+    #+NAME: company
+    #+BEGIN_SRC emacs-lisp
+      (use-package company
+	:straight t
+	:config
+	;; aligns annotation to the right hand side
+	(setq company-tooltip-align-annotations t)   
+	(add-hook 'after-init-hook 'global-company-mode))
+    #+END_SRC
+*** lsp-metals 
+    #+NAME: lsp-metals-tramp
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (lsp-register-client
+       (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-metals--server-command)
+			:major-modes '(scala-mode)
+			:priority -1
+			:initialization-options '((decorationProvider . t)
+						  (inlineDecorationProvider . t)
+						  (didFocusProvider . t)
+						  (executeClientCommandProvider . t)
+						  (doctorProvider . "html")
+						  (statusBarProvider . "on")
+						  (debuggingProvider . t)
+						  (treeViewProvider . t))
+			:notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
+						   ("metals/publishDecorations" #'lsp-metals--publish-decorations)
+						   ("metals/treeViewDidChange" #'lsp-metals-treeview--did-change)
+						   ("metals-model-refresh" #'lsp-metals--model-refresh)
+						   ("metals/status" #'lsp-metals--status-string))
+			:action-handlers (ht ("metals-debug-session-start" (-partial #'lsp-metals--debug-start :json-false))
+					     ("metals-run-session-start" (-partial #'lsp-metals--debug-start t)))
+			:server-id 'metals
+			:remote? t
+			:initialized-fn (lambda (workspace)
+					  (lsp-metals--add-focus-hooks)
+					  (with-lsp-workspace workspace
+					    (lsp--set-configuration
+					     (lsp-configuration-section "metals"))))
+			:after-open-fn (lambda ()
+					 (add-hook 'lsp-on-idle-hook #'lsp-metals--did-focus nil t))
+			:completion-in-comments? t))
+    #+END_SRC
+    #+NAME: lsp-metals
+    #+BEGIN_SRC emacs-lisp :noweb yes
+      (use-package lsp-metals
+	:straight t
+	:config
+	<<lsp-metals-tramp>>)
+    #+END_SRC
+*** lsp-ui
+    #+NAME: lsp-ui
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-ui
+	:straight t
+	:after (company-box)
+	:config
+	;; disable focus on mouse over
+	(push '(no-accept-focus . t) lsp-ui-doc-frame-parameters)
+	(push '(no-accept-focus . t) company-box-frame-parameters)
+
+	(add-to-list 'lsp-ui-doc-frame-parameters '(no-accept-focus . t))
+	(add-to-list 'company-box-frame-parameters '(no-accept-focus . t))
+	(setq mouse-autoselect-window nil))
+      (add-hook 'after-init-hook 'global-company-mode)
+    #+END_SRC
+*** lsp-pyright
+    #+NAME: lsp-pyright
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-pyright
+	:straight t
+	:hook (python-mode . (lambda ()
+			       (require 'lsp-pyright)
+			       (lsp))))  ; or lsp-deferred
+    #+END_SRC
+*** yassnippet
+    #+NAME: yasnippet
+    #+BEGIN_SRC emacs-lisp
+      (use-package yasnippet
+	:straight t
+	:config
+	(yas-global-mode 1)) 
+    #+END_SRC
+*** flycheck
+    #+NAME: flycheck
+    #+BEGIN_SRC emacs-lisp
+      (use-package flycheck
+	:straight t
+	:init (global-flycheck-mode))
+    #+END_SRC

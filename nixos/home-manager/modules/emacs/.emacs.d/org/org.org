@@ -1,0 +1,120 @@
+* ORG
+  
+** Org Roam
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-roam
+       :straight t
+       :config
+       (setq org-roam-directory "~/org")
+       (add-hook 'after-init-hook 'org-roam-mode))
+   #+END_SRC
+** Org Babel
+   #+BEGIN_SRC emacs-lisp
+     (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((python . t)))
+   #+END_SRC
+** Org Superstar
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-superstar
+       :straight t
+       :hook ((org-mode . org-superstar-mode)))
+   #+END_SRC
+** Org Bigger Headings
+   #+BEGIN_SRC emacs-lisp
+     (custom-set-faces
+      '(fixed-pitch ((t (:family "Fira Code 9"))))
+      '(org-level-1 ((t (:inherit outline-1 :height 1.25))))
+      '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+      '(org-level-3 ((t (:inherit outline-3 :height 1.15))))
+      '(org-level-4 ((t (:inherit outline-4 :height 1.10))))
+      '(org-level-5 ((t (:inherit outline-5 :height 1.05)))))
+   #+END_SRC
+** Org Agenda
+   #+BEGIN_SRC emacs-lisp
+     (setq org-agenda-files '("~/org" "~/org/school"))
+     (add-hook 'org-mode-hook (lambda ()
+				(set-fill-column 120)
+				(display-fill-column-indicator-mode)))
+
+     (setq org-agenda-custom-commands
+	   '(("h" "Agenda and Home-related tasks"
+	      ((agenda "")
+	       (tags-todo "home")
+	       (tags "garden")))
+	     ("o" "Agenda and Office-related tasks"
+	      ((agenda "")
+	       (tags-todo "work")
+	       (tags "office")))
+	     ("i" "Agenda and School-related tasks"
+	      ((agenda "")
+	       (tags-todo "school")
+	       (tags "school")))))
+
+     (setq org-highest-priority ?A)
+     (setq org-lowest-priority ?E)
+     (setq org-default-priority ?B)
+
+     (require 'org-alert)
+     (require 'notifications)
+   #+END_SRC
+   Increase org-preview size
+   #+BEGIN_SRC emacs-lisp
+     ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.75))
+   #+END_SRC
+** ORG tikz previews
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'org-latex-packages-alist
+		  '("" "tikz" t))
+
+     (eval-after-load "preview"
+       '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
+
+     (setq org-latex-create-formula-image-program 'imagemagick)
+   #+END_SRC
+** ORG fragtog
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-fragtog
+       :straight t
+       :hook (org-mode . org-fragtog-mode))
+   #+END_SRC
+** ORG Linkz
+   Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]].
+   Remove validation link from exported html file
+
+   #+NAME: org-linkz-html-validation-link
+   #+BEGIN_SRC emacs-lisp
+     (setq org-html-validation-link nil)
+   #+END_SRC
+   #+NAME: org-linkz
+   #+BEGIN_SRC emacs-lisp
+     (require 'org-protocol)
+     (setq org-capture-templates
+	   '(
+	     ("o" "Link capture" entry
+	      (file+headline "~/org/linkz.org" "INBOX")
+	      "* %a %U"
+	      :immediate-finish t)
+	     ))
+     (setq org-protocol-default-template-key "o")
+   #+END_SRC
+   
+   Then a .desktop file is needed for Firefox/Chromium
+
+   #+NAME: org-protocol-desktop
+   #+BEGIN_SRC conf-desktop :tangle ~/.local/share/applications/org-protocol.desktop
+     [Desktop Entry]
+     Name=org-protocol
+     Exec=emacsclient -n %u
+     Type=Application
+     Terminal=fale
+     Categories=System;
+     MimeType=x-scheme-handler/org-protocol;
+   #+END_SRC
+   
+   Then a bookmark must be added into firefox with this location
+
+   #+NAME: bookmark
+   #+BEGIN_SRC javascript :tangle no
+     javascript:location.href="org-protocol:///capture?url="+encodeURIComponent(location.href)+"&title="+encodeURIComponent(document.title||"[untitled page]")
+   #+END_SRC

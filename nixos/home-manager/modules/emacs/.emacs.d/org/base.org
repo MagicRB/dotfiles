@@ -1,0 +1,181 @@
+#+NAME: base
+#+BEGIN_SRC emacs-lisp
+  (when (not (string= (system-name) "fractal"))
+    (use-package elcord
+      :straight t
+      :config
+      (elcord-mode)))
+
+  (when (not (string= (system-name) "localhost"))
+    (use-package tree-sitter
+      :straight t
+      :after (tree-sitter-langs)
+      :config
+      (global-tree-sitter-mode)
+      (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+    (use-package tree-sitter-langs
+      :straight t))
+
+  (use-package edit-server
+    :straight t
+    :commands edit-server-start
+    :init (if after-init-time
+	      (edit-server-start)
+	    (add-hook 'after-init-hook
+		      #'(lambda() (edit-server-start))))
+    :config (setq edit-server-new-frame-alist
+		  '((name . "Edit with Emacs FRAME")
+		    (top . 200)
+		    (left . 200)
+		    (width . 80)
+		    (height . 25)
+		    (minibuffer . t)
+		    (menu-bar-lines . t)
+		    (window-system . x))))
+
+  (setq display-line-numbers-type 'relative)
+
+  (use-package impatient-mode
+    :straight t)
+
+  (defun markdown-html (buffer)
+    (princ (with-current-buffer buffer
+	     (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+	   (current-buffer)))
+
+  (httpd-start)
+
+  (use-package pdf-tools
+    :straight t
+    :hook (('TeX-mode-hook . visual-line-mode))
+    :config
+    ;; initialise
+    (pdf-tools-install)
+    (setq TeX-PDF-mode 1)
+    ;; open pdfs scaled to fit page
+    (setq-default pdf-view-display-size 'fit-page)
+    ;; automatically annotate highlights
+    (setq pdf-annot-activate-created-annotations t))
+
+					  ;  (use-package auctex
+					  ;    :ensure t)
+
+  (use-package w3m
+    :straight t) 
+
+  (use-package all-the-icons
+    :straight t)
+
+  (use-package doom-modeline
+    :straight t
+    :config
+    (doom-modeline-mode)
+    (make-variable-buffer-local 'doom-modeline-icon)
+    (add-hook 'after-make-frame-hook
+	      (lambda ()
+		(setq doom-modeline-icon (display-graphic-p))))
+    )
+
+  (use-package origami
+    :straight t)
+
+
+  (setq modus-vivendi-theme-override-colors-alist 
+	'(("bg-main" . "#111519")))
+  (load-theme 'modus-vivendi t) 
+
+  (setq magic_rb/universal-font "Fira Code 12")
+
+  (use-package doom-themes
+    :straight t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+	  doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+
+    ;; or for treemacs users
+    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+    (doom-themes-treemacs-config)
+
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config)
+    :after (hydra)
+    :config
+    (defhydra magic_rb/theme-select (:color blue)
+      ("od" (progn
+	      (load-theme 'doom-one t)
+	      (set-frame-font magic_rb/universal-font nil t)))
+      ("ol" (progn
+	      (load-theme 'doom-one-light t)
+	      (set-frame-font magic_rb/universal-font nil t)))
+      ("mv" (progn
+	      (load-theme 'modus-vivendi t)
+	      (set-frame-font magic_rb/universal-font nil t)))
+      ("mo" (progn
+	      (load-theme 'modus-operandi t)
+	      (set-frame-font magic_rb/universal-font nil t))))
+    :bind ("<f6>" . magic_rb/theme-select/body))
+
+  (global-set-key (kbd "<f11>") 'fullscreen)
+
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+  ;; show matching parenthesis
+  (show-paren-mode 1) 
+
+  (setq ispell-program-name "hunspell")
+
+  ;; optimizations for emacs-lsp
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+
+  ;; disable gtk stuff
+  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))  ;; no toolbar
+  (menu-bar-mode -1) ;;no menubar
+  (scroll-bar-mode -1) ;; no scroll bar
+
+  (setq mouse-wheel-scroll-amount '(5 ((shift) . 1))) ;; 5 lines at a time, with shift only 1
+  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+
+  ;; set font
+  (when (string= (system-name) "omen")
+    (set-frame-font magic_rb/universal-font nil t))
+  (when (string= (system-name) "heater")
+    (set-frame-font magic_rb/universal-font nil t))
+  (when (string= (system-name) "fractal")
+    (set-frame-font magic_rb/universal-font nil t))
+
+  ;; enable parenthesis and quotes pairing thing
+  (electric-pair-mode)
+
+  (add-hook 'after-make-frame-functions
+	    (lambda (frame)
+	      (select-frame frame)
+	      (load-theme 'modus-vivendi t)))
+
+  ;; fullscreen
+  (defun fullscreen ()
+    (interactive)
+    (set-frame-parameter nil 'fullscreen
+			 (if (frame-parameter nil 'fullscreen) nil 'fullboth)))  
+
+  (setq backup-directory-alist
+	`(("." . ,(concat user-emacs-directory "backups"))))
+
+  ;; compositor based transparency
+					  ;(add-to-list 'default-frame-alist '(alpha 90 90))
+
+  ;; set fill column indicator column number
+  (setq-default display-fill-column-indicator-column 100)
+
+
+  (setq inhibit-startup-screen t
+	initial-scratch-message ";; ready\n\n"
+	package-enable-at-startup nil)
+
+					  ;(unless (server-running-p)
+  (server-start) ;)
+#+END_SRC

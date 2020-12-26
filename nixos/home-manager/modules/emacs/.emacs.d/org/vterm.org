@@ -1,0 +1,72 @@
+* VTerm
+#+NAME: vterm-evil-fix
+#+BEGIN_SRC emacs-lisp :tangle no
+  (defun vterm-evil-insert ()
+    (interactive)
+    (vterm-goto-char (point))
+    (call-interactively #'evil-insert))
+
+  (defun vterm-evil-append ()
+    (interactive)
+    (vterm-goto-char (1+ (point)))
+    (call-interactively #'evil-append))
+
+  (defun vterm-evil-delete ()
+    "Provide similar behavior as `evil-delete'."
+    (interactive)
+    (let ((inhibit-read-only t)
+	  )
+      (cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
+	(call-interactively 'evil-delete))))
+
+  (defun vterm-evil-change ()
+    "Provide similar behavior as `evil-change'."
+    (interactive)
+    (let ((inhibit-read-only t))
+      (cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
+	(call-interactively 'evil-change))))
+
+
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "d") (lambda () (interactive) (vterm-evil-delete)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "s") (lambda () (interactive) (vterm-evil-delete) (vterm-evil-insert)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "i") (lambda () (interactive) (vterm-evil-insert)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "a") (lambda () (interactive) (vterm-evil-append)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "c") (lambda () (interactive) (vterm-evil-change)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+  (evil-define-key 'normal vterm-mode-map
+    (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+  (evil-define-key 'insert vterm-mode-map
+    (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+
+  (defun evil-collection-vterm-escape-stay ()
+  "Go back to normal state but don't move
+  cursor backwards. Moving cursor backwards is the default vim behavior but it is
+  not appropriate in some cases like terminals."
+  (setq-local evil-move-cursor-back nil))
+
+  ;; :hook ((vterm-mode-hook . evil-collection-vterm-escape-stay))
+
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (use-package vterm
+    :straight t
+    :config
+    <<vterm-evil-fix>>)
+#+END_SRC
