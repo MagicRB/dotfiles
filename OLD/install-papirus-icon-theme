@@ -1,8 +1,0 @@
-#!/bin/bash
-
-wget -qO- https://git.io/papirus-icon-theme-install | sh
-
-for theme in Papirus ePapirus Papirus-Dark Papirus-Light ; do
-    sudo chmod -R u+r,g+r,o+r "/usr/share/icons/${theme}"
-    sudo find "/usr/share/icons/${theme}" -type d -exec chmod u+x,g+x,o+x {} +
-done

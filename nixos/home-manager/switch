@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+nix build ".#$(hostname)" && \
+result/activate && \
+rm result
