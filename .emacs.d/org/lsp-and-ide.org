@@ -131,6 +131,7 @@
 	(lsp-mode . origami-mode)
 	(lsp-mode . lsp-rust-analyzer-inlay-hints-mode)
 	:config
+        (message "Loading modified typescript lsp-client")
 	(lsp-register-client
 	 (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
 								  `("typescript-language-server"
