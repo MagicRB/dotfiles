@@ -81,5 +81,6 @@
       };
 
     omen = self.homeConfigurations.omen.activationPackage;
+    heater = self.homeConfigurations.omen.activationPackage;
   };
 }

@@ -7,5 +7,6 @@
     exa
     bat
     pciutils
+    git
   ];
 }
