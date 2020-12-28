@@ -1,0 +1,42 @@
+{
+  "nodes": {
+    "klippy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1608827666,
+        "narHash": "sha256-Kibdgs5OdkTvxQ/W1RtMtSTfJvbnxOfa7LEcaY7a7yQ=",
+        "owner": "KevinOConnor",
+        "repo": "klipper",
+        "rev": "a5ebe5825aa6bbb58b3c755fab77b3472cceed8a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "KevinOConnor",
+        "ref": "master",
+        "repo": "klipper",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1608802800,
+        "narHash": "sha256-QCpx3LHzunHj+PIXt1sSGfTiM+yxWO7YPfLgo6Lh7Nc=",
+        "path": "/nix/store/mkzal1xfc975xgdggika37r46xpmgapn-source",
+        "rev": "ca119749d86f484066fae7680af8a44ea1f11ca8",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "klippy": "klippy",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
