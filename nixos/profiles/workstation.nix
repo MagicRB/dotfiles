@@ -3,10 +3,15 @@
   services.openssh.enable = true;
   
   environment.systemPackages = with pkgs; [
-    lightdm
     home-manager
     cryptsetup
   ];
+  
+  services.xserver = {
+    displayManager = {
+      lightdm.enable =true;
+    };
+  };
   
   imports = [
     ../modules/grub.nix
