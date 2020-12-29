@@ -1,22 +1,5 @@
 {
   "nodes": {
-    "mainsail": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1609196389,
-        "narHash": "sha256-wGvziRy2oLmRylvFndy7UbScCYAxJmyU6L4J73fZyLk=",
-        "owner": "meteyou",
-        "repo": "mainsail",
-        "rev": "9152934f9daa275e73b40c5f8d2ada3984c3c416",
-        "type": "github"
-      },
-      "original": {
-        "owner": "meteyou",
-        "ref": "master",
-        "repo": "mainsail",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1608802800,
@@ -32,7 +15,6 @@
     },
     "root": {
       "inputs": {
-        "mainsail": "mainsail",
         "nixpkgs": "nixpkgs"
       }
     }

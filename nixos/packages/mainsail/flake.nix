@@ -1,11 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "nixpkgs";
-
-    mainsail = {
-      url = "github:meteyou/mainsail?ref=v0.4.0";
-      flake = false;
-    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
