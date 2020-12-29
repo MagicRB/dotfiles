@@ -1,19 +1,19 @@
 {
   "nodes": {
-    "klippy": {
+    "moonraker": {
       "flake": false,
       "locked": {
-        "lastModified": 1609168797,
-        "narHash": "sha256-1ojKClZTqa0amwUWz1z9GFuEaXtuw7xu0JEgF2N1UQ8=",
-        "owner": "KevinOConnor",
-        "repo": "klipper",
-        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "lastModified": 1609164221,
+        "narHash": "sha256-+k4bFTGWvJ+un8R9dRhjtDt4dVvHfu2/gSp5iEuoX/w=",
+        "owner": "MagicRB",
+        "repo": "moonraker",
+        "rev": "e63f104695278231c3961b12bc5f5e13f5eeea62",
         "type": "github"
       },
       "original": {
-        "owner": "KevinOConnor",
-        "repo": "klipper",
-        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "owner": "MagicRB",
+        "ref": "master",
+        "repo": "moonraker",
         "type": "github"
       }
     },
@@ -32,7 +32,7 @@
     },
     "root": {
       "inputs": {
-        "klippy": "klippy",
+        "moonraker": "moonraker",
         "nixpkgs": "nixpkgs"
       }
     }

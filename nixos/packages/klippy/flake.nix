@@ -3,7 +3,7 @@
     nixpkgs.url = "nixpkgs";
 
     klippy = {
-      url = "github:KevinOConnor/klipper?ref=master";
+      url = "github:KevinOConnor/klipper?rev=e68cf08d15a985ecce7497b58408ee233dd54eb9";
       flake = false;
     };
   };
@@ -54,5 +54,66 @@
           inherit system;
           overlays = [ self.overlay ];
         }).klippy);
+
+        nixosModules.klippy = { pkgs, config, ... }: with nixpkgs.lib;
+          let
+            cfg = config.services.klippy;
+          in {
+            options.services.klippy = import ./options.nix { inherit pkgs config; };
+
+            config =
+              {
+                nixpkgs.overlays = [ self.overlay ];
+
+                users.users."${cfg.user}" = {
+                  uid = cfg.uid;
+                  description = "klippy user";
+                  group = "${cfg.group}";
+                  extraGroups = cfg.extraGroups;
+                };
+
+                users.groups."${cfg.group}" = {
+                  gid = cfg.gid;
+                };
+                
+                systemd.services = mapAttrs'
+                  (name: value:
+                    let
+                      configFile = pkgs.writeText "printer.cfg" ''
+                        ${builtins.readFile value.config.file}
+
+                        ${foldl (str: acc: acc + str) "" (map (x: "[include " + x + "]\n") value.config.extraImports)}
+                        
+                        ${if value.config.virtualSd != "" then "[virtual_sdcard]\npath: " + value.config.virtualSd else ""}
+                      '';
+                    in
+                    (nameValuePair
+                      ("klippy-" + name)
+                      {
+                        wantedBy = [ "multi-user.target" ];
+                        after = [ "network.target" ];
+                        description = "Starts klipper-" + name;
+                        serviceConfig = {
+                          Type = "simple";
+                          User = cfg.user;
+                          Group = cfg.group;
+                          RemainAfterExit = "yes";
+                          ExecStart = ''
+                            ${value.package}/bin/klippy \
+                              --input-tty ${value.inputTty} \
+                              ${if value.apiServer != "" then "--api-server " + value.apiServer else ""} \
+                              ${if value.logFile != "" then "--logfile " + value.logFile else ""} \
+                              ${if value.verbose then "-v" else ""} \
+                              ${if value.dictionary != "" then "--dictionary " + value.dictionary else ""} \
+                              ${configFile}
+                          '';
+                          ExecStartPost = "${pkgs.bash}/bin/bash -c '(sleep 5 ; [[ -e \"${value.apiServer}\" ]] && chmod 664 \"${value.apiServer}\" ) & disown'";
+                          Restart = "always";
+                          RestartSec = 10;
+                        };
+                      }))
+                  cfg.instances;
+              };
+          };
       };
 }

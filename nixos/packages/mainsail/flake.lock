@@ -1,19 +1,19 @@
 {
   "nodes": {
-    "klippy": {
+    "mainsail": {
       "flake": false,
       "locked": {
-        "lastModified": 1609168797,
-        "narHash": "sha256-1ojKClZTqa0amwUWz1z9GFuEaXtuw7xu0JEgF2N1UQ8=",
-        "owner": "KevinOConnor",
-        "repo": "klipper",
-        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "lastModified": 1609196389,
+        "narHash": "sha256-wGvziRy2oLmRylvFndy7UbScCYAxJmyU6L4J73fZyLk=",
+        "owner": "meteyou",
+        "repo": "mainsail",
+        "rev": "9152934f9daa275e73b40c5f8d2ada3984c3c416",
         "type": "github"
       },
       "original": {
-        "owner": "KevinOConnor",
-        "repo": "klipper",
-        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "owner": "meteyou",
+        "ref": "master",
+        "repo": "mainsail",
         "type": "github"
       }
     },
@@ -32,7 +32,7 @@
     },
     "root": {
       "inputs": {
-        "klippy": "klippy",
+        "mainsail": "mainsail",
         "nixpkgs": "nixpkgs"
       }
     }
