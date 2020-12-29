@@ -54,7 +54,7 @@
             in {
               # home-manager.useGlobalPkgs = true;
 
-              home.packages = [ pkgs.nixpkgs.bat ];
+              home.packages = [ (import ./packages/enter-env pkgs) ];
 
               home.stateVersion = "20.09";
 
