@@ -19,9 +19,9 @@ backup=(etc/nomad.d/{server,client}/nomad.hcl)
 source_x86_64=("${pkgname}-${pkgver}.zip::https://releases.hashicorp.com/nomad/${pkgver}/nomad_${pkgver}_linux_amd64.zip")
 source_aarch64=("${pkgname}-${pkgver}.zip::https://releases.hashicorp.com/nomad/${pkgver}/nomad_${pkgver}_linux_arm64.zip")
 source=('nomad.service')
-sha256sums=('85b6938ba13b450f8b7b9ca281178eea57a9409948b9e70b69d6a66a4dbdaa7b')
-sha256sums_x86_64=('24102aa16e82330fac7de3b8156eb10d7ef535027c4d33321e7e64d6049442a4')
-sha256sums_aarch64=('b03d62a2fa6ba99c1acfab53099f3fee8bfd2a381d9a49192c8de6997fd1b0fa')
+sha256sums=('32c864a9aca5164d05b087b86858c9d6044025a5ce41b8a2c3749bd92f15686b')
+sha256sums_x86_64=('f384132204e906d653cce0fd6fa2dbe8edf26d50c319d824aa3a5e9184508fe0')
+sha256sums_aarch64=('f384132204e906d653cce0fd6fa2dbe8edf26d50c319d824aa3a5e9184508fe0')
 
 package() {
   install -Dm0755 nomad "${pkgdir}/usr/bin/nomad"

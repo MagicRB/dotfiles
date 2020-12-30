@@ -1,0 +1,9 @@
+* HashiCorp
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package hcl-mode
+      :straight t)
+
+    (use-package terraform-mode
+      :straight t)
+  #+END_SRC
