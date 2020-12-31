@@ -1,26 +1,14 @@
 {
   inputs = {
-      home-manager = {
-        url = "github:nix-community/home-manager?ref=release-20.09";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
-
-      nixpkgs.url = "nixpkgs";
-      nixpkgs-unstable.url = "nixpkgs-unstable";
-      nixpkgs-master.url = "nixpkgs-master";
-
-      emacs-overlay.url = "git+https://github.com/nix-community/emacs-overlay";
-      emacs = {
-        type = "git";
-        url = "https://git.savannah.gnu.org/git/emacs.git";
-        ref = "feature/native-comp";
-        flake = false;
-      };
-      vtermModule = {
-        url = "git+https://github.com/akermu/emacs-libvterm";
-        flake = false;
-      };
+    home-manager = {
+      url = "github:nix-community/home-manager?ref=release-20.09";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixpkgs.url = "nixpkgs";
+    nixpkgs-unstable.url = "nixpkgs-unstable";
+    nixpkgs-master.url = "nixpkgs-master";
+  };
 
   outputs = { self, ... }@inputs: {
     homeConfigurations = 
@@ -45,15 +33,13 @@
                     };
                 in pkgs // {
                   custom = {
-                    emacs = (import ./packages/emacs) pkgs inputs;
-                    screenshot = (import ./packages/screenshot) pkgs;
-                    emacsclient-remote = (import ./packages/emacsclient-remote) pkgs;
+                    emacs = (import ./packages/emacs).defaultPackage."x86_64-linux";
+                    screenshot = (import ./packages/screenshot).defaultPackage."x86_64-linux";
+                    emacsclient-remote = (import ./packages/emacsclient-remote).defaultPackage."x86_64-linux";
                   };
                 };
               dotfiles = ~/dotfiles;
             in {
-              # home-manager.useGlobalPkgs = true;
-
               home.packages = [ (import ./packages/enter-env pkgs) ];
 
               home.stateVersion = "20.09";

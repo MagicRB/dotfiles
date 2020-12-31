@@ -4,9 +4,12 @@
   home.packages = with nixpkgs; [
     zip
     unrar
+    cargo
     exa
     bat
     pciutils
     git
+    socat
+    nixpkgs-unstable.bfs
   ];
 }

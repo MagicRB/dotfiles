@@ -7,14 +7,15 @@ SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 cd "${SCRIPTPATH}"
 
 inputs="$(for input in "${inputs[@]}"; do echo --update-input ${input} ; done)"
-nix flake update ${inputs}
+#nix flake update ${inputs}
 
-find . -name "flake.nix" -print0 | while IFS= read -r -d '' flake
+bfs . -name "flake.nix" -print0 | perl -e 'print sort {$a=~s!/!/! <=> $b=~s!/!/!} <>' | while IFS= read -r -d '' flake
 do
     (
 	FLAKE_DIR="$(dirname "${flake}")"
+	echo "Updating ${FLAKE_DIR}"
 	cd "${FLAKE_DIR}"
 
-	echo nix flake update ${inputs}
+	nix flake update ${inputs}
     )
 done

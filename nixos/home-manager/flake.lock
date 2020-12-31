@@ -1,37 +1,5 @@
 {
   "nodes": {
-    "emacs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1608976434,
-        "narHash": "sha256-LzztkeOo8PGQY9X8R5l9mt/XnaaZgvHxEHlftcvQdVQ=",
-        "ref": "feature/native-comp",
-        "rev": "89d5a3a7603a0b096d02f58ba0a1997ad98c63ae",
-        "revCount": 145780,
-        "type": "git",
-        "url": "https://git.savannah.gnu.org/git/emacs.git"
-      },
-      "original": {
-        "ref": "feature/native-comp",
-        "type": "git",
-        "url": "https://git.savannah.gnu.org/git/emacs.git"
-      }
-    },
-    "emacs-overlay": {
-      "locked": {
-        "lastModified": 1608999586,
-        "narHash": "sha256-0zUW3c3trwnxqvW/WcPBwsVV+aSJxKPhsW8b7UkPvm0=",
-        "ref": "master",
-        "rev": "105f0cb92622ca79c77ef32dd4973d980340c36a",
-        "revCount": 4379,
-        "type": "git",
-        "url": "https://github.com/nix-community/emacs-overlay"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://github.com/nix-community/emacs-overlay"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -55,10 +23,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1608802800,
-        "narHash": "sha256-QCpx3LHzunHj+PIXt1sSGfTiM+yxWO7YPfLgo6Lh7Nc=",
-        "path": "/nix/store/mkzal1xfc975xgdggika37r46xpmgapn-source",
-        "rev": "ca119749d86f484066fae7680af8a44ea1f11ca8",
+        "lastModified": 1609187327,
+        "narHash": "sha256-6lCwWpGpZxbSYclryv4ixsxxbISe7HuLyyQnGWCC8ZQ=",
+        "path": "/nix/store/dcmj4p477fgzxz33rxss9wnmslnsahgx-source",
+        "rev": "e065200fc90175a8f6e50e76ef10a48786126e1c",
         "type": "path"
       },
       "original": {
@@ -68,10 +36,10 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1609030396,
-        "narHash": "sha256-VmnSFuhdxiQ7K83g177MD0mWxfHcNWJfp7C6GlW1Ji8=",
-        "path": "/nix/store/ajbpz4axwjblzr9ifpmbh9vkkhp199zq-source",
-        "rev": "c2dcb3b3e0c652b5b74127d0c82e252753b9752a",
+        "lastModified": 1609262190,
+        "narHash": "sha256-+2hW2L0XwPc7r4BY3S7nAzeFWgp26J+Fjl0uru54YCA=",
+        "path": "/nix/store/7xdf9d9xfh0r70y210nqz0bg0f4p79wy-source",
+        "rev": "339fccbe0c4edc72862f3228b5087d9afd01d3ac",
         "type": "path"
       },
       "original": {
@@ -81,10 +49,10 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1608956400,
-        "narHash": "sha256-OJhKvh8jloV6NmpeggVJYQmslGPF3i8O82meVgKCePQ=",
-        "path": "/nix/store/nbq6acfsnppa6agjp05m1dxfka6nkphl-source",
-        "rev": "84917aa00bf23c88e5874c683abe05edb0ba4078",
+        "lastModified": 1609079092,
+        "narHash": "sha256-KhyKfxBHtZlAgudpZ0EJVzeuqROjKfVOwj8j0cuhU50=",
+        "path": "/nix/store/5pmay8rdvgw5ml1xi6189xhdbygc850k-source",
+        "rev": "2f47650c2f28d87f86ab807b8a339c684d91ec56",
         "type": "path"
       },
       "original": {
@@ -94,29 +62,10 @@
     },
     "root": {
       "inputs": {
-        "emacs": "emacs",
-        "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
-        "nixpkgs-unstable": "nixpkgs-unstable",
-        "vtermModule": "vtermModule"
-      }
-    },
-    "vtermModule": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1607220306,
-        "narHash": "sha256-FprftlQvxx0pCk+OCuDl/S7Yeqia1HShFPSvKTMjRGg=",
-        "ref": "master",
-        "rev": "a670b786539d3c8865d8f68fe0c67a2d4afbf1aa",
-        "revCount": 571,
-        "type": "git",
-        "url": "https://github.com/akermu/emacs-libvterm"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://github.com/akermu/emacs-libvterm"
+        "nixpkgs-unstable": "nixpkgs-unstable"
       }
     }
   },

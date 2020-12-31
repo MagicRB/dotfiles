@@ -1,0 +1,89 @@
+{
+  "nodes": {
+    "emacs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1609333519,
+        "narHash": "sha256-ugrE5UzHXxF5K92YJSLRpn1MgYBvzriOL7nEsjA8tqs=",
+        "ref": "feature/native-comp",
+        "rev": "db2a49327a48a375cc2813d5211d762c5dfe55ff",
+        "revCount": 145868,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs.git"
+      },
+      "original": {
+        "ref": "feature/native-comp",
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs.git"
+      }
+    },
+    "emacs-overlay": {
+      "locked": {
+        "lastModified": 1609417595,
+        "narHash": "sha256-KKIdFmJ+wC3T5UtLLTUE8hvPO0/+TCyQFjyh+pc6Mug=",
+        "ref": "master",
+        "rev": "c9bc01eca800bb3f7c1f1bafadeb12a1904c6346",
+        "revCount": 4422,
+        "type": "git",
+        "url": "https://github.com/nix-community/emacs-overlay"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/nix-community/emacs-overlay"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1609187327,
+        "narHash": "sha256-6lCwWpGpZxbSYclryv4ixsxxbISe7HuLyyQnGWCC8ZQ=",
+        "path": "/nix/store/dcmj4p477fgzxz33rxss9wnmslnsahgx-source",
+        "rev": "e065200fc90175a8f6e50e76ef10a48786126e1c",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs-unstable": {
+      "locked": {
+        "lastModified": 1609079092,
+        "narHash": "sha256-KhyKfxBHtZlAgudpZ0EJVzeuqROjKfVOwj8j0cuhU50=",
+        "path": "/nix/store/5pmay8rdvgw5ml1xi6189xhdbygc850k-source",
+        "rev": "2f47650c2f28d87f86ab807b8a339c684d91ec56",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs-unstable",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "emacs": "emacs",
+        "emacs-overlay": "emacs-overlay",
+        "nixpkgs": "nixpkgs",
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "vtermModule": "vtermModule"
+      }
+    },
+    "vtermModule": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1607220306,
+        "narHash": "sha256-FprftlQvxx0pCk+OCuDl/S7Yeqia1HShFPSvKTMjRGg=",
+        "ref": "master",
+        "rev": "a670b786539d3c8865d8f68fe0c67a2d4afbf1aa",
+        "revCount": 571,
+        "type": "git",
+        "url": "https://github.com/akermu/emacs-libvterm"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/akermu/emacs-libvterm"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
