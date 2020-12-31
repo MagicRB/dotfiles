@@ -13,7 +13,7 @@ source=('consul.service')
 source_x86_64=("https://releases.hashicorp.com/consul/${pkgver}/consul_${pkgver}_linux_amd64.zip")
 source_aarch64=("https://releases.hashicorp.com/consul/${pkgver}/consul_${pkgver}_linux_arm64.zip")
 
-sha256sums=('cace20b6db0643a4d10f6f14ab7ba23d047376aae48460b48fd265cb3eebc13c')
+sha256sums=('44a2161e17b61996c4630ceeb87a5015aa17f4cc17dbb8a5e9fab001ce5a3253')
 sha256sums_x86_64=('409b964f9cec93ba4aa3f767fe3a57e14160d86ffab63c3697d188ba29d247ce')
 sha256sums_aarch64=('71b3c5551fbd297efbee74f95b138244202fcdd745b80033b99e1bc3d06043ee')
 options=('!strip')
