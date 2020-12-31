@@ -20,6 +20,7 @@ options=('!strip')
 
 package() {
   install -Dm755 consul "$pkgdir"/usr/bin/consul
+  install -Ddm750 -o root -g root "${pkgdir}/var/lib/consul"
   install -Dm644 consul.service "$pkgdir"/usr/lib/systemd/system/consul.service
   install -d "$pkgdir"/etc/consul.d
 }
