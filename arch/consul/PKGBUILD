@@ -1,6 +1,6 @@
 # Maintainer: Vasiliy Bukharev <bvp-yar@ya.ru>
 
-pkgname=consul-bin
+pkgname=consul
 pkgver=1.9.0
 pkgrel=1
 pkgdesc='A tool for service discovery, monitoring and configuration.'
@@ -18,9 +18,25 @@ sha256sums_x86_64=('409b964f9cec93ba4aa3f767fe3a57e14160d86ffab63c3697d188ba29d2
 sha256sums_aarch64=('71b3c5551fbd297efbee74f95b138244202fcdd745b80033b99e1bc3d06043ee')
 options=('!strip')
 
+_user_id=4648
+_user_name=consul
+
 package() {
-  install -Dm755 consul "$pkgdir"/usr/bin/consul
-  install -Ddm750 -o root -g root "${pkgdir}/var/lib/consul"
-  install -Dm644 consul.service "$pkgdir"/usr/lib/systemd/system/consul.service
-  install -d "$pkgdir"/etc/consul.d
+    install -Dm755 consul "$pkgdir"/usr/bin/consul
+    install -Ddm750 -o root -g root "${pkgdir}/var/lib/consul"
+    install -Dm644 consul.service "$pkgdir"/usr/lib/systemd/system/consul.service
+    install -d "$pkgdir"/etc/consul.d
+}
+
+post_install() {
+    useradd -MU -u "${_user_id}" "${_user_name}" -s /usr/bin/nologin
+}
+
+post_upgrade() {
+    id "${_user_name}" &>/dev/null && userdel "${_user_name}"
+    useradd -MU -u "${_user_id}" "${_user_name}" -s /user/bin/nologin
+}
+
+post_remove() {
+    userdel "${_user_name}"
 }
