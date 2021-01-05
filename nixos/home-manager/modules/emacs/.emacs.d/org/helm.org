@@ -3,6 +3,7 @@
   #+BEGIN_SRC emacs-lisp :noweb yes
     (use-package helm
       :straight t
+      :disabled t
       :config
       (defun my-helm-display-frame-center (buffer &optional resume)
 	"Display `helm-buffer' in a separate frame which centered in parent frame."

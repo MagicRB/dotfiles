@@ -1,0 +1,40 @@
+* Ivy
+  #+BEGIN_SRC emacs-lisp
+    (use-package ivy
+      :straight t
+      :config
+      (ivy-mode 1)
+      ;; (setq ivy-use-virtual-buffers t)
+      ;; (setq enable-recursive-minibuffers t)
+      )
+  #+END_SRC
+** Ivy Prescient
+   For fuzzy matching, from the author of ~selectrum~ and ~straight.el~.
+   For splitting completion things, separate them with a ~<SPC>~
+   #+BEGIN_SRC emacs-lisp
+     (use-package ivy-prescient
+       :straight t
+       :config
+       (ivy-prescient-mode 1))
+   #+END_SRC
+** All The Icons Ivy Rich
+   Fancy icons for buffer switching
+   #+BEGIN_SRC emacs-lisp
+     (use-package all-the-icons-ivy-rich
+       :straight t
+       :hook (after-init . all-the-icons-ivy-rich-mode))
+   #+END_SRC
+** Counsel
+   #+BEGIN_SRC emacs-lisp
+     (use-package counsel
+       :straight t
+       :config
+       (counsel-mode 1))
+   #+END_SRC
+** Ivy Rich
+   #+BEGIN_SRC emacs-lisp
+     (use-package ivy-rich
+       :straight t
+       :config
+       (ivy-rich-mode 1))
+   #+END_SRC
