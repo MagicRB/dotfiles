@@ -12,23 +12,23 @@
 		("l" . evil-next-line)
 		(";" . evil-forward-char)
 		:map evil-motion-state-map
-		("<left>" . (lambda () (interactive) ()))
-		("<right>" . (lambda () (interactive) ()))
-		("<up>" . (lambda ()  (interactive) ()))
-		("<down>" . (lambda () (interactive) ()))
+		("<left>" . 'ignore)
+		("<right>" . 'ignore)
+		("<up>" . 'ignore)
+		("<down>" . 'ignore)
 		:map evil-insert-state-map
-		("<left>" . (lambda () (interactive) ()))
-		("<right>" . (lambda () (interactive) ()))
-		("<up>" . (lambda ()  (interactive) ()))
-		("<down>" . (lambda () (interactive) ())))
+		("<left>" . 'ignore)
+		("<right>" . 'ignore)
+		("<up>" . 'ignore)
+		("<down>" . 'ignore)
     :config
     (evil-mode 1)
     (with-eval-after-load "treemacs"
-      (evil-define-key 'treemacs treemacs-mode-map (kbd "h") nil)
-      (evil-define-key 'treemacs treemacs-mode-map (kbd "j") 'treemacs-root-up)
+      (evil-define-key 'treemacs treemacs-mode-map (kbd "h") 'ignore)
+      (evil-define-key 'treemacs treemacs-mode-map (kbd "j") 'ignore)
       (evil-define-key 'treemacs treemacs-mode-map (kbd "k") 'treemacs-previous-line)
       (evil-define-key 'treemacs treemacs-mode-map (kbd "l") 'treemacs-next-line)
-      (evil-define-key 'treemacs treemacs-mode-map (kbd ";") 'treemacs-root-down))
+      (evil-define-key 'treemacs treemacs-mode-map (kbd ";") 'ignore))
     ;; :q should kill the current buffer rather than quitting emacs entirely
     (evil-ex-define-cmd "q" 'kill-this-buffer)
     ;; Need to type out :quit to close emacs
@@ -93,3 +93,26 @@
     (evil-define-key 'motion org-agenda-mode-map (kbd "k") 'org-agenda-previous-line)
     (evil-define-key 'motion org-agenda-mode-map (kbd "l") 'org-agenda-next-line))
 #+END_SRC
+
+** Evil Window Movement
+   #+BEGIN_SRC emacs-lisp
+     (with-eval-after-load "evil"
+       (define-prefix-command 'evil-window-movement-map)
+       (let ((map evil-window-movement-map))
+	 (define-key map "j" 'evil-window-left)
+	 (define-key map "k" 'evil-window-up)
+	 (define-key map "l" 'evil-window-down)
+	 (define-key map ";" 'evil-window-right)
+
+	 (define-key map "J" 'evil-window-move-far-left)
+	 (define-key map "K" 'evil-window-move-very-top)
+	 (define-key map "L" 'evil-window-move-very-bottom)
+	 (define-key map ":" 'evil-window-move-far-right)
+
+	 (define-key map "v" 'evil-window-vsplit)
+	 (define-key map "s" 'evil-window-split)
+	 (define-key map "x" 'evil-window-delete))
+       (define-key evil-motion-state-map " " 'evil-window-movement-map)
+       (with-eval-after-load "treemacs-evil"
+	 (define-key evil-treemacs-state-map " " 'evil-window-movement-map)))
+   #+END_SRC
