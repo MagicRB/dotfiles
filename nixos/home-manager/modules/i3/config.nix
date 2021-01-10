@@ -1,4 +1,4 @@
-{ pkgs, hostname }:
+{ pkgs, hostname, screenshot }:
 
 with pkgs.lib;
 
@@ -142,9 +142,9 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-bindsym --release Print exec /home/main/.local/bin/screenshot select
-bindsym --release Shift+Print exec /home/main/.local/bin/screenshot screen
-bindsym --release Control+Shift+Print exec /home/main/.local/bin/screenshot focused
+bindsym --release Print exec ${screenshot}/bin/screenshot select
+bindsym --release Shift+Print exec ${screenshot}/bin/screenshot screen
+bindsym --release Control+Shift+Print exec ${screenshot}/bin/screenshot focused
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
