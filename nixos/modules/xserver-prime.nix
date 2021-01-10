@@ -11,7 +11,7 @@ let
 in {
   environment.systemPackages = [ nvidia-offload ];
 
-  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidiaBeta" ];
 
   hardware.nvidia.prime = {
     offload.enable = true;

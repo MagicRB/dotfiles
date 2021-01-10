@@ -5,11 +5,13 @@
   environment.systemPackages = with pkgs; [
     home-manager
     cryptsetup
+    ntfs3g
+    cifs-utils
   ];
   
   services.xserver = {
     displayManager = {
-      lightdm.enable =true;
+      lightdm.enable = true;
     };
   };
   

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-nix build ".#$(hostname)" --show-trace && \
+nix build ".#$(hostname)" --impure --show-trace && \
 result/activate && \
 rm result
