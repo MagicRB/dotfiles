@@ -32,15 +32,13 @@
                 dontBuild = true;
                 installPhase = ''
                   mkdir -p $out/share/moonraker
-                  cp -r moonraker/* $out/share/moonraker
+                  cp -r * $out/share/moonraker
 
                   mkdir -p out/bin
-                  chmod +x $out/share/moonraker/moonraker.py
-
-                  # sed -i 's/utils\\.get_software_version\\(\\)/"NO-IDEA"/' $out/share/moonraker/moonraker.py
+                  chmod +x $out/share/moonraker/moonraker/moonraker.py
 
                   makeWrapper \
-                    $out/share/moonraker/moonraker.py \
+                    $out/share/moonraker/moonraker/moonraker.py \
                     $out/bin/moonraker \
                     --prefix PATH : ${lib.makeBinPath (with pkgs; [
                       pythonWithPackages

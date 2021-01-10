@@ -3,11 +3,11 @@
     "emacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1609333519,
-        "narHash": "sha256-ugrE5UzHXxF5K92YJSLRpn1MgYBvzriOL7nEsjA8tqs=",
+        "lastModified": 1609795929,
+        "narHash": "sha256-yIu/guiRIQ8VV5T8RUAN+6yqu46Djc3ylHaezs5fKFQ=",
         "ref": "feature/native-comp",
-        "rev": "db2a49327a48a375cc2813d5211d762c5dfe55ff",
-        "revCount": 145868,
+        "rev": "8ad983c4acef60a80e8d6b6ba891b1ef957f2d7c",
+        "revCount": 146003,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/emacs.git"
       },
@@ -19,11 +19,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1609417595,
-        "narHash": "sha256-KKIdFmJ+wC3T5UtLLTUE8hvPO0/+TCyQFjyh+pc6Mug=",
+        "lastModified": 1609856476,
+        "narHash": "sha256-2h4C2y87q5oRshN1nIWF25TsKXyBZCHyn3xwbfwJL0M=",
         "ref": "master",
-        "rev": "c9bc01eca800bb3f7c1f1bafadeb12a1904c6346",
-        "revCount": 4422,
+        "rev": "c33ab9d74d20493ae1a77ab8c7eedfd143ffa82c",
+        "revCount": 4438,
         "type": "git",
         "url": "https://github.com/nix-community/emacs-overlay"
       },
@@ -34,10 +34,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1609187327,
-        "narHash": "sha256-6lCwWpGpZxbSYclryv4ixsxxbISe7HuLyyQnGWCC8ZQ=",
-        "path": "/nix/store/dcmj4p477fgzxz33rxss9wnmslnsahgx-source",
-        "rev": "e065200fc90175a8f6e50e76ef10a48786126e1c",
+        "lastModified": 1609867866,
+        "narHash": "sha256-ITciATW51g/VqL4CTCh74Cu/wqIztkoJNZJxqj2vEMs=",
+        "path": "/nix/store/gz0m2hylws210m0nr3ih8b8pvnikwi6f-source",
+        "rev": "4a75ca4a4e7d14e7b0b0230b3ea57b5bd7c16218",
         "type": "path"
       },
       "original": {
@@ -47,10 +47,10 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1609079092,
-        "narHash": "sha256-KhyKfxBHtZlAgudpZ0EJVzeuqROjKfVOwj8j0cuhU50=",
-        "path": "/nix/store/5pmay8rdvgw5ml1xi6189xhdbygc850k-source",
-        "rev": "2f47650c2f28d87f86ab807b8a339c684d91ec56",
+        "lastModified": 1609866355,
+        "narHash": "sha256-TMzb8nMePC4OusDde+xv8AIgbNYuFku/dlLkPO/hifM=",
+        "path": "/nix/store/9kfzklpzv0bh5v7xidriwy7pq07drza8-source",
+        "rev": "d9dba88d08a9cdf483c3d45f0d7220cf97a4ce64",
         "type": "path"
       },
       "original": {
@@ -70,11 +70,11 @@
     "vtermModule": {
       "flake": false,
       "locked": {
-        "lastModified": 1607220306,
-        "narHash": "sha256-FprftlQvxx0pCk+OCuDl/S7Yeqia1HShFPSvKTMjRGg=",
+        "lastModified": 1609818547,
+        "narHash": "sha256-P5Z6oFjLoZnxnRglEt7ORjFtfy8mZ8drX6GNve87Knc=",
         "ref": "master",
-        "rev": "a670b786539d3c8865d8f68fe0c67a2d4afbf1aa",
-        "revCount": 571,
+        "rev": "6f95a1b2949f60539fd92e3a63011801a7e765fd",
+        "revCount": 575,
         "type": "git",
         "url": "https://github.com/akermu/emacs-libvterm"
       },
