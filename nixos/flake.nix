@@ -27,38 +27,7 @@
 
             time.timeZone = "Europe/Bratislava";
             system.stateVersion = "20.09";
-
-            # services.moonraker = {
-            #   instances = {
-            #     ender3 = {
-            #       config = {
-            #         authorization.trustedClients = [ "127.0.0.0/8" ];
-            #       };
-            #     };
-            #   };
-            # };
-
-            # services.mainsail = {
-            #   enable = true;
-            #   apiServer = "localhost:7125";
-            # };
-
-            # services.klippy = {
-            #   instances = {
-            #     ender3 = {
-            #       config = {
-            #         file = ./printer.cfg;
-            #         extraImports = [ ./macros.cfg ];
-            #         virtualSd = "/home/main";
-            #       };
-            #     };
-            #   };
-            # };
           })
-
-          # klippyModule
-          # moonrakerModule
-          # mainsailModule
 
           (import ./profiles/laptop.nix {
             intelBusId = "PCI:0:2:0";
@@ -87,6 +56,8 @@
 
             time.timeZone = "Europe/Bratislava";
             system.stateVersion = "20.09";
+
+            virtualisation.docker.enable = true;
           })
 
           (import ./profiles/workstation.nix)
