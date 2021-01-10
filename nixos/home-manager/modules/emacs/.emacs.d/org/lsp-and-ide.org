@@ -110,7 +110,7 @@
 	:config
 	(setq rustic-lsp-server 'rust-analyzer)
 	(setq rustic-compile-command "cargo build")
-	(setq rustic-format-trigger nil);'on-save)
+	(setq rustic-format-trigger nil);'on-save
 	(setq lsp-prefer-flymake nil)
 
 	(setq lsp-rust-analyzer-display-chaining-hints nil)

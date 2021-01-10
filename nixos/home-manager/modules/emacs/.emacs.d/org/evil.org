@@ -20,7 +20,7 @@
 		("<left>" . 'ignore)
 		("<right>" . 'ignore)
 		("<up>" . 'ignore)
-		("<down>" . 'ignore)
+		("<down>" . 'ignore))
     :config
     (evil-mode 1)
     (with-eval-after-load "treemacs"
