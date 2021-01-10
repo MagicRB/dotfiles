@@ -1,6 +1,8 @@
-* ORG
-  
-** Org Roam
+* ORG  
+   
+   Enable =org-roam=. It implements the Zettelkasten method in Emacs and uses a backing sqlite
+   database, therefore =sqlite= must be on your path, at least for Emacs.
+   
    #+BEGIN_SRC emacs-lisp
      (use-package org-roam
        :straight t
@@ -8,19 +10,35 @@
        (setq org-roam-directory "~/org")
        (add-hook 'after-init-hook 'org-roam-mode))
    #+END_SRC
-** Org Babel
+
+   Enable additional languages for org-babel, namely Python.
+   
    #+BEGIN_SRC emacs-lisp
      (org-babel-do-load-languages
        'org-babel-load-languages
        '((python . t)))
    #+END_SRC
-** Org Superstar
+
+   Enable tangle on save, big thanks to Diego Zamboni for his amazing booklet about
+   [[https://leanpub.com/lit-config/read][/Literate Configuration/]].
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-mode-hook
+	       (lambda () (add-hook 'after-save-hook #'org-babel-tangle
+				    :append :local)))
+   #+END_SRC
+   
+   Enable fancy UTF-8 characters for headings with =org-superstar=.
+   
    #+BEGIN_SRC emacs-lisp
      (use-package org-superstar
        :straight t
        :hook ((org-mode . org-superstar-mode)))
    #+END_SRC
-** Org Bigger Headings
+   
+   Enable bigger headings for =org-mode=, this in my opinion makes it a bit easier to read org-mode
+   buffer.
+   
    #+BEGIN_SRC emacs-lisp
      (custom-set-faces
       '(fixed-pitch ((t (:family "Fira Code 9"))))
@@ -30,12 +48,22 @@
       '(org-level-4 ((t (:inherit outline-4 :height 1.10))))
       '(org-level-5 ((t (:inherit outline-5 :height 1.05)))))
    #+END_SRC
-** Org Agenda
+   
+   Enable the "vertical ruler" specifically for =org-mode=, TODO: it is worth considering to enable
+   this for all text-mode buffers.
+   
    #+BEGIN_SRC emacs-lisp
-     (setq org-agenda-files '("~/org" "~/org/school"))
      (add-hook 'org-mode-hook (lambda ()
 				(set-fill-column 120)
 				(display-fill-column-indicator-mode)))
+   #+END_SRC
+   
+   Enable =org-agenda=, used for task management and things like that. TODO: Currently it's
+   underutilized and underconfigured.
+   TODO: Also should I have a separate folder for school related things? Do I even have that folder?
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq org-agenda-files '("~/org" "~/org/school"))
 
      (setq org-agenda-custom-commands
 	   '(("h" "Agenda and Home-related tasks"
@@ -54,15 +82,23 @@
      (setq org-highest-priority ?A)
      (setq org-lowest-priority ?E)
      (setq org-default-priority ?B)
+   #+END_SRC
 
+   (Dis)enable alerts and notifications, which should hook into =org-agenda= notify 
+
+   #+BEGIN_SRC emacs-lisp :tangle no
      (require 'org-alert)
      (require 'notifications)
    #+END_SRC
+   
    Increase org-preview size
+   
    #+BEGIN_SRC emacs-lisp
-     ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.75))
+     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.75))
    #+END_SRC
-** ORG tikz previews
+   
+   Enable org-tikz previews, =imagemagick= must be installed.
+   
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'org-latex-packages-alist
 		  '("" "tikz" t))
@@ -72,15 +108,20 @@
 
      (setq org-latex-create-formula-image-program 'imagemagick)
    #+END_SRC
-** ORG fragtog
+   
+   Install =org-fragtop=, it will automatically toggle previews for LaTex segments under point.
+   
    #+BEGIN_SRC emacs-lisp
      (use-package org-fragtog
        :straight t
        :hook (org-mode . org-fragtog-mode))
    #+END_SRC
+   
 ** ORG Linkz
+   
    Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]].
-   Remove validation link from exported html file
+   Remove validation link from exported html file.
+   Currently doesn't work for somer reason, must debug why.
 
    #+NAME: org-linkz-html-validation-link
    #+BEGIN_SRC emacs-lisp
