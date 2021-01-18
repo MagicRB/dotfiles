@@ -74,5 +74,27 @@
           ./users/main.nix
         ];
       };
+
+      nixosConfigurations.mark = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          ({ pkgs, ... }: {
+            time.timeZone = "Europe/Bratislava";
+            environment.systemPackages = [
+              pkgs.gnupg
+              (let
+                lib = import ./lib.nix
+                  inputs
+                  { lib = inputs.nixpkgs.lib; system = "x86_64-linux"; };
+              in
+                lib.halfCallFlake ./packages/sss-cli)
+            ];
+              system.stateVersion = "20.09";
+          })
+
+          (import ./filesystem/mark.nix)
+        ];
+      };
     };
 }
