@@ -1,10 +1,10 @@
 inputs: { lib, system }: {
   halfCallFlake = flakeSrc:
     let
-      flake = import (flakeSrc + "/outputs.nix");
-      outputs = flake ( inputs // { self = outputs; });
+      flake = import (flakeSrc + "/flake.nix");
+      outputs = flake.outputs ( inputs // { self = outputs; });
     in
-      outputs;
+      outputs.defaultPackage."${system}";
 
   getLegacyPkgs =
     config:

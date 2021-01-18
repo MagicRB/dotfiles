@@ -7,6 +7,23 @@
     nixpkgs.url = "nixpkgs";
     nixpkgs-unstable.url = "nixpkgs-unstable";
     nixpkgs-master.url = "nixpkgs-master";
+    
+    sss-cli = {
+      url = "github:dsprenkels/sss-cli";
+      flake = false;
+    };
+    
+    emacs-overlay.url = "git+https://github.com/nix-community/emacs-overlay";
+    emacs = {
+      type = "git";
+      url = "https://git.savannah.gnu.org/git/emacs.git";
+      ref = "feature/native-comp";
+      flake = false;
+    };
+    vtermModule = {
+      url = "git+https://github.com/akermu/emacs-libvterm";
+      flake = false;
+    };
   };
 
   outputs = { self, ... }@inputs: {
@@ -32,10 +49,11 @@
                     };
                 in pkgs // {
                   custom = {
-                    emacs = (import ./packages/emacs).defaultPackage."x86_64-linux";
-                    screenshot = (import ./packages/screenshot).defaultPackage."x86_64-linux";
-                    emacsclient-remote = (import ./packages/emacsclient-remote).defaultPackage."x86_64-linux";
-                    atom-shell = (import ./packages/atom-shellas).defaultPackage."x86_64-linux";
+                    emacs = lib.halfCallFlake ./packages/emacs;
+                    screenshot = lib.halfCallFlake ./packages/screenshot;
+                    emacsclient-remote = lib.halfCallFlake ./packages/emacsclient-remote;
+                    #atom-shell = lib.halfCallFlake ./packages/atom-shell;
+                    sss-cli = lib.halfCallFlake ./packages/sss-cli;
                   };
                 };
               dotfiles = ~/dotfiles;
@@ -81,15 +99,20 @@
                     };
                 in pkgs // {
                   custom = {
-                    emacs = (import ./packages/emacs).defaultPackage."x86_64-linux";
-                    screenshot = (import ./packages/screenshot).defaultPackage."x86_64-linux";
-                    emacsclient-remote = (import ./packages/emacsclient-remote).defaultPackage."x86_64-linux";
-                    atom-shell = (import ./packages/atom-shell).defaultPackage."x86_64-linux";
+                    emacs = lib.halfCallFlake ./packages/emacs;
+                    screenshot = lib.halfCallFlake ./packages/screenshot;
+                    emacsclient-remote = lib.halfCallFlake ./packages/emacsclient-remote;
+                    #atom-shell = lib.halfCallFlake ./packages/atom-shell;
+                    sss-cli = lib.halfCallFlake ./packages/sss-cli;
                   };
                 };
               dotfiles = ~/dotfiles;
             in {
-              home.packages = [ (import ./packages/enter-env pkgs) ];
+              home.packages = [
+                (import ./packages/enter-env pkgs)
+                pkgs.nixpkgs-unstable.nomad_1_0
+                pkgs.custom.sss-cli
+              ];
 
               home.stateVersion = "20.09";
 
@@ -100,6 +123,8 @@
                 (import ./modules/dunst pkgs)
                 (import ./modules/emacs pkgs)
                 (import ./modules/graphical-programs.nix pkgs)
+
+                (import ./modules/webdev.nix pkgs)
 
                 (import ./modules/i3 pkgs "heater")
                 (import ./modules/nix-du.nix pkgs)
