@@ -52,7 +52,24 @@
       "inputs": {
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "sss-cli": "sss-cli"
+      }
+    },
+    "sss-cli": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1588066586,
+        "narHash": "sha256-fOQoEcrLOzsJ+x0qD25kv+JUxT7d/wsLKoDIm1KXDuE=",
+        "owner": "dsprenkels",
+        "repo": "sss-cli",
+        "rev": "cfca1abb155a11f1b273b9a0ca4dc3b17882f3a0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "dsprenkels",
+        "repo": "sss-cli",
+        "type": "github"
       }
     }
   },

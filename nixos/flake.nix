@@ -3,6 +3,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-20.09";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs?ref=master"; 
+
+    sss-cli = {
+      flake = false;
+      url = "github:dsprenkels/sss-cli";
+    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
@@ -18,7 +23,9 @@
           ./filesystem/omen.nix
           ./kernel/omen.nix
 
-          (_: {
+          ({ pkgs, ... }: {
+            
+
             networking = {
               hostName = "omen";
               useDHCP = false;
@@ -45,9 +52,9 @@
 
         modules = [
           ./filesystem/heater.nix
-          ./kernel/heater.nix
+          (import ./kernel/heater.nix (import inputs.nixpkgs-unstable { system = "x86_64-linux"; config.allowUnfree = true; }))
 
-          (_: {
+          ({ pkgs, ... }: {
             networking = {
               hostName = "heater";
               useDHCP = false;
