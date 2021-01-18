@@ -1,8 +1,18 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, ... }:
 { config, lib, pkgs, ... }:
 {
+  services.gpg-agent = {
+    pinentryFlavor = "gtk2";
+    enable = true;
+  };
+  programs.gpg.enable = true;
+
   home.packages = with nixpkgs; [
     zip
+    unzip
+    pinentry
+    libqrencode
+    ssss
     unrar
     cargo
     exa
@@ -10,6 +20,10 @@
     pciutils
     git
     socat
+    gnumake
     nixpkgs-unstable.bfs
+    hugo
+    llvmPackages.bintools
+    pkgconfig
   ];
 }
