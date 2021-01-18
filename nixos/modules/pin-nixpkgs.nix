@@ -1,8 +1,10 @@
 inputs:
-{ ... }:
-
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
+{ config, pkgs, ... }:
 {
-  nix.registry."nixpkgs".flake = inputs.nixpkgs;
-  nix.registry."nixpkgs-unstable".flake = inputs.nixpkgs-unstable;
-  nix.registry."nixpkgs-master".flake = inputs.nixpkgs-master;
+  nix.registry = {
+    "nixpkgs".flake = inputs.nixpkgs;
+    "nixpkgs-unstable".flake = inputs.nixpkgs-unstable;
+    "nixpkgs-master".flake = inputs.nixpkgs-master;
+  };
 }

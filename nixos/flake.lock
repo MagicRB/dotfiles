@@ -1,12 +1,115 @@
 {
   "nodes": {
+    "csi-driver-nfs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1610374369,
+        "narHash": "sha256-+CoyhWufws6zEtFU2uJA4NamSCUGVmoMOA91kormXCo=",
+        "owner": "MagicRB",
+        "repo": "csi-driver-nfs",
+        "rev": "560a4ebc1587dd4d447b8be2dee36db4d67fabbc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MagicRB",
+        "repo": "csi-driver-nfs",
+        "type": "github"
+      }
+    },
+    "emacs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1610919739,
+        "narHash": "sha256-qh8q3ORT4+DdNfxze568/nKik+Kyn9YwxJyj73zHwpQ=",
+        "ref": "feature/native-comp",
+        "rev": "39b3bcd324c4519ae3b204a31ab1a385b8ba9574",
+        "revCount": 146220,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs.git"
+      },
+      "original": {
+        "ref": "feature/native-comp",
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/emacs.git"
+      }
+    },
+    "emacs-overlay": {
+      "locked": {
+        "lastModified": 1610987347,
+        "narHash": "sha256-2IOpv3fS94q2RGA/j9/mBZjcsE7AuwANeHKExx/6U6Y=",
+        "ref": "master",
+        "rev": "32984eedf998b7ac378fcdc75167a304702cf2fa",
+        "revCount": 4546,
+        "type": "git",
+        "url": "https://github.com/nix-community/emacs-overlay"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/nix-community/emacs-overlay"
+      }
+    },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1609010567,
+        "narHash": "sha256-N6WslRAtrvCPCpQnxQqo+VlSivX/KylL9Xy/OZr0kMg=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "22f6736e628958f05222ddaadd7df7818fe8f59d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "ref": "release-20.09",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "klippy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1609168797,
+        "narHash": "sha256-1ojKClZTqa0amwUWz1z9GFuEaXtuw7xu0JEgF2N1UQ8=",
+        "owner": "KevinOConnor",
+        "repo": "klipper",
+        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "KevinOConnor",
+        "repo": "klipper",
+        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "type": "github"
+      }
+    },
+    "moonraker": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1609164221,
+        "narHash": "sha256-+k4bFTGWvJ+un8R9dRhjtDt4dVvHfu2/gSp5iEuoX/w=",
+        "owner": "MagicRB",
+        "repo": "moonraker",
+        "rev": "e63f104695278231c3961b12bc5f5e13f5eeea62",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MagicRB",
+        "ref": "master",
+        "repo": "moonraker",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1609867866,
-        "narHash": "sha256-ITciATW51g/VqL4CTCh74Cu/wqIztkoJNZJxqj2vEMs=",
+        "lastModified": 1610961382,
+        "narHash": "sha256-2TH4uX3eUkvkDnhD3BhIGBkag72WqbLUkaFyARWj4iQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "4a75ca4a4e7d14e7b0b0230b3ea57b5bd7c16218",
+        "rev": "88f00e7e12d2669583fffd3f33aae01101464386",
         "type": "github"
       },
       "original": {
@@ -34,11 +137,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1609866355,
-        "narHash": "sha256-TMzb8nMePC4OusDde+xv8AIgbNYuFku/dlLkPO/hifM=",
+        "lastModified": 1610842533,
+        "narHash": "sha256-6hW8CML8RnNrRJMv7E56rXAhsCNgUM97HIVSqWxnO64=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d9dba88d08a9cdf483c3d45f0d7220cf97a4ce64",
+        "rev": "68398d2dd50efc2d878bf0f83bbc8bc323b6b0e0",
         "type": "github"
       },
       "original": {
@@ -48,12 +151,40 @@
         "type": "github"
       }
     },
+    "ra-systems": {
+      "inputs": {
+        "csi-driver-nfs": "csi-driver-nfs",
+        "klippy": "klippy",
+        "moonraker": "moonraker",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1610714324,
+        "narHash": "sha256-hrmDtEnNshJ94ZxO+F8c8XjgkewPy2QPkxifWteRxyE=",
+        "ref": "master",
+        "rev": "81a5a58dba34bd48652268f516a6892262dde49f",
+        "revCount": 10,
+        "type": "git",
+        "url": "https://gitea.redalder.org/RedAlder/systems"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitea.redalder.org/RedAlder/systems"
+      }
+    },
     "root": {
       "inputs": {
+        "emacs": "emacs",
+        "emacs-overlay": "emacs-overlay",
+        "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "sss-cli": "sss-cli"
+        "ra-systems": "ra-systems",
+        "sss-cli": "sss-cli",
+        "vtermModule": "vtermModule"
       }
     },
     "sss-cli": {
@@ -70,6 +201,22 @@
         "owner": "dsprenkels",
         "repo": "sss-cli",
         "type": "github"
+      }
+    },
+    "vtermModule": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1610342571,
+        "narHash": "sha256-J8SzkUs3V0Qzwquoz3UvzS01OJP+zd5mwk+xkMaj2g4=",
+        "ref": "master",
+        "rev": "9d2ef5e535e79781a0c1d2523f82d096eb48765f",
+        "revCount": 578,
+        "type": "git",
+        "url": "https://github.com/akermu/emacs-libvterm"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/akermu/emacs-libvterm"
       }
     }
   },

@@ -1,4 +1,7 @@
-{ intelBusId, nvidiaBusId }: { config, pkgs, ... }:
+{ intelBusId, nvidiaBusId }:
+inputs:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
+{ config, pkgs, ... }:
 let
   mkForce = pkgs.lib.mkForce;
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''

@@ -1,3 +1,5 @@
+inputs:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
 { config, pkgs, ... }:
 let
   nm-enable = config.networking.networkmanager.enable;
@@ -10,7 +12,7 @@ in {
     users.main = {
       isNormalUser = true;
       home = "/home/main";
-      hashedPassword = "<redacted>";
+      hashedPassword = "$6$F6w9J7PuM$O/0rEIRIjc9fWvZ2DPxttFU6vj0hKsyry0xO6CnVv6/2sbryCerZZDP2qlXHthSRPtgTfpnN0eaZa.RQDid5T.";
       description = "main";
 
       uid = 1000;

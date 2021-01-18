@@ -1,3 +1,5 @@
+inputs:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
 { config, pkgs, ... }:
 let
   mkIf = pkgs.lib.mkIf;
