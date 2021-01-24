@@ -21,4 +21,15 @@ inputs: { lib, system }: rec {
     lib.mapAttrs
       (_: value: import "${value}" { inherit system config; })
       pkgs;
+  substitute = runCommand: name: inFile: vars: 
+    runCommand name {}
+      (let
+        varsStr = lib.mapAttrsToList (name: value: ''--subst-var-by "${name}" "${value}"'') vars;
+      in
+        ''
+          substitute ${inFile} $out \
+          ${builtins.concatStringsSep " " varsStr}
+        '');
+  binPath = drv: name:
+    "${drv}/bin/${name}";
 }

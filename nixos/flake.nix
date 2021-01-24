@@ -123,19 +123,20 @@
 
         modules = rlib.callModules rpkgs [
           ./hardware/mark.nix
+          ./users/main.nix
         ] ++ [
           ({ pkgs, ... }: {
             time.timeZone = "Europe/Bratislava";
+            system.stateVersion = "20.09";
+
             environment.systemPackages = [
               pkgs.gnupg
-              (let
-                lib = import ./lib.nix
-                  inputs
-                  { lib = inputs.nixpkgs.lib; system = "x86_64-linux"; };
-              in
-                lib.halfCallFlake ./packages/sss-cli)
+              rpkgs.sss-cli
             ];
-              system.stateVersion = "20.09";
+
+	    home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.user.main = rlib.callModule rpkgs ./hm-profiles/mark.nix;
           })
         ];
       };

@@ -5,9 +5,13 @@ inputs:
     # custom.enter-env
     nixpkgs-unstable.nomad_1_0
     custom.sss-cli
+    custom.enter-env
+    nixpkgs.lato
   ];
 
   home.stateVersion = "20.09";
+
+  programs.gpg.enable = true;
 
   imports = rlib.callModules rpkgs [
     ../hm-modules/alacritty
@@ -25,6 +29,6 @@ inputs:
 
     ../hm-modules/urxvt.nix
   ] ++ [
-    (rlib.callModule rpkgs ../hm-modules/i3 "heater")
+    (rlib.callModule rpkgs ../hm-modules/xmonad "heater")
   ];
 }
