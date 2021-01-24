@@ -15,7 +15,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%StdinReader% %battery% | %multicpu% | %coretemp% | %memory% | %dynnetwork% }{ %date% || %kbd% "
+   , template = "%StdinReader% %battery% | %multicpu% | %multicoretemp% | %memory% | %dynnetwork% }{ %date% || %kbd% "
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -55,16 +55,16 @@ Config {
                              ] 10
 
         -- cpu activity monitor
-        , Run MultiCpu       [ "--template" , "Cpu: <total0>%|<total1>%" -- <fn=1></fn>
-                             , "--Low"      , "50"         -- units: %
-                             , "--High"     , "85"         -- units: %
+        , Run MultiCpu       [ "--template" , "Cpu: <autototal>" -- <fn=1></fn>
+                             , "--Low"      , "25"         -- units: %
+                             , "--High"     , "75"         -- units: %
                              , "--low"      , "green"
                              , "--normal"   , "orange"
                              , "--high"     , "red"
                              ] 10
 
         -- cpu core temperature monitor
-        , Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
+        , Run MultiCoreTemp       [ "--template" , "Temp: <autocore>"
                              , "--Low"      , "70"        -- units: °C
                              , "--High"     , "80"        -- units: °C
                              , "--low"      , "green"

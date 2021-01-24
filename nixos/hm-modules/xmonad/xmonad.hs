@@ -56,7 +56,14 @@ myModMask       = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = ["0", "1","2","3","4","5","6","7","8","9"]
+myWorkspaces    = [1..9] ++ ["0"]
+
+toggleFloat = withFocused (\windowId -> do
+                              { floats <- gets (W.floating . windowset);
+                                if windowId `M.member` floats
+                                then withFocused $ windows . W.sink
+                                else float windowId })
+
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -72,7 +79,7 @@ myKeymap c =
     , ("M-S-p", spawn "gmrun")
 
     -- close focused window
-    , ("M-S-c", kill)
+    , ("M-S-c", io (exitWith ExitSuccess))
 
      -- Rotate through the available layout algorithms
     , ("M-<Space>", sendMessage NextLayout)
@@ -111,7 +118,7 @@ myKeymap c =
     , ("M-;", sendMessage Expand)
 
     -- Push window back into tiling
-    , ("M-t", withFocused $ windows . W.sink)
+    , ("M-t", toggleFloat)
 
     -- Increment the number of windows in the master area
     , ("M-,", sendMessage (IncMasterN 1))
@@ -123,7 +130,6 @@ myKeymap c =
     , ("<Print>", spawn "sleep 0.1 ; @screenshot@ select")
     , ("S-<Print>", spawn "@screenshot@ screen")
     , ("C-S-<Print>", spawn "@screenshot@ focused")
-    , ("M-t", withFocused $ windows . W.sink)
 
     -- Toggle the status bar gap
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
@@ -132,7 +138,7 @@ myKeymap c =
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
-    , ("M-S-q", io (exitWith ExitSuccess))
+    , ("M-S-q", kill)
 
     -- Restart xmonad
     , ("M-q", spawn "xmonad --recompile; xmonad --restart")
