@@ -48,6 +48,21 @@
         "url": "https://github.com/nix-community/emacs-overlay"
       }
     },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1609246779,
+        "narHash": "sha256-eq6ZXE/VWo3EMC65jmIT6H/rrUc9UWOWVujkzav025k=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "08c7ad4a0844adc4a7f9f5bb3beae482e789afa4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -183,8 +198,30 @@
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "ra-systems": "ra-systems",
+        "rust-overlay": "rust-overlay",
         "sss-cli": "sss-cli",
         "vtermModule": "vtermModule"
+      }
+    },
+    "rust-overlay": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1611544875,
+        "narHash": "sha256-H+r5SEo9OhoRY/EtXx5ttrcoLptxiIIi4YdD696ez84=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "4c6a814f4b6ae89a9767bfcae4cbe2e49ca7c19e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
       }
     },
     "sss-cli": {

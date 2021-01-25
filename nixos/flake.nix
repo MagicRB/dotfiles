@@ -15,6 +15,12 @@
     };
 
     #  PACKAGES
+    ## Rust Things
+    rust-overlay = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:oxalica/rust-overlay";
+    };
+
     ## sss-cli
     sss-cli = {
       flake = false;
@@ -62,6 +68,13 @@
               emacsclient-remote = rlib.halfCallFlakePackage ./packages/emacsclient-remote;
               enter-env = rlib.halfCallFlakePackage ./packages/enter-env;
               screenshot = rlib.halfCallFlakePackage ./packages/screenshot;
+              rust = let
+                rustyPkgs = import inputs.nixpkgs {
+                  overlays = [ inputs.rust-overlay.overlay ];
+                  inherit system;
+                };
+              in
+                rustyPkgs.rust-bin;
             };
             inherit rlib;
           };

@@ -22,8 +22,8 @@ inputs:
     ../hm-modules/graphical-programs.nix
 
     ../hm-modules/webdev.nix
+    ../hm-modules/rust.nix
 
-    #../hm-modules/i3
     ../hm-modules/nix-du.nix
     ../hm-modules/picom
 
