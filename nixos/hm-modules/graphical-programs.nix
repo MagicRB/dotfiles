@@ -11,7 +11,6 @@ inputs:
     discord
     mpv
     nixpkgs.freecad
-    cura
     inkscape
   ];
 }

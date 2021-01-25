@@ -13,18 +13,17 @@ inputs:
     unzip
     pinentry
     libqrencode
-    ssss
     unrar
-    cargo
     exa
     bat
     pciutils
     git
     socat
     gnumake
-    nixpkgs-unstable.bfs
     hugo
     llvmPackages.bintools
     pkgconfig
+    nixpkgs-unstable.wineWowPackages.staging
+    winetricks
   ];
 }

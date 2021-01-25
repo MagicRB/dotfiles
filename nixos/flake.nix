@@ -46,34 +46,39 @@
         ra-systems.flakes.mainsail.nixosModules.mainsail
         inputs.home-manager.nixosModules.home-manager
       ];
-
-      rlib = (import ./lib.nix inputs { lib = nixpkgs.lib; system = "x86_64-linux"; });
-      rpkgs = (rlib.getLegacyPkgs
-        {
-          allowUnfree = true;
-        }
-        {
-          inherit (inputs) nixpkgs nixpkgs-unstable nixpkgs-master;
-        }) // {
-          custom = {
-            sss-cli = rlib.halfCallFlakePackage ./packages/sss-cli;
-            atom-shell = rlib.halfCallFlakePackage ./packages/atom-shell;
-            emacs = rlib.halfCallFlakePackage ./packages/emacs;
-            emacsclient-remote = rlib.halfCallFlakePackage ./packages/emacsclient-remote;
-            enter-env = rlib.halfCallFlakePackage ./packages/enter-env;
-            screenshot = rlib.halfCallFlakePackage ./packages/screenshot;
+      prelude = system: rec {
+        rlib = (import ./lib.nix inputs { lib = nixpkgs.lib; inherit system; });
+        rpkgs = (rlib.getLegacyPkgs
+          {
+            allowUnfree = true;
+          }
+          {
+            inherit (inputs) nixpkgs nixpkgs-unstable nixpkgs-master;
+          }) // {
+            custom = {
+              sss-cli = rlib.halfCallFlakePackage ./packages/sss-cli;
+              atom-shell = rlib.halfCallFlakePackage ./packages/atom-shell;
+              emacs = rlib.halfCallFlakePackage ./packages/emacs;
+              emacsclient-remote = rlib.halfCallFlakePackage ./packages/emacsclient-remote;
+              enter-env = rlib.halfCallFlakePackage ./packages/enter-env;
+              screenshot = rlib.halfCallFlakePackage ./packages/screenshot;
+            };
+            inherit rlib;
           };
-          inherit rlib;
-        };
+      };
     in {
-      nixosConfigurations.omen = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.omen = let
         system = "x86_64-linux";
+        inherit (prelude system) rlib rpkgs;
+      in nixpkgs.lib.nixosSystem {
+        inherit system;
 
         modules = rlib.callModules rpkgs [
           ./hardware/omen.nix
           ./modules/pin-nixpkgs.nix
           ./users/main.nix
         ] ++ [
+          ((rlib.callModule rpkgs ./modules/home-manager.nix) ./hm-profiles/common.nix)
           ({ pkgs, ... }: {
             networking = {
               hostName = "omen";
@@ -92,8 +97,11 @@
         ] ++ customModules;
       };
 
-      nixosConfigurations.heater = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.heater = let
         system = "x86_64-linux";
+        inherit (prelude system) rlib rpkgs;
+      in nixpkgs.lib.nixosSystem {
+        inherit system;
 
         modules = rlib.callModules rpkgs [
           ./hardware/heater.nix
@@ -101,6 +109,7 @@
           ./modules/pin-nixpkgs.nix
           ./users/main.nix
         ] ++ [
+          ((rlib.callModule rpkgs ./modules/home-manager.nix) ./hm-profiles/common.nix)
           ({ pkgs, ... }: {
             networking = {
               hostName = "heater";
@@ -112,19 +121,21 @@
             system.stateVersion = "20.09";
 
             virtualisation.docker.enable = true;
-
-            home-manager.users.main = rlib.callModule rpkgs ./hm-profiles/common.nix;
           })
         ] ++ customModules;
       };
 
-      nixosConfigurations.mark = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.mark = let
         system = "x86_64-linux";
+        inherit (prelude system) rlib rpkgs;
+      in nixpkgs.lib.nixosSystem {
+        inherit system;
 
         modules = rlib.callModules rpkgs [
           ./hardware/mark.nix
           ./users/main.nix
         ] ++ [
+          ((rlib.callModule rpkgs ./modules/home-manager.nix) ./hm-profiles/mark.nix)
           ({ pkgs, ... }: {
             time.timeZone = "Europe/Bratislava";
             system.stateVersion = "20.09";
@@ -133,12 +144,23 @@
               pkgs.gnupg
               rpkgs.sss-cli
             ];
-
-	    home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.user.main = rlib.callModule rpkgs ./hm-profiles/mark.nix;
           })
         ];
       };
+
+
+      homeConfigurations.edge = let
+        system = "aarch64-linux";
+        inherit (prelude system) rlib rpkgs;
+      in inputs.home-manager.lib.homeManagerConfiguration {
+        configuration = { pkgs, ... }: {
+          home.packages = [ rpkgs.nixpkgs.file rpkgs.nixpkgs.emacs ];
+          home.stateVersion = "20.09";
+        };
+        username = "u0_a269";
+        inherit system;
+        homeDirectory = "/data/data/com.termux/files/home";
+      };
+      edge = self.homeConfigurations.edge.activationPackage;
     };
 }
