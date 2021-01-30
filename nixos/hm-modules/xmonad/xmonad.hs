@@ -56,7 +56,7 @@ myModMask       = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = [1..9] ++ ["0"]
+myWorkspaces    = map show [1..9] ++ map show [0]
 
 toggleFloat = withFocused (\windowId -> do
                               { floats <- gets (W.floating . windowset);
@@ -310,7 +310,7 @@ defaults = let c = def {
         focusedBorderColor = "#5c5c5c",
         normalBorderColor = "#222222",
         borderWidth = 2
-    } in additionalKeysP c (myKeymap c)
+    } in additionalKeys (additionalKeysP c (myKeymap c)) [ ((mod1Mask, xK_v), return ()) ]
 
 -- | Finally, a copy of the default bindings in simple textual tabular format.
 help :: String

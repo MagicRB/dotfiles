@@ -46,6 +46,7 @@
   (load-theme 'modus-vivendi t) 
 
   (setq magic_rb/universal-font "Fira Code 12")
+  (setq magic_rb/pgtk-font "Fira Code 10")
 
   (use-package doom-themes
     :straight t
@@ -88,10 +89,6 @@
 
   (setq ispell-program-name "hunspell")
 
-  ;; optimizations for emacs-lsp
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024))
-
   ;; disable gtk stuff
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))  ;; no toolbar
   (menu-bar-mode -1) ;;no menubar
@@ -103,9 +100,9 @@
 
   ;; set font
   (when (string= (system-name) "omen")
-    (set-frame-font magic_rb/universal-font nil t))
+    (set-frame-font magic_rb/pgtk-font nil t))
   (when (string= (system-name) "heater")
-    (set-frame-font magic_rb/universal-font nil t))
+    (set-frame-font magic_rb/pgtk-font nil t))
   (when (string= (system-name) "fractal")
     (set-frame-font magic_rb/universal-font nil t))
 
@@ -127,7 +124,8 @@
 	`(("." . ,(concat user-emacs-directory "backups"))))
 
   ;; compositor based transparency
-  (add-to-list 'default-frame-alist '(alpha 90 90))
+  (add-to-list 'default-frame-alist '(alpha 100 100))
+  (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
 
   ;; set fill column indicator column number
   (setq-default display-fill-column-indicator-column 100)

@@ -16,7 +16,11 @@
    #+BEGIN_SRC emacs-lisp
      (org-babel-do-load-languages
        'org-babel-load-languages
-       '((python . t)))
+       '((python . t)
+	 (R . t)
+	 (shell . t)
+	 (dot . t)
+	 (latex . t)))
    #+END_SRC
 
    Enable tangle on save, big thanks to Diego Zamboni for his amazing booklet about
@@ -27,9 +31,16 @@
 	       (lambda () (add-hook 'after-save-hook #'org-babel-tangle
 				    :append :local)))
    #+END_SRC
-   
+
+   Also enable reloading of inline images on babel-execute, speeds up visual workflow significantly
+
+   #+BEGIN_SRC emacs-lisp
+     (eval-after-load 'org
+       (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images))
+   #+END_SRC
+
    Enable fancy UTF-8 characters for headings with =org-superstar=.
-   
+
    #+BEGIN_SRC emacs-lisp
      (use-package org-superstar
        :straight t
@@ -101,7 +112,8 @@
    
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'org-latex-packages-alist
-		  '("" "tikz" t))
+		  '("" "tikz" t)
+		  '("" "bytefield" t))
 
      (eval-after-load "preview"
        '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
@@ -115,6 +127,16 @@
      (use-package org-fragtog
        :straight t
        :hook (org-mode . org-fragtog-mode))
+   #+END_SRC
+   
+** TODO ESS
+
+   Required for R
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ess
+       :straight t
+       :init (require 'ess-r-mode))
    #+END_SRC
    
 ** ORG Linkz

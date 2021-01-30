@@ -20,6 +20,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package rustic
 	:straight t
+	:hook (rustic-mode . lsp-mode)
 	:mode ("\\.rs\\'" . rustic-mode))
     #+END_SRC
 *** SCAD
@@ -33,7 +34,8 @@
     #+BEGIN_SRC emacs-lisp
       (use-package scala-mode
 	:straight t
-	:mode ("\\.s\\(cala\\|bt\\)$" . scala-mode))
+	:mode ("\\.s\\(cala\\|bt\\)$" . scala-mode)
+	:hook (scala-mode . lsp-mode))
 
       (use-package sbt-mode
 	:straight t
@@ -57,6 +59,8 @@
 	:mode ("\\.xhtml\\'" . web-mode)
 	:mode ("\\.css\\'" . css-mode)
 	:mode ("\\.scss\\'" . css-mode)
+	:hook (web-mode . lsp-mode)
+	:hook (css-mode . lsp-mode)
 	:config
 	(with-eval-after-load "flycheck"
 	  (flycheck-add-mode 'javascript-eslint 'web-mode)))
@@ -68,7 +72,8 @@
 	:straight t
 	:config
 	:mode ("\\.js\\'" . rjsx-mode)
-	:mode ("\\.jsx\\'" . rjsx-mode))
+	:mode ("\\.jsx\\'" . rjsx-mode)
+	:hook (rjsx-mode . lsp-mode))
     #+END_SRC
 *** Typescript
     #+NAME: typescript
@@ -77,10 +82,8 @@
 	:straight t
 	:config
 	:mode ("\\.ts\\'" . typescript-mode)
-	:mode ("\\.tsx\\'" . typescript-mode))
-      (with-eval-after-load "lsp-mode"
-	)
-
+	:mode ("\\.tsx\\'" . typescript-mode)
+	:hook (typescript-mode . lsp-mode))
     #+END_SRC
 ** LSP
 *** COMMENT smart-tabs
@@ -98,57 +101,84 @@
 	(smart-tabs-insinuate 'c 'javascript 'rust))
     #+END_SRC
 *** lsp-mode
-    #+NAME: lsp-mode
-    #+BEGIN_SRC emacs-lisp
-      (use-package lsp-mode
-	:straight t
-	;; :after (; rustic
-	;; rjsx-mode
-	;; typescript-mode
-	;; web-mode
-	;; scala-mode)
-	:config
-	(setq rustic-lsp-server 'rust-analyzer)
-	(setq rustic-compile-command "cargo build")
-	(setq rustic-format-trigger nil);'on-save
-	(setq lsp-prefer-flymake nil)
+**** Performance
+     
+     Increase GC threshold to avoid random freezes on GC.
 
-	(setq lsp-rust-analyzer-display-chaining-hints nil)
-	(setq lsp-rust-analyzer-display-parameter-hints nil)
-	(setq lsp-rust-analyzer-server-display-inlay-hints t)
-	:hook
-	(rustic . lsp)
-	(php-mode . lsp)
-	(rjsx-mode . lsp)
-	(css-mode . lsp)
-	(web-mode . lsp)
-	(lsp-mode . lsp-lens-mode)
-	(typescript-mode . lsp)
-	(scala-mode . lsp)
-	(tex-mode . lsp)
-	(lsp-mode . display-fill-column-indicator-mode)
-	(python-mode . lsp)
-	(lsp-mode . origami-mode)
-	(lsp-mode . lsp-rust-analyzer-inlay-hints-mode)
-	:config
-        (message "Loading modified typescript lsp-client")
-	(lsp-register-client
-	 (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
-								  `("typescript-language-server"
-								    "--tsserver-path"
-								    "tsserver"
-								    ,@lsp-clients-typescript-server-args)))
-			  :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
-			  :priority -2
-			  :completion-in-comments? t
-			  :initialization-options (lambda ()
-						    (list :plugins lsp-clients-typescript-plugins
-							  :logVerbosity lsp-clients-typescript-log-verbosity
-							  :tsServerPath (lsp-package-path 'typescript)))
-			  :ignore-messages '("readFile .*? requested by TypeScript but content not available")
-			  :server-id 'ts-ls
-			  :remote? t)))
-    #+END_SRC
+     #+NAME: gc-cons-threshold
+     #+BEGIN_SRC emacs-lisp
+       (setq gc-cons-threshold 100000000)
+     #+END_SRC
+
+     Increase the amount of data Emacs reads from a process in one go, default is 4KB, but some LSP servers produce responses up to 3MB.
+
+     #+NAME: read-process-output-maX
+     #+BEGIN_SRC emacs-lisp
+       (setq read-process-output-max (* (* 1024 1024) 3))
+     #+END_SRC
+
+     Switch completion provider to =capf=, even though it should be the default, but just to make sure it. =company-lsp=
+     is what =lsp-mode= switched away from.
+
+     #+NAME: lsp-completion-provider
+     #+BEGIN_SRC emacs-lisp
+       (setq lsp-completion-provider :capf)
+     #+END_SRC
+
+     Set the minimum delay between LSP refreshes, should help with performance when typing really fast.
+     
+     #+BEGIN_SRC emacs-lisp
+       (setq lsp-idle-delay 0.500) ;; adjust me
+     #+END_SRC
+**** Config merge 
+     #+NAME: lsp-mode
+     #+BEGIN_SRC emacs-lisp :noweb yes
+       (use-package lsp-mode
+	 :straight t
+	 ;; :after (; rustic
+	 ;; rjsx-mode
+	 ;; typescript-mode
+	 ;; web-mode
+	 ;; scala-mode)
+	 :config
+	 (setq rustic-lsp-server 'rust-analyzer)
+	 (setq rustic-compile-command "cargo build")
+	 (setq rustic-format-trigger nil);'on-save
+	 (setq lsp-prefer-flymake nil)
+
+	 (setq lsp-rust-analyzer-display-chaining-hints nil)
+	 (setq lsp-rust-analyzer-display-parameter-hints nil)
+	 (setq lsp-rust-analyzer-server-display-inlay-hints t)
+	 ;; (lsp-mode . lsp-lens-mode)
+	 ;; :hook (tex-mode . lsp-mode)
+	 ;; (lsp-mode . display-fill-column-indicator-mode)
+	 ;; (python-mode . lsp)			;
+	 ;; (lsp-mode . origami-mode)
+	 ;; :hook (rustic . lsp-rust-analyzer-inlay-hints-mode) ;
+	 :config
+	 <<gc-cons-threshold>>
+	 <<read-process-output-max>>
+	 <<lsp-completion-provider>>
+	 (setq lsp-idle-delay 0.500)
+	 (message "Loading modified typescript lsp-client")
+	 ;; (lsp-register-client
+	 ;;  (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
+	 ;; 							    `("typescript-language-server"
+	 ;; 							      "--tsserver-path"
+	 ;; 							      "tsserver"
+	 ;; 							      ,@lsp-clients-typescript-server-args)))
+	 ;; 		    :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
+	 ;; 		    :priority -2
+	 ;; 		    :completion-in-comments? t
+	 ;; 		    :initialization-options (lambda ()
+	 ;; 					      (list :plugins lsp-clients-typescript-plugins
+	 ;; 						    :logVerbosity lsp-clients-typescript-log-verbosity
+	 ;; 						    :tsServerPath (lsp-package-path 'typescript)))
+	 ;; 		    :ignore-messages '("readFile .*? requested by TypeScript but content not available")
+	 ;; 		    :server-id 'ts-ls
+	 ;; 		    :remote? t))
+	 )
+     #+END_SRC
 *** company
     #+NAME: company
     #+BEGIN_SRC emacs-lisp
@@ -220,9 +250,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package lsp-pyright
 	:straight t
-	:hook (python-mode . (lambda ()
-			       (require 'lsp-pyright)
-			       (lsp))))  ; or lsp-deferred
+	:hook (python-mode . lsp))
     #+END_SRC
 *** yassnippet
     #+NAME: yasnippet

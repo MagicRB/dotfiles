@@ -6,8 +6,9 @@
     emacs-overlay.url = "git+https://github.com/nix-community/emacs-overlay";
     emacs = {
       type = "git";
-      url = "https://git.savannah.gnu.org/git/emacs.git";
-      ref = "feature/native-comp";
+      #url = "https://git.savannah.gnu.org/git/emacs.git";
+      url = "github.com:flatwhatson/emacs?ref=pgtk-nativecomp";
+      #ref = "feature/native-comp";
       flake = false;
     };
     vtermModule = {
@@ -26,6 +27,8 @@
           let
             pkgs = import nixpkgs { inherit system; };
             pkgs-unstable = import nixpkgs-unstable { inherit system; };
+
+            pgtkEnable = true;
           in
           with final; {
             emacs = let
@@ -50,6 +53,10 @@
                   src = inputs.emacs;
                   buildInputs = old.buildInputs ++ [ jansson harfbuzz.dev glib-networking ];
                   makeFlags = [ "NATIVE_FULL_AOT=1" ];
+
+                  configureFlags = if pgtkEnable then (lib.remove "--with-xft" old.configureFlags)
+                                                      ++ lib.singleton "--with-pgtk" else old.configureFlags; 
+
                   inherit name version;
                 }
               )).override { nativeComp = true; });
@@ -88,15 +95,14 @@
                     
                     w3m
                     sqlite
-
-                    webkitgtk
+		    gcc
 
                     ghostscript
                     imagemagick
-                    (texlive.combine { inherit (texlive) scheme-small siunitx amsmath ulem dvipng wrapfig cancel capt-of; })
+                    (texlive.combine { inherit (texlive) scheme-small preview siunitx amsmath ulem dvipng wrapfig cancel capt-of bytefield; })
                     texlab
 
-                    gcc
+                    (rWrapper.override { packages = []; })
                   ]} --prefix EMACSLOADPATH : ${vtermModule}/lib:
                 '';
               };
