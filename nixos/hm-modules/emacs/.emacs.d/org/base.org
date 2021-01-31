@@ -84,17 +84,18 @@ point in time.
     =magic_rb/theme-select= hydra bound to =F6=.  Available themes are:
     - =od= for /Doom One Dark/
     - =ol= for /Doom One Light/
+    - =dr= for /Doom Dracula/
     - =mv= for /Modus Vivendi/
     - =mo= for /Modus Operandi/
 
     #+BEGIN_SRC emacs-lisp
       (with-eval-after-load 'hydra
-	(defadvice load-theme (before theme-dont-propagate activate)
-	  "Disable theme befoe loading new one."
+	(defun magic_rb/unload-all-themes ()
+	    "Unloads all themes."
 	  (mapc #'disable-theme custom-enabled-themes))
-	(defadvice load-theme (after theme-dont-propagate activate)
-	  "Apply fonts after loading theme."
-	  (magic_rb/apply-fonts))
+
+	(advice-add 'load-theme :before #'(lambda (orig-fun &rest args) (magic_rb/unload-all-themes)))
+	(advice-add 'load-theme :after #'(lambda (orig-fun &rest args) (magic_rb/apply-fonts)))
 
 	(defhydra magic_rb/theme-select (:color blue)
 	  ("od" (progn
