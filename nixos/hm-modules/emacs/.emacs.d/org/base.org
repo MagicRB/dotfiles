@@ -1,3 +1,5 @@
+#+STARTUP: content
+
 #+NAME: base
 #+BEGIN_SRC emacs-lisp
   (when (not (string= (system-name) "fractal"))
@@ -34,8 +36,6 @@
   (use-package w3m
     :straight t) 
 
-  (use-package origami
-    :straight t)
 #+END_SRC
 
 Enable =all-the-icons=, it's used by =treemacs= and =doom-modeline=.
@@ -74,7 +74,7 @@ point in time.
 	(doom-themes-org-config))
     #+END_SRC
    
-    You can also enable visual bell on error, or =C-g=, probably other events. But I don't like. So it's disabled :).
+    You can also enable visual bell on error, or =C-g=, probably other events. But I don't like. So it's disabled :.
 
     #+BEGIN_SRC emacs-lisp :tangle no
       (doom-themes-visual-bell-config)
@@ -133,7 +133,7 @@ point in time.
       (setq modus-vivendi-theme-override-colors-alist 
 	    '(("bg-main" . "#111519")))
       (with-eval-after-load 'doom-themes
-	(load-theme 'doom-one-dark t))
+	(load-theme 'doom-one t))
     #+END_SRC
     
 *** Dashboard
@@ -455,7 +455,7 @@ point in time.
 	<<read-process-output-max>>
 	<<lsp-completion-provider>>
 	<<lsp-idle-delay>>
-	<<<lsp-typescript-tramp>>
+	<<lsp-typescript-tramp>>
 	<<lsp-scala-tramp>>)
     #+END_SRC
 
@@ -592,21 +592,226 @@ point in time.
 	(yas-global-mode 1)) 
     #+END_SRC
 
+*** origami
+
+    Enable ~origami~. It allows one to fold and unfold a section with =zc= and =zo= in ~evil-mode~. Hook it on both ~conf-mode~ and ~prog-mode~;
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package origami
+	:straight t
+	:hook ((prog-mode . origami-mode)
+	       (conf-mode . origami-mode)))
+    #+END_SRC
+
+    Enable ~origami-lsp~. Some LSP servers specify these folding ranges and this package makes ~origami~ understand that
+    and work with it.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-origami
+	:straight t
+	:hook (lsp-after-open-hook lsp-origami-try-enable))
+    #+END_SRC
+
+** Org Mode
+
+   Enable =org-roam=. It implements the Zettelkasten method in Emacs and uses a backing sqlite
+   database, therefore =sqlite= must be on your path, at least for Emacs.
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-roam
+       :straight t
+       :config
+       (setq org-roam-directory "~/org")
+       (add-hook 'after-init-hook 'org-roam-mode))
+   #+END_SRC
+
+   Enable additional languages for org-babel, namely Python.
+   
+   #+BEGIN_SRC emacs-lisp
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((python . t)
+	(R . t)
+	(shell . t)
+	(dot . t)
+	(latex . t)))
+   #+END_SRC
+
+   Enable tangle on save, big thanks to Diego Zamboni for his amazing booklet about
+   [[https://leanpub.com/lit-config/read][/Literate Configuration/]].
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-mode-hook
+	       (lambda () (add-hook 'after-save-hook #'org-babel-tangle
+				    :append :local)))
+   #+END_SRC
+
+   Also enable reloading of inline images on babel-execute, speeds up visual workflow significantly
+
+   #+BEGIN_SRC emacs-lisp
+     (eval-after-load 'org
+       (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images))
+   #+END_SRC
+
+   Enable fancy UTF-8 characters for headings with =org-superstar=.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-superstar
+       :straight t
+       :hook ((org-mode . org-superstar-mode)))
+   #+END_SRC
+   
+   Enable bigger headings for =org-mode=, this in my opinion makes it a bit easier to read org-mode
+   buffer.
+   
+   #+BEGIN_SRC emacs-lisp
+     (custom-set-faces
+      '(fixed-pitch ((t (:family "Fira Code 9"))))
+      '(org-level-1 ((t (:inherit outline-1 :height 1.25))))
+      '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+      '(org-level-3 ((t (:inherit outline-3 :height 1.15))))
+      '(org-level-4 ((t (:inherit outline-4 :height 1.10))))
+      '(org-level-5 ((t (:inherit outline-5 :height 1.05)))))
+   #+END_SRC
+   
+   Enable the "vertical ruler" specifically for =org-mode=, TODO: it is worth considering to enable
+   this for all text-mode buffers.
+   
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-mode-hook (lambda ()
+				(set-fill-column 120)
+				(display-fill-column-indicator-mode)))
+   #+END_SRC
+   
+   Enable =org-agenda=, used for task management and things like that. TODO: Currently it's
+   underutilized and underconfigured.
+   TODO: Also should I have a separate folder for school related things? Do I even have that folder?
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq org-agenda-files '("~/org" "~/org/school"))
+
+     (setq org-agenda-custom-commands
+	   '(("h" "Agenda and Home-related tasks"
+	      ((agenda "")
+	       (tags-todo "home")
+	       (tags "garden")))
+	     ("o" "Agenda and Office-related tasks"
+	      ((agenda "")
+	       (tags-todo "work")
+	       (tags "office")))
+	     ("i" "Agenda and School-related tasks"
+	      ((agenda "")
+	       (tags-todo "school")
+	       (tags "school")))))
+
+     (setq org-highest-priority ?A)
+     (setq org-lowest-priority ?E)
+     (setq org-default-priority ?B)
+   #+END_SRC
+
+   (Dis)enable alerts and notifications, which should hook into =org-agenda= notify 
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (require 'org-alert)
+     (require 'notifications)
+   #+END_SRC
+   
+   Increase org-preview size
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.75))
+   #+END_SRC
+   
+   Enable org-tikz previews, =imagemagick= must be installed.
+   
+   #+BEGIN_SRC emacs-lisp
+     (add-to-list 'org-latex-packages-alist
+		  '("" "tikz" t)
+		  '("" "bytefield" t))
+
+     (eval-after-load "preview"
+       '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
+
+     (setq org-latex-create-formula-image-program 'imagemagick)
+   #+END_SRC
+   
+   Install =org-fragtop=, it will automatically toggle previews for LaTex segments under point.
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-fragtog
+       :straight t
+       :hook (org-mode . org-fragtog-mode))
+   #+END_SRC
+   
+** TODO ESS
+
+   Required for R
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ess
+       :straight t
+       :init (require 'ess-r-mode))
+   #+END_SRC
+   
+** ORG Linkz
+   
+   Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]].
+   Remove validation link from exported html file.
+   Currently doesn't work for somer reason, must debug why.
+
+   #+NAME: org-linkz-html-validation-link
+   #+BEGIN_SRC emacs-lisp
+     (setq org-html-validation-link nil)
+   #+END_SRC
+   #+NAME: org-linkz
+   #+BEGIN_SRC emacs-lisp
+     (require 'org-protocol)
+     (setq org-capture-templates
+	   '(
+	     ("o" "Link capture" entry
+	      (file+headline "~/org/linkz.org" "INBOX")
+	      "* %a %U"
+	      :immediate-finish t)
+	     ))
+     (setq org-protocol-default-template-key "o")
+   #+END_SRC
+   
+   Then a .desktop file is needed for Firefox/Chromium
+
+   #+NAME: org-protocol-desktop
+   #+BEGIN_SRC conf-desktop :tangle ~/.local/share/applications/org-protocol.desktop
+     [Desktop Entry]
+     Name=org-protocol
+     Exec=emacsclient -n %u
+     Type=Application
+     Terminal=fale
+     Categories=System;
+     MimeType=x-scheme-handler/org-protocol;
+   #+END_SRC
+   
+   Then a bookmark must be added into firefox with this location
+
+   #+NAME: bookmark
+   #+BEGIN_SRC javascript :tangle no
+     javascript:location.href="org-protocol:///capture?url="+encodeURIComponent(location.href)+"&title="+encodeURIComponent(document.title||"[untitled page]")
+   #+END_SRC
+
 ** Smart Tabs
 
    The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
 
-   #+BEGIN_SRC rustic :tangle no
+   #+BEGIN_SRC fundemental :tangle no
      fn main() {
      --if 1 == 1 &&
      --...2 == 2 &&
      --...3 != 5 {
      ----println!("Stugg");
+     --}
      }
    #+END_SRC
    
    #+BEGIN_TINY
-     ~--~ represents a =<TAB>= and ~.~ a =<SPC>=
+   ~--~ represents a =<TAB>= and ~.~ a =<SPC>=
    #+END_TINY
 
    And while the idea is nice, I couldn't get it to work for Rust and that's the only language I use. Therefore it's
@@ -623,6 +828,59 @@ point in time.
 					((c-indent-line . c-basic-offset)
 					 (c-indent-region . c-basic-offset)))
        (smart-tabs-insinuate 'c 'javascript 'rust))
+   #+END_SRC
+   
+** Ivy
+   
+   Ivy is a lighter and actually maintained altrenative to Helm. I used to use helm, but I switched to it when I started
+   using EXWM, as I had to disable my floating Helm window and since Helm doesn't use minibuffers, the window above the
+   popup would get scrolled. So enable it.
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package ivy
+       :straight t
+       :config
+       (ivy-mode 1)
+       ;; (setq ivy-use-virtual-buffers t)
+       ;; (setq enable-recursive-minibuffers t)
+       )
+   #+END_SRC
+
+   Enable ~ivy-prescient~ for fuzzy matching, from the author of ~selectrum~ and ~straight.el~. For splitting completion
+   parts, separate them with a ~<SPC>~.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ivy-prescient
+       :straight t
+       :config
+       (ivy-prescient-mode 1))
+   #+END_SRC
+
+   ~counsel~ adds specific functions for common Emacs commands, like =find-file= and makes them more Helm like.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package counsel
+       :straight t
+       :config
+       (counsel-mode 1))
+   #+END_SRC
+
+   ~ivy-rich~ and ~all-the-icons~ compatibility.
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package all-the-icons-ivy-rich
+       :straight t
+       :hook (after-init . all-the-icons-ivy-rich-mode))
+   #+END_SRC
+
+   ~ivy-rich~ add more stuff into =switch-to-buffer=, but has some issues when working over TRAMP. It gets a little
+   slow. TODO
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package ivy-rich
+       :straight t
+       :config
+       (ivy-rich-mode 1))
    #+END_SRC
    
 ** Magit
@@ -757,10 +1015,10 @@ point in time.
        (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
 
      (defun evil-collection-vterm-escape-stay ()
-     "Go back to normal state but don't move
+       "Go back to normal state but don't move
      cursor backwards. Moving cursor backwards is the default vim behavior but it is
      not appropriate in some cases like terminals."
-     (setq-local evil-move-cursor-back nil))
+       (setq-local evil-move-cursor-back nil))
 
      ;; :hook ((vterm-mode-hook . evil-collection-vterm-escape-stay))
    #+END_SRC
@@ -770,12 +1028,52 @@ point in time.
    #+BEGIN_SRC emacs-lisp :noweb yes
      (use-package vterm
        :straight t
+       :after (evil)
        :config
-       <<vterm-evil-fix>>)
+       <<vterm-evil-fix>>
+       )
    #+END_SRC
    
-** Functional things
+** Edit Server
 
+   This awesome package when paired with a free software browser extension, available for both [[https://chrome.google.com/webstore/detail/edit-with-emacs/ljobjlafonikaiipfkggjbhkghgicgoh][Chromium]] and [[https://addons.mozilla.org/en-US/firefox/addon/edit-with-emacs1/][Firefox]],
+   allows one to edit text areas in their browser in Emacs.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package edit-server
+       :straight t
+       :init
+       (edit-server-start))
+   #+END_SRC
+   
+** Random Bits and Bobs
+
+   Delete files by moving to trash.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq-default delete-by-moving-to-trash t)
+   #+END_SRC
+
+   Equalize windows after split.
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq-default window-combination-resize t)
+   #+END_SRC
+   
+   Increase undo limit to 80MB and enable fine undo, Evil will no longer chunk all edits in =INSERT= mode into one big
+   undo blob.
+   
+   #+BEGIN_SRC emacs-lisp
+     (setq undo-limit 80000000
+	   evil-want-fine-undo t)
+   #+END_SRC
+
+   For now, don't autosave. Because editing on remote disks, not TRAMP, but just NFS or CIFS, becomes extremely painful.
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (setq auto-save-default t)
+   #+END_SRC
+   
    Enable line numbers for both programming buffers (Rust, C, and such) and configuration buffers (Nix, Yaml, Json, and
    such).
 
@@ -821,3 +1119,4 @@ point in time.
      (setq backup-directory-alist
 	   `(("." . ,(concat user-emacs-directory "backups"))))
    #+END_SRC
+   

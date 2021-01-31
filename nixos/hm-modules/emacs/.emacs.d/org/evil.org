@@ -98,11 +98,11 @@
     (evil-define-key 'motion org-agenda-mode-map (kbd "l") 'org-agenda-next-line))
 #+END_SRC
 
-** Evil Window Movement
+** Evil Leader
    #+BEGIN_SRC emacs-lisp
-     (with-eval-after-load "evil"
-       (define-prefix-command 'evil-window-movement-map)
-       (let ((map evil-window-movement-map))
+     (with-eval-after-load 'evil
+       (define-prefix-command 'evil-leader-map)
+       (let ((map evil-leader-map))
 	 (define-key map "j" 'evil-window-left)
 	 (define-key map "k" 'evil-window-up)
 	 (define-key map "l" 'evil-window-down)
@@ -113,10 +113,25 @@
 	 (define-key map "L" 'evil-window-move-very-bottom)
 	 (define-key map ":" 'evil-window-move-far-right)
 
-	 (define-key map "v" 'evil-window-vsplit)
-	 (define-key map "s" 'evil-window-split)
-	 (define-key map "x" 'evil-window-delete))
-       (define-key evil-motion-state-map " " 'evil-window-movement-map)
-       (with-eval-after-load "treemacs-evil"
-	 (define-key evil-treemacs-state-map " " 'evil-window-movement-map)))
-   #+END_SRC
+	 (define-key map "2" 'evil-window-vsplit)
+	 (define-key map "3" 'evil-window-split)
+	 (define-key map "0" 'evil-window-delete)
+
+	 (define-key map "T" 'treemacs)
+	 (define-key map "t" 'treemacs-select-window)
+	 (define-key map "s" 'treemacs-switch-workspace)
+	 (define-key map "S" 'treemacs-edit-workspaces)
+
+	 (define-key map "v" 'vterm)
+	 (define-key map "m" 'magit)
+
+	 (define-key map "a" 'org-agenda)
+	 (define-key map "f" 'org-roam-find-file)
+	 (define-key map "c" 'org-roam-capture)
+	 (define-key map "r" 'org-roam)
+
+	 (define-key map "e" 'lsp-execute-code-action))
+       (define-key evil-motion-state-map " " 'evil-leader-map)
+       (with-eval-after-load 'treemacs-evil
+	 (define-key evil-treemacs-state-map " " 'evil-leader-map)))
+#+END_SRC

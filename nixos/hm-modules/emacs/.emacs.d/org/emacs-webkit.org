@@ -23,8 +23,9 @@
   #+END_SRC
 ** Evil integration
    #+BEGIN_SRC emacs-lisp
-     ; (use-package evil-collection-webkit
-     ;   :straight t
-     ;   :config
-     ;   (evil-collection-xwidget-setup))
+     (use-package evil-collection-webkit
+       :straight t
+       :disabled t
+       :config
+       (evil-collection-xwidget-setup))
    #+END_SRC
