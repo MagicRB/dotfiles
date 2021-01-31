@@ -1,6 +1,0 @@
-* Haskell
-
-  #+BEGIN_SRC emacs-lisp
-    (use-package haskell-mode
-      :straight t)
-  #+END_SRC

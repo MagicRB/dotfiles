@@ -34,107 +34,790 @@
   (use-package w3m
     :straight t) 
 
-  (use-package all-the-icons
-    :straight t) 
-
   (use-package origami
     :straight t)
-
-
-  (setq modus-vivendi-theme-override-colors-alist 
-	'(("bg-main" . "#111519")))
-  (load-theme 'modus-vivendi t) 
-
-  (setq magic_rb/universal-font "Fira Code 12")
-  (setq magic_rb/pgtk-font "Fira Code 10")
-
-  (use-package doom-themes
-    :straight t
-    :config
-    ;; Global settings (defaults)
-    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	  doom-themes-enable-italic t) ; if nil, italics is universally disabled
-    ;; Enable flashing mode-line on errors
-    (doom-themes-visual-bell-config)
-
-    ;; or for treemacs users
-    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-    (doom-themes-treemacs-config)
-
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config)
-    :after (hydra)
-    :config
-    (defhydra magic_rb/theme-select (:color blue)
-      ("od" (progn
-	      (load-theme 'doom-one t)
-	      (set-frame-font magic_rb/universal-font nil t)))
-      ("ol" (progn
-	      (load-theme 'doom-one-light t)
-	      (set-frame-font magic_rb/universal-font nil t)))
-      ("mv" (progn
-	      (load-theme 'modus-vivendi t)
-	      (set-frame-font magic_rb/universal-font nil t)))
-      ("mo" (progn
-	      (load-theme 'modus-operandi t)
-	      (set-frame-font magic_rb/universal-font nil t))))
-    :bind ("<f6>" . magic_rb/theme-select/body))
-
-  (global-set-key (kbd "<f11>") 'fullscreen)
-
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-
-  ;; show matching parenthesis
-  (show-paren-mode 1) 
-
-  (setq ispell-program-name "hunspell")
-
-  ;; disable gtk stuff
-  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))  ;; no toolbar
-  (menu-bar-mode -1) ;;no menubar
-  (scroll-bar-mode -1) ;; no scroll bar
-
-  (setq mouse-wheel-scroll-amount '(5 ((shift) . 1))) ;; 5 lines at a time, with shift only 1
-  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-
-  ;; set font
-  (when (string= (system-name) "omen")
-    (set-frame-font magic_rb/pgtk-font nil t))
-  (when (string= (system-name) "heater")
-    (set-frame-font magic_rb/pgtk-font nil t))
-  (when (string= (system-name) "fractal")
-    (set-frame-font magic_rb/universal-font nil t))
-
-  ;; enable parenthesis and quotes pairing thing
-  (electric-pair-mode)
-
-  ;; (add-hook 'after-make-frame-functions
-  ;; 	  (lambda (frame)
-  ;; 	    (select-frame frame)
-  ;; 	    (load-theme 'modus-vivendi t)))
-
-  ;; fullscreen
-  (defun fullscreen ()
-    (interactive)
-    (set-frame-parameter nil 'fullscreen
-			 (if (frame-parameter nil 'fullscreen) nil 'fullboth)))  
-
-  (setq backup-directory-alist
-	`(("." . ,(concat user-emacs-directory "backups"))))
-
-  ;; compositor based transparency
-  (add-to-list 'default-frame-alist '(alpha 100 100))
-  (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
-
-  ;; set fill column indicator column number
-  (setq-default display-fill-column-indicator-column 100)
-
-
-  (setq inhibit-startup-screen t
-	initial-scratch-message ";; ready\n\n"
-	package-enable-at-startup nil)
-
-  (load "server")
-  (unless (server-running-p) (server-start))
 #+END_SRC
+
+Enable =all-the-icons=, it's used by =treemacs= and =doom-modeline=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package all-the-icons
+    :straight t) 
+#+END_SRC
+
+Set ispell program to hunspell, this is very much a TODO, since the spelling configuration is rather minimal at this
+point in time.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ispell-program-name "hunspell")
+#+END_SRC
+
+** Look & Feel
+*** Color Themes
+    
+    Enable =doom-themes=, with bold and italics. Then apply the =doom-colors= theme to Treemacs and improve org's native
+    fontification somewhat.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package doom-themes
+	:straight t
+	:config
+	;; Global settings (defaults)
+	(setq doom-themes-enable-bold t    
+	      doom-themes-enable-italic t) 
+
+	;; Enable Treemacs doom theme
+	(setq doom-themes-treemacs-theme "doom-colors")
+	(doom-themes-treemacs-config)
+
+	;; Corrects (and improves) org-mode's native fontification.
+	(doom-themes-org-config))
+    #+END_SRC
+   
+    You can also enable visual bell on error, or =C-g=, probably other events. But I don't like. So it's disabled :).
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (doom-themes-visual-bell-config)
+    #+END_SRC
+   
+    First make =load-theme= unload all currently loaded themes and reapply fonts afterwards, then create a
+    =magic_rb/theme-select= hydra bound to =F6=.  Available themes are:
+    - =od= for /Doom One Dark/
+    - =ol= for /Doom One Light/
+    - =mv= for /Modus Vivendi/
+    - =mo= for /Modus Operandi/
+
+    #+BEGIN_SRC emacs-lisp
+      (with-eval-after-load 'hydra
+	(defadvice load-theme (before theme-dont-propagate activate)
+	  "Disable theme befoe loading new one."
+	  (mapc #'disable-theme custom-enabled-themes))
+	(defadvice load-theme (after theme-dont-propagate activate)
+	  "Apply fonts after loading theme."
+	  (magic_rb/apply-fonts))
+
+	(defhydra magic_rb/theme-select (:color blue)
+	  ("od" (progn
+		  (load-theme 'doom-one t)))
+	  ("ol" (progn
+		  (load-theme 'doom-one-light t)))
+	  ("mv" (progn
+		  (load-theme 'modus-vivendi t)))
+	  ("mo" (progn
+		  (load-theme 'modus-operandi t))))
+
+	(global-set-key (kbd "<f6>") 'magic_rb/theme-select/body))
+    #+END_SRC
+   
+    Create a function, which applies my font settings, and call it. Also branch on whether PGtk is in use, as fonts are a
+    bit bigger with it.
+
+    #+BEGIN_SRC emacs-lisp
+      (defvar magic_rb/fixed-width-font "Fira Code")
+      (defvar magic_rb/variable-pitch-font "Overpass")
+
+      (with-eval-after-load 'dash
+	(defun magic_rb/apply-fonts ()
+	  (if (-contains? (split-string system-configuration-features) "PGTK")
+	      (set-face-attribute 'default nil :family magic_rb/fixed-width-font :height 110)
+	    (set-face-attribute 'default nil :family magic_rb/fixed-width-font :height 120))
+	  (set-face-attribute 'fixed-pitch nil :family magic_rb/fixed-width-font :height 1.0)
+	  (set-face-attribute 'variable-pitch nil :family magic_rb/variable-pitch-font :height 1.0))
+	(magic_rb/apply-fonts))
+    #+END_SRC
+   
+    Load Modus Vivendi, but change the background color to not-black, it's a bit less depressing and in my opinion nicer
+    on the eyes.
+
+    #+BEGIN_SRC emacs-lisp
+      (setq modus-vivendi-theme-override-colors-alist 
+	    '(("bg-main" . "#111519")))
+      (with-eval-after-load 'doom-themes
+	(load-theme 'doom-one-dark t))
+    #+END_SRC
+    
+*** Dashboard
+    
+    Enable the Emacs dashboard, pretty much useless but much better looking than the default. And the jokes are
+    funny. Also if you actually properly use =org-agenda= the /agenda of the day/ section might prove useful.
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package dashboard
+	:straight t
+	:after (all-the-icons)
+	:config
+	(dashboard-setup-startup-hook)
+	(setq dashboard-items '((recents . 5)
+				(projects . 5)
+				(agenda . 5))
+	      dashboard-center-content t
+	      dashboard-set-heading-icons t
+	      dashboard-set-file-icons t
+	      dashboard-set-init-info t))
+    #+END_SRC
+
+    Inhibit startup screen and scratch buffer, it conflicts with =emacs-dashboard=
+
+    #+BEGIN_SRC emacs-lisp
+      (setq inhibit-startup-screen t
+	    initial-buffer-choice nil
+	    initial-scratch-message ";; ready\n\n")
+    #+END_SRC
+   
+*** Modeline
+
+    Enable =doom-modeline=, much better than the default and unline =powerline= it's usable with TRAMP, so that's great.
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package doom-modeline
+	:straight t
+	:config
+	(doom-modeline-mode))
+    #+END_SRC
+
+    You can also control, whether =doom-modeline= uses =all-the-icons= on a per frame basis. Especially useful when
+    running Emacs in daemon mode.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (make-variable-buffer-local 'doom-modeline-icon)
+      (add-hook 'after-make-frame-hook
+		(lambda ()
+		  (setq doom-modeline-icon (display-graphic-p))))
+    #+END_SRC
+    
+    Show battery status and time in modeline. But don't show load average. Useful when using EXWM, without a external
+    bar.
+
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (display-time-mode)
+      (setq display-time-load-average nil)
+
+      (display-battery-mode)
+    #+END_SRC
+    
+*** Miscelanious
+    
+    Disable GTK decorations, as they are not "cool" as member of the Emacs mailing list would put it. Or actually my
+    reasoning, I don't want Emacs to be influenced by GTK theming, as I don't use almost any GTK programs.
+  
+    #+BEGIN_SRC emacs-lisp
+      (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+      (menu-bar-mode -1)
+      (scroll-bar-mode -1)
+    #+END_SRC
+
+    Enable compositor based transparency, low values will make text hard to read as everything, not just the background
+    is made transparent. It's also possible to set the alpha separately for when a frame is in focus and when it's not.
+
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'default-frame-alist '(alpha 100 100))
+      (set-frame-parameter (selected-frame) 'alpha '(100 . 100))
+    #+END_SRC
+
+    Load =all-the-icons=, it's required used by =treemacs= and =doom-modeline=. You also must run
+    =all-the-icons-install-fonts= if you haven't already.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package all-the-icons
+	:straight t)
+    #+END_SRC
+
+** Languages
+*** Nix Expression Language
+
+    Enable ~nix-mode~.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package nix-mode
+	:straight t
+	:mode ("\\.nix\\'" . nix-mode))
+    #+END_SRC
+    
+*** Haskell Programming Language
+    
+    Enable ~haskell-mode~.
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package haskell-mode
+	:straight t)
+    #+END_SRC
+    
+*** HashiCorp
+**** HashiCorp Configuration Language
+     
+     #+BEGIN_SRC emacs-lisp
+       (use-package hcl-mode
+	 :straight t)
+     #+END_SRC
+
+**** Terraform Configuration Language
+     
+     #+BEGIN_SRC emacs-lisp
+       (use-package terraform-mode
+	 :straight t)
+     #+END_SRC
+
+*** YAML Configuration Language
+
+    Enable ~yaml-mode~.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package yaml-mode
+	:straight t
+	:mode ("\\.yml\\'" . yaml-mode)
+	:mode ("\\.yaml\\'" . yaml-mode))
+    #+END_SRC
+    
+*** Dockerfile Configuration Language
+    
+    Enable ~dockerfile-mode~
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package dockerfile-mode
+	:straight t
+	:mode ("Dockerfile\\'" . dockerfile-mode))
+    #+END_SRC
+    
+*** SCAD Programming Language
+
+    Enable ~scad-mode~
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package scad-mode
+	:straight t) 
+    #+END_SRC
+    
+*** Web Development
+**** HTML Markup Language
+     
+     Enable ~web-mode~ for =.html=, =.xhtml= and hook ~lsp-mode~ on it.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package web-mode
+	 :straight t
+	 :mode ("\\.html\\'" . web-mode)
+	 :mode ("\\.xhtml\\'" . web-mode)
+	 :hook (web-mode . lsp-mode))
+     #+END_SRC
+     
+**** CSS Style Sheet Language
+
+     Enable ~css-mode~ for =.css=, =.scss= and hook ~lsp-mode~ on it. Also make ~flycheck~ happy.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package css-mode
+	 :mode ("\\.css\\'" . css-mode)
+	 :mode ("\\.scss\\'". css-mode)
+	 :hook (css-mode . lsp-mode)
+	 :config
+	 (with-eval-after-load "flycheck"
+	   (flycheck-add-mode 'javascript-eslint 'web-mode)))
+     #+END_SRC
+
+**** Javascript Programming Language
+
+     #+BEGIN_WARNING
+     I do not personally do much Javascript development, so this mode might be completely broken or a better
+     alternative might be available.
+     #+END_WARNING
+
+     Enable ~rjsx-mode~ instead of ~javascript-mode~ or ~js2-mode~ as it properly handles inline HTML.
+
+     #+BEGIN_SRC emacs-lisp
+       (use-package rjsx-mode
+	 :straight t
+	 :config
+	 :mode ("\\.js\\'" . rjsx-mode)
+	 :mode ("\\.jsx\\'" . rjsx-mode)
+	 :hook (rjsx-mode . lsp-mode))
+     #+END_SRC
+
+**** Typescript Programming Language
+
+     Enable ~typescript-mode~ for =.ts=, =.tsx= and hook ~lsp-mode~ on it. It doesn't specifically support inline HTML,
+     but aside from minor indentation issues it works fine.
+     
+     #+BEGIN_SRC emacs-lisp
+       (use-package typescript-mode
+	 :straight t
+	 :config
+	 :mode ("\\.ts\\'" . typescript-mode)
+	 :mode ("\\.tsx\\'" . typescript-mode)
+	 :hook (typescript-mode . lsp-mode))
+     #+END_SRC
+*** Scala Programming Language
+
+    Enable ~scala-mode~ for =.scala=, =.sbt= and hook ~lsp-mode~ on it.
+    
+    #+BEGIN_SRC emacs-lisp
+      (use-package scala-mode
+	:straight t
+	:mode ("\\.s\\(cala\\|bt\\)$" . scala-mode)
+	:hook (scala-mode . lsp-mode))
+    #+END_SRC
+    
+    Enable ~sbt-mode~, it's used for sbt buffers.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package sbt-mode
+	:straight t
+	:commands sbt-start sbt-command
+	:config
+	;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+	;; allows using SPACE when in the minibuffer
+	(substitute-key-definition
+	 'minibuffer-complete-word
+	 'self-insert-command
+	 minibuffer-local-completion-map)
+	;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+	(setq sbt:program-options '("-Dsbt.supershell=false")))
+    #+END_SRC
+*** Rust Programming Language
+
+    Enable ~rustic~ and more feature-full alternative to ~rust-mode~, actually a rather distant fork of it.
+    Also hook ~lsp-mode~ on it.
+
+    #+NAME: rust
+    #+BEGIN_SRC emacs-lisp
+      (use-package rustic
+	:straight t
+	:hook (rustic-mode . lsp-mode)
+	:mode ("\\.rs\\'" . rustic-mode))
+    #+END_SRC
+** LSP
+*** lsp-mode
+     
+    Increase GC threshold to avoid random freezes on garbage collection.
+
+    #+NAME: gc-cons-threshold
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq gc-cons-threshold 100000000)
+    #+END_SRC
+
+    Increase the amount of data Emacs reads from a process in one go, default is 4KB, but some LSP servers produce responses up to 3MB.
+
+    #+NAME: read-process-output-max
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq read-process-output-max (* (* 1024 1024) 3))
+    #+END_SRC
+
+    Switch completion provider to =capf=, even though it should be the default, but just to make sure it. =company-lsp=
+    is what =lsp-mode= switched away from.
+
+    #+NAME: lsp-completion-provider
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq lsp-completion-provider :capf)
+    #+END_SRC
+
+    Set the minimum delay between LSP refreshes, should help with performance when typing really fast.
+
+    #+NAME: lsp-idle-delay
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq lsp-idle-delay 0.500) ;; adjust me
+    #+END_SRC
+
+    Setup rustic to prefer ~rust-analyzer~ instead of ~rls~ and also don't format on save, it's really annoying.
+
+    #+NAME: lsp-rustic
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq rustic-lsp-server 'rust-analyzer)
+      (setq rustic-compile-command "cargo build")
+      (setq rustic-format-trigger nil);'on-save
+    #+END_SRC
+
+    Enable inline type hints and disable chaining and parameter hints for Rust.
+
+    #+NAME: lsp-rust-analyzer
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (setq lsp-rust-analyzer-display-chaining-hints nil)
+      (setq lsp-rust-analyzer-display-parameter-hints nil)
+      (setq lsp-rust-analyzer-server-display-inlay-hints t)
+    #+END_SRC
+    
+    Finally enable ~lsp-mode~.
+
+    #+BEGIN_SRC emacs-lisp :noweb yes
+      (use-package lsp-mode
+	:straight t
+	:config
+	(setq lsp-prefer-flymake nil)
+	;; (lsp-mode . lsp-lens-mode)
+	;; :hook (tex-mode . lsp-mode)
+	;; (lsp-mode . display-fill-column-indicator-mode)
+	;; (python-mode . lsp)			;
+	;; (lsp-mode . origami-mode)
+	;; :hook (rustic . lsp-rust-analyzer-inlay-hints-mode) ;
+	:config
+	<<lsp-rustic>>
+	<<lsp-rust-analyzer>>
+
+	<<gc-cons-threshold>>
+	<<read-process-output-max>>
+	<<lsp-completion-provider>>
+	<<lsp-idle-delay>>
+	<<<lsp-typescript-tramp>>
+	<<lsp-scala-tramp>>)
+    #+END_SRC
+
+*** TRAMP support
+
+    None of the LSP client packages (many are included with ~lsp-mode~) don't feature remote client definitions. It's
+    rather easy to add them. I've only added the one necessary for Javascript and Scala as that are the only languages 
+
+    #+NAME: lsp-typescript-tramp
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (lsp-register-client
+       (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
+								`("typescript-language-server"
+								  "--tsserver-path"
+								  "tsserver"
+								  ,@lsp-clients-typescript-server-args)))
+			:activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
+			:priority -2
+			:completion-in-comments? t
+			:initialization-options (lambda ()
+						  (list :plugins lsp-clients-typescript-plugins
+							:logVerbosity lsp-clients-typescript-log-verbosity
+							:tsServerPath (lsp-package-path 'typescript)))
+			:ignore-messages '("readFile .*? requested by TypeScript but content not available")
+			:server-id 'ts-ls
+			:remote? t))
+    #+END_SRC
+     
+    #+NAME: lsp-scala-tramp
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (lsp-register-client
+       (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-metals--server-command)
+			:major-modes '(scala-mode)
+			:priority -1
+			:initialization-options '((decorationProvider . t)
+						  (inlineDecorationProvider . t)
+						  (didFocusProvider . t)
+						  (executeClientCommandProvider . t)
+						  (doctorProvider . "html")
+						  (statusBarProvider . "on")
+						  (debuggingProvider . t)
+						  (treeViewProvider . t))
+			:notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
+						   ("metals/publishDecorations" #'lsp-metals--publish-decorations)
+						   ("metals/treeViewDidChange" #'lsp-metals-treeview--did-change)
+						   ("metals-model-refresh" #'lsp-metals--model-refresh)
+						   ("metals/status" #'lsp-metals--status-string))
+			:action-handlers (ht ("metals-debug-session-start" (-partial #'lsp-metals--debug-start :json-false))
+					     ("metals-run-session-start" (-partial #'lsp-metals--debug-start t)))
+			:server-id 'metals
+			:remote? t
+			:initialized-fn (lambda (workspace)
+					  (lsp-metals--add-focus-hooks)
+					  (with-lsp-workspace workspace
+					    (lsp--set-configuration
+					     (lsp-configuration-section "metals"))))
+			:after-open-fn (lambda ()
+					 (add-hook 'lsp-on-idle-hook #'lsp-metals--did-focus nil t))
+			:completion-in-comments? t))
+    #+END_SRC
+     
+*** lsp-pyright
+
+    Enable ~lsp-pyright~, the best Python language server, all of them are a bit lackluster, this one is the best
+    option.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-pyright
+	:straight t
+	:hook (python-mode . lsp))
+    #+END_SRC
+    
+*** lsp-metals
+
+    Enable ~lsp-metals~ for Scala. It's actually really good and makes emacs into a very competent IDE.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-metals
+	:straight t
+	:config)
+    #+END_SRC
+    
+*** company
+
+    Enable ~company~, I'd expect it to be loaded by default, but apparently not.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package company
+	:straight t
+	:config
+	;; aligns annotation to the right hand side
+	(setq company-tooltip-align-annotations t)   
+	(add-hook 'after-init-hook 'global-company-mode))
+    #+END_SRC
+    
+*** lsp-ui
+
+    Enable ~lsp-ui~, it adds doc frames, code actions at the side and other cool things, some of them are annoying and
+    need disabling.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package lsp-ui
+	:straight t
+	:after (company-box)
+	:config
+	;; disable focus on mouse over
+	(push '(no-accept-focus . t) lsp-ui-doc-frame-parameters)
+	(push '(no-accept-focus . t) company-box-frame-parameters)
+
+	(add-to-list 'lsp-ui-doc-frame-parameters '(no-accept-focus . t))
+	(add-to-list 'company-box-frame-parameters '(no-accept-focus . t))
+	(setq mouse-autoselect-window nil))
+      (add-hook 'after-init-hook 'global-company-mode)
+    #+END_SRC
+    
+*** flycheck
+
+    Enable ~flycheck~ for in-buffer hints and errors and warning and things.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package flycheck
+	:straight t
+	:init (global-flycheck-mode))
+    #+END_SRC
+    
+*** yasnippet
+
+    Enable ~yasnippet~.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package yasnippet
+	:straight t
+	:config
+	(yas-global-mode 1)) 
+    #+END_SRC
+
+** Smart Tabs
+
+   The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
+
+   #+BEGIN_SRC rustic :tangle no
+     fn main() {
+     --if 1 == 1 &&
+     --...2 == 2 &&
+     --...3 != 5 {
+     ----println!("Stugg");
+     }
+   #+END_SRC
+   
+   #+BEGIN_TINY
+     ~--~ represents a =<TAB>= and ~.~ a =<SPC>=
+   #+END_TINY
+
+   And while the idea is nice, I couldn't get it to work for Rust and that's the only language I use. Therefore it's
+   disable for now.
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (setq whitespace-display-mappings
+	   '((tab-mark 9 [65293] [92 9])))
+     (setq whitespace-style '(tab-mark))
+     (use-package smart-tabs-mode
+       :straight t
+       :config
+       (smart-tabs-add-language-support rust rustic-hook
+					((c-indent-line . c-basic-offset)
+					 (c-indent-region . c-basic-offset)))
+       (smart-tabs-insinuate 'c 'javascript 'rust))
+   #+END_SRC
+   
+** Magit
+
+   ~magit~ is literally the best package right after OrgMode of course. Therefore enable it.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package magit
+       :straight t)
+   #+END_SRC
+
+   Also enable ~evil-magit~ for evil-style keybindings in Magit.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package evil-magit
+       :straight t
+       :after (evil magit)
+       :config
+       (setq evil-magit-state 'motion)
+       (evil-define-key 'motion magit-status-mode-map ";" 'magit-log)
+       (evil-define-key 'motion magit-status-mode-map "k" 'evil-previous-line)
+       (evil-define-key 'motion magit-status-mode-map "l" 'evil-next-line)
+       (evil-define-key 'normal magit-status-mode-map "l" 'evil-next-line)
+       (evil-define-key 'visual magit-status-mode-map "l" 'evil-next-line)
+
+       (evil-define-key 'motion magit-log-mode-map ";" 'magit-log)
+       (evil-define-key 'motion magit-log-mode-map "k" 'evil-previous-line)
+       (evil-define-key 'motion magit-log-mode-map "l" 'evil-next-line)
+       (evil-define-key 'normal magit-log-mode-map "l" 'evil-next-line)
+       (evil-define-key 'visual magit-log-mode-map "l" 'evil-next-line))
+   #+END_SRC
+
+   Enable ~magit-todos~ and hook them on ~lsp-mode~ and also ~org-mode~, because it acts like a project local
+   ~org-agenda~, sort of.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package magit-todos
+       :straight t
+       :hook
+       (lsp-mode . hl-todo-mode)
+       (org-mode . hl-todo-mode))
+   #+END_SRC
+   
+** Popwin
+
+   Enable ~popwin~, it creates a minibuffer-esque window at the bottom of the currently focused frame, when specific
+   buffer are to be raised. For example, when you go to compile a Rust project with =C-c C-c C-b=, the compilation
+   buffer won't take up your whole frame and it also won't split your current window, rather it'll pop up at the bottom
+   like in all those fancy mainstream IDEs.
+
+   #+NAME: popwin
+   #+BEGIN_SRC emacs-lisp
+     (use-package popwin
+       :straight t
+       :config
+       (push '(rustic-compilation-mode :noselect t) popwin:special-display-config)
+       (push '(rustic-cargo-test-mode :noselect t) popwin:special-display-config)
+       (push '("*Warnings*" :noselect t) popwin:special-display-config)
+       (popwin-mode 1))
+   #+END_SRC
+   
+** Projectile
+
+   Enable ~projectile~.
+   
+   #+BEGIN_SRC emacs-lisp
+     (use-package projectile
+       :straight t
+       :config
+       (projectile-mode +1)
+       (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+   #+END_SRC
+   
+** VTerm
+
+   ~vterm~ is fun, but it does not play well with ~evil~, at least by default. Therefore we need to make it
+   cooperate. Most of the following ELisp was taken from an issue on VTerm's github.
+
+   #+NAME: vterm-evil-fix
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (defun vterm-evil-insert ()
+       (interactive)
+       (vterm-goto-char (point))
+       (call-interactively #'evil-insert))
+
+     (defun vterm-evil-append ()
+       (interactive)
+       (vterm-goto-char (1+ (point)))
+       (call-interactively #'evil-append))
+
+     (defun vterm-evil-delete ()
+       "Provide similar behavior as `evil-delete'."
+       (interactive)
+       (let ((inhibit-read-only t)
+	     )
+	 (cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
+	   (call-interactively 'evil-delete))))
+
+     (defun vterm-evil-change ()
+       "Provide similar behavior as `evil-change'."
+       (interactive)
+       (let ((inhibit-read-only t))
+	 (cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
+	   (call-interactively 'evil-change))))
+
+
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "d") (lambda () (interactive) (vterm-evil-delete)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "s") (lambda () (interactive) (vterm-evil-delete) (vterm-evil-insert)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "i") (lambda () (interactive) (vterm-evil-insert)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "a") (lambda () (interactive) (vterm-evil-append)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "c") (lambda () (interactive) (vterm-evil-change)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+     (evil-define-key 'normal vterm-mode-map
+       (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+     (evil-define-key 'insert vterm-mode-map
+       (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+     (evil-define-key 'insert vterm-mode-map
+       (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+     (evil-define-key 'insert vterm-mode-map
+       (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+     (evil-define-key 'insert vterm-mode-map
+       (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+
+     (defun evil-collection-vterm-escape-stay ()
+     "Go back to normal state but don't move
+     cursor backwards. Moving cursor backwards is the default vim behavior but it is
+     not appropriate in some cases like terminals."
+     (setq-local evil-move-cursor-back nil))
+
+     ;; :hook ((vterm-mode-hook . evil-collection-vterm-escape-stay))
+   #+END_SRC
+
+   And enable ~vterm~.
+   
+   #+BEGIN_SRC emacs-lisp :noweb yes
+     (use-package vterm
+       :straight t
+       :config
+       <<vterm-evil-fix>>)
+   #+END_SRC
+   
+** Functional things
+
+   Enable line numbers for both programming buffers (Rust, C, and such) and configuration buffers (Nix, Yaml, Json, and
+   such).
+
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'conf-mode-hook 'display-line-numbers-mode)
+     (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+   #+END_SRC
+
+   Improve scrolling by:
+   1. disabling acceleration
+   2. making it so that the window under the pointer is scroller no matter the focused window
+   3. changing default scroll amount to 5 lines and 1 when shift is pressed
+
+   #+BEGIN_SRC emacs-lisp
+     (setq mouse-wheel-scroll-amount '(5 ((shift) . 1)))
+     (setq mouse-wheel-progressive-speed nil)
+     (setq mouse-wheel-follow-mouse 't)
+   #+END_SRC
+   
+   Enable perentheses highlighting and pairing.
+
+   #+BEGIN_SRC emacs-lisp
+     (show-paren-mode 1) 
+     (electric-pair-mode)
+   #+END_SRC
+
+   Set fill colum, horizontal indicator, for both =fill-paragraph=(=M-q=) and the visual horizontal indicator.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq-default display-fill-column-indicator-column 120
+		   fill-column 120)
+   #+END_SRC
+
+   Start Emacs server, unless it's already running. Starting a new Emacs instance while debugging and getting an error
+   about a server already running can be a bit annoying.
+
+   #+BEGIN_SRC emacs-lisp
+     (load "server")
+     (unless (server-running-p) (server-start))
+   #+END_SRC
+
+   #+BEGIN_SRC emacs-lisp
+     (setq backup-directory-alist
+	   `(("." . ,(concat user-emacs-directory "backups"))))
+   #+END_SRC
