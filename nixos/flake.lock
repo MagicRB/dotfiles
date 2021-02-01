@@ -19,27 +19,27 @@
     "emacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1610919739,
-        "narHash": "sha256-qh8q3ORT4+DdNfxze568/nKik+Kyn9YwxJyj73zHwpQ=",
-        "ref": "feature/native-comp",
-        "rev": "39b3bcd324c4519ae3b204a31ab1a385b8ba9574",
-        "revCount": 146220,
-        "type": "git",
-        "url": "https://git.savannah.gnu.org/git/emacs.git"
+        "lastModified": 1612046248,
+        "narHash": "sha256-FVTgwuzqjE2yhAUnFtDyln2EKMm+4QDbgF3fP1nQDSA=",
+        "owner": "flatwhatson",
+        "repo": "emacs",
+        "rev": "a68d99009604bd38f880086bea49e00008b70f8a",
+        "type": "github"
       },
       "original": {
-        "ref": "feature/native-comp",
-        "type": "git",
-        "url": "https://git.savannah.gnu.org/git/emacs.git"
+        "owner": "flatwhatson",
+        "ref": "pgtk-nativecomp",
+        "repo": "emacs",
+        "type": "github"
       }
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1610987347,
-        "narHash": "sha256-2IOpv3fS94q2RGA/j9/mBZjcsE7AuwANeHKExx/6U6Y=",
+        "lastModified": 1612153279,
+        "narHash": "sha256-QIkLyd8GjpPGaRVCofI2GcADdbIA5zmL+JUZux57bdY=",
         "ref": "master",
-        "rev": "32984eedf998b7ac378fcdc75167a304702cf2fa",
-        "revCount": 4546,
+        "rev": "266b7793ee59f461e2ff9245fcc48dfcd02e43f4",
+        "revCount": 4618,
         "type": "git",
         "url": "https://github.com/nix-community/emacs-overlay"
       },
@@ -70,11 +70,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1609010567,
-        "narHash": "sha256-N6WslRAtrvCPCpQnxQqo+VlSivX/KylL9Xy/OZr0kMg=",
+        "lastModified": 1611323638,
+        "narHash": "sha256-+7wm2RH82NYTZjzl0Nw+8E4yyXqVp/6xPdPWHAQXlt8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "22f6736e628958f05222ddaadd7df7818fe8f59d",
+        "rev": "91bd34620d73340be03642279ee0d1c64110ee6c",
         "type": "github"
       },
       "original": {
@@ -120,11 +120,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1610961382,
-        "narHash": "sha256-2TH4uX3eUkvkDnhD3BhIGBkag72WqbLUkaFyARWj4iQ=",
+        "lastModified": 1612060807,
+        "narHash": "sha256-ht+Dr/lo+8hjsxXbRZPjs8JrTNxaHxq94RKwZxUImUM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "88f00e7e12d2669583fffd3f33aae01101464386",
+        "rev": "f18fbc33930d7569cfedb8acd75177d0ff7c8678",
         "type": "github"
       },
       "original": {
@@ -136,11 +136,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1610062394,
-        "narHash": "sha256-0ntFTZonPiGr+w+kA/pp9cMxBCkkf1teuPt1KxygcfM=",
+        "lastModified": 1612168508,
+        "narHash": "sha256-VqsgG6GGN6GGGnIHkjyeM+NqwE3TJWQspl2Dm/K8jmY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "9414948a5a19463acce5a7f2b2206c39ecb6359f",
+        "rev": "4695a7ca51250d52aba5857fb0748c81fbdce526",
         "type": "github"
       },
       "original": {
@@ -152,11 +152,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1610842533,
-        "narHash": "sha256-6hW8CML8RnNrRJMv7E56rXAhsCNgUM97HIVSqWxnO64=",
+        "lastModified": 1611575689,
+        "narHash": "sha256-z2rNP3zdVnGxp9iV2Rbn0/LLKhk47DZQKxDkpYFLI7M=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "68398d2dd50efc2d878bf0f83bbc8bc323b6b0e0",
+        "rev": "891f607d5301d6730cb1f9dcf3618bcb1ab7f10e",
         "type": "github"
       },
       "original": {
@@ -176,11 +176,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1610714324,
-        "narHash": "sha256-hrmDtEnNshJ94ZxO+F8c8XjgkewPy2QPkxifWteRxyE=",
+        "lastModified": 1611663049,
+        "narHash": "sha256-qjxWkzevj6KALyjnHxrzihDFIuCrDCqo8X41OSnziOg=",
         "ref": "master",
-        "rev": "81a5a58dba34bd48652268f516a6892262dde49f",
-        "revCount": 10,
+        "rev": "7b3ab825e3cf1529ac7c05ddbc4d5848161e07eb",
+        "revCount": 12,
         "type": "git",
         "url": "https://gitea.redalder.org/RedAlder/systems"
       },
@@ -211,11 +211,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1611544875,
-        "narHash": "sha256-H+r5SEo9OhoRY/EtXx5ttrcoLptxiIIi4YdD696ez84=",
+        "lastModified": 1612147138,
+        "narHash": "sha256-MPboMbRzyGZtM745ov0i75vMKsVnXGf8RPvjmb5edP8=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "4c6a814f4b6ae89a9767bfcae4cbe2e49ca7c19e",
+        "rev": "5d630d7043bbbc0688459fe0c09f3f8d7f500740",
         "type": "github"
       },
       "original": {
@@ -243,11 +243,11 @@
     "vtermModule": {
       "flake": false,
       "locked": {
-        "lastModified": 1610342571,
-        "narHash": "sha256-J8SzkUs3V0Qzwquoz3UvzS01OJP+zd5mwk+xkMaj2g4=",
+        "lastModified": 1612054876,
+        "narHash": "sha256-G0FxY+98y+nn5PA7pwJblKM+WL3bF2a07BiBlzrh7cc=",
         "ref": "master",
-        "rev": "9d2ef5e535e79781a0c1d2523f82d096eb48765f",
-        "revCount": 578,
+        "rev": "fb12d7f49e2da121d9b17ed583d269166e0da087",
+        "revCount": 586,
         "type": "git",
         "url": "https://github.com/akermu/emacs-libvterm"
       },

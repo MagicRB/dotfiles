@@ -1,56 +1,65 @@
 #+STARTUP: content
 
-#+NAME: base
-#+BEGIN_SRC emacs-lisp
-  (when (not (string= (system-name) "fractal"))
-    (use-package elcord
-      :straight t
-      :config
-      (elcord-mode)))
+* Magic_RB's Emacs configuration
+** Stuff That Needs Work
+*** TODO Spell checking
+*** TODO Calc mode
+*** TODO Org Agenda
+**** Make it work on my phone
+*** TODO Org Roam
+** Stuff  
 
-  (when (not (string= (system-name) "localhost"))
-    (use-package tree-sitter
-      :straight t
-      :after (tree-sitter-langs)
-      :config
-      (global-tree-sitter-mode)
-      (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-    (use-package tree-sitter-langs
-      :straight t))
+   #+NAME: base
+   #+BEGIN_SRC emacs-lisp
+     (when (not (string= (system-name) "fractal"))
+       (use-package elcord
+	 :straight t
+	 :config
+	 (elcord-mode)))
 
-  (use-package pdf-tools
-    :straight t
-    :hook (('TeX-mode-hook . visual-line-mode))
-    :config
-    ;; initialise
-    (pdf-tools-install)
-    (setq TeX-PDF-mode 1)
-    ;; open pdfs scaled to fit page
-    (setq-default pdf-view-display-size 'fit-page)
-    ;; automatically annotate highlights
-    (setq pdf-annot-activate-created-annotations t))
+     (when (not (string= (system-name) "localhost"))
+       (use-package tree-sitter
+	 :straight t
+	 :after (tree-sitter-langs)
+	 :config
+	 (global-tree-sitter-mode)
+	 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+       (use-package tree-sitter-langs
+	 :straight t))
 
-					  ;  (use-package auctex
-					  ;    :ensure t)
+     (use-package pdf-tools
+       :straight t
+       :hook (('TeX-mode-hook . visual-line-mode))
+       :config
+       ;; initialise
+       (pdf-tools-install)
+       (setq TeX-PDF-mode 1)
+       ;; open pdfs scaled to fit page
+       (setq-default pdf-view-display-size 'fit-page)
+       ;; automatically annotate highlights
+       (setq pdf-annot-activate-created-annotations t))
 
-  (use-package w3m
-    :straight t) 
+					     ;  (use-package auctex
+					     ;    :ensure t)
 
-#+END_SRC
+     (use-package w3m
+       :straight t) 
 
-Enable =all-the-icons=, it's used by =treemacs= and =doom-modeline=.
+   #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  (use-package all-the-icons
-    :straight t) 
-#+END_SRC
+   Enable =all-the-icons=, it's used by =treemacs= and =doom-modeline=.
 
-Set ispell program to hunspell, this is very much a TODO, since the spelling configuration is rather minimal at this
-point in time.
+   #+BEGIN_SRC emacs-lisp
+     (use-package all-the-icons
+       :straight t) 
+   #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-  (setq ispell-program-name "hunspell")
-#+END_SRC
+   Set ispell program to hunspell, this is very much a TODO, since the spelling configuration is rather minimal at this
+   point in time.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq ispell-program-name "hunspell")
+   #+END_SRC
 
 ** Look & Feel
 *** Color Themes
@@ -91,7 +100,7 @@ point in time.
     #+BEGIN_SRC emacs-lisp
       (with-eval-after-load 'hydra
 	(defun magic_rb/unload-all-themes ()
-	    "Unloads all themes."
+	  "Unloads all themes."
 	  (mapc #'disable-theme custom-enabled-themes))
 
 	(advice-add 'load-theme :before #'(lambda (orig-fun &rest args) (magic_rb/unload-all-themes)))
@@ -194,6 +203,19 @@ point in time.
       (setq display-time-load-average nil)
 
       (display-battery-mode)
+    #+END_SRC
+
+    Only show buffer encoding conditionally, there's no reason to have ~LF UTF-8~ down there, rather only show when the
+    encoding is something we don't expect, like ~CRLF~ or ~UTF-16~. Inspired by [[https://tecosaur.github.io/emacs-config/config.html#theme-modeline][tecosaur]].
+
+    #+BEGIN_SRC emacs-lisp
+      (defun tecosaur/doom-modeline-conditional-buffer-encoding ()
+	"We expect the encoding to be LF UTF-8, so only show the modeline when this is not the case"
+	(setq-local doom-modeline-buffer-encoding
+		    (unless (or (eq buffer-file-coding-system 'utf-8-unix)
+				(eq buffer-file-coding-system 'utf-8)))))
+
+      (add-hook 'after-change-major-mode-hook #'tecosaur/doom-modeline-conditional-buffer-encoding)
     #+END_SRC
     
 *** Miscelanious
@@ -548,7 +570,9 @@ point in time.
 	:straight t
 	:config
 	;; aligns annotation to the right hand side
-	(setq company-tooltip-align-annotations t)   
+	(setq company-tooltip-align-annotations t)
+	(setq company-show-numbers t)
+	(add-hook 'evil-normal-state-entry-hook #'company-abort) ;; make aborting less annoying
 	(add-hook 'after-init-hook 'global-company-mode))
     #+END_SRC
     
@@ -744,59 +768,71 @@ point in time.
        :hook (org-mode . org-fragtog-mode))
    #+END_SRC
    
-** TODO ESS
+*** TODO ESS
 
-   Required for R
+    Required for R
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package ess
-       :straight t
-       :init (require 'ess-r-mode))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package ess
+	:straight t
+	:init (require 'ess-r-mode))
+    #+END_SRC
    
-** ORG Linkz
+*** Org Linkz
    
-   Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]].
-   Remove validation link from exported html file.
-   Currently doesn't work for somer reason, must debug why.
+    Based on [[https://github.com/p-kolacz/org-linkz][org-linkz]].
+    Remove validation link from exported html file.
+    Currently doesn't work for somer reason, must debug why.
 
-   #+NAME: org-linkz-html-validation-link
-   #+BEGIN_SRC emacs-lisp
-     (setq org-html-validation-link nil)
-   #+END_SRC
-   #+NAME: org-linkz
-   #+BEGIN_SRC emacs-lisp
-     (require 'org-protocol)
-     (setq org-capture-templates
-	   '(
-	     ("o" "Link capture" entry
-	      (file+headline "~/org/linkz.org" "INBOX")
-	      "* %a %U"
-	      :immediate-finish t)
-	     ))
-     (setq org-protocol-default-template-key "o")
-   #+END_SRC
+    #+NAME: org-linkz-html-validation-link
+    #+BEGIN_SRC emacs-lisp
+      (setq org-html-validation-link nil)
+    #+END_SRC
+    #+NAME: org-linkz
+    #+BEGIN_SRC emacs-lisp
+      (require 'org-protocol)
+      (setq org-capture-templates
+	    '(
+	      ("o" "Link capture" entry
+	       (file+headline "~/org/linkz.org" "INBOX")
+	       "* %a %U"
+	       :immediate-finish t)
+	      ))
+      (setq org-protocol-default-template-key "o")
+    #+END_SRC
    
-   Then a .desktop file is needed for Firefox/Chromium
+    Then a .desktop file is needed for Firefox/Chromium
 
-   #+NAME: org-protocol-desktop
-   #+BEGIN_SRC conf-desktop :tangle ~/.local/share/applications/org-protocol.desktop
-     [Desktop Entry]
-     Name=org-protocol
-     Exec=emacsclient -n %u
-     Type=Application
-     Terminal=fale
-     Categories=System;
-     MimeType=x-scheme-handler/org-protocol;
-   #+END_SRC
+    #+NAME: org-protocol-desktop
+    #+BEGIN_SRC conf-desktop :tangle ~/.local/share/applications/org-protocol.desktop
+      [Desktop Entry]
+      Name=org-protocol
+      Exec=emacsclient -n %u
+      Type=Application
+      Terminal=fale
+      Categories=System;
+      MimeType=x-scheme-handler/org-protocol;
+    #+END_SRC
    
-   Then a bookmark must be added into firefox with this location
+    Then a bookmark must be added into firefox with this location
 
-   #+NAME: bookmark
-   #+BEGIN_SRC javascript :tangle no
-     javascript:location.href="org-protocol:///capture?url="+encodeURIComponent(location.href)+"&title="+encodeURIComponent(document.title||"[untitled page]")
-   #+END_SRC
+    #+NAME: bookmark
+    #+BEGIN_SRC javascript :tangle no
+      javascript:location.href="org-protocol:///capture?url="+encodeURIComponent(location.href)+"&title="+encodeURIComponent(document.title||"[untitled page]")
+    #+END_SRC
 
+*** Org Variable Pitch
+
+    Enable ~org-variable-pitch~, it makes ~org-mode~ feel like a proper writing instrument, I'm not sure if I like it
+    though. Disable for now, cool idea, but messes with horizontal alignment...
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-variable-pitch
+	:straight t
+	:disabled t
+	:hook org-mode)
+    #+END_SRC
+    
 ** Smart Tabs
 
    The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
@@ -863,7 +899,8 @@ point in time.
      (use-package counsel
        :straight t
        :config
-       (counsel-mode 1))
+       (counsel-mode 1)
+       :bind ("C-x b" . counsel-switch-buffer))
    #+END_SRC
 
    ~ivy-rich~ and ~all-the-icons~ compatibility.
@@ -882,6 +919,13 @@ point in time.
        :straight t
        :config
        (ivy-rich-mode 1))
+   #+END_SRC
+
+   ~ivy-hydra~ adds Helm like extended actions.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package ivy-hydra
+       :straight t)
    #+END_SRC
    
 ** Magit
@@ -1047,7 +1091,22 @@ point in time.
        (edit-server-start))
    #+END_SRC
    
+** Spray
+   
+   ~spray~ sprays words on screen at a certain rate.
+
+   #+BEGIN_SRC emacs-lisp
+     (use-package spray
+       :straight t)
+   #+END_SRC
+   
 ** Random Bits and Bobs
+
+   Set default major mode to org mode, it's much more useful than fundamental.
+
+   #+BEGIN_SRC emacs-lisp
+     (setq-default major-mode 'org-mode)
+   #+END_SRC
 
    Delete files by moving to trash.
 
@@ -1121,3 +1180,15 @@ point in time.
 	   `(("." . ,(concat user-emacs-directory "backups"))))
    #+END_SRC
    
+*** Windows
+    
+    As [[https://github.com/tecosaur/][tecosaur]] has it in his [[https://tecosaur.github.io/emacs-config/config.html#windows][configuration]], I was to be asked which window to should be brought up when I split a
+    window in Emacs. So create a new advice which will run after evil split commands and brings up the buffer selector.
+
+    #+BEGIN_SRC emacs-lisp
+      (defadvice evil-window-vsplit (after activate compile)
+	(counsel-switch-buffer))
+      (defadvice evil-window-split (after activate compile)
+	(counsel-switch-buffer))
+    #+END_SRC   
+

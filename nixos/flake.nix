@@ -33,9 +33,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     emacs = {
-      type = "git";
-      url = "https://git.savannah.gnu.org/git/emacs.git";
-      ref = "feature/native-comp";
+      # type = "git";
+      #url = "https://git.savannah.gnu.org/git/emacs.git";
+      url = "github:flatwhatson/emacs?ref=pgtk-nativecomp";
+      #ref = "feature/native-comp";
       flake = false;
     };
     vtermModule = {

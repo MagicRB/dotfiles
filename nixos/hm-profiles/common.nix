@@ -6,8 +6,11 @@ inputs:
     nixpkgs-unstable.nomad_1_0
     custom.sss-cli
     custom.enter-env
-    nixpkgs.lato
-  ];
+
+  ] ++ (with nixpkgs; [
+    fira-code
+    overpass
+  ]);
 
   home.stateVersion = "20.09";
 

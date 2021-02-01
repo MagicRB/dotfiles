@@ -87,8 +87,6 @@
                     python38Full
                     nodePackages.typescript-language-server
 
-                    fira-code
-
                     pkgs-unstable.rust-analyzer
                     
                     (hunspell-with-dicts [ hunspellDicts.en_US ])
