@@ -1,6 +1,5 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 
 {
   boot = {
@@ -18,7 +17,7 @@ inputs:
 
   hardware.enableRedistributableFirmware = true;
 
-  powerManagement.cpuFreqGovernor = pkgs.lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = nixpkgs.lib.mkDefault "powersave";
 
   fileSystems = {
     "/" = {

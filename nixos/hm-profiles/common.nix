@@ -1,6 +1,5 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }@ rpkgs:
-{ config, lib, pkgs, ... }: {
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, lib, ... }: {
   home.packages = [
     # custom.enter-env
     nixpkgs-unstable.nomad_1_0
@@ -16,7 +15,7 @@ inputs:
 
   programs.gpg.enable = true;
 
-  imports = rlib.callModules rpkgs [
+  imports = [
     ../hm-modules/alacritty
     ../hm-modules/bash
     ../hm-modules/cmdline-utils.nix
@@ -31,7 +30,6 @@ inputs:
     ../hm-modules/picom
 
     ../hm-modules/urxvt.nix
-  ] ++ [
-    (rlib.callModule rpkgs ../hm-modules/xmonad "heater")
+    ../hm-modules/xmonad
   ];
 }

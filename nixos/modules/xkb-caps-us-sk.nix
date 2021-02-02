@@ -1,8 +1,7 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ pkgs, config, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 let
-  mkIf = pkgs.lib.mkIf;
+  mkIf = nixpkgs.lib.mkIf;
   xserver-enable = config.services.xserver.enable;
 in {
   services.xserver = {

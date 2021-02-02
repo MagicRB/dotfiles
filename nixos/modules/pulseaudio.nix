@@ -1,15 +1,14 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 let
-  mkIf = pkgs.lib.mkIf;
+  mkIf = nixpkgs.lib.mkIf;
   bluetooth-enable = config.hardware.bluetooth.enable;
 in {
   sound.enable = true;
   hardware = {
     pulseaudio = {
       enable = true;
-      package = mkIf bluetooth-enable pkgs.pulseaudioFull;
+      package = mkIf bluetooth-enable nixpkgs.pulseaudioFull;
     };
     pulseaudio.support32Bit = true;
   };

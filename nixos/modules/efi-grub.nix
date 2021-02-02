@@ -1,6 +1,5 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 {
   boot.loader = {
     systemd-boot.enable = false;

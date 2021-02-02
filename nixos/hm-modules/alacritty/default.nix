@@ -1,8 +1,7 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, lib, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, lib, ... }:
 {
-  home.packages = with pkgs; [
+  home.packages = with nixpkgs; [
     alacritty
   ];
 

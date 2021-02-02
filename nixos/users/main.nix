@@ -1,10 +1,9 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 let
   nm-enable = config.networking.networkmanager.enable;
   docker-enable = config.virtualisation.docker.enable;
-  mkIf = pkgs.lib.mkIf;
+  mkIf = nixpkgs.lib.mkIf;
 in {
   users = {
     mutableUsers = false;

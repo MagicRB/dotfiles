@@ -1,10 +1,9 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }@ rpkgs:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 {
   services.openssh.enable = true;
   
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with nixpkgs; [
     home-manager
     cryptsetup
     nix-tree
@@ -18,8 +17,7 @@ inputs:
     };
   };
   
-  imports = rlib.callModules rpkgs [
-    ../modules/allow-unfree.nix
+  imports = [
     ../modules/efi-grub.nix
     ../modules/nix-flakes.nix
     ../modules/pulseaudio.nix

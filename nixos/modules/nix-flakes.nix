@@ -1,9 +1,8 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 {
   nix = let
-    nix = pkgs.nixFlakes;
+    nix = nixpkgs.nixFlakes;
   in {
     package = nix; 
     extraOptions = ''

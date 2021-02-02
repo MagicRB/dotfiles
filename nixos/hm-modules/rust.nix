@@ -1,10 +1,9 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 {
   home.packages = let
     nightly = custom.rust.nightly.latest.rust.override {
-      extensions = [ "clippy" "rustfmt" ];
+      extensions = [ "clippy" ];
       targets = [ "x86_64-unknown-linux-gnu" "x86_64-unknown-linux-musl" ];
     };
   in [

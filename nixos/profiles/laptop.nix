@@ -1,16 +1,16 @@
 { intelBusId, nvidiaBusId }:
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }@ rpkgs:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 {
   hardware.bluetooth.enable = true;
   networking.networkmanager.enable = true;
 
-  environment.systemPackages = with pkgs; [ libglvnd ];
+  environment.systemPackages = with nixpkgs; [ libglvnd ];
  
-  imports = rlib.callModules rpkgs [
+  imports = [
     ./workstation.nix
+    (import ../modules/xserver-prime.nix { inherit intelBusId nvidiaBusId; })
   ] ++ [
-    (import ../modules/xserver-prime.nix { inherit intelBusId nvidiaBusId; } inputs rpkgs)
+    
   ];
 }

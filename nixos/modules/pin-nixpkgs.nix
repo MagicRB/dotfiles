@@ -1,6 +1,6 @@
 inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 {
   nix.registry = {
     "nixpkgs".flake = inputs.nixpkgs;

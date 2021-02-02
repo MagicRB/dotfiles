@@ -45,136 +45,57 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, ... }@inputs:
     with inputs; let
-      customModules = [
-        ra-systems.flakes.klippy.nixosModules.klippy
-        ra-systems.flakes.moonraker.nixosModules.moonraker
-        ra-systems.flakes.mainsail.nixosModules.mainsail
-        inputs.home-manager.nixosModules.home-manager
-      ];
-      prelude = system: rec {
-        rlib = (import ./lib.nix inputs { lib = nixpkgs.lib; inherit system; });
-        rpkgs = (rlib.getLegacyPkgs
-          {
-            allowUnfree = true;
-          }
-          {
-            inherit (inputs) nixpkgs nixpkgs-unstable nixpkgs-master;
-          }) // {
-            custom = {
-              sss-cli = rlib.halfCallFlakePackage ./packages/sss-cli;
-              atom-shell = rlib.halfCallFlakePackage ./packages/atom-shell;
-              emacs = rlib.halfCallFlakePackage ./packages/emacs;
-              emacsclient-remote = rlib.halfCallFlakePackage ./packages/emacsclient-remote;
-              enter-env = rlib.halfCallFlakePackage ./packages/enter-env;
-              screenshot = rlib.halfCallFlakePackage ./packages/screenshot;
-              rust = let
-                rustyPkgs = import inputs.nixpkgs {
-                  overlays = [ inputs.rust-overlay.overlay ];
-                  inherit system;
-                };
-              in
-                rustyPkgs.rust-bin;
-            };
-            inherit rlib;
-          };
-      };
-    in {
-      nixosConfigurations.omen = let
-        system = "x86_64-linux";
-        inherit (prelude system) rlib rpkgs;
-      in nixpkgs.lib.nixosSystem {
-        inherit system;
-
-        modules = rlib.callModules rpkgs [
-          ./hardware/omen.nix
-          ./modules/pin-nixpkgs.nix
-          ./users/main.nix
-        ] ++ [
-          ((rlib.callModule rpkgs ./modules/home-manager.nix) ./hm-profiles/common.nix)
-          ({ pkgs, ... }: {
-            networking = {
-              hostName = "omen";
-              useDHCP = false;
-              interfaces.eno1.useDHCP = true;
-            };
-
-            time.timeZone = "Europe/Bratislava";
-            system.stateVersion = "20.09";
-          })
-
-          (import ./profiles/laptop.nix {
-            intelBusId = "PCI:0:2:0";
-            nvidiaBusId = "PCI:1:0:0";
-          } inputs rpkgs)
-        ] ++ customModules;
-      };
-
-      nixosConfigurations.heater = let
-        system = "x86_64-linux";
-        inherit (prelude system) rlib rpkgs;
-      in nixpkgs.lib.nixosSystem {
-        inherit system;
-
-        modules = rlib.callModules rpkgs [
-          ./hardware/heater.nix
-          ./profiles/workstation.nix
-          ./modules/pin-nixpkgs.nix
-          ./users/main.nix
-        ] ++ [
-          ((rlib.callModule rpkgs ./modules/home-manager.nix) ./hm-profiles/common.nix)
-          ({ pkgs, ... }: {
-            networking = {
-              hostName = "heater";
-              useDHCP = false;
-              interfaces.enp3s0.useDHCP = true;
-            };
-
-            time.timeZone = "Europe/Bratislava";
-            system.stateVersion = "20.09";
-
-            virtualisation.docker.enable = true;
-          })
-        ] ++ customModules;
-      };
-
-      nixosConfigurations.mark = let
-        system = "x86_64-linux";
-        inherit (prelude system) rlib rpkgs;
-      in nixpkgs.lib.nixosSystem {
-        inherit system;
-
-        modules = rlib.callModules rpkgs [
-          ./hardware/mark.nix
-          ./users/main.nix
-        ] ++ [
-          ((rlib.callModule rpkgs ./modules/home-manager.nix) ./hm-profiles/mark.nix)
-          ({ pkgs, ... }: {
-            time.timeZone = "Europe/Bratislava";
-            system.stateVersion = "20.09";
-
-            environment.systemPackages = [
-              pkgs.gnupg
-              rpkgs.sss-cli
-            ];
-          })
-        ];
-      };
-
-
-      homeConfigurations.edge = let
-        system = "aarch64-linux";
-        inherit (prelude system) rlib rpkgs;
-      in inputs.home-manager.lib.homeManagerConfiguration {
-        configuration = { pkgs, ... }: {
-          home.packages = [ rpkgs.nixpkgs.file rpkgs.nixpkgs.emacs ];
-          home.stateVersion = "20.09";
+      rlib = import ./rlib.nix {
+        inherit nixpkgs home-manager inputs;
+        pkgs = {
+          inherit nixpkgs nixpkgs-unstable nixpkgs-master;
         };
-        username = "u0_a269";
-        inherit system;
-        homeDirectory = "/data/data/com.termux/files/home";
+        custom = with rlib; {
+          sss-cli = callHalfFlake ./packages/sss-cli;
+          atom-shell = callHalfFlake ./packages/atom-shell;
+          emacs = callHalfFlake ./packages/emacs;
+          emacsclient-remote = callHalfFlake ./packages/emacsclient-remote;
+          enter-env = callHalfFlake ./packages/enter-env;
+          screenshot = callHalfFlake ./packages/screenshot;
+          rust =
+            system:
+            let
+              rustyPkgs = import inputs.nixpkgs {
+                overlays = [ inputs.rust-overlay.overlay ];
+                inherit system;
+              };
+            in
+              rustyPkgs.rust-bin;
+        };
+        self = rlib;
       };
-      edge = self.homeConfigurations.edge.activationPackage;
+
+      rmodules = {
+        klippy = ra-systems.flakes.klippy.nixosModules.klippy;
+        moonraker = ra-systems.flakes.moonraker.nixosModules.moonraker;
+        mainsail = ra-systems.flakes.mainsail.nixosModules.mainsail;
+        home-manager = inputs.home-manager.nixosModules.home-manager;
+      };
+
+      omen = rlib.nixosSystem (import ./systems/omen.nix inputs);
+      heater = rlib.nixosSystem (import ./systems/heater.nix inputs);
+      mark = rlib.nixosSystem (import ./systems/mark.nix inputs);
+
+      edge = rlib.nixosSystem import ./systems/edge.nix;
+    in {
+      nixosConfigurations.omen = omen;
+      omen = omen.config.system.build.toplevel;
+
+      nixosConfigurations.heater = heater;
+      heater = heater.config.system.build.toplevel;
+
+      nixosConfigurations.mark = mark;
+      mark = mark.config.system.build.toplevel;
+
+
+      homeConfigurations.edge = edge;
+      edge = edge.activationPackage;
     };
 }

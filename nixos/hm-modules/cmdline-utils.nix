@@ -1,6 +1,5 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, lib, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, lib, ... }:
 {
   services.gpg-agent = {
     pinentryFlavor = "gtk2";

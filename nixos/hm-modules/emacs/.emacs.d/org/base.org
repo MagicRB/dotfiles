@@ -101,7 +101,8 @@
       (with-eval-after-load 'hydra
 	(defun magic_rb/unload-all-themes ()
 	  "Unloads all themes."
-	  (mapc #'disable-theme custom-enabled-themes))
+	  (mapc #'disable-theme custom-enabled-themes)
+	  (solaire-global-mode +1))
 
 	(advice-add 'load-theme :before #'(lambda (orig-fun &rest args) (magic_rb/unload-all-themes)))
 	(advice-add 'load-theme :after #'(lambda (orig-fun &rest args) (magic_rb/apply-fonts)))
@@ -144,6 +145,15 @@
 	    '(("bg-main" . "#111519")))
       (with-eval-after-load 'doom-themes
 	(load-theme 'doom-one t))
+    #+END_SRC
+
+    Enable ~solaire-mode~, it makes a window a bit darker  TODO.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package solaire-mode
+	:straight t
+	:init
+	(solaire-mode 1))
     #+END_SRC
     
 *** Dashboard

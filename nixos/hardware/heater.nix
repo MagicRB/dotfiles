@@ -1,6 +1,5 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 
 let
   defaultBtrfsOpts = [
@@ -22,7 +21,7 @@ in {
     kernelPackages = nixpkgs-unstable.linuxPackages_latest;
   };
 
-  powerManagement.cpuFreqGovernor = pkgs.lib.mkDefault "performance";
+  powerManagement.cpuFreqGovernor = nixpkgs.lib.mkDefault "performance";
 
   fileSystems = {
     "/" =
@@ -68,6 +67,12 @@ in {
       {
         device = "/dev/mapper/VG_0-LV_Data0";
         fsType = "ext4";
+      };
+
+    "/mnt/net/Magic_RB" =
+      {
+        fsType = "nfs";
+        device = "blowhole.in.redalder.org:/Magic_RB";
       };
   };
 

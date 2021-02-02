@@ -1,7 +1,5 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-hostname:
-{ config, lib, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, lib, ... }:
 {
   home.packages = with nixpkgs; [
     powerline-fonts
@@ -11,9 +9,9 @@ hostname:
 
   home.file.".xmonad/xmonad.hs".source = let
     vars = {
-      xmobar = rlib.binPath nixpkgs.xmobar "xmobar";
+      xmobar = "${nixpkgs.xmobar}/bin/xmobar";
       xmobarConfig = ./xmobarrc;
-      screenshot = rlib.binPath custom.screenshot "screenshot";
+      screenshot = "${custom.screenshot}/bin/screenshot";
     };
   in with rlib; substitute nixpkgs.runCommandNoCCLocal "xmonad.hs" ./xmonad.hs vars;
 }

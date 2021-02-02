@@ -1,10 +1,9 @@
 { intelBusId, nvidiaBusId }:
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, ... }:
 let
-  mkForce = pkgs.lib.mkForce;
-  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+  mkForce = nixpkgs.lib.mkForce;
+  nvidia-offload = nixpkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
     export __GLX_VENDOR_LIBRARY_NAME=nvidia

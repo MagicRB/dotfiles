@@ -1,8 +1,7 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }@ rpkgs:
-{ config, lib, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, lib, ... }:
 {
-  imports = rlib.callModules rpkgs [
+  imports = [
     ./xresources
   ];
 

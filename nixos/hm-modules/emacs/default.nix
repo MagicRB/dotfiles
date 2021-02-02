@@ -1,10 +1,9 @@
-inputs:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, rlib }:
-{ config, lib, pkgs, ... }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ config, lib, ... }:
 {
-  home.packages = with custom; [
+  home.packages = if hostname != "edge" then with custom; [
     emacs
-  ] ++ (with nixpkgs; [
+  ] else with nixpkgs; [ emacs ] ++ (with nixpkgs; [
     fira-code
   ]);
 
