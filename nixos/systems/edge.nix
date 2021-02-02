@@ -6,8 +6,8 @@
 
   modules = [
     # ../hm-modules/emacs
-    (_: _: {
-      home.packages = [ ];
+    ({ nixpkgs, ... }: _: {
+      home.packages = [ nixpkgs.emacs ];
       home.stateVersion = "20.09";
     })
   ];
