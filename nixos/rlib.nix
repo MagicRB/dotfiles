@@ -123,6 +123,13 @@ let
     in
       fetchedModule;# (args // { pkgs = pkgs.nixpkgs; })
 
+  loadHomeConfiguration =
+    { configuration, pkgs, custom, hostname }:
+    lib.mapAttrs
+      (n: v: callModule {
+        inherit hostname pkgs custom;
+      } v) configuration;
+
   callCompatModules =
     modules:
 
@@ -146,52 +153,80 @@ let
 in {
   inherit callHalfFlake moduleFlakes callCompatModules substitute;
 
-  nixosSystem = { cross ? null,
-                  system,
-                  config ? {},
-                  modules ? [],
-                  compatModules ? [],
-                  hm ? null,
-                  hostname,
-                  check ? true }:
-                    let
-                      loadedPkgs =
-                        loadNixpkgs
-                          { inherit cross system; }
-                          { inherit pkgs config; };
-                      loadedCustoms =
-                        loadCustoms system custom;
-                    in nixosSystem {
-                      inherit check system;
+  nixosSystem =
+    { cross ? null,
+      system,
+      config ? {},
+      modules ? [],
+      compatModules ? [],
+      hm ? null,
+      hostname,
+      check ? true
+    }:
+    let
+      loadedPkgs =
+        loadNixpkgs
+          { inherit cross system; }
+          { inherit pkgs config; };
+      loadedCustoms =
+        loadCustoms system custom;
+    in nixosSystem {
+      inherit check system;
 
-                      # pkgs = loadedPkgs.nixpkgs;
+      # pkgs = loadedPkgs.nixpkgs;
 
-                      modules = (callModules {
-                        inherit hostname;
-                        pkgs = loadedPkgs;
-                        custom = loadedCustoms;
-                      } modules) ++ (callCompatModules compatModules)
-                      ++
-                      [({ ... }: {
-                        nixpkgs.config = config;
-                      })]
-                      ++
-                      (if hm != null then
-                        [ home-manager.nixosModules.home-manager
-                          ({ config, ... }:
-                            {
-                              home-manager.useGlobalPkgs = true;
-                              home-manager.useUserPackages = true;
+      modules = (callModules {
+        inherit hostname;
+        pkgs = loadedPkgs;
+        custom = loadedCustoms;
+      } modules) ++ (callCompatModules compatModules)
+      ++
+      [({ ... }: {
+        nixpkgs.config = config;
+      })]
+      ++
+      (if hm != null then
+        [ home-manager.nixosModules.home-manager
+          ({ config, ... }:
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
 
-                              home-manager.users = lib.mapAttrs
-                                (n: v: callModule {
-                                  inherit hostname;
-                                  pkgs = loadedPkgs;
-                                  custom = loadedCustoms;
-                                } v) hm;
-                            })
-                        ]
-                       else
-                         []);
-                    };
+              home-manager.users = loadHomeConfiguration hm;
+            })
+        ]
+       else
+         []);
+    };
+  homeManagerConfiguration =
+    { cross ? null,
+      system,
+      username,
+      homeDirectory,
+      config ? {},
+      modules ? [],
+      compatModules ? [],
+      hostname
+    }:
+    let
+      loadedPkgs =
+        loadNixpkgs
+          { inherit cross system; }
+          { inherit pkgs config; };
+      loadedCustoms =
+        loadCustoms system custom;
+    in homeManagerConfiguration {
+      inherit system username homeDirectory;
+
+      pkgs = loadedPkgs.nixpkgs;
+
+      configuration = _: {
+        imports = (callModules {
+          inherit hostname;
+          pkgs = loadedPkgs;
+          custom = loadedCustoms;
+        } modules)
+        ++ (callCompatModules compatModules);
+      };
+    };
 }

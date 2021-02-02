@@ -83,7 +83,7 @@
       heater = rlib.nixosSystem (import ./systems/heater.nix inputs);
       mark = rlib.nixosSystem (import ./systems/mark.nix inputs);
 
-      edge = rlib.nixosSystem import ./systems/edge.nix;
+      edge = rlib.homeManagerConfiguration (import ./systems/edge.nix);
     in {
       nixosConfigurations.omen = omen;
       omen = omen.config.system.build.toplevel;
