@@ -59,6 +59,7 @@
           emacsclient-remote = callHalfFlake ./packages/emacsclient-remote;
           enter-env = callHalfFlake ./packages/enter-env;
           screenshot = callHalfFlake ./packages/screenshot;
+          multimc-devel = callHalfFlake ./packages/multimc-devel;
           rust =
             system:
             let
@@ -84,6 +85,8 @@
       mark = rlib.nixosSystem (import ./systems/mark.nix inputs);
 
       edge = rlib.homeManagerConfiguration (import ./systems/edge.nix);
+
+      baseContainer = rlib.nixosSystem (import ./systems/base-container.nix);
     in {
       nixosConfigurations.omen = omen;
       omen = omen.config.system.build.toplevel;
@@ -94,6 +97,7 @@
       nixosConfigurations.mark = mark;
       mark = mark.config.system.build.toplevel;
 
+      baseContainer = baseContainer.config.system.build.toplevel;
 
       homeConfigurations.edge = edge;
       edge = edge.activationPackage;

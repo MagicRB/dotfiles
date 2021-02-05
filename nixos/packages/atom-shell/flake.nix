@@ -1,14 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs";
-    atom = {
-      url = "github:adam-mcdaniel/atom";
-      flake = false;
-    };
-    nixpkgs-mozilla = {
-      url = "github:mozilla/nixpkgs-mozilla";
-      flake = false;
-    };
+    # Omitted, not a flake...
   };
 
   outputs = { self, nixpkgs, atom, nixpkgs-mozilla }: 

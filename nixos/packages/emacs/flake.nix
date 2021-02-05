@@ -1,20 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs";
-    nixpkgs-unstable.url = "nixpkgs-unstable";
-
-    emacs-overlay.url = "git+https://github.com/nix-community/emacs-overlay";
-    emacs = {
-      type = "git";
-      #url = "https://git.savannah.gnu.org/git/emacs.git";
-      url = "github.com:flatwhatson/emacs?ref=pgtk-nativecomp";
-      #ref = "feature/native-comp";
-      flake = false;
-    };
-    vtermModule = {
-      url = "git+https://github.com/akermu/emacs-libvterm";
-      flake = false;
-    };
+    # Omitted, not a flake...
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, ... }@inputs:

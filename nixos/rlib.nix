@@ -192,7 +192,12 @@ in {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
 
-              home-manager.users = loadHomeConfiguration hm;
+              home-manager.users = loadHomeConfiguration
+                { pkgs = loadedPkgs;
+                  custom = loadedCustoms;
+                  inherit hostname;
+                  configuration = hm;
+                };
             })
         ]
        else

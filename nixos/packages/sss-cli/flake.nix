@@ -1,9 +1,6 @@
 {
   inputs = {
-    sss-cli = {
-      flake = false;
-      url = "github:dsprenkels/sss-cli";
-    };
+    # Omitted, not a flake...
   };
 
   outputs = { self, nixpkgs, sss-cli, ... }@inputs:

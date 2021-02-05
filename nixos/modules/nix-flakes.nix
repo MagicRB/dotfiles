@@ -2,7 +2,7 @@
 { config, ... }:
 {
   nix = let
-    nix = nixpkgs.nixFlakes;
+    nix = nixpkgs-master.nixFlakes;
   in {
     package = nix; 
     extraOptions = ''

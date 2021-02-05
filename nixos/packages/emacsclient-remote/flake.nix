@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "nixpkgs";
+    # Omitted, not a flake...
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

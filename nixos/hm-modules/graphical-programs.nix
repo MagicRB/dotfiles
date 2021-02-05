@@ -11,5 +11,7 @@
     mpv
     nixpkgs.freecad
     inkscape
+
+    custom.multimc-devel
   ];
 }
