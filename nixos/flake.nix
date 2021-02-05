@@ -85,6 +85,7 @@
       mark = rlib.nixosSystem (import ./systems/mark.nix inputs);
 
       edge = rlib.homeManagerConfiguration (import ./systems/edge.nix);
+      blowhole = rlib.homeManagerConfiguration (import ./systems/blowhole.nix);
 
       baseContainer = rlib.nixosSystem (import ./systems/base-container.nix);
     in {
@@ -101,5 +102,8 @@
 
       homeConfigurations.edge = edge;
       edge = edge.activationPackage;
+
+      homeConfigurations.blowhole = blowhole;
+      blowhole = blowhole.activationPackage;
     };
 }
