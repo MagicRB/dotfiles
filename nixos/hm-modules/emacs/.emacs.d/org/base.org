@@ -7,6 +7,7 @@
 *** TODO Org Agenda
 **** Make it work on my phone
 *** TODO Org Roam
+*** org-evil moving stuff, left, right with M-j M-; instead of M-h M-l
 ** Stuff  
 
    #+NAME: base
@@ -101,8 +102,7 @@
       (with-eval-after-load 'hydra
 	(defun magic_rb/unload-all-themes ()
 	  "Unloads all themes."
-	  (mapc #'disable-theme custom-enabled-themes)
-	  (solaire-global-mode +1))
+	  (mapc #'disable-theme custom-enabled-themes))
 
 	(advice-add 'load-theme :before #'(lambda (orig-fun &rest args) (magic_rb/unload-all-themes)))
 	(advice-add 'load-theme :after #'(lambda (orig-fun &rest args) (magic_rb/apply-fonts)))
@@ -147,15 +147,6 @@
 	(load-theme 'doom-one t))
     #+END_SRC
 
-    Enable ~solaire-mode~, it makes a window a bit darker  TODO.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package solaire-mode
-	:straight t
-	:init
-	(solaire-mode 1))
-    #+END_SRC
-    
 *** Dashboard
     
     Enable the Emacs dashboard, pretty much useless but much better looking than the default. And the jokes are
@@ -762,12 +753,13 @@
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'org-latex-packages-alist
 		  '("" "tikz" t)
-		  '("" "bytefield" t))
+		  '("" "bytefield" t)
+		  '("" "gensymb" t))
 
      (eval-after-load "preview"
        '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
 
-     (setq org-latex-create-formula-image-program 'imagemagick)
+     (setq org-latex-create-formula-image-program 'dvipng)
    #+END_SRC
    
    Install =org-fragtop=, it will automatically toggle previews for LaTex segments under point.
