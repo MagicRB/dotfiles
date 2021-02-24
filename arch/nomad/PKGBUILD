@@ -3,7 +3,7 @@
 # Contributor: Wojtek Gawroński <afronski@gmail.com>
 
 pkgname=nomad
-pkgver=1.0.1
+pkgver=1.0.3
 pkgrel=1
 pkgdesc='A distributed, highly available, datacenter-aware scheduler'
 arch=('x86_64' 'i686' 'armv7h' 'aarch64')

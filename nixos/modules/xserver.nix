@@ -14,7 +14,7 @@
       defaultSession = "none+i3";
     };
     
-    videoDrivers = [ "nvidiaBeta" ];
+    videoDrivers = [ "nvidia" ];
     libinput.enable = true;
   };
 

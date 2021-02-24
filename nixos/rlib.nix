@@ -17,6 +17,9 @@ let
     in
       outputs;
 
+  callHalfFlakes = flakes:
+    lib.mapAttrs' (n: v: lib.nameValuePair n (callHalfFlake v)) flakes;
+
   moduleFlake = module: flake:
     (callHalfFlake flake).nixosModules."${module}";
   moduleFlakes = flakes:
@@ -151,7 +154,7 @@ let
         '');
 
 in {
-  inherit callHalfFlake moduleFlakes callCompatModules substitute;
+  inherit callHalfFlake callHalfFlakes moduleFlakes callCompatModules substitute;
 
   nixosSystem =
     { cross ? null,

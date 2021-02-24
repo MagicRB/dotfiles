@@ -13,8 +13,13 @@ inputs: {
       time.timeZone = "Europe/Bratislava";
       system.stateVersion = "20.09";
 
-      environment.systemPackages = [
-        nixpkgs.gnupg
+      environment.systemPackages = with nixpkgs; [
+        gnupg
+        pinentry
+        openssl
+        paperkey
+        monkeysphere
+      ] ++ [
         custom.sss-cli
       ];
     })

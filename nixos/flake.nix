@@ -47,19 +47,22 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     with inputs; let
+      halfFlakes = rlib.callHalfFlakes {
+          sss-cli = ./packages/sss-cli;
+          atom-shell = ./packages/atom-shell;
+          emacs = ./packages/emacs;
+          emacsclient-remote = ./packages/emacsclient-remote;
+          enter-env = ./packages/enter-env;
+          screenshot = ./packages/screenshot;
+          multimc-devel = ./packages/multimc-devel;
+          concourse = ./packages/concourse-ci;
+      };
       rlib = import ./rlib.nix {
         inherit nixpkgs home-manager inputs;
         pkgs = {
           inherit nixpkgs nixpkgs-unstable nixpkgs-master;
         };
         custom = with rlib; {
-          sss-cli = callHalfFlake ./packages/sss-cli;
-          atom-shell = callHalfFlake ./packages/atom-shell;
-          emacs = callHalfFlake ./packages/emacs;
-          emacsclient-remote = callHalfFlake ./packages/emacsclient-remote;
-          enter-env = callHalfFlake ./packages/enter-env;
-          screenshot = callHalfFlake ./packages/screenshot;
-          multimc-devel = callHalfFlake ./packages/multimc-devel;
           rust =
             system:
             let
@@ -69,7 +72,7 @@
               };
             in
               rustyPkgs.rust-bin;
-        };
+        } // halfFlakes;
         self = rlib;
       };
 
@@ -105,5 +108,5 @@
 
       homeConfigurations.blowhole = blowhole;
       blowhole = blowhole.activationPackage;
-    };
+    } // halfFlakes;
 }

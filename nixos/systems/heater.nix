@@ -14,12 +14,15 @@ inputs: {
     ../profiles/workstation.nix
     (import ../modules/pin-nixpkgs.nix inputs)
     ../users/main.nix
+    ../modules/nvidia-5.11-patch.nix
   ] ++ [
     (_: _: {
       networking = {
         hostName = "heater";
         useDHCP = false;
         interfaces.enp3s0.useDHCP = true;
+
+        firewall.enable = false;
       };
 
       time.timeZone = "Europe/Bratislava";

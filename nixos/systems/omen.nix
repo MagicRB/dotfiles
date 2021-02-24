@@ -17,6 +17,7 @@ inputs: {
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     })
+    ../modules/nvidia-5.11-patch.nix
   ] ++ [
     (_: _: {
       networking = {

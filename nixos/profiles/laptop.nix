@@ -5,7 +5,9 @@
   hardware.bluetooth.enable = true;
   networking.networkmanager.enable = true;
 
-  environment.systemPackages = with nixpkgs; [ libglvnd ];
+  environment.systemPackages = with nixpkgs; [
+    libglvnd
+  ];
  
   imports = [
     ./workstation.nix

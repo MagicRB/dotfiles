@@ -18,7 +18,7 @@ in {
     initrd.kernelModules = [ "dm-snapshot" ];
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
-    kernelPackages = nixpkgs-unstable.linuxPackages_latest;
+    kernelPackages = nixpkgs-unstable.linuxPackages_testing;
   };
 
   powerManagement.cpuFreqGovernor = nixpkgs.lib.mkDefault "performance";

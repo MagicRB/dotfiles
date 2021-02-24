@@ -79,11 +79,11 @@
                     
                     w3m
                     sqlite
-		    gcc
+		                gcc
 
                     ghostscript
                     imagemagick
-                    (texlive.combine { inherit (texlive) scheme-small preview siunitx amsmath ulem dvipng wrapfig cancel capt-of bytefield; })
+                    (texlive.combine { inherit (texlive) dvisvgm scheme-small preview siunitx amsmath ulem dvipng wrapfig cancel capt-of bytefield; })
                     texlab
 
                     (rWrapper.override { packages = []; })
