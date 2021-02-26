@@ -13,27 +13,38 @@
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
+    supportedFilesystems = [ "zfs" ];
+    kernelPackages = nixpkgs-unstable.linuxPackages_latest;
   };
 
   hardware.enableRedistributableFirmware = true;
 
-  powerManagement.cpuFreqGovernor = nixpkgs.lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = nixpkgs.lib.mkDefault "schedutil";
 
   fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-uuid/bfdcd9bc-c5bb-424a-a110-20fab4b97f6d";
-      fsType = "btrfs";
-      options = [ "subvol=nixos" ];
-    };
+    "/" =
+      { device = "omen-zpool/root";
+        fsType = "zfs";
+      };
 
-    "/btrfs" = {
-      device = "/dev/disk/by-uuid/bfdcd9bc-c5bb-424a-a110-20fab4b97f6d";
-      fsType = "btrfs";
-      options = [ "subvol=/" ];
-    };
+    "/home" =
+      { device = "omen-zpool/root/home";
+        fsType = "zfs";
+      };
+
+    "/nix" =
+      { device = "omen-zpool/root/nix";
+        fsType = "zfs";
+      };
+
+    "/boot/efi" =
+      { device = "/dev/disk/by-partlabel/boot-WL157385";
+        fsType = "vfat";
+      };
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/9dca362e-43be-4f27-81bc-6bb7a244a7ae"; }
+    { device = "/dev/disk/by-partlabel/swap-WL157385"; }
   ];
 }
+  

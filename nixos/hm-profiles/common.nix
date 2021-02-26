@@ -1,10 +1,11 @@
+{ multimc5 ? false
+, wine ? false
+, _3dPrinting ? false }:
 { nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
 { config, lib, ... }: {
   home.packages = [
-    # custom.enter-env
     nixpkgs-unstable.nomad_1_0
     custom.sss-cli
-    custom.enter-env
 
   ] ++ (with nixpkgs; [
     fira-code
@@ -31,5 +32,8 @@
 
     ../hm-modules/urxvt.nix
     ../hm-modules/xmonad
-  ];
+  ]
+  ++ (lib.optionals multimc5 [ ../hm-modules/multimc.nix ])
+  ++ (lib.optionals wine [ ../hm-modules/wine.nix ])
+  ++ (lib.optionals _3dPrinting [ ../hm-modules/3d-printing.nix ]);
 }

@@ -27,12 +27,17 @@ inputs: {
         interfaces.enp3s0.useDHCP = true;
 
         firewall.enable = false;
+        hostId = "3457b383";
       };
 
       time.timeZone = "Europe/Bratislava";
       system.stateVersion = "20.09";
 
       virtualisation.docker.enable = true;
+      boot = {
+        supportedFilesystems = [ "zfs" ];
+        zfs.enableUnstable = true;
+      };
     })
   ];
 
