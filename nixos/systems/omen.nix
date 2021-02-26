@@ -28,6 +28,7 @@ inputs: {
         hostName = "omen";
         useDHCP = false;
         interfaces.eno1.useDHCP = true;
+        hostId = "10c7ffc5";
       };
 
       time.timeZone = "Europe/Bratislava";
