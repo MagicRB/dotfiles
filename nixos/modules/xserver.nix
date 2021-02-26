@@ -5,13 +5,12 @@
     enable = true;
 
     windowManager = {
-      i3.enable = true;
       xmonad.enable = true;
       xmonad.enableContribAndExtras = true;
     };
 
     displayManager = {
-      defaultSession = "none+i3";
+      defaultSession = "none+xmonad";
     };
     
     videoDrivers = [ "nvidia" ];
