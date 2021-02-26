@@ -141,7 +141,7 @@ let
     ) modules;
 
 
-  substitute = runCommand: name: inFile: vars: 
+  substitute = { runCommand, name, inFile, vars }: 
     runCommand name {}
       (let
         varsStr = lib.mapAttrsToList

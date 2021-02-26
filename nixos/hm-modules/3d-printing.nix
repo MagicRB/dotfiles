@@ -2,12 +2,12 @@
 { config, lib, ... }:
 {
   home.packages = with nixpkgs; [
-    gimp
-    steam
-    firefox
-    scrot
-    xclip
-    discord
-    mpv
+    freecad
+    openscad
+    cura
+    inkscape
+    
+  ] ++ [
+    nixpkgs-unstable.prusa-slicer
   ];
 }

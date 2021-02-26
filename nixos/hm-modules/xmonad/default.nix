@@ -7,11 +7,14 @@
     dejavu_fonts
   ];
 
-  home.file.".xmonad/xmonad.hs".source = let
+  home.file.".xmonad/xmonad.hs".source = rlib.substitute {
+    runCommand = nixpkgs.runCommandNoCCLocal;
+    name = "xmonad.hs";
+    inFile = ./xmonad.hs;
     vars = {
       xmobar = "${nixpkgs.xmobar}/bin/xmobar";
       xmobarConfig = ./xmobarrc;
       screenshot = "${custom.screenshot}/bin/screenshot";
     };
-  in with rlib; substitute nixpkgs.runCommandNoCCLocal "xmonad.hs" ./xmonad.hs vars;
+  };
 }

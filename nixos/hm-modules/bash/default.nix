@@ -6,6 +6,14 @@
   ];
     
   home.file = {
-    ".bashrc".source = ./.bashrc;
+    ".bashrc".source = rlib.substitute {
+      runCommand = nixpkgs.runCommandNoCC;
+      inFile = ./.bashrc;
+      name = ".bashrc";
+      vars = {
+        "exa" = "${nixpkgs.exa}";
+        "bat" = "${nixpkgs.bat}";
+      };
+    };
   };
 }

@@ -7,7 +7,11 @@ inputs: {
     allowUnfree = true;
   };
 
-  hm."main" = import ../hm-profiles/common.nix;
+  hm."main" = import ../hm-profiles/common.nix {
+    multimc5 = true;
+    wine = true;
+    _3dPrinting = true;
+  };
 
   modules = [
     ../hardware/heater.nix

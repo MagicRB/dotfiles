@@ -7,7 +7,11 @@ inputs: {
     allowUnfree = true;
   };
 
-  hm."main" = import ../hm-profiles/common.nix;
+  hm."main" = import ../hm-profiles/common.nix {
+    multimc5 = false;
+    wine = false;
+    _3dPrinting = false;
+  };
 
   modules = [
     ../hardware/omen.nix

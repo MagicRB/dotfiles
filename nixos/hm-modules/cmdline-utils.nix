@@ -13,16 +13,13 @@
     pinentry
     libqrencode
     unrar
-    exa
-    bat
     pciutils
     git
     socat
     gnumake
-    hugo
     llvmPackages.bintools
-    pkgconfig
-    nixpkgs-unstable.wineWowPackages.staging
-    winetricks
-  ];
+    pkgconfig 
+  ] ++ (with custom; [
+    screenshot
+  ]);
 }

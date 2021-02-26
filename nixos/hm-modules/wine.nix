@@ -2,12 +2,8 @@
 { config, lib, ... }:
 {
   home.packages = with nixpkgs; [
-    gimp
-    steam
-    firefox
-    scrot
-    xclip
-    discord
-    mpv
-  ];
+    winetricks
+  ] ++ (with nixpkgs-unstable; [
+    wineWowPackages.staging
+  ]);
 }

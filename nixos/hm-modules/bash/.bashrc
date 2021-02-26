@@ -11,8 +11,8 @@
 alias grep='grep --color=auto'
 
 ## Replace ls and cat with exa and bat respectively
-alias ls='exa'
-alias cat='bat'
+alias ls='@exa@/bin/exa'
+alias cat='@bat@/bin/bat'
 
 ## Add .local/bin to path
 #export PATH="${HOME}/.local/bin:${PATH}"
