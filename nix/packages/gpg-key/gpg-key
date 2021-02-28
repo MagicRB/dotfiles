@@ -1,24 +1,35 @@
-#!/bin/bash
+ # -*- mode: shell-script; -*- 
 
 command="$1"
 
-[ "$(id -u)" -e "0" ] || echo "You must this script as root." && exit 1
+if [ "$(id -u)" != "0" ]
+then
+    echo "You must this script as root."
+    exit 1 
+fi
 
+set -e
 case "$command" in
      "open")
 	 @cryptsetup@ open /dev/disk/by-label/secret secret
-	 @mount@ /dev/mapper/secret /mnt/key
-
 	 @mkdir@ -p /mnt/key
+
+	 mount /dev/mapper/secret /mnt/key
      ;;
      "close")
-	 @umount@ /mnt/key
+	 umount /mnt/key
 	 @cryptsetup@ close secret
 
 	 @rm@ -r /mnt/key
-	 @ls@ -A /mnt || @rm@ -r /mnt
+	 if [ -n "$(find /mnt -maxdepth 0 -empty)" ]
+	 then
+	     @rm@ -r /mnt
+	 fi
      ;;
-     "*")
-
+     *)
+	 cat <<EOF
+open - open key
+close - close key
+EOF
      ;;
 esac

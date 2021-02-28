@@ -6,6 +6,6 @@
   ];
 
   home.activation.gnupghome = config.lib.dag.entryAfter ["writeBoundary"] ''
-    ln -s /mnt/key/.gnupg ~/.gnupg
+    ln -sf /mnt/key/gnupg ~/.gnupg
   '';
 }

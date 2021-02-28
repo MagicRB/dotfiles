@@ -14,8 +14,6 @@
 
   home.stateVersion = "20.09";
 
-  programs.gpg.enable = true;
-
   imports = [
     ../modules/alacritty
     ../modules/bash
@@ -32,6 +30,8 @@
 
     ../modules/urxvt.nix
     ../modules/xmonad
+
+    ../modules/gpg.nix
   ]
   ++ (lib.optionals multimc5 [ ../modules/multimc.nix ])
   ++ (lib.optionals wine [ ../modules/wine.nix ])

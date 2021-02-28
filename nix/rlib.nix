@@ -13,7 +13,7 @@ let
   callHalfFlake = flakeSrc:
     let
       flake = import (flakeSrc + "/flake.nix");
-      outputs = flake.outputs ( inputs // { self = outputs; });
+      outputs = flake.outputs ( inputs // { self = outputs; rlib = self; });
     in
       outputs;
 

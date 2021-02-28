@@ -56,6 +56,7 @@
           screenshot = ./packages/screenshot;
           multimc-devel = ./packages/multimc-devel;
           concourse = ./packages/concourse-ci;
+          gpg-key = ./packages/gpg-key;
       };
       rlib = import ./rlib.nix {
         inherit nixpkgs home-manager inputs;

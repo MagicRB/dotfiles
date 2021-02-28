@@ -1,4 +1,4 @@
-#!/bin/sh
+ # -*- mode: shell-script; -*- 
 
 OPT="${1:-screen}"
 
