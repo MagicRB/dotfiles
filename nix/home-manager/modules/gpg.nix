@@ -12,6 +12,10 @@
     enableSshSupport = true;
   };
 
+  home.file.".profile".text = ''
+     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+  '';
+
   home.activation.gnupghome = config.lib.dag.entryAfter ["writeBoundary"] ''
     if [ ! -e ~/.gnupg ]
     then
