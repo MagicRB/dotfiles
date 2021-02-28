@@ -3,9 +3,19 @@
 {
   home.packages = [
     custom.gpg-key
+    nixpkgs.gnupg
   ];
 
+  services.gpg-agent = {
+    pinentryFlavor = "gtk2";
+    enable = true;
+    enableSshSupport = true;
+  };
+
   home.activation.gnupghome = config.lib.dag.entryAfter ["writeBoundary"] ''
-    ln -sf /mnt/key/gnupg ~/.gnupg
+    if [ ! -e ~/.gnupg ]
+    then
+        ln -sf /mnt/key/gnupg ~/.gnupg
+    fi
   '';
 }
