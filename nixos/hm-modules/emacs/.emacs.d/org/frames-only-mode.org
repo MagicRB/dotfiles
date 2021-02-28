@@ -1,7 +1,0 @@
-* Frames Only Mode
-  #+BEGIN_SRC emacs-lisp
-    (use-package frames-only-mode
-      :straight t
-      :config
-      (frames-only-mode))
-  #+END_SRC

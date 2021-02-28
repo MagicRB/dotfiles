@@ -1,0 +1,73 @@
+* EXVM
+** Moving workspace
+   Theoretically it's possible to move workspace N to monitor M, by binding \s-C-[0-9], like many people do in i3. All that needs to be done is that a suitable plist needs to be build:
+
+   #+NAME: workspace-plist
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (setq exwm-randr-workspace-output-plist `(1 "HDMI-0" 2 "HDMI-1" 3 "HDMI-1"))
+   #+END_SRC
+
+   And then this function must be called for EXWM to pick up any changes made
+
+   #+NAME: 
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (exwm-randr-refresh)
+   #+END_SRC
+
+** Autostart
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (call-interactively '(lambda (command)
+			    (interactive (list (read-shell-command "$ ")))
+			    (message "%s" command)
+			    (apply 'start-process (nth 0 command) nil (nth 0 command) '(nthcdr 1 command))))
+   #+END_SRC
+   
+   #+NAME: exwm
+   #+BEGIN_SRC emacs-lisp :noweb yes
+     (if (string= (getenv "EXWM") "1")
+	 (use-package exwm
+	   :straight t
+	   :after hydra
+	   :init
+	   (require 'exwm-config)
+	   (exwm-config-default)
+	   (require 'exwm-randr)
+	   (setq exwm-randr-workspace-output-plist '(0 "HDMI-0" 1 "HDMI-0" 2 "HDMI-1"))
+	   (add-hook 'exwm-randr-screen-change-hook
+	   	  (lambda ()
+	   	    (start-process-shell-command
+	   	     "xrandr" nil "xrandr --output HDMI-1 --right-of HDMI-0 --auto")))
+
+	   (setq exwm-input-global-keys
+		 `(([?\s-r] . exwm-reset)
+		   ([?\s-w] . exwm-workspace-switch)
+		   ,@(mapcar (lambda (i)
+			       `(,(kbd (format "s-%d" i)) .
+				 (lambda ()
+				   (interactive)
+				   (exwm-workspace-switch-create ,i))))
+			     (number-sequence 0 9))
+		   ([?\s-\)] . (lambda () (nteractive) (exwm-workspace-move-window 0)))
+		   ([?\s-!] . (lambda () (interactive) (exwm-workspace-move-window 1)))
+		   ([?\s-@] . (lambda () (interactive) (exwm-workspace-move-window 2)))
+		   ([?\s-#] . (lambda () (interactive) (exwm-workspace-move-window 3)))
+		   ([?\s-$] . (lambda () (interactive) (exwm-workspace-move-window 4)))
+		   ([?\s-%] . (lambda () (interactive) (exwm-workspace-move-window 5)))
+		   ([?\s-^] . (lambda () (interactive) (exwm-workspace-move-window 6)))
+		   ([?\s-&] . (lambda () (interactive) (exwm-workspace-move-window 7)))
+		   ([?\s-8] . (lambda () (interactive) (exwm-workspace-move-window 8)))
+		   ([?\s-*] . (lambda () (interactive) (exwm-workspace-move-window 9)))
+		   ([<print>] . (call-process-shell-command "screenshot select &" nil 0))
+		   ([?\s-d] . (lambda (command)
+				(interactive (list (read-shell-command "$ ")))
+				(message "%s" command)
+				(start-process-shell-command command nil command)))))
+	   ;; Make focus follow mouse
+	   ;;(setq mouse-autoselect-window t
+	   ;;      focus-follows-mouse t)
+
+	   (setq exwm-workspace-number 3)
+
+	   (exwm-randr-enable)
+	   ))
+   #+END_SRC

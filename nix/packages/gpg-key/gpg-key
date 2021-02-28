@@ -1,0 +1,24 @@
+#!/bin/bash
+
+command="$1"
+
+[ "$(id -u)" -e "0" ] || echo "You must this script as root." && exit 1
+
+case "$command" in
+     "open")
+	 @cryptsetup@ open /dev/disk/by-label/secret secret
+	 @mount@ /dev/mapper/secret /mnt/key
+
+	 @mkdir@ -p /mnt/key
+     ;;
+     "close")
+	 @umount@ /mnt/key
+	 @cryptsetup@ close secret
+
+	 @rm@ -r /mnt/key
+	 @ls@ -A /mnt || @rm@ -r /mnt
+     ;;
+     "*")
+
+     ;;
+esac
