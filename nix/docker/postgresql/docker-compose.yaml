@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  postgresql:
+    image: postgresql:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/data/postgresql
