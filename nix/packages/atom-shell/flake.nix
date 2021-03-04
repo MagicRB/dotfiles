@@ -3,10 +3,8 @@
     # Omitted, not a flake...
   };
 
-  outputs = { self, nixpkgs, atom, nixpkgs-mozilla }: 
+  outputs = { self, nixpkgs, atom, nixpkgs-mozilla, rlib, .. }: 
     let
-      supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
       cargoLock = ./Cargo.lock;
       rustChannelsOverlay = import "${nixpkgs-mozilla}/rust-overlay.nix";
     in
