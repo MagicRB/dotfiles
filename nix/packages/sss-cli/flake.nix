@@ -3,11 +3,8 @@
     # Omitted, not a flake...
   };
 
-  outputs = { self, nixpkgs, sss-cli, ... }@inputs:
-    let
-      supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
-    in {
+  outputs = { self, nixpkgs, sss-cli, rlib, ... }@inputs:
+    {
       overlay = system: final: prev:
         let
           pkgs = import nixpkgs { inherit system; };
@@ -22,7 +19,7 @@
             };
           };
       
-      defaultPackage = forAllSystems (system: (import nixpkgs {
+      defaultPackage = rlib.forAllSystems (system: (import nixpkgs {
         inherit system;
         overlays = [ (self.overlay system) ];
       }).sss-cli);

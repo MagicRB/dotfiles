@@ -27,6 +27,12 @@
       url = "github:dsprenkels/sss-cli";
     };
 
+    ## yarn2nix
+    yarn2nix = {
+      flake = false;
+      url = "github:Profpatsch/yarn2nix";
+    };
+
     ## Emacs
     emacs-overlay = {
       url = "git+https://github.com/nix-community/emacs-overlay";
@@ -57,6 +63,7 @@
           multimc-devel = ./packages/multimc-devel;
           concourse = ./packages/concourse-ci;
           gpg-key = ./packages/gpg-key;
+          yarn2nix = ./packages/yarn2nix;
       };
       rlib = import ./rlib.nix {
         inherit nixpkgs home-manager inputs;
@@ -75,6 +82,7 @@
               rustyPkgs.rust-bin;
         } // halfFlakes;
         self = rlib;
+        supportedSystems = [ "x86_64-linux" "i386-linux" "aarch64-linux" ];
       };
 
       rmodules = {
@@ -90,6 +98,8 @@
 
       edge = rlib.homeManagerConfiguration (import ./systems/edge.nix);
       blowhole = rlib.homeManagerConfiguration (import ./systems/blowhole.nix);
+
+      recoveryUsb = rlib.nixosSystem (import ./systems/recovery-usb.nix inputs);
     in {
       nixosConfigurations.omen = omen;
       omen = omen.config.system.build.toplevel;
@@ -105,5 +115,13 @@
 
       homeConfigurations.blowhole = blowhole;
       blowhole = blowhole.activationPackage;
+
+      recoveryUsb = recoveryUsb.config.system.build.isoImage;
+
+      dockerImages = rlib.dockerImages {
+        concourse = ./docker/concourse;
+        gitea = ./docker/gitea;
+        postgresql = ./docker/postgresql;
+      }; 
     } // halfFlakes;
 }

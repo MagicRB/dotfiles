@@ -3,6 +3,7 @@
   inputs,
   pkgs,
   custom,
+  supportedSystems,
   self
 }@ args:
 let
@@ -153,8 +154,39 @@ let
           ${builtins.concatStringsSep " " varsStr}
         '');
 
+  callDocker =
+    { pkgs, custom }:
+    docker: 
+    let
+      fetchedModule =
+        (if builtins.isFunction docker then
+          docker
+         else
+           import docker);
+    in
+      (fetchedModule (pkgs // { inherit custom; rlib = self; }));
+
+  forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
 in {
-  inherit callHalfFlake callHalfFlakes moduleFlakes callCompatModules substitute;
+  inherit callHalfFlake callHalfFlakes moduleFlakes callCompatModules substitute forAllSystems;
+
+  dockerImages =
+    images:
+    forAllSystems (system: 
+      lib.mapAttrs
+        (_: value:
+          let
+            loadedPkgs =
+              loadNixpkgs
+                { inherit system; cross = null; }  # TODO really disable cross?
+                { inherit pkgs; config = {}; };  # TODO handle config
+            loadedCustoms =
+              loadCustoms system custom; # TODO handle config
+          in 
+            callDocker {
+              pkgs = loadedPkgs;
+              custom = loadedCustoms;
+            } value) images);
 
   nixosSystem =
     { cross ? null,

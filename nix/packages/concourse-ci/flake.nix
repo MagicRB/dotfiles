@@ -3,15 +3,11 @@
     # Omitted, not a flake...
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
-    let
-      supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
-    in
+  outputs = { self, nixpkgs-unstable, rlib, ... }@inputs:
       {
         overlay = system: final: prev:
           let
-            pkgs = import nixpkgs { inherit system; };
+            pkgs = import nixpkgs-unstable { inherit system; };
           in
             {
               concourse = prev.fly.overrideAttrs (old: {
@@ -26,7 +22,7 @@
               });
             };
 
-        defaultPackage = forAllSystems (system: (import nixpkgs {
+        defaultPackage = rlib.forAllSystems (system: (import nixpkgs-unstable {
           inherit system;
           overlays = [ (self.overlay system) ];
         }).concourse);
