@@ -70,6 +70,15 @@ function stop_tmp_server() {
 	  -w stop
 }
 
+# Execute sql script, passed via stdin (or -f flag of pqsl)
+# usage: docker_process_sql [psql-cli-args]
+#    ie: docker_process_sql --dbname=mydb <<<'INSERT ...'
+#    ie: docker_process_sql -f my-file.sql
+#    ie: docker_process_sql <my-file.sql
+process_psql() {
+    PGHOST= PGHOSTADDR= execAs postgres $_prog_postgresql/bin/psql -v ON_ERROR_STOP=1 --username "$_user" --no-password "$@"
+}
+
 export PATH=$_prog_postgresql/bin # I don't like it, but postgres does
 # Intialize database or reset username and password
 if [[ $_db_exists = "1" ]]
@@ -93,21 +102,28 @@ else
     _old_username="$($_prog_busybox/bin/cat $_conf_data/user_save)"
     if [[ "$_old_username" = "$_user" ]]
     then
-	PGDATA=$_conf_data execAs postgres $_prog_postgresql/bin/psql \
-		       -v ON_ERROR_STOP=1 \
-		       --username "$_user" \
-		       --no-password \
-		       "postgres" \
-		       -c "ALTER USER $_user WITH PASSWORD '$_password';"
+	process_psql "postgres" -c "ALTER USER $_user WITH PASSWORD '$_password';"
     else
-	PGDATA=$_conf_data execAs postgres $_prog_postgresql/bin/psql \
-		       -v ON_ERROR_STOP=1 \
-		       --username "$_old_username" \
-		       --no-password \
-		       "postgres" \
-		       -c "CREATE USER $_user; ALTER USER $_user WITH PASSWORD '$_password' AND SUPERUSER; DROP USER $_old_username"
+	process_psql "postgres" -c "CREATE USER $_user; ALTER USER $_user WITH PASSWORD '$_password' AND SUPERUSER; DROP USER $_old_username"
 	echo "$_conf_user" > "$_conf_data/user_save"
     fi
+
+    stop_tmp_server
+fi
+
+if [[ -d /data/scripts ]]
+then
+    start_tmp_server
+
+    for script in /data/scripts/*.sh
+    do
+	(
+	    echo "Running \`$script\`."
+	    export -f process_psql execAs
+	    export PATH=$_prog_bash/bin/:$_prog_busybox/bin/:$_prog_postgresql/bin/ _prog_bash _prog_busybox _prog_postgresql
+	    bash $script
+	)
+    done
 
     stop_tmp_server
 fi

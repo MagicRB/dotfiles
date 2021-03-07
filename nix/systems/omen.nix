@@ -11,6 +11,7 @@ inputs: {
     multimc5 = false;
     wine = false;
     _3dPrinting = false;
+    js-ts = false;
   };
 
   modules = [

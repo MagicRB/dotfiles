@@ -1,0 +1,40 @@
+---
+resources:
+- name: dotfiles-git
+  type: git
+  icon: github
+  source:
+    uri: https://github.com/MagicRB/dotfiles.git
+
+- name: nix-image
+  type: registry-image
+  icon: docker
+  source:
+    repository: magicrb/nix
+    tag: latest
+
+jobs:
+- name: test-build
+  public: true
+  plan:
+    - get: dotfiles-git
+      trigger: true
+      params: { submodules: none }
+    - get: nix-image
+      trigger: false
+    - task: build
+      image: nix-image
+      config:
+        platform: linux
+        inputs:
+          - name: dotfiles-git
+            path: src/
+        run:
+          path: /bin/entrypoint.sh
+          args:
+            - -c
+            - |
+              cd src
+
+              nix --experimental-features 'nix-command flakes' build .#dockerImages.gitea
+              du -hs $(readlink -f result)

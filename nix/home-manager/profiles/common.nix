@@ -1,6 +1,7 @@
 { multimc5 ? false
 , wine ? false
-, _3dPrinting ? false }:
+, _3dPrinting ? false
+, js-ts ? false }:
 { nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
 { config, lib, ... }: {
   home.packages = [
@@ -35,5 +36,6 @@
   ]
   ++ (lib.optionals multimc5 [ ../modules/multimc.nix ])
   ++ (lib.optionals wine [ ../modules/wine.nix ])
-  ++ (lib.optionals _3dPrinting [ ../modules/3d-printing.nix ]);
+  ++ (lib.optionals _3dPrinting [ ../modules/3d-printing.nix ])
+  ++ (lib.optionals js-ts [ ../modules/js-ts.nix ]);
 }

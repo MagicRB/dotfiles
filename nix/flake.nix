@@ -33,6 +33,11 @@
       url = "github:Profpatsch/yarn2nix";
     };
 
+    concourse = {
+      flake = false;
+      url = "github:concourse/concourse";
+    };
+
     ## Emacs
     emacs-overlay = {
       url = "git+https://github.com/nix-community/emacs-overlay";
@@ -53,7 +58,12 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     with inputs; let
-      halfFlakes = rlib.callHalfFlakes {
+      rlib = import ./rlib.nix {
+        inherit nixpkgs home-manager inputs;
+        pkgs = {
+          inherit nixpkgs nixpkgs-unstable nixpkgs-master;
+        };
+        custom = with rlib; {
           sss-cli = ./packages/sss-cli;
           atom-shell = ./packages/atom-shell;
           emacs = ./packages/emacs;
@@ -64,13 +74,6 @@
           concourse = ./packages/concourse-ci;
           gpg-key = ./packages/gpg-key;
           yarn2nix = ./packages/yarn2nix;
-      };
-      rlib = import ./rlib.nix {
-        inherit nixpkgs home-manager inputs;
-        pkgs = {
-          inherit nixpkgs nixpkgs-unstable nixpkgs-master;
-        };
-        custom = with rlib; {
           rust =
             system:
             let
@@ -80,7 +83,7 @@
               };
             in
               rustyPkgs.rust-bin;
-        } // halfFlakes;
+        };
         self = rlib;
         supportedSystems = [ "x86_64-linux" "i386-linux" "aarch64-linux" ];
       };
@@ -122,6 +125,8 @@
         concourse = ./docker/concourse;
         gitea = ./docker/gitea;
         postgresql = ./docker/postgresql;
+        concourse-vault-sidecar = ./docker/concourse-vault-sidecar;
+        nix = (import ./docker/nix inputs);
       }; 
-    } // halfFlakes;
+    } // { halfFlakes = rlib.custom; };
 }

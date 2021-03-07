@@ -11,20 +11,20 @@ let
   nixosSystem = nixpkgs.lib.nixosSystem;
   homeManagerConfiguration = home-manager.lib.homeManagerConfiguration;
 
-  callHalfFlake = flakeSrc:
+  callHalfFlake = { custom-self, flakeSrc }:
     let
       flake = import (flakeSrc + "/flake.nix");
-      outputs = flake.outputs ( inputs // { self = outputs; rlib = self; });
+      outputs = flake.outputs ( inputs // { self = outputs; rlib = self; custom = custom-self; });
     in
       outputs;
 
-  callHalfFlakes = flakes:
-    lib.mapAttrs' (n: v: lib.nameValuePair n (callHalfFlake v)) flakes;
+  callHalfFlakes = { custom-self, flakes }:
+    lib.mapAttrs' (name: flakeSrc: lib.nameValuePair name (callHalfFlake { inherit custom-self flakeSrc; })) flakes;
 
-  moduleFlake = module: flake:
-    (callHalfFlake flake).nixosModules."${module}";
-  moduleFlakes = flakes:
-    lib.mapAttrsToList (n: v: moduleFlake n v) flakes;
+  moduleFlake = { custom-self, module, flake }:
+    (callHalfFlake custom-self flake).nixosModules."${module}";
+  moduleFlakes = { custom-self, flakes }:
+    lib.mapAttrsToList (module: flake: moduleFlake { inherit custom-self module flake; }) flakes;
 
   loadNixpkgs = 
     { cross, system }:
@@ -167,8 +167,12 @@ let
       (fetchedModule (pkgs // { inherit custom; rlib = self; }));
 
   forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+
+  parsedCustom = callHalfFlakes { custom-self = parsedCustom; flakes = custom; };
 in {
   inherit callHalfFlake callHalfFlakes moduleFlakes callCompatModules substitute forAllSystems;
+
+  custom = parsedCustom;
 
   dockerImages =
     images:
@@ -181,7 +185,7 @@ in {
                 { inherit system; cross = null; }  # TODO really disable cross?
                 { inherit pkgs; config = {}; };  # TODO handle config
             loadedCustoms =
-              loadCustoms system custom; # TODO handle config
+              loadCustoms system (callHalfFlakes { custom-self = loadedCustoms; flakes = custom; }); # TODO handle config
           in 
             callDocker {
               pkgs = loadedPkgs;
@@ -204,7 +208,7 @@ in {
           { inherit cross system; }
           { inherit pkgs config; };
       loadedCustoms =
-        loadCustoms system custom;
+        loadCustoms system (callHalfFlakes { custom-self = loadedCustoms; flakes = custom; });
     in nixosSystem {
       inherit check system;
 
@@ -254,7 +258,7 @@ in {
           { inherit cross system; }
           { inherit pkgs config; };
       loadedCustoms =
-        loadCustoms system custom;
+        loadCustoms system (callHalfFlakes { custom-self = loadedCustoms; flakes = custom; });
     in homeManagerConfiguration {
       inherit system username homeDirectory;
 

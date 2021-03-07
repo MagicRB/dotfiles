@@ -1,0 +1,30 @@
+diff --git a/package.json b/package.json
+index 52994abfd..988434bbf 100644
+--- a/package.json
++++ b/package.json
+@@ -16,7 +16,7 @@
+     "child-process-promise": "^2.2.1",
+     "clean-css-cli": "^4.3.0",
+     "elm": "^0.19.1",
+-    "elm-analyse": "stil4m/elm-analyse#701b8b4013a4f057b9382d368e42adc6fe08e14e",
++    "elm-analyse": "^0.16.5",
+     "elm-format": "0.8.2",
+     "elm-test": "^0.19.1-revision4",
+     "less": "^3.10.3",
+diff --git a/yarn.lock b/yarn.lock
+index 58e4a43a2..3b62090bc 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -2028,9 +2028,10 @@ elliptic@^6.5.3:
+     minimalistic-assert "^1.0.0"
+     minimalistic-crypto-utils "^1.0.0"
+ 
+-elm-analyse@stil4m/elm-analyse#701b8b4013a4f057b9382d368e42adc6fe08e14e:
++"elm-analyse@^0.16.5":
+   version "0.16.5"
+-  resolved "https://codeload.github.com/stil4m/elm-analyse/tar.gz/701b8b4013a4f057b9382d368e42adc6fe08e14e"
++  resolved "https://registry.yarnpkg.com/elm-analyse/-/elm-analyse-0.16.5.tgz#701b8b4013a4f057b9382d368e42adc6fe08e14e"
++  integrity sha1-cBuLQBOk8Fe5OC02jkKtxv4I4U4=
+   dependencies:
+     body-parser "1.19.0"
+     express "4.17.1"

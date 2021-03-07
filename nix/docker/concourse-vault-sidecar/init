@@ -1,0 +1,22 @@
+# -*- mode: shell-script; -*-
+
+conf=$1 ; shift 1
+source $conf
+
+# shellcheck source=/../../bash-lib/main.bash 
+source $_prog_bashlib
+
+$_prog_busybox/bin/env
+
+$_prog_concourse/bin/concourse generate-key -t ssh -f /worker_key
+
+_worker_key="$($_prog_busybox/bin/cat /worker_key)"
+_worker_key_pub="$($_prog_busybox/bin/cat /worker_key.pub)"
+echo -e "${_worker_key//$'\n'/\\\\n}" > /worker_key
+echo -e "${_worker_key_pub//$'\n'/\\\\n}" > /worker_key.pub
+
+
+JSON_FMT='{"public_key":"%s","private_key":"%s"}'
+$_prog_busybox/bin/printf "$JSON_FMT" "$(< /worker_key.pub)" "$(< /worker_key)" > secret.json
+
+VAULT_SKIP_VERIFY=1 $_prog_vault/bin/vault kv put kv/concourse/workers/blowhole @secret.json

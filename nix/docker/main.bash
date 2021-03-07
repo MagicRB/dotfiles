@@ -81,6 +81,24 @@ mkdir_chown() {
 }
 
 ## Args
+# - path - path to the directory to create
+# - uid - desired uid
+# - gid - desired gid
+mkdir_chown_permissive() {
+    path="$1"
+    uid="$2"
+    gid="$3"
+
+    if [[ ! -e "$path" ]]
+    then
+	$_prog_busybox/bin/mkdir -p "$path"
+	$_prog_busybox/bin/chown "$uid:$gid" "$path"
+    else
+	echo "Path $path already exists!"
+    fi
+}
+
+## Args
 # - uid - currently set uid
 check_root() {
     local uid="$1"

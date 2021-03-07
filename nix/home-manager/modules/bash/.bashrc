@@ -14,17 +14,6 @@ alias grep='grep --color=auto'
 alias ls='@exa@/bin/exa'
 alias cat='@bat@/bin/bat'
 
-## Add .local/bin to path
-#export PATH="${HOME}/.local/bin:${PATH}"
-
-if [[ -d "${HOME}/.cargo/bin" ]]; then
-    export PATH="${HOME}/.cargo/bin:${PATH}"
-fi
-
-if [[ -d "${HOME}/.yarn/bin" ]]; then
-    export PATH="${HOME}/.yarn/bin:${PATH}"
-fi
-
 export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
 
 EMACSCLIENT="`command -v -- emacsclient >/dev/null 2>&1 && printf emacsclient || printf emacsclient-$(uname -m)`"
