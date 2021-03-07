@@ -40,8 +40,14 @@
         fsType = "zfs";
       };
 
-    "/boot/efi" =
+    "/boot" =
       { device = "/dev/disk/by-partlabel/boot-WL157385";
+        fsType = "ext4";
+      };
+
+
+    "/boot/efi" =
+      { device = "/dev/disk/by-partlabel/efi-WL157385";
         fsType = "vfat";
       };
   };
