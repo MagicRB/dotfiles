@@ -14,14 +14,6 @@ $_prog_busybox/bin/cat << EOF
 
 EOF
 
-(
-    set -e
-    echo "root:x:0:0:Nix:/:$_prog_bash/bin/bash" > /etc/passwd
-    echo "root:x:0:" > /etc/group
-) || echo_exit "Failed to create user and group!"
-
-mkdir_chown_permissive /tmp 0 0
-
 if [[ -d "/nix/store-host" ]]
 then
     $_prog_busybox/bin/mount -t overlay overlay -o lowerdir=/nix/store:/nix/store-host /nix/store
@@ -29,12 +21,6 @@ then
 else
     echo "Running in single user mode!"
 fi
-
-export PATH=$_prog_bash/bin:$_prog_nix/bin:$_prog_busybox/bin \
-       NIX_PATH=nixpkgs=$_conf_nixpkgs \
-       NIX_SSL_CERT_FILE=$_conf_cacert/etc/ssl/certs/ca-bundle.crt
-
-create_ssl_certs $_conf_cacert
 
 $_prog_bash/bin/bash "$@"
 

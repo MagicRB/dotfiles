@@ -34,7 +34,7 @@ jobs:
           args:
             - -c
             - |
-              cd src
+              cd src/nix
 
-              nix --experimental-features 'nix-command flakes' build .#dockerImages.gitea
+              nix --experimental-features 'nix-command flakes' build .#dockerImages.x86_64-linux.gitea
               du -hs $(readlink -f result)

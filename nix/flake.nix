@@ -103,6 +103,14 @@
       blowhole = rlib.homeManagerConfiguration (import ./systems/blowhole.nix);
 
       recoveryUsb = rlib.nixosSystem (import ./systems/recovery-usb.nix inputs);
+
+      dockerImages = rlib.dockerImages {
+        concourse = ./docker/concourse;
+        gitea = ./docker/gitea;
+        postgresql = ./docker/postgresql;
+        concourse-vault-sidecar = ./docker/concourse-vault-sidecar;
+        nix = (import ./docker/nix inputs);
+      };
     in {
       nixosConfigurations.omen = omen;
       omen = omen.config.system.build.toplevel;
@@ -121,12 +129,48 @@
 
       recoveryUsb = recoveryUsb.config.system.build.isoImage;
 
-      dockerImages = rlib.dockerImages {
-        concourse = ./docker/concourse;
-        gitea = ./docker/gitea;
-        postgresql = ./docker/postgresql;
-        concourse-vault-sidecar = ./docker/concourse-vault-sidecar;
-        nix = (import ./docker/nix inputs);
-      }; 
-    } // { halfFlakes = rlib.custom; };
+      inherit dockerImages;
+
+      halfFlakes = rlib.custom;
+      CI = rlib.linkFarm "CI" (system: (with rlib.custom; [
+        {
+          name = "dockerImages";
+          path = (rlib.linkFarm "dockerImages" (_: with dockerImages."${system}"; [
+            {
+              name = "gitea";
+              path = gitea;
+            }
+            {
+              name = "gitea";
+              path = concourse;
+            }
+          ]))."${system}";
+        }
+        {
+          name = "systems";
+          path = (rlib.linkFarm "systems" (_: [
+            {
+              name = "omen";
+              path = omen.config.system.build.toplevel;
+            }
+            {
+              name = "heater";
+              path = heater.config.system.build.toplevel;
+            }
+            {
+              name = "blowhole";
+              path = blowhole.activationPackage;
+            }
+            {
+              name = "mark";
+              path = mark.config.system.build.toplevel;
+            }
+          ]))."${system}";
+        }
+        {
+          name = "sss-cli";
+          path = sss-cli.defaultPackage."${system}";
+        }
+      ]));
+    };
 }
