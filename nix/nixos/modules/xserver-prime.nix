@@ -1,5 +1,5 @@
 { intelBusId, nvidiaBusId }:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
 { config, ... }:
 let
   mkForce = nixpkgs.lib.mkForce;

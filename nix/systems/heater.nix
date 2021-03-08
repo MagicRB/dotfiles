@@ -17,9 +17,10 @@ inputs: {
   modules = [
     ../nixos/hardware/heater.nix
     ../nixos/profiles/workstation.nix
-    (import ../nixos/modules/pin-nixpkgs.nix inputs)
+    ../nixos/modules/pin-nixpkgs.nix
     ../nixos/users/main.nix
     ../nixos/modules/nvidia-5.11-patch.nix
+    ../nixos/modules/nomad.nix
   ] ++ [
     (_: _: {
       networking = {

@@ -84,7 +84,7 @@ let
       sanitizedArgs = builtins.removeAttrs args [ "pkgs" ];
 
       calledModule = fetchedModule
-        (pkgs // { inherit hostname custom; rlib = self; })
+        (pkgs // { inherit hostname custom inputs; rlib = self; })
         sanitizedArgs;
 
       recursedModule =

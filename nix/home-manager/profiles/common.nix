@@ -2,7 +2,7 @@
 , wine ? false
 , _3dPrinting ? false
 , js-ts ? false }:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib }:
+{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
 { config, lib, ... }: {
   home.packages = [
     nixpkgs-unstable.nomad_1_0

@@ -35,11 +35,9 @@
     "emacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1614468660,
-        "narHash": "sha256-uJyU/Kn9NGpoH2RiS+BnqUJ61iSw681A+cociAsKFRs=",
         "owner": "flatwhatson",
         "repo": "emacs",
-        "rev": "61aaf36935df57450916fce2c5372a2a83d8f4e3",
+        "rev": "8bcd71bf75672bbcfbb6175301a3552dae4bfb4a",
         "type": "github"
       },
       "original": {
