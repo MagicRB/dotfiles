@@ -19,7 +19,7 @@ resources:
   source:
     repository: magicrb/nix
     username: magicrb
-    password: 
+    password: ((docker_hub.magicrb_token))
 
 jobs:
 - name: test-build
@@ -42,7 +42,10 @@ jobs:
           args:
             - -c
             - |
+              out=$(pwd)
               cd src/nix
 
-              nix --experimental-features 'nix-command flakes' build .#dockerImages.x86_64-linux.gitea
-              du -hs $(readlink -f result)
+              nix -v --log-format raw -L  --experimental-features 'nix-command flakes' build --out-link $out/nix.tar.gz .#dockerImages.x86_64-linux.nix.build
+    - put: push-nix-image
+      params:
+        image: nix.tar.gz

@@ -147,6 +147,13 @@ CONCOURSE_POSTGRES_DATABASE={{ .Data.data.database }}
 CONCOURSE_POSTGRES_USER={{ .Data.data.user }}
 CONCOURSE_POSTGRES_PASSWORD={{ .Data.data.password }}
 {{ end }}
+
+CONCOURSE_VAULT_URL=https://vault.in.redalder.org:8200/
+CONCOURSE_VAULT_CA_CERT={{ env "NOMAD_SECRETS_DIR" }}/vault.crt
+CONCOURSE_VAULT_PATH_PREFIX=/concourse/pipelines
+
+CONCOURSE_VAULT_CLIENT_TOKEN={{ env "VAULT_TOKEN" }}
+CONCOURSE_VAULT_LOOKUP_TEMPLATES=/{{.Team}}/{{.Pipeline}}/{{.Secret}},/{{.Team}}/{{.Secret}}
 EOF
 	destination = "${NOMAD_SECRETS_DIR}/data.env"
 	env = true
@@ -164,6 +171,13 @@ EOF
 {{ with secret "kv/data/concourse/web" }}{{ .Data.data.tsa_host_key }}{{ end }}
 EOF
 	destination = "${NOMAD_SECRETS_DIR}/tsa_host_key"
+      }
+
+      template {
+	data = <<EOF
+{{ with secret "kv/data/concourse/web" }}{{ .Data.data.redalder_org_cert }}{{ end }}
+EOF
+	destination = "${NOMAD_SECRETS_DIR}/vault.crt"
       }
 
 
