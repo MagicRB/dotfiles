@@ -12,11 +12,16 @@ let
   homeManagerConfiguration = home-manager.lib.homeManagerConfiguration;
 
   callHalfFlake = { custom-self, flakeSrc }:
-    let
-      flake = import (flakeSrc + "/flake.nix");
-      outputs = flake.outputs ( inputs // { self = outputs; rlib = self; custom = custom-self; });
-    in
-      outputs;
+    if builtins.isAttrs flakeSrc then
+      flakeSrc
+    else if builtins.isPath flakeSrc then
+      let
+        flake = import (flakeSrc + "/flake.nix");
+        outputs =  flake.outputs ( inputs // { self = outputs; rlib = self; custom = custom-self; });
+      in
+        outputs
+    else
+      builtins.throw "Invalid custom package!";
 
   callHalfFlakes = { custom-self, flakes }:
     lib.mapAttrs' (name: flakeSrc: lib.nameValuePair name (callHalfFlake { inherit custom-self flakeSrc; })) flakes;
