@@ -133,23 +133,19 @@
       inherit dockerImages;
 
       halfFlakes = rlib.custom;
-      CI = rlib.linkFarm "CI" (system: (with rlib.custom; [
+      CI = 
         {
-          name = "dockerImages";
-          path = (rlib.linkFarm "dockerImages" (_: with dockerImages."${system}"; [
+          dockerImages = (rlib.linkFarm "dockerImages" (system: with dockerImages."${system}"; [
             {
               name = "gitea";
               path = gitea;
             }
             {
-              name = "gitea";
+              name = "concourse";
               path = concourse;
             }
-          ]))."${system}";
-        }
-        {
-          name = "systems";
-          path = (rlib.linkFarm "systems" (_: [
+          ]));
+          systems = (rlib.linkFarm "systems" (_: [
             {
               name = "omen";
               path = omen.config.system.build.toplevel;
@@ -167,11 +163,23 @@
               path = mark.config.system.build.toplevel;
             }
           ]))."${system}";
-        }
-        {
-          name = "sss-cli";
-          path = sss-cli.defaultPackage."${system}";
-        }
-      ]));
+          halfFlakes = (rlib.linkFarm "dockerImages" (system: with dockerImages."${system}"; [
+            {
+              name = "gitea";
+              path = gitea;
+            }
+            {
+              name = "concourse";
+              path = concourse;
+            }
+          ]));
+
+          packages = (rlib.linkFarm "dockerImages" (system: with dockerImages."${system}"; [
+            {
+            name = "sss-cli";
+            path = sss-cli.defaultPackage."${system}";
+            }
+          ]));
+        };
     };
 }

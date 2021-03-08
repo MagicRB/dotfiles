@@ -44,11 +44,23 @@ let
   tmp = nixpkgs.runCommandNoCCLocal "tmp" {} ''
     mkdir -p $out/tmp
   '';
-  ca-certificates = nixpkgs.runCommandNoCCLocal "ca-certificates" {} ''
-    mkdir -p $out/etc/ssl/certs
-    ln -s ${nixpkgs.cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/certs/ca-bundle.crt
-    ln -s $out/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/certs/ca-certificates.crt
-  '';
+  ca-certificates = let
+    caBundle = nixpkgs.cacert;
+
+    merged = nixpkgs.runCommandNoCC "ca-certificates.crt"
+      { files =
+          [ "${caBundle}/etc/ssl/certs/ca-bundle.crt" ../redalder.org.crt ];
+        preferLocalBuild = true;
+      }
+      ''
+        cat $files > $out
+      '';
+    in
+      nixpkgs.runCommandNoCCLocal "ca-certificates" {} ''
+        mkdir -p $out/etc/ssl/certs
+        ln -s ${merged} $out/etc/ssl/certs/ca-bundle.crt
+        ln -s $out/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/certs/ca-certificates.crt
+      '';
   entrypoint = nixpkgs.writeShellScriptBin "entrypoint.sh" ''
     ${init}/bin/init ${conf} "$@" 
   '';

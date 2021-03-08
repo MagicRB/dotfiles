@@ -13,6 +13,14 @@ resources:
     repository: magicrb/nix
     tag: latest
 
+- name: push-nix-image
+  type: registry-image
+  icon: docker
+  source:
+    repository: magicrb/nix
+    username: magicrb
+    password: 
+
 jobs:
 - name: test-build
   public: true
