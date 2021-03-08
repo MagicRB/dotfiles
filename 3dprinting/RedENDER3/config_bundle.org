@@ -212,6 +212,19 @@
   #+END_SRC
 
   #+BEGIN_SRC conf :noweb yes :tangle ./config_bundle.ini
+    [print:RedENDER-3 0.08mm Screw 0.4 nozzle]
+    bottom_solid_layers = 7
+    top_solid_layers = 7
+    bridge_flow_ratio = 80%
+    layer_height = 0.08
+    perimeter_acceleration = 400
+    xy_size_compensation = 0
+    perimeter_speed = 30
+    infill_speed = 15
+    <<generic-print-profile>>
+  #+END_SRC
+  
+  #+BEGIN_SRC conf :noweb yes :tangle ./config_bundle.ini
     [print:RedENDER-3 0.08mm DETAIL 0.4 nozzle]
     bottom_solid_layers = 7
     top_solid_layers = 7
@@ -349,8 +362,9 @@
      first_layer_bed_temperature = 50
      first_layer_temperature = 200
      max_fan_speed = 100
-     temperature = 190
+     temperature = 205
      top_fan_speed = 100
+     extrusion_multiplier = 0.9
      <<generic-filament>>
    #+END_SRC
    
@@ -474,7 +488,7 @@
      serial_speed = 250000
      silent_mode = 0
      single_extruder_multi_material = 0
-     start_gcode = START_PRINT 
+     start_gcode = M109 S[first_layer_temperature]\\nSTART_PRINT 
      thumbnails = 0x0,0x0
      thumbnails_color = #018aff
      thumbnails_custom_color = 0
