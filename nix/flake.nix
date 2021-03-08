@@ -75,11 +75,12 @@
           gpg-key = ./packages/gpg-key;
           yarn2nix = ./packages/yarn2nix;
           rust =
-            system:
+            # system:
             let
               rustyPkgs = import inputs.nixpkgs {
                 overlays = [ inputs.rust-overlay.overlay ];
-                inherit system;
+                system = "x86_64-linux";
+                # inherit system;
               };
             in
               rustyPkgs.rust-bin;
