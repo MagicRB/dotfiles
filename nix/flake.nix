@@ -58,7 +58,7 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     with inputs; let
-      rlib = import ./rlib.nix {
+      rlib = import ./rlib {
         inherit nixpkgs home-manager inputs;
         pkgs = {
           inherit nixpkgs nixpkgs-unstable nixpkgs-master;
@@ -130,7 +130,7 @@
 
       recoveryUsb = recoveryUsb.config.system.build.isoImage;
 
-      inherit dockerImages;
+      inherit dockerImages rlib;
 
       halfFlakes = rlib.custom;
       CI = 
