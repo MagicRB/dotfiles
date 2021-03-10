@@ -130,8 +130,10 @@
 
       recoveryUsb = recoveryUsb.config.system.build.isoImage;
 
-      inherit dockerImages rlib;
+      inherit dockerImages;
 
+      rlib = import ./rlib;
+      
       halfFlakes = rlib.custom;
       CI = 
         {
