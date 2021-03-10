@@ -1,11 +1,6 @@
 # -*- mode: shell-script; -*-
 
-conf=$1 ; shift 1
-source $conf
-
-source $_prog_bashlib
-
-$_prog_busybox/bin/cat << EOF
+cat << EOF
 ### Nix Image Manual
 
 /nix/var/nix/db
@@ -16,12 +11,12 @@ EOF
 
 if [[ -d "/nix/store-host" ]]
 then
-    $_prog_busybox/bin/mount -t overlay overlay -o lowerdir=/nix/store:/nix/store-host /nix/store
+    mount -t overlay overlay -o lowerdir=/nix/store:/nix/store-host /nix/store
     export NIX_REMOTE=daemon
 else
     echo "Running in single user mode!"
 fi
 
-$_prog_bash/bin/bash "$@"
+bash "$@"
 
 # nix --experimental-features 'nix-command flakes' build github:edolstra/dwarffs

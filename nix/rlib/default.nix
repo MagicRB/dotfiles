@@ -281,4 +281,6 @@ in {
 
   linkFarm = name: entries:
     forAllSystems (system: (import pkgs.nixpkgs { inherit system; }).linkFarm name (entries system));
+
+  dockerTools = import ./docker.nix;
 }
