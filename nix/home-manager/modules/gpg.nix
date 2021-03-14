@@ -16,12 +16,12 @@
   '';
 
   home.activation.gnupghome = config.lib.dag.entryAfter ["writeBoundary"] ''
-    if [ ! -e ~/.gnupg ]
+    if [[ ! -e ~/.gnupg ]]
     then
         ln -sf /mnt/key/gnupg ~/.gnupg  
     fi
 
-    if [ ! -e ~/.gnupg/gpg-agent.conf ]
+    if [[ ! -e ~/.gnupg/gpg-agent.conf ]] && [[ -d /mnt/key/gnupg ]]
     then
         ln -sf ~/.gpg-agent.conf /mnt/key/gnupg/gpg-agent.conf
     fi
