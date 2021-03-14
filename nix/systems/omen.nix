@@ -16,7 +16,7 @@ inputs: {
 
   modules = [
     ../nixos/hardware/omen.nix
-    (import ../nixos/modules/pin-nixpkgs.nix inputs)
+    ../nixos/modules/pin-nixpkgs.nix
     ../nixos/users/main.nix
     (import ../nixos/profiles/laptop.nix {
       intelBusId = "PCI:0:2:0";
