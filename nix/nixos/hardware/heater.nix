@@ -26,25 +26,31 @@ in {
   fileSystems = {
     "/" =
       {
-        device = "/dev/disk/by-uuid/7831f8ee-0ad6-49c2-8288-6f5e61ae0a08";
-        fsType = "btrfs";
-        options = [ 
-          "subvol=/nix"
-        ] ++ defaultBtrfsOpts;
+        device = "heater-zpool/local/root";
+        fsType = "zfs";
+      };
+    
+    "/nix" =
+      {
+        device = "heater-zpool/local/nix";
+        fsType = "zfs"; 
       };
 
-    "/btrfs" =
+    "/home" =
       {
-        device = "/dev/disk/by-uuid/7831f8ee-0ad6-49c2-8288-6f5e61ae0a08";
-        fsType = "btrfs";
-        options = [ 
-          "subvol=/"
-        ] ++ defaultBtrfsOpts;
+        device = "heater-zpool/safe/home";
+        fsType = "zfs";
+      };
+
+    "/boot" =
+      {
+        device = "/dev/disk/by-uuid/dafa0b63-c033-4ceb-ae12-dbd2ab66c604";
+        fsType = "ext4";
       };
 
     "/boot/EFI" =
       {
-        device = "/dev/disk/by-uuid/DBE9-10B4";
+        device = "/dev/disk/by-uuid/B505-6FF0";
         fsType = "vfat";
       };
 
