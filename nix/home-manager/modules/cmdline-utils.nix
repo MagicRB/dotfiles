@@ -13,6 +13,7 @@
     gnumake
     llvmPackages.bintools
     pkgconfig 
+    htop
   ] ++ (with custom; [
     screenshot
   ]);

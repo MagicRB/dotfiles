@@ -5,7 +5,7 @@
 { nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
 { config, lib, ... }: {
   home.packages = [
-    nixpkgs-unstable.nomad_1_0
+    nixpkgs-unstable.nomad
     custom.sss-cli
 
   ] ++ (with nixpkgs; [
