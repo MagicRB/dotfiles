@@ -18,7 +18,6 @@
   };
   
   imports = [
-    ../modules/efi-grub.nix
     ../modules/nix-flakes.nix
     ../modules/pulseaudio.nix
     ../modules/xserver.nix

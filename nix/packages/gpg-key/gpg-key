@@ -21,7 +21,7 @@ case "$command" in
 	 @cryptsetup@ close secret
 
 	 @rm@ -r /mnt/key
-	 if [ -n "$(find /mnt -maxdepth 0 -empty)" ]
+	 if [ -n "$(@find@ /mnt -maxdepth 0 -empty)" ]
 	 then
 	     @rm@ -r /mnt
 	 fi

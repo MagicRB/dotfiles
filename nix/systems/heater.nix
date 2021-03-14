@@ -16,11 +16,130 @@ inputs: {
 
   modules = [
     ../nixos/hardware/heater.nix
+    ../nixos/modules/efi-grub.nix
     ../nixos/profiles/workstation.nix
     ../nixos/modules/pin-nixpkgs.nix
     ../nixos/users/main.nix
     ../nixos/modules/nvidia-5.11-patch.nix
     ../nixos/modules/nomad.nix
+
+    ../nixos/modules/vault-agent.nix
+    ({ nixpkgs, nixpkgs-unstable, ... }: _: {
+      magic_rb = {
+        grub = {
+          enable = true;
+          efi.enable = true;
+        };
+
+        xserver = {
+          enable = true;
+          gpu = "nvidia";
+          xmonad = true;
+        };
+      };
+
+      hardware.steam-hardware.enable = true;
+    
+      services.vault-agent = {
+        enable = true;
+        settings = {
+          vault = {
+            address = "https://vault.in.redalder.org:8200";
+
+            client_cert = "/etc/vault-agent/client.crt";
+            client_key = "/etc/vault-agent/client.key";
+          };
+
+          auto_auth = {
+            method = [
+              {
+                "cert" = {
+                  name = "system-heater";
+                };
+              }
+            ];
+          };
+
+          template = [
+            {
+              source = nixpkgs.writeText "wg0.key.tpl" ''
+                {{ with secret "kv/data/systems/heater/wireguard" }}{{ .Data.data.private_key }}{{ end }}
+              '';
+              destination = "/var/secrets/wg0.key";
+            }
+            {
+              source = nixpkgs.writeText "nomad.hcl.tpl" ''
+                client {
+                  enabled = true 
+                 servers = [ "blowhole.in.redalder.org:4647" ]
+
+                 options {
+                    docker.privileged.enabled = "true"
+                  }
+                  
+                  cni_path = "${nixpkgs.cni-plugins}/bin"
+                } 
+                 {{ with secret "kv/data/systems/heater/nomad" }}
+                vault {
+                  enabled = true
+                  address = "https://vault.in.redalder.org:8200"
+                  token = "{{ .Data.data.vault_token }}"
+                  allow_unauthenticated = true
+                 create_from_role = "nomad-cluster"
+               }
+
+               consul {
+                 address = "blowhole.in.redalder.org:8500"
+                 token = "{{ .Data.data.consul_token }}"
+               }
+               {{ end }}
+
+               disable_update_check = true
+               datacenter = "homelab-1"
+               data_dir = "/var/lib/nomad"
+             '';
+             destination = "/var/secrets/nomad.hcl";
+             perms = "0644";
+           }
+         ];
+       };
+     };
+
+     services.nomad = {
+       enable = true;
+       enableDocker = true;
+       dropPrivileges = false;
+
+       extraPackages = [ nixpkgs.consul ];
+
+       package = nixpkgs-unstable.nomad;
+
+       extraSettingsPaths = [ "/var/secrets/nomad.hcl" ];
+     };
+
+     networking = {
+       firewwall = {
+         allowedUDPPorts = [ 6666 ];
+       };
+
+       wireguard.interfaces = {
+         wg0 = {
+           ips = [ "10.64.0.3/24" ];
+           listenPort = 6666;
+
+           privateKeyFile = "/var/secrets/wg0.key";
+           peers = [
+             {
+               publicKey = "h4g6vWjOB6RS0NbrP/Kvb2CZeutm/F+ZfDbJmEd1Dgk=";
+               allowedIPs = [ "10.64.0.0/24" ];
+               endpoint = "redalder.org:6666";
+               persistentKeepalive = 25;
+             }
+           ];
+         };
+       };
+     };
+   })
   ] ++ [
     (_: _: {
       networking = {
@@ -34,6 +153,8 @@ inputs: {
 
       time.timeZone = "Europe/Bratislava";
       system.stateVersion = "20.09";
+
+      security.pki.certificates = [ (builtins.readFile ../redalder.org.crt) ];
 
       virtualisation.docker.enable = true;
       boot = {

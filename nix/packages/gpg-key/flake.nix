@@ -21,6 +21,7 @@
                       cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
                       rm = "${pkgs.coreutils}/bin/rm";
                       ls = "${pkgs.coreutils}/bin/ls";
+                      find = "${pkgs.coreutils}/bin/find";
                       mkdir = "${pkgs.coreutils}/bin/mkdir";
                     };
                   };

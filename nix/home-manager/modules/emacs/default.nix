@@ -1,10 +1,11 @@
 { nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
 { config, lib, ... }:
 {
-  home.packages = if hostname != "edge" then with custom; [
+  home.packages = (if hostname != "edge" then with custom; [
     emacs
-  ] else with nixpkgs; [ emacs ] ++ (with nixpkgs; [
+  ] else with nixpkgs; [ emacs ]) ++ (with nixpkgs; [
     fira-code
+    emacs-all-the-icons-fonts
   ]);
 
   home.file = {

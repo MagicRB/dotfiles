@@ -25,6 +25,8 @@ inputs: {
     ../nixos/modules/nvidia-5.11-patch.nix
   ] ++ [
     (_: _: {
+      hardware.steam-hardware.enable = true;
+
       networking = {
         hostName = "omen";
         useDHCP = false;
