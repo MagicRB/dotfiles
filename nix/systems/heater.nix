@@ -15,15 +15,14 @@ inputs: {
   };
 
   modules = [
-    ../nixos/hardware/heater.nix
-    ../nixos/modules/efi-grub.nix
-    ../nixos/profiles/workstation.nix
-    ../nixos/modules/pin-nixpkgs.nix
-    ../nixos/users/main.nix
-    ../nixos/modules/nvidia-5.11-patch.nix
-    ../nixos/modules/nomad.nix
-
-    ../nixos/modules/vault-agent.nix
+    ../nixos/hardware/heater.nix # auto
+    ../nixos/modules/efi-grub.nix # manual
+    ../nixos/profiles/workstation.nix # auto
+    ../nixos/modules/pin-nixpkgs.nix # manual
+    ../nixos/users/main.nix # auto
+    ../nixos/modules/nomad.nix # manual
+    ../nixos/modules/xserver.nix # manual
+    ../nixos/modules/vault-agent.nix # manual
     ({ nixpkgs, nixpkgs-unstable, ... }: _: {
       magic_rb = {
         grub = {
@@ -35,8 +34,19 @@ inputs: {
           enable = true;
           gpu = "nvidia";
           xmonad = true;
+
+          setSkLayout = true;
+          emacsCtrl = true;
+        };
+
+        pins = {
+          "nixpkgs" = inputs.nixpkgs;
+          "nixpkgs-unstable" = inputs.nixpkgs-unstable;
+          "nixpkgs-master" = inputs.nixpkgs-master;
         };
       };
+
+      nixpkgs.pkgs = nixpkgs;
 
       hardware.steam-hardware.enable = true;
     

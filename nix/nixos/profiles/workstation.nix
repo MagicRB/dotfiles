@@ -20,7 +20,5 @@
   imports = [
     ../modules/nix-flakes.nix
     ../modules/pulseaudio.nix
-    ../modules/xserver.nix
-    ../modules/xkb-caps-us-sk.nix
   ];
 }

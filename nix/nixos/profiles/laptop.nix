@@ -1,4 +1,3 @@
-{ intelBusId, nvidiaBusId }:
 { nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
 { config, ... }:
 {
@@ -11,7 +10,6 @@
  
   imports = [
     ./workstation.nix
-    (import ../modules/xserver-prime.nix { inherit intelBusId nvidiaBusId; })
   ] ++ [
     
   ];

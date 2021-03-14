@@ -2,6 +2,7 @@
 { config, lib, ... }:
 with lib;
 let
+  xserver-enable = config.services.xserver.enable;
   nvidia-offload = nixpkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -16,49 +17,87 @@ in
     enable = mkEnableOption "XServer for my setup style";
     gpu = mkOption {
       description = "Which GPU type do you have?";
-      type = types.oneOf ["nvidia"];
+      type = types.enum ["nvidia"];
     };
-    prime = mkEnableOption "NVidia PRIME support";
+
+    nvidia = mkOption {
+      description = "NVidia section";
+      type = types.submodule {
+        options = {
+          prime = mkEnableOption "NVidia PRIME support";
+          
+          intelBusId = mkOption {
+            type = types.str;
+            default = "";
+          };
+          nvidiaBusId = mkOption {
+            type = types.str;
+            default = "";
+          };
+
+          linux-5-11-patch = mkEnableOption "Linux 5.11 compat patch";
+        };
+      };
+      default = {};
+    };
     xmonad = mkEnableOption "Enable xmonad";
-
-    intelBusId = mkOption {
-      type = types.string;
-    };
-    nvidiaBusId = mkOption {
-      type = types.string;
-    };
+    setSkLayout = mkEnableOption "Set SK layout";
+    emacsCtrl = mkEnableOption "Rebind CapsLock to Ctrl";
   };
 
-  config = mkIf cfg.enable {
-    services.xserver = {
-      enable = true;
+  config = mkIf cfg.enable (mkMerge [
+    {
+      services.xserver = {
+        enable = true;
 
-      windowManager = mkIf cfg.xmonad {
-        xmonad.enable = true;
-        xmonad.enableContribAndExtras = true;
-      };
+        windowManager = mkIf cfg.xmonad {
+          xmonad.enable = true;
+          xmonad.enableContribAndExtras = true;
+        };
 
-      displayManager = mkIf cfg.xmonad {
-        defaultSession = "none+xmonad";
-      };
-      
-      videoDrivers = [ "nvidia" ];
+        displayManager = mkIf cfg.xmonad {
+          defaultSession = "none+xmonad";
+        };
         
-      libinput.enable = true;
-    };
+        
+        libinput.enable = true;
+      };
 
-    hardware = {
-      opengl.driSupport32Bit = true;
-      # opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ]; # What does this do??
-    };
+      hardware = {
+        opengl.driSupport32Bit = true;
+        # opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ]; # What does this do??
+      };
 
-    environment.systemPackages = mkIf (cfg.prime && cfg.gpu == "nvidia") [ nvidia-offload ];
+    }
+    (mkIf (cfg.gpu == "nvidia") {
+      services.xserver.videoDrivers = [ "nvidia" ];
 
-    hardware.nvidia.prime = mkIf cfg.prime {
-      offload.enable = true;
-      
-      intelBusId = cfg.intelBusId;
-      nvidiaBusId = cfg.nvidiaBusId;
-    };
-  };
+      environment.systemPackages = mkIf (cfg.nvidia.prime) [ nvidia-offload ];
+
+      hardware.nvidia.prime = mkIf cfg.nvidia.prime {
+        offload.enable = true;
+        
+        intelBusId = cfg.nvidia.intelBusId;
+        nvidiaBusId = cfg.nvidia.nvidiaBusId;
+      };
+
+      hardware.nvidia.package = mkIf
+        cfg.nvidia.linux-5-11-patch
+        config.hardware.nvidia.package.overrideAttrs (old:
+          {
+            patches = old.patches ++ [ ./nvidia-5.11.patch ];
+          });
+    })
+    (mkIf cfg.setSkLayout {
+      services.xserver = {
+        layout = mkIf xserver-enable "us,sk";
+        xkbVariant = mkIf xserver-enable ",qwerty";
+      };
+    })
+    (mkIf cfg.emacsCtrl {
+      services.xserver = {
+        xkbOptions = mkIf xserver-enable "grp:lalt_lshift_toggle ctrl:nocaps";
+      };
+    })
+  ]);
 }

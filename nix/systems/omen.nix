@@ -15,16 +15,45 @@ inputs: {
   };
 
   modules = [
-    ../nixos/hardware/omen.nix
-    ../nixos/modules/pin-nixpkgs.nix
-    ../nixos/users/main.nix
-    (import ../nixos/profiles/laptop.nix {
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
-    })
-    ../nixos/modules/nvidia-5.11-patch.nix
+    ../nixos/hardware/omen.nix # auto
+    ../nixos/modules/efi-grub.nix # manual
+    ../nixos/modules/pin-nixpkgs.nix # manual
+    ../nixos/users/main.nix # auto
+    ../nixos/profiles/laptop.nix # auto
+    ../nixos/modules/xserver.nix # manual
   ] ++ [
-    (_: _: {
+    ({ nixpkgs, ... }: _: {
+      magic_rb = {
+        grub = {
+          enable = true;
+          efi.enable = true;
+        };
+
+        xserver = {
+          enable = true;
+          gpu = "nvidia";
+          xmonad = true;
+
+          nvidia = {
+            prime = true;
+
+            intelBusId = "PCI:0:2:0";
+            nvidiaBusId = "PCI:1:0:0";
+          };
+
+          setSkLayout = true;
+          emacsCtrl = true;
+        };
+
+        pins = {
+          "nixpkgs" = inputs.nixpkgs;
+          "nixpkgs-unstable" = inputs.nixpkgs-unstable;
+          "nixpkgs-master" = inputs.nixpkgs-master;
+        };
+      };
+
+      nixpkgs.pkgs = nixpkgs;
+
       hardware.steam-hardware.enable = true;
 
       networking = {

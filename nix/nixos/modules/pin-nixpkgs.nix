@@ -1,17 +1,17 @@
 { nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, ... }:
+{ config, lib, ... }:
+with lib;
+let
+  cfg = config.magic_rb.pins;
+in
 {
-  nix.registry = {
-    "nixpkgs".flake = inputs.nixpkgs;
-    "nixpkgs-unstable".flake = inputs.nixpkgs-unstable;
-    "nixpkgs-master".flake = inputs.nixpkgs-master;
+  options.magic_rb.pins = mkOption {
+    description = "nix things to pin into the PATH and registry";
+    type = types.attrsOf types.unspecified;
   };
 
-  nix.nixPath = [
-    "nixpkgs=${inputs.nixpkgs}"
-    "nixpkgs-unstable=${inputs.nixpkgs-unstable}"
-    "nixpkgs-master=${inputs.nixpkgs-master}"
-  ];
-
-  nixpkgs.pkgs = nixpkgs;
+  config.nix = mkMerge (mapAttrsToList (name: value: {
+    registry."${name}".flake = value;
+    nixPath = [ "${name}=${value}" ];
+  }) cfg);    
 }
