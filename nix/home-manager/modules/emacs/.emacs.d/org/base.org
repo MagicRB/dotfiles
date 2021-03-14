@@ -754,9 +754,13 @@
    
    #+BEGIN_SRC emacs-lisp
      (add-to-list 'org-latex-packages-alist
-		  '("" "tikz" t)
+		  '("" "tikz" t))
+     (add-to-list 'org-latex-packages-alist
+		  '("" "tabularx" t))
+     (add-to-list 'org-latex-packages-alist
 		  '("" "bytefield" t))
-		  ;; '("" "gensymb" t))
+     (add-to-list 'org-latex-packages-alist
+		  '("" "rest-api" t))
 
      (eval-after-load "preview"
        '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
