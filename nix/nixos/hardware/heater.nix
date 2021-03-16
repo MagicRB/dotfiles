@@ -1,6 +1,7 @@
 { nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, ... }:
+{ config, lib, ... }:
 
+with lib;
 let
   defaultBtrfsOpts = [
     "noatime"
@@ -39,6 +40,38 @@ in {
     "/home" =
       {
         device = "heater-zpool/safe/home";
+        fsType = "zfs";
+      };
+
+    "/var/lib/nomad" =
+      {
+        device = "heater-zpool/persist/nomad";
+        fsType = "zfs";
+      };
+
+    "/var/lib/docker" =
+      {
+        device = "heater-zpool/persist/docker";
+        fsType = "zfs";
+      };
+
+    "/var/lib/secrets" = mkIf config.services.vault-agent.enable
+      {
+        device = "tmpfs";
+        fsType = "tmpfs";
+        options = [
+          "mode=0640"
+          "uid=${toString config.users.users.vault-agent.uid}"
+          "gid=${toString config.users.groups.root.gid}"
+          "noexec"
+          "rw"
+          "size=64M"
+        ];
+      };
+
+    "/etc/vault-agent" = mkIf config.services.vault-agent.enable
+      {
+        device = "heater-zpool/persist/vault-agent";
         fsType = "zfs";
       };
 

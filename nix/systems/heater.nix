@@ -23,6 +23,7 @@ inputs: {
     ../nixos/modules/nomad.nix # manual
     ../nixos/modules/xserver.nix # manual
     ../nixos/modules/vault-agent.nix # manual
+    ../nixos/modules/erase-my-darlings.nix # manual
     ({ nixpkgs, nixpkgs-unstable, ... }: _: {
       magic_rb = {
         grub = {
@@ -43,6 +44,11 @@ inputs: {
           "nixpkgs" = inputs.nixpkgs;
           "nixpkgs-unstable" = inputs.nixpkgs-unstable;
           "nixpkgs-master" = inputs.nixpkgs-master;
+        };
+
+        erase-my-darlings = {
+          enable = true;
+          snapshot = "heater-zpool/local/root@blank";
         };
       };
 
