@@ -149,7 +149,7 @@
 	(load-theme 'doom-one t))
     #+END_SRC
 
-*** Dashboard
+*** Dashboard DEPRECATED
     
     Enable the Emacs dashboard, pretty much useless but much better looking than the default. And the jokes are
     funny. Also if you actually properly use =org-agenda= the /agenda of the day/ section might prove useful.
@@ -157,6 +157,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package dashboard
 	:straight t
+        :disabled t
 	:after (all-the-icons)
 	:config
 	(dashboard-setup-startup-hook)
@@ -977,10 +978,10 @@
        (org-mode . hl-todo-mode))
    #+END_SRC
    
-** Popwin
+** Popwin DEPRECATED
 
    Enable ~popwin~, it creates a minibuffer-esque window at the bottom of the currently focused frame, when specific
-   buffer are to be raised. For example, when you go to compile a Rust project with =C-c C-c C-b=, the compilation
+   buffers are to be raised. For example, when you go to compile a Rust project with =C-c C-c C-b=, the compilation
    buffer won't take up your whole frame and it also won't split your current window, rather it'll pop up at the bottom
    like in all those fancy mainstream IDEs.
 
@@ -988,6 +989,7 @@
    #+BEGIN_SRC emacs-lisp
      (use-package popwin
        :straight t
+       :disabled t
        :config
        (push '(rustic-compilation-mode :noselect t) popwin:special-display-config)
        (push '(rustic-cargo-test-mode :noselect t) popwin:special-display-config)
@@ -995,6 +997,25 @@
        (popwin-mode 1))
    #+END_SRC
    
+** Popper
+
+   Enable ~popper~, a better version of ~popwin~, which might actually work. It groups popups by context and allows you
+   to specify their exact positioning, or even a custom display function. It also seems to be better at restoring the
+   previous layout.
+
+   #+NAME: popper
+   #+BEGIN_SRC emacs-lisp
+     (use-package popper
+       :straight (popper :type git :host github :repo "karthink/popper")
+       :init
+       (setq popper-reference-buffers
+	     '("\\*Messages\\*"
+	       "Output\\*$"
+	       help-mode
+	       compilation-mode
+	       rustic-compilation-mode))
+       (popper-mode +1))
+   #+END_SRC
 ** Projectile
 
    Enable ~projectile~.

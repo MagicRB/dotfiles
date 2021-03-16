@@ -42,6 +42,7 @@
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (straight-use-package 'use-package)
+(straight-thaw-versions)
 
 (use-package org
   :straight t)
