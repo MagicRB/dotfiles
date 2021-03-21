@@ -2,12 +2,11 @@
 { config, lib, ... }:
 {
   home.packages = with nixpkgs; [
-    freecad
     openscad
     cura
     inkscape
-    
   ] ++ [
     nixpkgs-unstable.prusa-slicer
+    custom.freecad-appimage
   ];
 }

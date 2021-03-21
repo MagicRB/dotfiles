@@ -74,6 +74,7 @@
           concourse = ./packages/concourse-ci;
           gpg-key = ./packages/gpg-key;
           yarn2nix = ./packages/yarn2nix;
+          freecad-appimage = ./packages/freecad-appimage;
           rust =
             # system:
             let
@@ -111,6 +112,7 @@
         postgresql = ./docker/postgresql;
         concourse-vault-sidecar = ./docker/concourse-vault-sidecar;
         nix = (import ./docker/nix inputs);
+        runner = (import ./docker/runner inputs);
       };
     in {
       nixosConfigurations.omen = omen;
