@@ -133,6 +133,26 @@ inputs: {
        extraSettingsPaths = [ "/var/secrets/nomad.hcl" ];
      };
 
+     services.hydra = {
+       enable = true;
+       hydraURL = "http://localhost:3000";
+       notificationSender = "hydra@localhost"; # e-mail of hydra service
+       # a standalone hydra will require you to unset the buildMachinesFiles list to avoid using a nonexistant /etc/nix/machines
+       buildMachinesFiles = [];
+       # you will probably also want, otherwise *everything* will be built from scratch
+       useSubstitutes = true;
+
+       extraConfig = ''
+         <runcommand>
+           command = cp $HYDRA_JSON /tmp/hydra-json ; ${nixpkgs.curl}/bin/curl -X POST -H "Content-Type: application/json" -d @$HYDRA_JSON http://localhost:8080/hydra
+         </runcommand>
+       '';
+     };
+
+     nix.extraOptions = ''
+       allowed-uris = https://gitea.redalder.org/RedAlder/rlib
+     '';
+
      networking = {
        firewwall = {
          allowedUDPPorts = [ 6666 ];
