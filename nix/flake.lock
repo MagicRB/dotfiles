@@ -3,11 +3,11 @@
     "concourse": {
       "flake": false,
       "locked": {
-        "lastModified": 1614830510,
-        "narHash": "sha256-9T6H5ZZ36iIpTBDqdBISk01W5EgXR1P7se/Hiv+43U8=",
+        "lastModified": 1617306088,
+        "narHash": "sha256-ThbsRmv+8x41ACbgjZjjtsZ1X/ztGQOeHb//G1UX6Lk=",
         "owner": "concourse",
         "repo": "concourse",
-        "rev": "7de2523289ed7ccf3baf088f1b0632ebb3dc78fb",
+        "rev": "2918b3775b50ba1b6d365994db1f7c17b925c2a8",
         "type": "github"
       },
       "original": {
@@ -49,11 +49,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1614545381,
-        "narHash": "sha256-mrdxKP+WfV24Bz9X7xaI/q69yhVZBz7EhRvh2MNa3O0=",
+        "lastModified": 1616214656,
+        "narHash": "sha256-ceFOGcsbGlP/qtxMBlRGFH5fsbN+uGQYeHUrpgcRS4U=",
         "ref": "master",
-        "rev": "0bcbe96bef50e3c059a4792f8a227c42b299cc2a",
-        "revCount": 4807,
+        "rev": "d9530a7048f4b1c0f65825202a0ce1d111a1d39a",
+        "revCount": 4917,
         "type": "git",
         "url": "https://github.com/nix-community/emacs-overlay"
       },
@@ -134,11 +134,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1615540211,
-        "narHash": "sha256-GCcG/w9qDVxVz0LvC61GZbPY6opWndrOiN7xEJAUdlw=",
+        "lastModified": 1617271991,
+        "narHash": "sha256-VdzjIQaT1FtycNid0iPSVr44Jrstoox6QRLrwCY1uG0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "aceb539221d6c4ad92c361ed32beb90e201b9204",
+        "rev": "da7f4c4842520167f65c20ad75ecdbd14e27ae91",
         "type": "github"
       },
       "original": {
@@ -150,11 +150,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1615643782,
-        "narHash": "sha256-t3Bhlud1aIyNCMYuq8uynYHf9IR+KeVjliTb4sM7nDA=",
+        "lastModified": 1617310820,
+        "narHash": "sha256-zys0AaeYFXQ4g1Q1yjMvEH2rG3XMZM36YiStR75HhqY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d1dba66e156d3dc11cbe0d89752962a06cad56e1",
+        "rev": "11ac9ab827fd48e142e0db32193a688627fbbaa6",
         "type": "github"
       },
       "original": {
@@ -166,11 +166,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1615532953,
-        "narHash": "sha256-SWpaGjrp/INzorEqMz3HLi6Uuk9I0KAn4YS8B4n3q5g=",
+        "lastModified": 1617082367,
+        "narHash": "sha256-W0cQPGjc4IVzryaGycuoS8KZkXafS1P23w/fcKLoD5Y=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "916ee862e87ac5ee2439f2fb7856386b4dc906ae",
+        "rev": "04a2b269d8921505a2969fc9ec25c1f517f2b307",
         "type": "github"
       },
       "original": {
@@ -241,11 +241,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1614479513,
-        "narHash": "sha256-AAjtZ5g6eFKamNW+VJGmjLaIDPIryPghpZLcmooszro=",
+        "lastModified": 1617244077,
+        "narHash": "sha256-lAOLV0ZlulxLxLyldRuTx187/c/SDLoRH6TsrUzZsB0=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "1ed73d2d879fef68e9fb66711013bcbdd7b260b9",
+        "rev": "f18edbcb270b5245455bab58b721e4d748963b09",
         "type": "github"
       },
       "original": {
@@ -273,11 +273,11 @@
     "vtermModule": {
       "flake": false,
       "locked": {
-        "lastModified": 1613547426,
-        "narHash": "sha256-6i4vDjdOf/fPMOvg0MbwkZs7wyJsWMlULmEgukkoqRM=",
+        "lastModified": 1616770729,
+        "narHash": "sha256-aKhtv1XK/GFzK88R+ukNG7yPCfcU0IsoLYuN5eLJbVM=",
         "ref": "master",
-        "rev": "e19da61668783239e47b1a7390fca10f38ceffa9",
-        "revCount": 598,
+        "rev": "1bc4516f53955dcbf397cf999f38e67eec835d8c",
+        "revCount": 606,
         "type": "git",
         "url": "https://github.com/akermu/emacs-libvterm"
       },
@@ -289,11 +289,11 @@
     "yarn2nix": {
       "flake": false,
       "locked": {
-        "lastModified": 1614297590,
-        "narHash": "sha256-XKjW1owhoV39IUr6Q5VRJPgyCS/5o3BcDZv9MDVUOQU=",
+        "lastModified": 1617205634,
+        "narHash": "sha256-QPdbTSljYyLKcs01PMDHEVbIoQGcEOfjH9D/AmSPV1U=",
         "owner": "Profpatsch",
         "repo": "yarn2nix",
-        "rev": "3e19fe5ac10d1d422704d5ceda3ddc5f426bd30a",
+        "rev": "20e7027efedf1094983c3722ca577448f7633de2",
         "type": "github"
       },
       "original": {
