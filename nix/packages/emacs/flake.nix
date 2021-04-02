@@ -67,7 +67,7 @@
                   makeWrapper ${emacs}/bin/emacs $out/bin/emacs --prefix PATH : ${lib.makeBinPath [
                     nodePackages.pyright
                     python38Full
-                    nodePackages.typescript-language-server
+                    nodePackages.typescript-language-server nodePackages.typescript
 
                     pkgs-unstable.rust-analyzer
                     
@@ -79,7 +79,7 @@
 
                     ghostscript
                     imagemagick
-                    (texlive.combine { inherit (texlive) dvisvgm scheme-small preview siunitx amsmath ulem dvipng wrapfig cancel capt-of bytefield; })
+                    (texlive.combine { inherit (texlive) dvisvgm scheme-small preview siunitx amsmath ulem dvipng wrapfig cancel capt-of bytefield; }) # gensymb is not here, dont add
                     texlab
 
                     (rWrapper.override { packages = []; })

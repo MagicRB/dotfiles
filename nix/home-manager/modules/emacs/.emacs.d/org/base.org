@@ -1,7 +1,7 @@
 #+STARTUP: content
+#+TITLE: Magic_RB's Emacs configuration
 
-* Magic_RB's Emacs configuration
-** Stuff That Needs Work
+* Stuff That Needs Work
 *** TODO Spell checking
 *** TODO Calc mode
 *** TODO Org Agenda
@@ -10,7 +10,7 @@
 *** TODO org-evil moving stuff, left, right with M-j M-; instead of M-h M-l
 *** Org Web Tools
     https://github.com/alphapapa/org-web-tools
-** Stuff  
+* Stuff  
 
    #+NAME: base
    #+BEGIN_SRC emacs-lisp
@@ -64,7 +64,7 @@
      (setq ispell-program-name "hunspell")
    #+END_SRC
 
-** Look & Feel
+* Look & Feel
 *** Color Themes
     
     Enable =doom-themes=, with bold and italics. Then apply the =doom-colors= theme to Treemacs and improve org's native
@@ -249,7 +249,7 @@
 	:straight t)
     #+END_SRC
 
-** Languages
+* Languages
 *** Nix Expression Language
 
     Enable ~nix-mode~.
@@ -411,7 +411,7 @@
 	:hook (rustic-mode . lsp-mode)
 	:mode ("\\.rs\\'" . rustic-mode))
     #+END_SRC
-** LSP
+* LSP
 *** lsp-mode
      
     Increase GC threshold to avoid random freezes on garbage collection.
@@ -641,7 +641,7 @@
 	:hook (lsp-after-open-hook lsp-origami-try-enable))
     #+END_SRC
 
-** Org Mode
+* Org Mode
 
    Enable =org-roam=. It implements the Zettelkasten method in Emacs and uses a backing sqlite
    database, therefore =sqlite= must be on your path, at least for Emacs.
@@ -761,7 +761,7 @@
      (add-to-list 'org-latex-packages-alist
 		  '("" "bytefield" t))
      (add-to-list 'org-latex-packages-alist
-		  '("" "rest-api" t))
+		  '("" "siunitx" t))
 
      (eval-after-load "preview"
        '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
@@ -842,7 +842,12 @@
 	:hook org-mode)
     #+END_SRC
     
-** Smart Tabs
+*** Org ol Tree
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-ol-tree
+	:straight (org-ol-tree :type git :host github :repo "Townk/org-ol-tree"))
+    #+END_SRC
+* Smart Tabs
 
    The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
 
@@ -876,7 +881,7 @@
        (smart-tabs-insinuate 'c 'javascript 'rust))
    #+END_SRC
    
-** Ivy
+* Ivy
    
    Ivy is a lighter and actually maintained altrenative to Helm. I used to use helm, but I switched to it when I started
    using EXWM, as I had to disable my floating Helm window and since Helm doesn't use minibuffers, the window above the
@@ -937,7 +942,7 @@
        :straight t)
    #+END_SRC
    
-** Magit
+* Magit
 
    ~magit~ is literally the best package right after OrgMode of course. Therefore enable it.
 
@@ -978,26 +983,7 @@
        (org-mode . hl-todo-mode))
    #+END_SRC
    
-** Popwin DEPRECATED
-
-   Enable ~popwin~, it creates a minibuffer-esque window at the bottom of the currently focused frame, when specific
-   buffers are to be raised. For example, when you go to compile a Rust project with =C-c C-c C-b=, the compilation
-   buffer won't take up your whole frame and it also won't split your current window, rather it'll pop up at the bottom
-   like in all those fancy mainstream IDEs.
-
-   #+NAME: popwin
-   #+BEGIN_SRC emacs-lisp
-     (use-package popwin
-       :straight t
-       :disabled t
-       :config
-       (push '(rustic-compilation-mode :noselect t) popwin:special-display-config)
-       (push '(rustic-cargo-test-mode :noselect t) popwin:special-display-config)
-       (push '("*Warnings*" :noselect t) popwin:special-display-config)
-       (popwin-mode 1))
-   #+END_SRC
-   
-** Popper
+* Popper
 
    Enable ~popper~, a better version of ~popwin~, which might actually work. It groups popups by context and allows you
    to specify their exact positioning, or even a custom display function. It also seems to be better at restoring the
@@ -1010,13 +996,14 @@
        :init
        (setq popper-reference-buffers
 	     '("\\*Messages\\*"
+               "\\*Warnings\\*"
 	       "Output\\*$"
 	       help-mode
 	       compilation-mode
 	       rustic-compilation-mode))
        (popper-mode +1))
    #+END_SRC
-** Projectile
+* Projectile
 
    Enable ~projectile~.
    
@@ -1028,7 +1015,7 @@
        (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
    #+END_SRC
    
-** VTerm
+* VTerm
 
    ~vterm~ is fun, but it does not play well with ~evil~, at least by default. Therefore we need to make it
    cooperate. Most of the following ELisp was taken from an issue on VTerm's github.
@@ -1108,7 +1095,7 @@
        )
    #+END_SRC
    
-** Edit Server
+* Edit Server
 
    This awesome package when paired with a free software browser extension, available for both [[https://chrome.google.com/webstore/detail/edit-with-emacs/ljobjlafonikaiipfkggjbhkghgicgoh][Chromium]] and [[https://addons.mozilla.org/en-US/firefox/addon/edit-with-emacs1/][Firefox]],
    allows one to edit text areas in their browser in Emacs.
@@ -1120,7 +1107,7 @@
        (edit-server-start))
    #+END_SRC
    
-** Spray
+* Spray
    
    ~spray~ sprays words on screen at a certain rate.
 
@@ -1129,7 +1116,7 @@
        :straight t)
    #+END_SRC
    
-** Random Bits and Bobs
+* Random Bits and Bobs
 
    Set default major mode to org mode, it's much more useful than fundamental.
 
@@ -1164,10 +1151,11 @@
    #+END_SRC
    
    Enable line numbers for both programming buffers (Rust, C, and such) and configuration buffers (Nix, Yaml, Json, and
-   such).
+   such) and Org mode.
 
    #+BEGIN_SRC emacs-lisp
      (add-hook 'conf-mode-hook 'display-line-numbers-mode)
+     (add-hook 'org-mode-hook 'display-line-numbers-mode)
      (add-hook 'prog-mode-hook 'display-line-numbers-mode)
    #+END_SRC
 
