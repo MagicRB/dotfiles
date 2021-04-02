@@ -8,7 +8,7 @@
   home.file = {
     ".bashrc".source = rlib.substitute {
       runCommand = nixpkgs.runCommandNoCC;
-      inFile = ./.bashrc;
+      inFile = ./bashrc;
       name = ".bashrc";
       vars = {
         "exa" = "${nixpkgs.exa}";
