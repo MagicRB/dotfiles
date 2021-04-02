@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "concourse": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1617306088,
-        "narHash": "sha256-ThbsRmv+8x41ACbgjZjjtsZ1X/ztGQOeHb//G1UX6Lk=",
-        "owner": "concourse",
-        "repo": "concourse",
-        "rev": "2918b3775b50ba1b6d365994db1f7c17b925c2a8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "concourse",
-        "repo": "concourse",
-        "type": "github"
-      }
-    },
     "csi-driver-nfs": {
       "flake": false,
       "locked": {
@@ -219,7 +203,6 @@
     },
     "root": {
       "inputs": {
-        "concourse": "concourse",
         "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",

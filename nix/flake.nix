@@ -33,11 +33,6 @@
       url = "github:Profpatsch/yarn2nix";
     };
 
-    concourse = {
-      flake = false;
-      url = "github:concourse/concourse";
-    };
-
     ## Emacs
     emacs-overlay = {
       url = "git+https://github.com/nix-community/emacs-overlay";
