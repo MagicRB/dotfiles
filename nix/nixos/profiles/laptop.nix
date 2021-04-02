@@ -4,7 +4,7 @@
   hardware.bluetooth.enable = true;
   networking.networkmanager.enable = true;
 
-  environment.systemPackages = with nixpkgs; [
+  environment.systemPackages = with nixpkgs-unstable; [
     libglvnd
   ];
  

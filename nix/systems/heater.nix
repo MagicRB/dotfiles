@@ -20,7 +20,6 @@ inputs: {
     ../nixos/profiles/workstation.nix # auto
     ../nixos/modules/pin-nixpkgs.nix # manual
     ../nixos/users/main.nix # auto
-    ../nixos/modules/nomad.nix # manual
     ../nixos/modules/xserver.nix # manual
     ../nixos/modules/vault-agent.nix # manual
     ../nixos/modules/erase-my-darlings.nix # manual
@@ -52,9 +51,9 @@ inputs: {
         };
       };
 
-      nixpkgs.pkgs = nixpkgs;
+      nixpkgs.pkgs = nixpkgs-unstable;
 
-      hardware.steam-hardware.enable = true;
+      programs.steam.enable = true;
     
       services.vault-agent = {
         enable = true;
@@ -78,13 +77,13 @@ inputs: {
 
           template = [
             {
-              source = nixpkgs.writeText "wg0.key.tpl" ''
+              source = nixpkgs-unstable.writeText "wg0.key.tpl" ''
                 {{ with secret "kv/data/systems/heater/wireguard" }}{{ .Data.data.private_key }}{{ end }}
               '';
               destination = "/var/secrets/wg0.key";
             }
             {
-              source = nixpkgs.writeText "nomad.hcl.tpl" ''
+              source = nixpkgs-unstable.writeText "nomad.hcl.tpl" ''
                 client {
                   enabled = true 
                  servers = [ "blowhole.in.redalder.org:4647" ]
@@ -93,7 +92,7 @@ inputs: {
                     docker.privileged.enabled = "true"
                   }
                   
-                  cni_path = "${nixpkgs.cni-plugins}/bin"
+                  cni_path = "${nixpkgs-unstable.cni-plugins}/bin"
                 } 
                  {{ with secret "kv/data/systems/heater/nomad" }}
                 vault {
@@ -121,12 +120,14 @@ inputs: {
        };
      };
 
+      services.sshd.enable = true;
+
      services.nomad = {
        enable = true;
        enableDocker = true;
        dropPrivileges = false;
 
-       extraPackages = [ nixpkgs.consul ];
+       extraPackages = [ nixpkgs-unstable.consul ];
 
        package = nixpkgs-unstable.nomad;
 
@@ -144,7 +145,7 @@ inputs: {
 
        extraConfig = ''
          <runcommand>
-           command = cp $HYDRA_JSON /tmp/hydra-json ; ${nixpkgs.curl}/bin/curl -X POST -H "Content-Type: application/json" -d @$HYDRA_JSON http://localhost:8080/hydra
+           command = cp $HYDRA_JSON /tmp/hydra-json ; ${nixpkgs-unstable.curl}/bin/curl -X POST -H "Content-Type: application/json" -d @$HYDRA_JSON http://localhost:8080/hydra
          </runcommand>
        '';
      };

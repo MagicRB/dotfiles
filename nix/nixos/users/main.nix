@@ -3,7 +3,7 @@
 let
   nm-enable = config.networking.networkmanager.enable;
   docker-enable = config.virtualisation.docker.enable;
-  mkIf = nixpkgs.lib.mkIf;
+  mkIf = nixpkgs-unstable.lib.mkIf;
 in {
   users = {
     mutableUsers = false;

@@ -22,7 +22,7 @@
 
   hardware.enableRedistributableFirmware = true;
 
-  powerManagement.cpuFreqGovernor = nixpkgs.lib.mkDefault "schedutil";
+  powerManagement.cpuFreqGovernor = nixpkgs-unstable.lib.mkDefault "schedutil";
 
   fileSystems = {
     "/" =

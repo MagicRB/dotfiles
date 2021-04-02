@@ -7,6 +7,6 @@
     inkscape
   ] ++ [
     nixpkgs-unstable.prusa-slicer
-    custom.freecad-appimage
+#    custom.freecad-appimage
   ];
 }

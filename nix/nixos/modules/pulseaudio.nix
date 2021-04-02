@@ -8,7 +8,7 @@ in {
   hardware = {
     pulseaudio = {
       enable = true;
-      package = mkIf bluetooth-enable nixpkgs.pulseaudioFull;
+      package = mkIf bluetooth-enable nixpkgs-unstable.pulseaudioFull;
     };
     pulseaudio.support32Bit = true;
   };

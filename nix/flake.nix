@@ -58,8 +58,9 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     with inputs; let
-      rlib = import ./rlib {
-        inherit nixpkgs home-manager inputs;
+      rlib = self.rlib {
+        inherit home-manager inputs;
+        nixpkgs = nixpkgs-unstable;
         pkgs = {
           inherit nixpkgs nixpkgs-unstable nixpkgs-master;
         };

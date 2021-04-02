@@ -3,11 +3,11 @@
 {
   home.packages = with nixpkgs; [
     gimp
-    steam
     firefox
     scrot
     xclip
-    discord
     mpv
+  ] ++ [
+    nixpkgs-master.discord
   ];
 }

@@ -3,7 +3,7 @@
 {
   services.openssh.enable = true;
   
-  environment.systemPackages = with nixpkgs; [
+  environment.systemPackages = with nixpkgs-unstable; [
     home-manager
     cryptsetup
     nix-tree

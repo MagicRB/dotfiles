@@ -15,6 +15,7 @@ in {
       "usbhid"
       "usb_storage"
       "sd_mod"
+      "nvme"
     ];
     initrd.kernelModules = [ "dm-snapshot" ];
     kernelModules = [ "kvm-amd" ];
@@ -22,7 +23,7 @@ in {
     kernelPackages = nixpkgs-unstable.linuxPackages_latest;
   };
 
-  powerManagement.cpuFreqGovernor = nixpkgs.lib.mkDefault "performance";
+  powerManagement.cpuFreqGovernor = nixpkgs-unstable.lib.mkDefault "performance";
 
   fileSystems = {
     "/" =
@@ -41,6 +42,18 @@ in {
       {
         device = "heater-zpool/safe/home";
         fsType = "zfs";
+      };
+	
+    "/var/lib/hydra" =
+      {
+        device = "heater-zpool/persist/hydra/prog";
+ 	fsType = "zfs";
+      };
+
+    "/var/lib/postgresql" =
+      {
+	device = "heater-zpool/persist/hydra/db";
+	fsType = "zfs";
       };
 
     "/var/lib/nomad" =
@@ -77,13 +90,13 @@ in {
 
     "/boot" =
       {
-        device = "/dev/disk/by-uuid/dafa0b63-c033-4ceb-ae12-dbd2ab66c604";
+        device = "/dev/disk/by-uuid/5e590840-9e62-4231-8ac5-e6a27325254d";
         fsType = "ext4";
       };
 
     "/boot/EFI" =
       {
-        device = "/dev/disk/by-uuid/B505-6FF0";
+        device = "/dev/disk/by-uuid/D381-9D12";
         fsType = "vfat";
       };
 

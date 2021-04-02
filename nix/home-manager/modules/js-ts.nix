@@ -3,6 +3,6 @@
 {
   home.packages = [
     nixpkgs.yarn
-    custom.yarn2nix
+#    custom.yarn2nix
   ];
 }

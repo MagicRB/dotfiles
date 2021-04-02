@@ -3,7 +3,7 @@
 with lib;
 let
   cfg = config.services.vault-agent;
-  format = nixpkgs.formats.json { };
+  format = nixpkgs-unstable.formats.json { };
 in
 {
   options = {
@@ -12,7 +12,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = nixpkgs.vault;
+        default = nixpkgs-unstable.vault;
         defaultText = "nixpkgs.vault";
         description = ''
           The package used for the Vault agent and CLI.
@@ -113,7 +113,7 @@ in
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
 
-          path = (with nixpkgs; [
+          path = (with nixpkgs-unstable; [
             glibc
           ]);
 
@@ -122,7 +122,7 @@ in
               User = cfg.userName;
               Group = cfg.groupName;
 
-              ExecReload = "${nixpkgs.busybox}/bin/kill -HUP $MAINPID";
+              ExecReload = "${nixpkgs-unstable.busybox}/bin/kill -HUP $MAINPID";
               ExecStart = "${cfg.package}/bin/vault agent -config=${vaultConfig}";
 
               KillMode = "process";
