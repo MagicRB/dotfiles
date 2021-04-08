@@ -1,5 +1,7 @@
  # -*- mode: shell-script; -*- 
 
+export PATH=@findutils@/bin:@busybox@/bin:@cryptsetup@/bin
+
 command="$1"
 
 if [ "$(id -u)" != "0" ]
@@ -11,19 +13,19 @@ fi
 set -e
 case "$command" in
      "open")
-	 @cryptsetup@ open /dev/disk/by-label/secret secret
-	 @mkdir@ -p /mnt/key
+	 cryptsetup open /dev/disk/by-label/secret secret
+	 mkdir -p /mnt/key
 
 	 mount /dev/mapper/secret /mnt/key
      ;;
      "close")
 	 umount /mnt/key
-	 @cryptsetup@ close secret
+	 cryptsetup close secret
 
-	 @rm@ -r /mnt/key
-	 if [ -n "$(@find@ /mnt -maxdepth 0 -empty)" ]
+	 rm -r /mnt/key
+	 if [ -n "$(find /mnt -maxdepth 0 -empty)" ]
 	 then
-	     @rm@ -r /mnt
+	     rm -r /mnt
 	 fi
      ;;
      *)

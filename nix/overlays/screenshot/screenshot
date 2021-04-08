@@ -1,4 +1,6 @@
- # -*- mode: shell-script; -*- 
+# -*- mode: shell-script; -*- 
+
+export PATH=@scrot@/bin:@xclip@/bin:@busybox@/bin
 
 OPT="${1:-screen}"
 
