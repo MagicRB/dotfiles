@@ -84,10 +84,6 @@ xssh() {
     fi
 }
 
-#if [[ -d "/mnt/data3/Programs/bin" ]]; then
-#    export PATH="/mnt/data3/Programs/bin:${PATH}"
-#fi
-
 ## Set prompt
 
 export EDITOR="emacsclient"

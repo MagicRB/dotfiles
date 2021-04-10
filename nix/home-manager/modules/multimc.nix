@@ -1,7 +1,17 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
+with lib;
+let
+  cfg = config.magic_rb.programs.multimc;
+  inherit (config.magic_rb.pkgs) nixpkgs-unstable;
+in
 {
-  home.packages = with custom; [
-    multimc-devel
-  ];
+  options.magic_rb.programs.multimc = {
+    enable = mkEnableOption "Enable MultiMC Minecraft launcher.";
+  };
+
+  config = mkIf cfg.enable {
+    home.packages = [
+      nixpkgs-unstable.multimc
+    ];
+  };
 }

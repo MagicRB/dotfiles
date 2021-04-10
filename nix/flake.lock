@@ -1,27 +1,13 @@
 {
   "nodes": {
-    "csi-driver-nfs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1610374369,
-        "narHash": "sha256-+CoyhWufws6zEtFU2uJA4NamSCUGVmoMOA91kormXCo=",
-        "owner": "MagicRB",
-        "repo": "csi-driver-nfs",
-        "rev": "560a4ebc1587dd4d447b8be2dee36db4d67fabbc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "MagicRB",
-        "repo": "csi-driver-nfs",
-        "type": "github"
-      }
-    },
     "emacs": {
       "flake": false,
       "locked": {
+        "lastModified": 1617874231,
+        "narHash": "sha256-7ZtKxYEJjXD2zi2t7JPP+TmAO10ZfzvG9XemkFy2uqk=",
         "owner": "flatwhatson",
         "repo": "emacs",
-        "rev": "8bcd71bf75672bbcfbb6175301a3552dae4bfb4a",
+        "rev": "1000227d38b4f139f1e393e6bfb613829fcc92d0",
         "type": "github"
       },
       "original": {
@@ -33,11 +19,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1616214656,
-        "narHash": "sha256-ceFOGcsbGlP/qtxMBlRGFH5fsbN+uGQYeHUrpgcRS4U=",
+        "lastModified": 1618077757,
+        "narHash": "sha256-117/IcsuzKkgA+duqYUNHQ3T3h2T97Xl5Q4+zHE/EsM=",
         "ref": "master",
-        "rev": "d9530a7048f4b1c0f65825202a0ce1d111a1d39a",
-        "revCount": 4917,
+        "rev": "ef0447c0edd403e798816b91f197ce59b5ab8de6",
+        "revCount": 4941,
         "type": "git",
         "url": "https://github.com/nix-community/emacs-overlay"
       },
@@ -46,25 +32,32 @@
         "url": "https://github.com/nix-community/emacs-overlay"
       }
     },
-    "flake-utils": {
+    "fenix": {
+      "inputs": {
+        "naersk": "naersk",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ],
+        "rust-analyzer-src": "rust-analyzer-src"
+      },
       "locked": {
-        "lastModified": 1609246779,
-        "narHash": "sha256-eq6ZXE/VWo3EMC65jmIT6H/rrUc9UWOWVujkzav025k=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "08c7ad4a0844adc4a7f9f5bb3beae482e789afa4",
+        "lastModified": 1618022249,
+        "narHash": "sha256-551q39hhX6/MQ6xCHOdQFT1/ZRYRrwLsIc8HdBwxT/U=",
+        "owner": "nix-community",
+        "repo": "fenix",
+        "rev": "8a3ef3f61b626feccca68935621e4c83e4e8031f",
         "type": "github"
       },
       "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
+        "owner": "nix-community",
+        "repo": "fenix",
         "type": "github"
       }
     },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-unstable"
         ]
       },
       "locked": {
@@ -82,38 +75,44 @@
         "type": "github"
       }
     },
-    "klippy": {
-      "flake": false,
+    "naersk": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1609168797,
-        "narHash": "sha256-1ojKClZTqa0amwUWz1z9GFuEaXtuw7xu0JEgF2N1UQ8=",
-        "owner": "KevinOConnor",
-        "repo": "klipper",
-        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "lastModified": 1614785451,
+        "narHash": "sha256-TPw8kQvr2UNCuvndtY+EjyXp6Q5GEW2l9UafXXh1XmI=",
+        "owner": "nmattia",
+        "repo": "naersk",
+        "rev": "e0fe990b478a66178a58c69cf53daec0478ca6f9",
         "type": "github"
       },
       "original": {
-        "owner": "KevinOConnor",
-        "repo": "klipper",
-        "rev": "e68cf08d15a985ecce7497b58408ee233dd54eb9",
+        "owner": "nmattia",
+        "repo": "naersk",
         "type": "github"
       }
     },
-    "moonraker": {
-      "flake": false,
+    "nixng": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
       "locked": {
-        "lastModified": 1609164221,
-        "narHash": "sha256-+k4bFTGWvJ+un8R9dRhjtDt4dVvHfu2/gSp5iEuoX/w=",
-        "owner": "MagicRB",
-        "repo": "moonraker",
-        "rev": "e63f104695278231c3961b12bc5f5e13f5eeea62",
-        "type": "github"
+        "lastModified": 1617920106,
+        "narHash": "sha256-Q42x56jAQZdoa2XhyBXZsOPP0vKs6T5O61O+WDAu7I0=",
+        "ref": "master",
+        "rev": "6236d9e963a18a795ddceb45c8ec6ed5447e33fa",
+        "revCount": 32,
+        "type": "git",
+        "url": "https://gitea.redalder.org/Magic_RB/NixNG"
       },
       "original": {
-        "owner": "MagicRB",
-        "ref": "master",
-        "repo": "moonraker",
-        "type": "github"
+        "type": "git",
+        "url": "https://gitea.redalder.org/Magic_RB/NixNG"
       }
     },
     "nixpkgs": {
@@ -164,76 +163,34 @@
         "type": "github"
       }
     },
-    "nixpkgs-unstable_2": {
-      "locked": {
-        "lastModified": 1613226215,
-        "narHash": "sha256-3rA5cGIrBHD6yeKhNhsF7/t461ww25oJY8KyBb0IhjU=",
-        "path": "/nix/store/nm00hhm641807yih5qxf98d9hxixzfg6-source",
-        "rev": "ff96a0fa5635770390b184ae74debea75c3fd534",
-        "type": "path"
-      },
-      "original": {
-        "id": "nixpkgs-unstable",
-        "type": "indirect"
-      }
-    },
-    "ra-systems": {
-      "inputs": {
-        "csi-driver-nfs": "csi-driver-nfs",
-        "klippy": "klippy",
-        "moonraker": "moonraker",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-unstable": "nixpkgs-unstable_2"
-      },
-      "locked": {
-        "lastModified": 1614553740,
-        "narHash": "sha256-nygaVykSgbfTNsmC+O3zDLjsWoPsT26iMacIS4PtmIk=",
-        "ref": "master",
-        "rev": "dc01844998c4883faf4778d9db546522e2604499",
-        "revCount": 17,
-        "type": "git",
-        "url": "https://gitea.redalder.org/RedAlder/systems"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://gitea.redalder.org/RedAlder/systems"
-      }
-    },
     "root": {
       "inputs": {
         "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
+        "fenix": "fenix",
         "home-manager": "home-manager",
+        "nixng": "nixng",
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "ra-systems": "ra-systems",
-        "rust-overlay": "rust-overlay",
         "sss-cli": "sss-cli",
-        "vtermModule": "vtermModule",
-        "yarn2nix": "yarn2nix"
+        "vtermModule": "vtermModule"
       }
     },
-    "rust-overlay": {
-      "inputs": {
-        "flake-utils": "flake-utils",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
+    "rust-analyzer-src": {
+      "flake": false,
       "locked": {
-        "lastModified": 1617244077,
-        "narHash": "sha256-lAOLV0ZlulxLxLyldRuTx187/c/SDLoRH6TsrUzZsB0=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "f18edbcb270b5245455bab58b721e4d748963b09",
+        "lastModified": 1618001561,
+        "narHash": "sha256-+nBH5imNoD9W3hWkIwVffVeftiY/9vts0++/0i80zgk=",
+        "owner": "rust-analyzer",
+        "repo": "rust-analyzer",
+        "rev": "00cdbceb9d7afdabc82788a88df88c6eb1035839",
         "type": "github"
       },
       "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
+        "owner": "rust-analyzer",
+        "ref": "nightly",
+        "repo": "rust-analyzer",
         "type": "github"
       }
     },
@@ -267,22 +224,6 @@
       "original": {
         "type": "git",
         "url": "https://github.com/akermu/emacs-libvterm"
-      }
-    },
-    "yarn2nix": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1617205634,
-        "narHash": "sha256-QPdbTSljYyLKcs01PMDHEVbIoQGcEOfjH9D/AmSPV1U=",
-        "owner": "Profpatsch",
-        "repo": "yarn2nix",
-        "rev": "20e7027efedf1094983c3722ca577448f7633de2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Profpatsch",
-        "repo": "yarn2nix",
-        "type": "github"
       }
     }
   },

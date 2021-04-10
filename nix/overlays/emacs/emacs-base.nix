@@ -7,6 +7,7 @@
 , emacsOverlay
 , emacsSrc
 }:
+with lib;
 (emacsOverlay.emacsGit.overrideAttrs
   (old: {
     src = emacsSrc;
@@ -15,11 +16,11 @@
     makeFlags = [ "NATIVE_FULL_AOT=1" ];
 
     configureFlags =
-      if withPgtk then
-        (lib.remove "--with-xft" old.configureFlags)
-        ++ lib.singleton "--with-pgtk"
+      (if withPgtk then
+        (remove "--with-xft" old.configureFlags)
+        ++ singleton "--with-pgtk"
       else
-        old.configureFlags; 
+        old.configureFlags) ++ (optional withNativeComp "--with-native-compilation"); 
 
     inherit name;
   })).override { nativeComp = withNativeComp; }

@@ -1,10 +1,10 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }: {
-  home.packages = [
-    nixpkgs-unstable.nixFlakes
+{ pkgs, ... }: {
+  home.packages = with pkgs; [
+    nixFlakes
   ];
 
   imports = [
+    ../modules/pin-nixpkgs.nix
     ../modules/bash
   ];
 }

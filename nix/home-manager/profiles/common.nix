@@ -2,13 +2,18 @@
 , wine ? false
 , _3dPrinting ? false
 , js-ts ? false }:
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }: {
+{ config, pkgs, ... }:
+let
+  inherit (config.magic_rb.pins) nixpkgs-unstable;
+  inherit (pkgs) lib;
+
+in
+{
   home.packages = [
     nixpkgs-unstable.nomad
-    custom.sss-cli
+    pkgs.magic_rb.sss-cli
 
-  ] ++ (with nixpkgs; [
+  ] ++ (with pkgs; [
     fira-code
     overpass
   ]);
@@ -33,9 +38,9 @@
     ../modules/xmonad
 
     ../modules/gpg.nix
-  ]
-  ++ (lib.optionals multimc5 [ ../modules/multimc.nix ])
-  ++ (lib.optionals wine [ ../modules/wine.nix ])
-  ++ (lib.optionals _3dPrinting [ ../modules/3d-printing.nix ])
-  ++ (lib.optionals js-ts [ ../modules/js-ts.nix ]);
+  ];
+  # ++ (lib.optionals multimc5 [ ../modules/multimc.nix ])
+  # ++ (lib.optionals wine [ ../modules/wine.nix ])
+  # ++ (lib.optionals _3dPrinting [ ../modules/3d-printing.nix ])
+  # ++ (lib.optionals js-ts [ ../modules/js-ts.nix ]);
 }

@@ -1,9 +1,20 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib,  ... }:
+{ config, lib, pkgs, ... }:
+with lib;
+let
+  cfg = config.magic_rb.packageCollections.webdev;
+in
 {
-  home.packages = with nixpkgs; [
-    wasm-pack
-    nodePackages.vscode-html-languageserver-bin
-    nodePackages.vscode-css-languageserver-bin
-  ];
+  options.magic_rb.packageCollections.webdev = {
+    enable = mkEnableOption
+      ''
+        Enable webdev package collection, contains yarn and wasm-pack.
+      '';
+  };
+
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      yarn
+      wasm-pack
+    ];
+  };
 }

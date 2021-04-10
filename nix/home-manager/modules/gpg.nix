@@ -1,29 +1,54 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
+with lib;
+let
+  cfg = config.magic_rb.programs.gpg;
+  inherit (config.magic_rb.pkgs) nixpkgs; 
+in
 {
-  home.packages = [
-    custom.gpg-key
-    nixpkgs.gnupg
-  ];
+  options.magic_rb.programs.gpg = {
+    enable = mkEnableOption
+      ''
+        Enable gpg and gpg-key.
+      '';
+    pinentryFlavor = mkOption {
+      description = "Which pinentry flavor should be used.";
+      type = types.enum [
+        "curses"
+        "emacs"
+        "mac"
+        "gtk2"
+        "qt"
+        "gnome"
+      ];
+      default = "gtk2";
+    };
+  };
+  
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      nixpkgs.magic_rb.gpg-key
+      gnupg
+    ];
 
-  home.file.".gpg-agent.conf".text = (pinentryFlavor: ''
-    enable-ssh-support
-    pinentry-program ${nixpkgs.pinentry.${pinentryFlavor}}/bin/pinentry
-  '') "gtk2";
+    home.file.".gpg-agent.conf".text = ''
+      enable-ssh-support
+      pinentry-program ${nixpkgs.pinentry."${cfg.pinentryFlavor}"}/bin/pinentry
+    '';
 
-  home.file.".profile".text = ''
-     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-  '';
+    home.file.".profile".text = ''
+      export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    '';
 
-  home.activation.gnupghome = config.lib.dag.entryAfter ["writeBoundary"] ''
-    if [[ ! -e ~/.gnupg ]]
-    then
+    home.activation.gnupghome = config.lib.dag.entryAfter ["writeBoundary"] ''
+      if [[ ! -e ~/.gnupg ]]
+      then
         ln -sf /mnt/key/gnupg ~/.gnupg  
-    fi
+      fi
 
-    if [[ ! -e ~/.gnupg/gpg-agent.conf ]] && [[ -d /mnt/key/gnupg ]]
-    then
+      if [[ ! -e ~/.gnupg/gpg-agent.conf ]] && [[ -d /mnt/key/gnupg ]]
+      then
         ln -sf ~/.gpg-agent.conf /mnt/key/gnupg/gpg-agent.conf
-    fi
-  '';
+      fi
+    '';
+  };
 }

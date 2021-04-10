@@ -1,20 +1,23 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
+with lib;
+let
+  cfg = config.magic_rb.packageCollections.cmdline;
+in
 {
-  home.packages = with nixpkgs; [
-    zip
-    unzip
-    pinentry
-    libqrencode
-    unrar
-    pciutils
-    git
-    socat
-    gnumake
-    llvmPackages.bintools
-    pkgconfig 
-    htop
-  ] ++ (with custom; [
-    screenshot
-  ]);
+  options.magic_rb.packageCollections.cmdline = {
+    enable = mkEnableOption
+      ''
+        A package collection containing command line programs, specifically zip, unzip, unrar (unfree), git, and htop.
+      '';
+  };
+
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      zip
+      unzip
+      unrar
+      git
+      htop
+    ];
+  };
 }

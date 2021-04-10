@@ -4,45 +4,35 @@
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs?ref=master";
     
-    ra-systems = {
-      url = "git+https://gitea.redalder.org/RedAlder/systems";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     home-manager = {
       url = "github:nix-community/home-manager?ref=release-20.09";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
+    nixng = {
+      url = "git+https://gitea.redalder.org/Magic_RB/NixNG";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    
     #  PACKAGES
-    ## Rust Things
-    rust-overlay = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "github:oxalica/rust-overlay";
-    };
-
     ## sss-cli
     sss-cli = {
       flake = false;
       url = "github:dsprenkels/sss-cli";
     };
 
-    ## yarn2nix
-    yarn2nix = {
-      flake = false;
-      url = "github:Profpatsch/yarn2nix";
-    };
-
     ## Emacs
     emacs-overlay = {
       url = "git+https://github.com/nix-community/emacs-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     emacs = {
-      # type = "git";
-      #url = "https://git.savannah.gnu.org/git/emacs.git";
       url = "github:flatwhatson/emacs?ref=pgtk-nativecomp";
-      #ref = "feature/native-comp";
       flake = false;
     };
     vtermModule = {
@@ -51,135 +41,58 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
-    with inputs; let
-      rlib = self.rlib {
-        inherit home-manager inputs;
-        nixpkgs = nixpkgs-unstable;
-        pkgs = {
-          inherit nixpkgs nixpkgs-unstable nixpkgs-master;
-        };
-        custom = with rlib; {
-          sss-cli = ./packages/sss-cli;
-          atom-shell = ./packages/atom-shell;
-          emacs = ./packages/emacs;
-          emacsclient-remote = ./packages/emacsclient-remote;
-          enter-env = ./packages/enter-env;
-          screenshot = ./packages/screenshot;
-          multimc-devel = ./packages/multimc-devel;
-          concourse = ./packages/concourse-ci;
-          gpg-key = ./packages/gpg-key;
-          yarn2nix = ./packages/yarn2nix;
-          freecad-appimage = ./packages/freecad-appimage;
-          rust =
-            # system:
-            let
-              rustyPkgs = import inputs.nixpkgs {
-                overlays = [ inputs.rust-overlay.overlay ];
-                system = "x86_64-linux";
-                # inherit system;
-              };
-            in
-              rustyPkgs.rust-bin;
-        };
-        self = rlib;
-        supportedSystems = [ "x86_64-linux" "i386-linux" "aarch64-linux" ];
-      };
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
+    let
+      inherit (nixpkgs-unstable.lib) nixosSystem;
+      inherit (home-manager.lib) homeManagerConfiguration;
 
-      rmodules = {
-        klippy = ra-systems.flakes.klippy.nixosModules.klippy;
-        moonraker = ra-systems.flakes.moonraker.nixosModules.moonraker;
-        mainsail = ra-systems.flakes.mainsail.nixosModules.mainsail;
-        home-manager = inputs.home-manager.nixosModules.home-manager;
-      };
-
-      omen = rlib.nixosSystem (import ./systems/omen.nix inputs);
-      heater = rlib.nixosSystem (import ./systems/heater.nix inputs);
-      mark = rlib.nixosSystem (import ./systems/mark.nix inputs);
-
-      edge = rlib.homeManagerConfiguration (import ./systems/edge.nix);
-      blowhole = rlib.homeManagerConfiguration (import ./systems/blowhole.nix);
-
-      recoveryUsb = rlib.nixosSystem (import ./systems/recovery-usb.nix inputs);
-
-      dockerImages = rlib.dockerImages {
-        concourse = ./docker/concourse;
-        gitea = ./docker/gitea;
-        postgresql = ./docker/postgresql;
-        concourse-vault-sidecar = ./docker/concourse-vault-sidecar;
-        nix = (import ./docker/nix inputs);
-        runner = (import ./docker/runner inputs);
-      };
+      supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
     in {
-      nixosConfigurations.omen = omen;
-      omen = omen.config.system.build.toplevel;
+      nixosConfigurations.omen = nixosSystem (import ./systems/omen.nix inputs);
+      omen = self.nixosConfigurations.omen.config.system.build.toplevel;
 
-      nixosConfigurations.heater = heater;
-      heater = heater.config.system.build.toplevel;
+      nixosConfigurations.heater = nixosSystem (import ./systems/heater.nix inputs);
+      heater = self.nixosConfigurations.heater.config.system.build.toplevel;
 
-      nixosConfigurations.mark = mark;
-      mark = mark.config.system.build.toplevel;
+      nixosConfigurations.crystalsRig = nixosSystem (import ./systems/crystals-rig.nix);
+      crystalsRig = self.nixosConfigurations.crystalsRig.config.system.build.toplevel;
 
-      homeConfigurations.edge = edge;
-      edge = edge.activationPackage;
+      nixosConfigurations.mark = nixosSystem (import ./systems/mark.nix inputs);
+      mark = self.nixosConfigurations.mark.config.system.build.toplevel;
 
-      homeConfigurations.blowhole = blowhole;
-      blowhole = blowhole.activationPackage;
+      nixosConfigurations.recoveryUsb = nixosSystem (import ./systems/recovery-usb.nix inputs);
+      recoveryUsb = self.nixosConfigurations.recoveryUsb.config.system.build.toplevel;
 
-      recoveryUsb = recoveryUsb.config.system.build.isoImage;
+      homeConfigurations.edge = homeManagerConfiguration (import ./systems/edge.nix inputs);
+      edge = self.homeConfigurations.edge.activationPackage;
 
-      inherit dockerImages;
+      homeConfigurations.blowhole = homeManagerConfiguration (import ./systems/blowhole.nix inputs);
+      blowhole = self.homeConfigurations.blowhole.activationPackage;
 
-      rlib = import ./rlib;
-      
-      halfFlakes = rlib.custom;
-      CI = 
-        {
-          dockerImages = (rlib.linkFarm "dockerImages" (system: with dockerImages."${system}"; [
-            {
-              name = "gitea";
-              path = gitea;
-            }
-            {
-              name = "concourse";
-              path = concourse;
-            }
-          ]));
-          systems = (rlib.linkFarm "systems" (_: [
-            {
-              name = "omen";
-              path = omen.config.system.build.toplevel;
-            }
-            {
-              name = "heater";
-              path = heater.config.system.build.toplevel;
-            }
-            {
-              name = "blowhole";
-              path = blowhole.activationPackage;
-            }
-            {
-              name = "mark";
-              path = mark.config.system.build.toplevel;
-            }
-          ]))."${system}";
-          halfFlakes = (rlib.linkFarm "dockerImages" (system: with dockerImages."${system}"; [
-            {
-              name = "gitea";
-              path = gitea;
-            }
-            {
-              name = "concourse";
-              path = concourse;
-            }
-          ]));
 
-          packages = (rlib.linkFarm "dockerImages" (system: with dockerImages."${system}"; [
+      overlays = {
+        emacs = import ./overlays/emacs/default.nix inputs;
+        emacsclient-remote = import ./overlays/emacsclient-remote;
+        gpg-key = import ./overlays/gpg-key inputs.nixng.lib;
+        screenshot = import ./overlays/screenshot inputs.nixng.lib;
+        sss-cli = import ./overlays/sss-cli inputs.sss-cli;
+      };
+
+      packages =
+        forAllSystems (system:
+          let
+            mkPkg =
+              name: (import nixpkgs { inherit system; overlays = [ self.overlays."${name}" ]; }).magic_rb."${name}";
+          in
             {
-            name = "sss-cli";
-            path = sss-cli.defaultPackage."${system}";
-            }
-          ]));
-        };
+              emacs = mkPkg "emacs";
+              emacsclient-remote = mkPkg "emacsclient-remote";
+              gpg-key = mkPkg "gpg-key";
+              screenshot = mkPkg "screenshot";
+              sss-cli = mkPkg "sss-cli";
+            });
+
+      # halfFlakes = rlib.custom;
     };
 }

@@ -6,7 +6,7 @@ let
   };
 in
 {
-  magic_rb = {
+  magic_rb = prev.magic_rb or {} // {
     emacs = prev.callPackage ./emacs-bundle.nix rec {
       emacsOverlay = inputs.emacs-overlay.overlay prev prev;
       emacsSrc = inputs.emacs;
@@ -16,7 +16,6 @@ in
         [
           nodePackages.pyright
           python38Full
-          nodePackages.typescript-language-server nodePackages.typescript
 
           rust-analyzer
           
@@ -32,7 +31,14 @@ in
           texlab
 
           (rWrapper.override { packages = []; })
-        ];
+
+	  gnumake
+        ] ++ (with prev.nodePackages; [
+          typescript-language-server
+          typescript
+          vscode-html-languageserver-bin
+          vscode-css-languageserver-bin
+        ]);
     };
   };
 }
