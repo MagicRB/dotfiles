@@ -43,9 +43,11 @@ in
         "screenshot" = "${pkgs.magic_rb.screenshot}/bin/screenshot";
         "dmenu_run" = "${pkgs.dmenu}/bin/dmenu_run";
 
+        "dunst" = "${pkgs.dunst}/bin/dunst";
         "enableDunst" = if cfg.enableDunst then "True" else "False";
         "dunstConfig" = ./dunstrc;
 
+        "picom" = "${pkgs.picom}/bin/picom";
         "enablePicom" = if cfg.enablePicom then "True" else "False";
         "picomConfig" = ./picom.conf;
         "experimentalBackends" = if cfg.picomExperimentalBackends then "--experimental-backends" else "";
