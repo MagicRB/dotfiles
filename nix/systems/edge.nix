@@ -19,7 +19,7 @@ inputs: {
         overlays = inputs.self.overlays;
 
         programs = {
-          base.enable = true;
+          bash.enable = true;
           emacs = {
             enable = true;
             package = pkgs.emacs;
