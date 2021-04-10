@@ -1,29 +1,43 @@
 inputs: {
   system = "x86_64-linux";
-  hostname = "mark";
-  check = false;
 
-  hm."main" = import ../home-manager/profiles/mark.nix;
+  # hm."main" = import ../home-manager/profiles/mark.nix;
 
   modules = [
-    ../nixos/hardware/mark.nix
-    ../nixos/users/main.nix
+    ../hardware/default.nix # manual
+    ../nixos-modules/pin-nixpkgs.nix # manual
+    ../nixos-modules/main.nix # auto
   ] ++ [
-    ({ custom, nixpkgs, ... }: _: {
+    ({ pkgs, config, ... }: {
+      magic_rb = {
+        pins = {
+          inherit (inputs)
+            nixpkgs
+            nixpkgs-unstable
+            nixpkgs-master
+
+            home-manager
+            nixng
+            fenix;
+        };
+        config = {
+          allowUnfree = true;
+        };
+        overlays = inputs.self.overlays;
+
+        hardware.mark = true;
+      };
       time.timeZone = "Europe/Bratislava";
       system.stateVersion = "20.09";
 
-      environment.systemPackages = with nixpkgs; [
+      environment.systemPackages = with pkgs; [
         gnupg
         pinentry
         openssl
         paperkey
         monkeysphere
-      ] ++ [
-        custom.sss-cli
+        magic_rb.sss-cli
       ];
     })
   ];
-
-  compatModules = [];
 }

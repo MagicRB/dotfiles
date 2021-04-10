@@ -1,9 +1,10 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
+  inherit (config.magic_rb.pkgs) nixpkgs-unstable;
+
   cfg = config.services.vault-agent;
-  format = nixpkgs-unstable.formats.json { };
+  format = pkgs.formats.json { };
 in
 {
   options = {
@@ -113,7 +114,7 @@ in
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
 
-          path = (with nixpkgs-unstable; [
+          path = (with pkgs; [
             glibc
           ]);
 
@@ -122,7 +123,7 @@ in
               User = cfg.userName;
               Group = cfg.groupName;
 
-              ExecReload = "${nixpkgs-unstable.busybox}/bin/kill -HUP $MAINPID";
+              ExecReload = "${pkgs.busybox}/bin/kill -HUP $MAINPID";
               ExecStart = "${cfg.package}/bin/vault agent -config=${vaultConfig}";
 
               KillMode = "process";

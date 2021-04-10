@@ -1,11 +1,20 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
+with lib;
+let
+  cfg = config.magic_rb.programs.alacritty;
+in
 {
-  home.packages = with nixpkgs; [
-    alacritty
-  ];
+  options.magic_rb.programs.alacritty = {
+    enable = mkEnableOption "Enable the alacritty terminal emulator";
+  };
 
-  home.file = {
-    ".config/alacritty/alacritty.yaml".source = ./alacritty.yaml;
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      alacritty
+    ];
+
+    home.file = {
+      ".config/alacritty/alacritty.yaml".source = ./alacritty.yaml;
+    };
   };
 }

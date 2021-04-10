@@ -1,9 +1,8 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, ... }:
+{ config, lib, ... }:
+with lib;
 let
   nm-enable = config.networking.networkmanager.enable;
   docker-enable = config.virtualisation.docker.enable;
-  mkIf = nixpkgs-unstable.lib.mkIf;
 in {
   users = {
     mutableUsers = false;
@@ -17,8 +16,8 @@ in {
       uid = 1000;
 
       extraGroups = [ "wheel" "audio" ]
-                    ++ (if nm-enable then [ "networkmanager" ] else [])
-                    ++ (if docker-enable then [ "docker" ] else []);
+                     ++ (optional nm-enable "network-manager")
+                    ++ (optional docker-enable "docker");
     };
     
     groups.main = {

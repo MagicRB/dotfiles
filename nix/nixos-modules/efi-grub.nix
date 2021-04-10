@@ -1,4 +1,3 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
 { config, lib, ... }:
 with lib;
 let

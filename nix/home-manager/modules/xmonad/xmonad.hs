@@ -21,6 +21,8 @@ import XMonad.Layout.NoBorders
 import XMonad.Util.WorkspaceCompare
 import XMonad.Hooks.DynamicLog
 
+import Control.Monad
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -261,8 +263,8 @@ myLogHook = return ()
 -- By default, do nothing.
 myStartupHook = do
   spawnOnce "setxkbmap -layout us,sk -variant ,qwerty -option 'grp:lalt_lshift_toggle' -option ctrl:nocaps"
-  spawnOnce "dunst"
-  spawnOnce "picom --experimental-backends"
+  when @enableDunst@ (spawnOnce "dunst --config @dunstConfig@")
+  when @enablePicom@ (spawnOnce "picom --config @picomConfig@ @experimentalBackends@")
   spawnOnce xmobarCmd
 
 myPP = def

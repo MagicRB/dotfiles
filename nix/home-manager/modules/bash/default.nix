@@ -1,18 +1,32 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
+with lib;
+let
+  nglib = config.magic_rb.pins.nixng.lib pkgs.stdenv.system;
+  cfg = config.magic_rb.programs.bash;
+in
 {
-  home.packages = with custom; [
-    emacsclient-remote
-  ];
+  options.magic_rb.programs.bash = {
+    enable = mkEnableOption "Enable bash, the shell";
+    emacsclient-remote = mkOption {
+      description = "Enable emacsclient-remote and associated aliases";
+      type = types.bool;
+      default = true;
+    };
+  };
     
-  home.file = {
-    ".bashrc".source = rlib.substitute {
-      runCommand = nixpkgs.runCommandNoCC;
-      inFile = ./bashrc;
-      name = ".bashrc";
-      vars = {
-        "exa" = "${nixpkgs.exa}";
-        "bat" = "${nixpkgs.bat}";
+  config = mkIf cfg.enable {
+    home.packages = mkIf cfg.emacsclient-remote [
+      pkgs.magic_rb.emacsclient-remote
+    ];
+
+    home.file = {
+      ".bashrc".source = nglib.writeSubstitutedFile {
+        name = ".bashrc";
+        file = ./bashrc;
+        substitutes = {
+          "exa" = "${pkgs.exa}";
+          "bat" = "${pkgs.bat}";
+        };
       };
     };
   };

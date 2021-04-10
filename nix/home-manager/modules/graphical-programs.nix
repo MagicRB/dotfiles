@@ -1,13 +1,24 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
+with lib;
+let
+  cfg = config.magic_rb.packageCollections.graphical;
+  inherit (config.magic_rb.pkgs) nixpkgs-master;
+in
 {
-  home.packages = with nixpkgs; [
-    gimp
-    firefox
-    scrot
-    xclip
-    mpv
-  ] ++ [
-    nixpkgs-master.discord
-  ];
+  options.magic_rb.packageCollections.graphical = {
+    enable = mkEnableOption
+      ''
+        Enable graphical package collection, contains GIMP, Firefox, mpv, and Discord.
+      '';
+  };
+
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      gimp
+      firefox
+      mpv
+    ] ++ [
+      nixpkgs-master.discord
+    ];
+  };
 }

@@ -1,9 +1,19 @@
-{ nixpkgs, nixpkgs-unstable, nixpkgs-master, custom, hostname, rlib, inputs }:
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
+with lib;
+let
+  cfg = config.magic_rb.packageCollections.wine;
+  inherit (config.magic_rb.pkgs) nixpkgs-unstable;
+in
 {
-  home.packages = with nixpkgs; [
-    winetricks
-  ] ++ (with nixpkgs-unstable; [
-    wineWowPackages.staging
-  ]);
+  options.magic_rb.packageCollections.wine = {
+    enable = mkEnableOption "Enable wine package collection, contains wine-staging and winetricks";
+  };
+
+  config = mkIf cfg.enable {
+    home.packages = with pkgs; [
+      winetricks
+    ] ++ (with nixpkgs-unstable; [
+      wineWowPackages.staging
+    ]);
+  };
 }
