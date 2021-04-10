@@ -145,9 +145,6 @@ myKeymap c =
 
     -- Restart xmonad
     , ("M-q", spawn "xmonad --recompile; xmonad --restart")
-
-    -- Run xmessage with a summary of the default keybindings (useful for beginners)
-    , ("M-S-/", spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
     ]
     ++
 
@@ -263,8 +260,8 @@ myLogHook = return ()
 -- By default, do nothing.
 myStartupHook = do
   spawnOnce "setxkbmap -layout us,sk -variant ,qwerty -option 'grp:lalt_lshift_toggle' -option ctrl:nocaps"
-  when @enableDunst@ (spawnOnce "dunst --config @dunstConfig@")
-  when @enablePicom@ (spawnOnce "picom --config @picomConfig@ @experimentalBackends@")
+  when @enableDunst@ (spawnOnce "@dunst@ -config @dunstConfig@")
+  when @enablePicom@ (spawnOnce "@picom@ --config @picomConfig@ @experimentalBackends@")
   spawnOnce xmobarCmd
 
 myPP = def
