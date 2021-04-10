@@ -1,3 +1,0 @@
-# -*- mode: shell-script; -*-
-
-bash "$@"
