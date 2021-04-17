@@ -82,13 +82,15 @@
       packages =
         forAllSystems (system:
           let
-            mkPkg =
-              name: (import nixpkgs { inherit system; overlays = [ self.overlays."${name}" ]; }).magic_rb."${name}";
+            mkPkg' =
+              nixpkgs: name: package: (import nixpkgs { inherit system; overlays = [ self.overlays."${name}" ]; }).magic_rb."${package}";
+            mkPkg = name: mkPkg' nixpkgs name name;
           in
             {
               emacs = mkPkg "emacs";
               emacsclient-remote = mkPkg "emacsclient-remote";
               gpg-key = mkPkg "gpg-key";
+              gpg-key-hs = mkPkg' nixpkgs-unstable "gpg-key" "gpg-key-hs";
               screenshot = mkPkg "screenshot";
               sss-cli = mkPkg "sss-cli";
             });
