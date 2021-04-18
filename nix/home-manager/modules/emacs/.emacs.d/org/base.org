@@ -12,57 +12,57 @@
     https://github.com/alphapapa/org-web-tools
 * Stuff  
 
-   #+NAME: base
-   #+BEGIN_SRC emacs-lisp
-     (when (not (string= (system-name) "fractal"))
-       (use-package elcord
-	 :straight t
-	 :config
-	 (elcord-mode)))
+  #+NAME: base
+  #+BEGIN_SRC emacs-lisp
+    (when (not (string= (system-name) "fractal"))
+      (use-package elcord
+	:straight t
+	:config
+	(elcord-mode)))
 
-     (when (not (string= (system-name) "localhost"))
-       (use-package tree-sitter
-	 :straight t
-	 :after (tree-sitter-langs)
-	 :config
-	 (global-tree-sitter-mode)
-	 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-       (use-package tree-sitter-langs
-	 :straight t))
+    (when (not (string= (system-name) "localhost"))
+      (use-package tree-sitter
+	:straight t
+	:after (tree-sitter-langs)
+	:config
+	(global-tree-sitter-mode)
+	(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+      (use-package tree-sitter-langs
+	:straight t))
 
-     (use-package pdf-tools
-       :straight t
-       :hook (('TeX-mode-hook . visual-line-mode))
-       :config
-       ;; initialise
-       (pdf-tools-install)
-       (setq TeX-PDF-mode 1)
-       ;; open pdfs scaled to fit page
-       (setq-default pdf-view-display-size 'fit-page)
-       ;; automatically annotate highlights
-       (setq pdf-annot-activate-created-annotations t))
+    (use-package pdf-tools
+      :straight t
+      :hook (('TeX-mode-hook . visual-line-mode))
+      :config
+      ;; initialise
+      (pdf-tools-install)
+      (setq TeX-PDF-mode 1)
+      ;; open pdfs scaled to fit page
+      (setq-default pdf-view-display-size 'fit-page)
+      ;; automatically annotate highlights
+      (setq pdf-annot-activate-created-annotations t))
 
-					     ;  (use-package auctex
-					     ;    :ensure t)
+					    ;  (use-package auctex
+					    ;    :ensure t)
 
-     (use-package w3m
-       :straight t) 
+    (use-package w3m
+      :straight t) 
 
-   #+END_SRC
+  #+END_SRC
 
-   Enable =all-the-icons=, it's used by =treemacs= and =doom-modeline=.
+  Enable =all-the-icons=, it's used by =treemacs= and =doom-modeline=.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package all-the-icons
-       :straight t) 
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package all-the-icons
+      :straight t) 
+  #+END_SRC
 
-   Set ispell program to hunspell, this is very much a TODO, since the spelling configuration is rather minimal at this
-   point in time.
+  Set ispell program to hunspell, this is very much a TODO, since the spelling configuration is rather minimal at this
+  point in time.
 
-   #+BEGIN_SRC emacs-lisp
-     (setq ispell-program-name "hunspell")
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq ispell-program-name "hunspell")
+  #+END_SRC
 
 * Look & Feel
 *** Color Themes
@@ -157,7 +157,7 @@
     #+BEGIN_SRC emacs-lisp
       (use-package dashboard
 	:straight t
-        :disabled t
+	:disabled t
 	:after (all-the-icons)
 	:config
 	(dashboard-setup-startup-hook)
@@ -257,16 +257,31 @@
     #+BEGIN_SRC emacs-lisp
       (use-package nix-mode
 	:straight t
-	:mode ("\\.nix\\'" . nix-mode))
+	:mode ("\\.nix\\'" . nix-mode)
+	:config
+	(add-hook 'nix-mode-hook #'lsp))
     #+END_SRC
     
 *** Haskell Programming Language
     
-    Enable ~haskell-mode~.
+    Enable ~haskell-mode~, and ~lsp-haskell~
     
     #+BEGIN_SRC emacs-lisp
       (use-package haskell-mode
+	:straight t
+	:config
+	(add-hook 'haskell-mode-hook #'lsp)
+	(add-hook 'haskell-literate-mode-hook #'lsp))
+      (use-package lsp-haskell
 	:straight t)
+    #+END_SRC
+
+    Disable the ~haskell-stack-ghc~ flycheck checker, it's not used when lsp starts, but it does get loaded just before
+    it. Loading and unloading it is slow and causes Emacs to freeze for a few seconds, so just disable it.
+
+    #+BEGIN_SRC emacs-lisp
+      (with-eval-after-load "flycheck" 
+	(add-to-list 'flycheck-disabled-checkers 'haskell-stack-ghc))
     #+END_SRC
     
 *** HashiCorp
@@ -643,140 +658,157 @@
 
 * Org Mode
 
-   Enable =org-roam=. It implements the Zettelkasten method in Emacs and uses a backing sqlite
-   database, therefore =sqlite= must be on your path, at least for Emacs.
+  Enable =org-roam=. It implements the Zettelkasten method in Emacs and uses a backing sqlite
+  database, therefore =sqlite= must be on your path, at least for Emacs.
    
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-roam
-       :straight t
-       :config
-       (setq org-roam-directory "~/org")
-       (add-hook 'after-init-hook 'org-roam-mode))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package org-roam
+      :straight t
+      :config
+      (setq org-roam-directory "~/roam")
+      (add-hook 'after-init-hook 'org-roam-mode))
+  #+END_SRC
 
-   Enable additional languages for org-babel, namely Python.
+  Enable additional languages for org-babel, namely Python.
    
-   #+BEGIN_SRC emacs-lisp
-     (org-babel-do-load-languages
-      'org-babel-load-languages
-      '((python . t)
-	(R . t)
-	(shell . t)
-	(dot . t)
-	(latex . t)))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t)
+       (R . t)
+       (shell . t)
+       (dot . t)
+       (latex . t)))
+  #+END_SRC
 
-   Enable tangle on save, big thanks to Diego Zamboni for his amazing booklet about
-   [[https://leanpub.com/lit-config/read][/Literate Configuration/]].
+  Enable tangle on save, big thanks to Diego Zamboni for his amazing booklet about
+  [[https://leanpub.com/lit-config/read][/Literate Configuration/]].
 
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'org-mode-hook
-	       (lambda () (add-hook 'after-save-hook #'org-babel-tangle
-				    :append :local)))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'org-mode-hook
+	      (lambda () (add-hook 'after-save-hook #'org-babel-tangle
+				   :append :local)))
+  #+END_SRC
 
-   Also enable reloading of inline images on babel-execute, speeds up visual workflow significantly
+  Also enable reloading of inline images on babel-execute, speeds up visual workflow significantly
 
-   #+BEGIN_SRC emacs-lisp
-     (eval-after-load 'org
-       (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (eval-after-load 'org
+      (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images))
+  #+END_SRC
 
-   Enable fancy UTF-8 characters for headings with =org-superstar=.
+  Enable fancy UTF-8 characters for headings with =org-superstar=.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-superstar
-       :straight t
-       :hook ((org-mode . org-superstar-mode)))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package org-superstar
+      :straight t
+      :hook ((org-mode . org-superstar-mode)))
+  #+END_SRC
    
-   Enable bigger headings for =org-mode=, this in my opinion makes it a bit easier to read org-mode
-   buffer.
+  Enable bigger headings for =org-mode=, this in my opinion makes it a bit easier to read org-mode
+  buffer.
    
-   #+BEGIN_SRC emacs-lisp
-     (custom-set-faces
-      '(fixed-pitch ((t (:family "Fira Code 9"))))
-      '(org-level-1 ((t (:inherit outline-1 :height 1.25))))
-      '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
-      '(org-level-3 ((t (:inherit outline-3 :height 1.15))))
-      '(org-level-4 ((t (:inherit outline-4 :height 1.10))))
-      '(org-level-5 ((t (:inherit outline-5 :height 1.05)))))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (custom-set-faces
+     '(fixed-pitch ((t (:family "Fira Code 9"))))
+     '(org-level-1 ((t (:inherit outline-1 :height 1.25))))
+     '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+     '(org-level-3 ((t (:inherit outline-3 :height 1.15))))
+     '(org-level-4 ((t (:inherit outline-4 :height 1.10))))
+     '(org-level-5 ((t (:inherit outline-5 :height 1.05)))))
+  #+END_SRC
    
-   Enable the "vertical ruler" specifically for =org-mode=, TODO: it is worth considering to enable
-   this for all text-mode buffers.
+  Enable the "vertical ruler" specifically for =org-mode=, TODO: it is worth considering to enable
+  this for all text-mode buffers.
    
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'org-mode-hook (lambda ()
-				(set-fill-column 120)
-				(display-fill-column-indicator-mode)))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'org-mode-hook (lambda ()
+			       (set-fill-column 120)
+			       (display-fill-column-indicator-mode)))
+  #+END_SRC
    
-   Enable =org-agenda=, used for task management and things like that. TODO: Currently it's
-   underutilized and underconfigured.
-   TODO: Also should I have a separate folder for school related things? Do I even have that folder?
+  Enable =org-agenda=, used for task management and things like that. TODO: Currently it's
+  underutilized and underconfigured.
+  TODO: Also should I have a separate folder for school related things? Do I even have that folder?
    
-   #+BEGIN_SRC emacs-lisp
-     (setq org-agenda-files '("~/org" "~/org/school"))
+  #+BEGIN_SRC emacs-lisp
+    (setq org-agenda-files '("~/agenda"))
 
-     (setq org-agenda-custom-commands
-	   '(("h" "Agenda and Home-related tasks"
-	      ((agenda "")
-	       (tags-todo "home")
-	       (tags "garden")))
-	     ("o" "Agenda and Office-related tasks"
-	      ((agenda "")
-	       (tags-todo "work")
-	       (tags "office")))
-	     ("i" "Agenda and School-related tasks"
-	      ((agenda "")
-	       (tags-todo "school")
-	       (tags "school")))))
+    (setq org-agenda-custom-commands
+	  '(("h" "Agenda and Home-related tasks"
+	     ((agenda "")
+	      (tags-todo "home")
+	      (tags "garden")))
+	    ("o" "Agenda and Office-related tasks"
+	     ((agenda "")
+	      (tags-todo "work")
+	      (tags "office")))
+	    ("i" "Agenda and School-related tasks"
+	     ((agenda "")
+	      (tags-todo "school")
+	      (tags "school")))))
 
-     (setq org-highest-priority ?A)
-     (setq org-lowest-priority ?E)
-     (setq org-default-priority ?B)
-   #+END_SRC
+    (setq org-highest-priority ?A)
+    (setq org-lowest-priority ?E)
+    (setq org-default-priority ?B)
+  #+END_SRC
 
-   (Dis)enable alerts and notifications, which should hook into =org-agenda= notify 
+  (Dis)enable alerts and notifications, which should hook into =org-agenda= notify 
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (require 'org-alert)
-     (require 'notifications)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (require 'org-alert)
+    (require 'notifications)
+  #+END_SRC
    
-   Increase org-preview size
+  Increase org-preview size
    
-   #+BEGIN_SRC emacs-lisp
-     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.75))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.75))
+  #+END_SRC
    
-   Enable org-tikz previews, =imagemagick= must be installed.
+  Enable org-tikz previews, =imagemagick= must be installed.
    
-   #+BEGIN_SRC emacs-lisp
-     (add-to-list 'org-latex-packages-alist
-		  '("" "tikz" t))
-     (add-to-list 'org-latex-packages-alist
-		  '("" "tabularx" t))
-     (add-to-list 'org-latex-packages-alist
-		  '("" "bytefield" t))
-     (add-to-list 'org-latex-packages-alist
-		  '("" "siunitx" t))
+  #+BEGIN_SRC emacs-lisp
+    (add-to-list 'org-latex-packages-alist
+		 '("" "tikz" t))
+    (add-to-list 'org-latex-packages-alist
+		 '("" "tabularx" t))
+    (add-to-list 'org-latex-packages-alist
+		 '("" "bytefield" t))
+    (add-to-list 'org-latex-packages-alist
+		 '("" "siunitx" t))
 
-     (eval-after-load "preview"
-       '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
+    (eval-after-load "preview"
+      '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
 
-     (setq org-latex-create-formula-image-program 'dvisvgm)
-   #+END_SRC
+    (setq org-latex-create-formula-image-program 'dvisvgm)
+  #+END_SRC
    
-   Install =org-fragtop=, it will automatically toggle previews for LaTex segments under point.
+  Install =org-fragtop=, it will automatically toggle previews for LaTex segments under point.
    
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-fragtog
-       :straight t
-       :hook (org-mode . org-fragtog-mode))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package org-fragtog
+      :straight t
+      :hook (org-mode . org-fragtog-mode))
+  #+END_SRC
    
+*** Org Habit
+
+    Enable ~org-habit~.
+
+    #+BEGIN_SRC emacs-lisp
+      (require 'org-habit)
+    #+END_SRC
+
+    Setup a function which resets any checkboxes under a ~TODO~ which changes state to ~DONE~. Many thanks to
+    [[https://www.reddit.com/user/davidglasser][davidglasser]], who had this exact same issue and solved it on [[https://www.reddit.com/r/emacs/comments/3ltjjc/org_reset_task_when_it_repeats/cv9gbj6?utm_source=share&utm_medium=web2x&context=3][Reddit]].
+    
+    #+BEGIN_SRC emacs-lisp
+      (defun glasser-org-reset-check-on-repeat ()
+	(when (and (org-get-repeat) (member org-state org-done-keywords))
+	  (org-reset-checkbox-state-subtree)))
+      (add-hook 'org-after-todo-state-change-hook 'glasser-org-reset-check-on-repeat)
+    #+END_SRC
 *** TODO ESS
 
     Required for R
@@ -849,9 +881,9 @@
     #+END_SRC
 * Smart Tabs
 
-   The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
+  The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
 
-   #+BEGIN_SRC fundemental :tangle no
+  #+BEGIN_SRC fundemental :tangle no
      fn main() {
      --if 1 == 1 &&
      --...2 == 2 &&
@@ -859,344 +891,398 @@
      ----println!("Stugg");
      --}
      }
-   #+END_SRC
+  #+END_SRC
    
-   #+BEGIN_TINY
-   ~--~ represents a =<TAB>= and ~.~ a =<SPC>=
-   #+END_TINY
+  #+BEGIN_TINY
+  ~--~ represents a =<TAB>= and ~.~ a =<SPC>=
+  #+END_TINY
 
-   And while the idea is nice, I couldn't get it to work for Rust and that's the only language I use. Therefore it's
-   disable for now.
+  And while the idea is nice, I couldn't get it to work for Rust and that's the only language I use. Therefore it's
+  disable for now.
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (setq whitespace-display-mappings
-	   '((tab-mark 9 [65293] [92 9])))
-     (setq whitespace-style '(tab-mark))
-     (use-package smart-tabs-mode
-       :straight t
-       :config
-       (smart-tabs-add-language-support rust rustic-hook
-					((c-indent-line . c-basic-offset)
-					 (c-indent-region . c-basic-offset)))
-       (smart-tabs-insinuate 'c 'javascript 'rust))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (setq whitespace-display-mappings
+	  '((tab-mark 9 [65293] [92 9])))
+    (setq whitespace-style '(tab-mark))
+    (use-package smart-tabs-mode
+      :straight t
+      :config
+      (smart-tabs-add-language-support rust rustic-hook
+				       ((c-indent-line . c-basic-offset)
+					(c-indent-region . c-basic-offset)))
+      (smart-tabs-insinuate 'c 'javascript 'rust))
+  #+END_SRC
    
 * Ivy
    
-   Ivy is a lighter and actually maintained altrenative to Helm. I used to use helm, but I switched to it when I started
-   using EXWM, as I had to disable my floating Helm window and since Helm doesn't use minibuffers, the window above the
-   popup would get scrolled. So enable it.
+  Ivy is a lighter and actually maintained altrenative to Helm. I used to use helm, but I switched to it when I started
+  using EXWM, as I had to disable my floating Helm window and since Helm doesn't use minibuffers, the window above the
+  popup would get scrolled. So enable it.
    
-   #+BEGIN_SRC emacs-lisp
-     (use-package ivy
-       :straight t
-       :config
-       (ivy-mode 1)
-       ;; (setq ivy-use-virtual-buffers t)
-       ;; (setq enable-recursive-minibuffers t)
-       )
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package ivy
+      :straight t
+      :config
+      (ivy-mode 1)
+      ;; (setq ivy-use-virtual-buffers t)
+      ;; (setq enable-recursive-minibuffers t)
+      )
+  #+END_SRC
 
-   Enable ~ivy-prescient~ for fuzzy matching, from the author of ~selectrum~ and ~straight.el~. For splitting completion
-   parts, separate them with a ~<SPC>~.
+  Enable ~ivy-prescient~ for fuzzy matching, from the author of ~selectrum~ and ~straight.el~. For splitting completion
+  parts, separate them with a ~<SPC>~.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package ivy-prescient
-       :straight t
-       :config
-       (ivy-prescient-mode 1))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package ivy-prescient
+      :straight t
+      :config
+      (ivy-prescient-mode 1))
+  #+END_SRC
 
-   ~counsel~ adds specific functions for common Emacs commands, like =find-file= and makes them more Helm like.
+  ~counsel~ adds specific functions for common Emacs commands, like =find-file= and makes them more Helm like.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package counsel
-       :straight t
-       :config
-       (counsel-mode 1)
-       :bind ("C-x b" . counsel-switch-buffer))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package counsel
+      :straight t
+      :config
+      (counsel-mode 1)
+      :bind ("C-x b" . counsel-switch-buffer))
+  #+END_SRC
 
-   ~ivy-rich~ and ~all-the-icons~ compatibility.
+  ~ivy-rich~ and ~all-the-icons~ compatibility.
    
-   #+BEGIN_SRC emacs-lisp
-     (use-package all-the-icons-ivy-rich
-       :straight t
-       :hook (after-init . all-the-icons-ivy-rich-mode))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package all-the-icons-ivy-rich
+      :straight t
+      :hook (after-init . all-the-icons-ivy-rich-mode))
+  #+END_SRC
 
-   ~ivy-rich~ add more stuff into =switch-to-buffer=, but has some issues when working over TRAMP. It gets a little
-   slow. TODO
+  ~ivy-rich~ add more stuff into =switch-to-buffer=, but has some issues when working over TRAMP. It gets a little
+  slow. TODO
    
-   #+BEGIN_SRC emacs-lisp
-     (use-package ivy-rich
-       :straight t
-       :config
-       (ivy-rich-mode 1))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package ivy-rich
+      :straight t
+      :config
+      (ivy-rich-mode 1))
+  #+END_SRC
 
-   ~ivy-hydra~ adds Helm like extended actions.
+  ~ivy-hydra~ adds Helm like extended actions.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package ivy-hydra
-       :straight t)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package ivy-hydra
+      :straight t)
+  #+END_SRC
    
 * Magit
 
-   ~magit~ is literally the best package right after OrgMode of course. Therefore enable it.
+  ~magit~ is literally the best package right after OrgMode of course. Therefore enable it.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package magit
-       :straight t)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package magit
+      :straight t)
+  #+END_SRC
 
-   Also enable ~evil-magit~ for evil-style keybindings in Magit.
+  Also enable ~evil-magit~ for evil-style keybindings in Magit.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package evil-magit
-       :straight t
-       :after (evil magit)
-       :config
-       (setq evil-magit-state 'motion)
-       (evil-define-key 'motion magit-status-mode-map ";" 'magit-log)
-       (evil-define-key 'motion magit-status-mode-map "k" 'evil-previous-line)
-       (evil-define-key 'motion magit-status-mode-map "l" 'evil-next-line)
-       (evil-define-key 'normal magit-status-mode-map "l" 'evil-next-line)
-       (evil-define-key 'visual magit-status-mode-map "l" 'evil-next-line)
+  #+BEGIN_SRC emacs-lisp
+    (use-package evil-magit
+      :straight t
+      :after (evil magit)
+      :config
+      (setq evil-magit-state 'motion)
+      (evil-define-key 'motion magit-status-mode-map ";" 'magit-log)
+      (evil-define-key 'motion magit-status-mode-map "k" 'evil-previous-line)
+      (evil-define-key 'motion magit-status-mode-map "l" 'evil-next-line)
+      (evil-define-key 'normal magit-status-mode-map "l" 'evil-next-line)
+      (evil-define-key 'visual magit-status-mode-map "l" 'evil-next-line)
 
-       (evil-define-key 'motion magit-log-mode-map ";" 'magit-log)
-       (evil-define-key 'motion magit-log-mode-map "k" 'evil-previous-line)
-       (evil-define-key 'motion magit-log-mode-map "l" 'evil-next-line)
-       (evil-define-key 'normal magit-log-mode-map "l" 'evil-next-line)
-       (evil-define-key 'visual magit-log-mode-map "l" 'evil-next-line))
-   #+END_SRC
+      (evil-define-key 'motion magit-log-mode-map ";" 'magit-log)
+      (evil-define-key 'motion magit-log-mode-map "k" 'evil-previous-line)
+      (evil-define-key 'motion magit-log-mode-map "l" 'evil-next-line)
+      (evil-define-key 'normal magit-log-mode-map "l" 'evil-next-line)
+      (evil-define-key 'visual magit-log-mode-map "l" 'evil-next-line))
+  #+END_SRC
 
-   Enable ~magit-todos~ and hook them on ~lsp-mode~ and also ~org-mode~, because it acts like a project local
-   ~org-agenda~, sort of.
+  Enable ~magit-todos~ and hook them on ~lsp-mode~ and also ~org-mode~, because it acts like a project local
+  ~org-agenda~, sort of.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package magit-todos
-       :straight t
-       :hook
-       (lsp-mode . hl-todo-mode)
-       (org-mode . hl-todo-mode))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package magit-todos
+      :straight t
+      :hook
+      (lsp-mode . hl-todo-mode)
+      (org-mode . hl-todo-mode))
+  #+END_SRC
    
 * Popper
 
-   Enable ~popper~, a better version of ~popwin~, which might actually work. It groups popups by context and allows you
-   to specify their exact positioning, or even a custom display function. It also seems to be better at restoring the
-   previous layout.
+  Enable ~popper~, a better version of ~popwin~, which might actually work. It groups popups by context and allows you
+  to specify their exact positioning, or even a custom display function. It also seems to be better at restoring the
+  previous layout.
 
-   #+NAME: popper
-   #+BEGIN_SRC emacs-lisp
-     (use-package popper
-       :straight (popper :type git :host github :repo "karthink/popper")
-       :init
-       (setq popper-reference-buffers
-	     '("\\*Messages\\*"
-               "\\*Warnings\\*"
-	       "Output\\*$"
-	       help-mode
-	       compilation-mode
-	       rustic-compilation-mode))
-       (popper-mode +1))
-   #+END_SRC
+  #+NAME: popper
+  #+BEGIN_SRC emacs-lisp
+    (use-package popper
+      :straight (popper :type git :host github :repo "karthink/popper")
+      :init
+      (setq popper-reference-buffers
+	    '("\\*Messages\\*"
+	      "\\*Warnings\\*"
+	      "Output\\*$"
+	      help-mode
+	      compilation-mode
+	      rustic-compilation-mode))
+      (popper-mode +1))
+  #+END_SRC
 * Projectile
 
-   Enable ~projectile~.
+  Enable ~projectile~.
    
-   #+BEGIN_SRC emacs-lisp
-     (use-package projectile
-       :straight t
-       :config
-       (projectile-mode +1)
-       (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package projectile
+      :straight t
+      :config
+      (projectile-mode +1)
+      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  #+END_SRC
    
 * VTerm
 
-   ~vterm~ is fun, but it does not play well with ~evil~, at least by default. Therefore we need to make it
-   cooperate. Most of the following ELisp was taken from an issue on VTerm's github.
+  ~vterm~ is fun, but it does not play well with ~evil~, at least by default. Therefore we need to make it
+  cooperate. Most of the following ELisp was taken from an issue on VTerm's github.
 
-   #+NAME: vterm-evil-fix
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (defun vterm-evil-insert ()
-       (interactive)
-       (vterm-goto-char (point))
-       (call-interactively #'evil-insert))
+  #+NAME: vterm-evil-fix
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (defun vterm-evil-insert ()
+      (interactive)
+      (vterm-goto-char (point))
+      (call-interactively #'evil-insert))
 
-     (defun vterm-evil-append ()
-       (interactive)
-       (vterm-goto-char (1+ (point)))
-       (call-interactively #'evil-append))
+    (defun vterm-evil-append ()
+      (interactive)
+      (vterm-goto-char (1+ (point)))
+      (call-interactively #'evil-append))
 
-     (defun vterm-evil-delete ()
-       "Provide similar behavior as `evil-delete'."
-       (interactive)
-       (let ((inhibit-read-only t)
-	     )
-	 (cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
-	   (call-interactively 'evil-delete))))
+    (defun vterm-evil-delete ()
+      "Provide similar behavior as `evil-delete'."
+      (interactive)
+      (let ((inhibit-read-only t)
+	    )
+	(cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
+	  (call-interactively 'evil-delete))))
 
-     (defun vterm-evil-change ()
-       "Provide similar behavior as `evil-change'."
-       (interactive)
-       (let ((inhibit-read-only t))
-	 (cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
-	   (call-interactively 'evil-change))))
+    (defun vterm-evil-change ()
+      "Provide similar behavior as `evil-change'."
+      (interactive)
+      (let ((inhibit-read-only t))
+	(cl-letf (((symbol-function #'delete-region) #'vterm-delete-region))
+	  (call-interactively 'evil-change))))
 
 
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "d") (lambda () (interactive) (vterm-evil-delete)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "s") (lambda () (interactive) (vterm-evil-delete) (vterm-evil-insert)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "i") (lambda () (interactive) (vterm-evil-insert)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "a") (lambda () (interactive) (vterm-evil-append)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "c") (lambda () (interactive) (vterm-evil-change)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
-     (evil-define-key 'normal vterm-mode-map
-       (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
-     (evil-define-key 'insert vterm-mode-map
-       (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
-     (evil-define-key 'insert vterm-mode-map
-       (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
-     (evil-define-key 'insert vterm-mode-map
-       (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
-     (evil-define-key 'insert vterm-mode-map
-       (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "d") (lambda () (interactive) (vterm-evil-delete)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "s") (lambda () (interactive) (vterm-evil-delete) (vterm-evil-insert)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "i") (lambda () (interactive) (vterm-evil-insert)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "a") (lambda () (interactive) (vterm-evil-append)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "c") (lambda () (interactive) (vterm-evil-change)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+    (evil-define-key 'normal vterm-mode-map
+      (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
+    (evil-define-key 'insert vterm-mode-map
+      (kbd "<left>") (lambda () (interactive) (vterm-send-left)))
+    (evil-define-key 'insert vterm-mode-map
+      (kbd "<right>") (lambda () (interactive) (vterm-send-right)))
+    (evil-define-key 'insert vterm-mode-map
+      (kbd "<up>") (lambda () (interactive) (vterm-send-up)))
+    (evil-define-key 'insert vterm-mode-map
+      (kbd "<down>") (lambda () (interactive) (vterm-send-down)))
 
-     (defun evil-collection-vterm-escape-stay ()
-       "Go back to normal state but don't move
-     cursor backwards. Moving cursor backwards is the default vim behavior but it is
-     not appropriate in some cases like terminals."
-       (setq-local evil-move-cursor-back nil))
+    (defun evil-collection-vterm-escape-stay ()
+      "Go back to normal state but don't move
+    cursor backwards. Moving cursor backwards is the default vim behavior but it is
+    not appropriate in some cases like terminals."
+      (setq-local evil-move-cursor-back nil))
 
-     ;; :hook ((vterm-mode-hook . evil-collection-vterm-escape-stay))
-   #+END_SRC
+    ;; :hook ((vterm-mode-hook . evil-collection-vterm-escape-stay))
+  #+END_SRC
 
-   And enable ~vterm~.
+  And enable ~vterm~.
    
-   #+BEGIN_SRC emacs-lisp :noweb yes
-     (use-package vterm
-       :straight t
-       :after (evil)
-       :config
-       <<vterm-evil-fix>>
-       )
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp :noweb yes
+    (use-package vterm
+      :straight t
+      :after (evil)
+      :config
+      <<vterm-evil-fix>>
+      )
+  #+END_SRC
    
 * Edit Server
 
-   This awesome package when paired with a free software browser extension, available for both [[https://chrome.google.com/webstore/detail/edit-with-emacs/ljobjlafonikaiipfkggjbhkghgicgoh][Chromium]] and [[https://addons.mozilla.org/en-US/firefox/addon/edit-with-emacs1/][Firefox]],
-   allows one to edit text areas in their browser in Emacs.
+  This awesome package when paired with a free software browser extension, available for both [[https://chrome.google.com/webstore/detail/edit-with-emacs/ljobjlafonikaiipfkggjbhkghgicgoh][Chromium]] and [[https://addons.mozilla.org/en-US/firefox/addon/edit-with-emacs1/][Firefox]],
+  allows one to edit text areas in their browser in Emacs.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package edit-server
-       :straight t
-       :init
-       (edit-server-start))
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package edit-server
+      :straight t
+      :init
+      (edit-server-start))
+  #+END_SRC
    
 * Spray
    
-   ~spray~ sprays words on screen at a certain rate.
+  ~spray~ sprays words on screen at a certain rate.
 
-   #+BEGIN_SRC emacs-lisp
-     (use-package spray
-       :straight t)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (use-package spray
+      :straight t)
+  #+END_SRC
    
+* Treemacs
+  Enable ~treemacs~.
+
+  #+BEGIN_SRC emacs-lisp :noweb yes
+    (use-package treemacs
+      :straight t
+      :after (doom-themes)
+      :config
+      <<treemacs-doom-colors>>
+      <<treemacs-ignore-org-not-org>>)
+  #+END_SRC
+
+  Load the ~doom-colors~ theme, it looks nicer.
+
+  #+NAME: treemacs-doom-colors
+  #+BEGIN_SRC emacs-lisp
+    (setq doom-themes-treemacs-theme "doom-colors")
+    (doom-themes-treemacs-config)
+    (treemacs-load-theme 'doom-colors)
+  #+END_SRC
+
+  Enable ~treemacs-evil~, it enables Evil in treemacs.
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package treemacs-evil
+      :after (treemacs evil)
+      :straight t)
+  #+END_SRC
+
+  Enable ~lsp-treemacs~, I honestly don't remember what it does.
+
+  #+BEGIN_SRC emacs-lisp
+    (use-package lsp-treemacs
+      :straight t
+      :after (lsp-mode treemacs)
+      :config
+      (lsp-treemacs-sync-mode 1))
+  #+END_SRC
+
+  Add a ignore predicate, that will ignore any files which do not end in =.org= in ~~/org~.
+
+  #+NAME: treemacs-ignore-org-not-org
+  #+BEGIN_SRC emacs-lisp
+    (defun magic_rb/treemacs-ginore-org-not-org (filename absolute-path)
+      (and (not (or (string-suffix-p ".org" filename)
+		    (file-directory-p absolute-path)
+
+		    (string-prefix-p "~/roam/img" absolute-path)
+		    (string-prefix-p "/home/main/roam/img" absolute-path)))
+	   (or (string-prefix-p "~/roam" absolute-path)
+	       (string-prefix-p "/home/main/roam" absolute-path))))
+
+    (add-to-list 'treemacs-ignored-file-predicates #'magic_rb/treemacs-ginore-org-not-org)
+  #+END_SRC
 * Random Bits and Bobs
 
-   Set default major mode to org mode, it's much more useful than fundamental.
+  Set default major mode to org mode, it's much more useful than fundamental.
 
-   #+BEGIN_SRC emacs-lisp
-     (setq-default major-mode 'org-mode)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq-default major-mode 'org-mode)
+  #+END_SRC
 
-   Delete files by moving to trash.
+  Delete files by moving to trash.
 
-   #+BEGIN_SRC emacs-lisp
-     (setq-default delete-by-moving-to-trash t)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq-default delete-by-moving-to-trash t)
+  #+END_SRC
 
-   Equalize windows after split.
+  Equalize windows after split.
    
-   #+BEGIN_SRC emacs-lisp
-     (setq-default window-combination-resize t)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq-default window-combination-resize t)
+  #+END_SRC
    
-   Increase undo limit to 80MB and enable fine undo, Evil will no longer chunk all edits in =INSERT= mode into one big
-   undo blob.
+  Increase undo limit to 80MB and enable fine undo, Evil will no longer chunk all edits in =INSERT= mode into one big
+  undo blob.
    
-   #+BEGIN_SRC emacs-lisp
-     (setq undo-limit 80000000
-	   evil-want-fine-undo t)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (setq undo-limit 80000000
+	  evil-want-fine-undo t)
+  #+END_SRC
 
-   For now, don't autosave. Because editing on remote disks, not TRAMP, but just NFS or CIFS, becomes extremely painful.
+  For now, don't autosave. Because editing on remote disks, not TRAMP, but just NFS or CIFS, becomes extremely painful.
 
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (setq auto-save-default t)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (setq auto-save-default t)
+  #+END_SRC
    
-   Enable line numbers for both programming buffers (Rust, C, and such) and configuration buffers (Nix, Yaml, Json, and
-   such) and Org mode.
+  Enable line numbers for both programming buffers (Rust, C, and such) and configuration buffers (Nix, Yaml, Json, and
+  such) and Org mode.
 
-   #+BEGIN_SRC emacs-lisp
-     (add-hook 'conf-mode-hook 'display-line-numbers-mode)
-     (add-hook 'org-mode-hook 'display-line-numbers-mode)
-     (add-hook 'prog-mode-hook 'display-line-numbers-mode)
-   #+END_SRC
+  #+BEGIN_SRC emacs-lisp
+    (add-hook 'conf-mode-hook 'display-line-numbers-mode)
+    (add-hook 'org-mode-hook 'display-line-numbers-mode)
+    (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+  #+END_SRC
 
-   Improve scrolling by:
-   1. disabling acceleration
-   2. making it so that the window under the pointer is scroller no matter the focused window
-   3. changing default scroll amount to 5 lines and 1 when shift is pressed
+  Improve scrolling by:
+    1. disabling acceleration
+    2. making it so that the window under the pointer is scroller no matter the focused window
+    3. changing default scroll amount to 5 lines and 1 when shift is pressed
 
-   #+BEGIN_SRC emacs-lisp
-     (setq mouse-wheel-scroll-amount '(5 ((shift) . 1)))
-     (setq mouse-wheel-progressive-speed nil)
-     (setq mouse-wheel-follow-mouse 't)
-   #+END_SRC
-   
-   Enable perentheses highlighting and pairing.
+       #+BEGIN_SRC emacs-lisp
+	 (setq mouse-wheel-scroll-amount '(5 ((shift) . 1)))
+	 (setq mouse-wheel-progressive-speed nil)
+	 (setq mouse-wheel-follow-mouse 't)
+       #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp
-     (show-paren-mode 1) 
-     (electric-pair-mode)
-   #+END_SRC
+       Enable perentheses highlighting and pairing.
 
-   Set fill colum, horizontal indicator, for both =fill-paragraph=(=M-q=) and the visual horizontal indicator.
+       #+BEGIN_SRC emacs-lisp
+	 (show-paren-mode 1) 
+	 (electric-pair-mode)
+       #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp
-     (setq-default display-fill-column-indicator-column 120
-		   fill-column 120)
-   #+END_SRC
+       Set fill colum, horizontal indicator, for both =fill-paragraph=(=M-q=) and the visual horizontal indicator.
 
-   Start Emacs server, unless it's already running. Starting a new Emacs instance while debugging and getting an error
-   about a server already running can be a bit annoying.
+       #+BEGIN_SRC emacs-lisp
+	 (setq-default display-fill-column-indicator-column 120
+		       fill-column 120)
+       #+END_SRC
 
-   #+BEGIN_SRC emacs-lisp
-     (load "server")
-     (unless (server-running-p) (server-start))
-   #+END_SRC
+       Start Emacs server, unless it's already running. Starting a new Emacs instance while debugging and getting an error
+       about a server already running can be a bit annoying.
 
-   #+BEGIN_SRC emacs-lisp
-     (setq backup-directory-alist
-	   `(("." . ,(concat user-emacs-directory "backups"))))
-   #+END_SRC
-   
+       #+BEGIN_SRC emacs-lisp
+	 (load "server")
+	 (unless (server-running-p) (server-start))
+       #+END_SRC
+
+       #+BEGIN_SRC emacs-lisp
+	 (setq backup-directory-alist
+	       `(("." . ,(concat user-emacs-directory "backups"))))
+       #+END_SRC
+
 *** Windows
     
     As [[https://github.com/tecosaur/][tecosaur]] has it in his [[https://tecosaur.github.io/emacs-config/config.html#windows][configuration]], I was to be asked which window to should be brought up when I split a

@@ -4,6 +4,8 @@ let
   hunspellWithDicts = prev.callPackage ./hunspell-with-dicts.nix {
     dicts = with prev.hunspellDicts; [ en_US ];
   };
+  nixpkgs-unstable = import inputs.nixpkgs-unstable
+    { system = prev.stdenv.system; };
 in
 {
   magic_rb = prev.magic_rb or {} // {
@@ -12,7 +14,7 @@ in
       emacsSrc = inputs.emacs;
       vtermModule = inputs.vtermModule;
 
-      emacsPackages = with prev; 
+      emacsPackages = with nixpkgs-unstable; 
         [
           nodePackages.pyright
           python38Full
@@ -32,7 +34,13 @@ in
 
           (rWrapper.override { packages = []; })
 
-	  gnumake
+          gnumake
+        ] ++ [
+          rnix-lsp
+        ] ++ [
+          ghc
+          stack
+          (inputs.easy-hls-nix.defaultPackage."${prev.stdenv.system}")
         ] ++ (with prev.nodePackages; [
           typescript-language-server
           typescript
