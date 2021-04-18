@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "easy-hls-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1618344778,
+        "narHash": "sha256-bCFzv7HLPen3Ak6Ho8RhfxsG4UWXeROqHgVW/tNla68=",
+        "owner": "jkachmar",
+        "repo": "easy-hls-nix",
+        "rev": "291cf77f512a7121bb6801cde35ee1e8b7287f91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jkachmar",
+        "repo": "easy-hls-nix",
+        "type": "github"
+      }
+    },
     "emacs": {
       "flake": false,
       "locked": {
@@ -165,6 +185,7 @@
     },
     "root": {
       "inputs": {
+        "easy-hls-nix": "easy-hls-nix",
         "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
         "fenix": "fenix",

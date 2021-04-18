@@ -39,6 +39,10 @@
       url = "git+https://github.com/akermu/emacs-libvterm";
       flake = false;
     };
+    easy-hls-nix = {
+      url = "github:jkachmar/easy-hls-nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
