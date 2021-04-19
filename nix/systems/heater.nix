@@ -33,6 +33,7 @@ inputs: {
                 programs = {
                   alacritty.enable = true;
                   bash.enable = true;
+                  shh.enable = true;
                   emacs.enable = true;
                   xmonad.enable = true;
                   gpg.enable = true;

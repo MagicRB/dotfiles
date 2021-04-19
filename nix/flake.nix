@@ -81,6 +81,7 @@
         gpg-key = import ./overlays/gpg-key inputs.nixng.lib;
         screenshot = import ./overlays/screenshot inputs.nixng.lib;
         sss-cli = import ./overlays/sss-cli inputs.sss-cli;
+        shh = import ./overlays/shh;
       };
 
       packages =
@@ -97,6 +98,7 @@
               gpg-key-hs = mkPkg' nixpkgs-unstable "gpg-key" "gpg-key-hs";
               screenshot = mkPkg "screenshot";
               sss-cli = mkPkg "sss-cli";
+              shh = mkPkg "shh";
             });
 
       # halfFlakes = rlib.custom;
