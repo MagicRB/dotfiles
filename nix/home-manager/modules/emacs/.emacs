@@ -40,6 +40,7 @@
 (setq vc-follow-symlinks t)
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+(add-to-list 'load-path "~/.emacs.d/lisp/org-task-dump")
 
 (straight-use-package 'use-package)
 (straight-thaw-versions)
