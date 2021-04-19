@@ -41,11 +41,8 @@ final: prev:
                 
                 rm "-r" "/mnt/key"
                 mntContains <- captureTrim <| find "/mnt" "-maxdepth" "0" "-empty"
-                if show mntContains == "" then do
-                  putStrLn "delete /mnt" -- rm "-r" "/mnt"
-                else do
-                  return ()
-              otherwise -> do
+                when (show mntContains == "") (putStrLn "delete /mnt" -- rm "-r" "/mnt")
+              _ -> do
                 putStrLn "open - open key\nclose - close key"
       '';
   };
