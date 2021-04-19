@@ -4,7 +4,7 @@
 
 
 (load "org-task-dump-logs.el")
-(load "svg.el")
+(load "org-task-svg.el")
 
 (defun hmw/generate-calendar-view(file-name year heading statechanges)
   "Generate a calendar view for the given YEAR and colours the dates
