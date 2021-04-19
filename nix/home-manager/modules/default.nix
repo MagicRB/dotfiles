@@ -3,6 +3,7 @@
   imports = [
     ./alacritty
     ./bash
+    ./shh
     ./emacs
     # ./pulseaudio
     ./xmonad

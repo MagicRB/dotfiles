@@ -1,0 +1,5 @@
+:seti -XNoOverloadedLists
+import Shh
+import Shh.Prompt
+:set prompt-function formatPrompt "%u@\ESC[37m%h\ESC[m:\ESC[32m%w\ESC[31m$\ESC[m "
+:set prompt-cont "| "
