@@ -88,6 +88,7 @@ inputs: {
             };
 
             hardware.heater = true;
+            sshdEmacs.enable = true;
             flakes.enable = true;
             pulseaudio.enable = true;
           };
