@@ -197,6 +197,7 @@ inputs: {
           networking = {
             firewall = {
               allowedUDPPorts = [ 6666 ];
+              allowedTCPPorts = [ 22 ];
             };
 
             wireguard.interfaces = {
