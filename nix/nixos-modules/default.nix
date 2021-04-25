@@ -9,6 +9,7 @@
     ./pin-nixpkgs.nix
     ./pulseaudio.nix
     ./vault-agent.nix
+    ./sshd-emacs.nix
     ./xserver.nix
     ../hardware/default.nix
   ];

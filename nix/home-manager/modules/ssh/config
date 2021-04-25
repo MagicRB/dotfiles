@@ -1,0 +1,13 @@
+Host *
+     ControlMaster auto
+     ControlPath ~/.ssh/controlmasters/%r@%h:%p
+     ControlPersist 300s
+     SendEnv INSIDE_EMACS
+
+Host 192.168.0.250
+     Port 2222
+
+Host *redalder.org 192.168.0.250
+     ExitOnForwardFailure yes
+     RemoteForward /home/main/.ssh/emacs-server /run/user/1000/emacs/server
+   

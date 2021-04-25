@@ -28,6 +28,7 @@ inputs: {
             programs = {
               alacritty.enable = true;
               bash.enable = true;
+              ssh.enable = true;
               emacs.enable = true;
               xmonad.enable = true;
               gpg.enable = true;
@@ -117,6 +118,7 @@ inputs: {
         hardware.omen = true;
         flakes.enable = true;
         pulseaudio.enable = true;
+        sshdEmacs.enable = true;
         networking = {
           bluetooth = true;
           networkManager = true;
