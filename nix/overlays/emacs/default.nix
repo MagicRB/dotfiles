@@ -41,6 +41,7 @@ in
           ghc
           stack
           (inputs.easy-hls-nix.defaultPackage."${prev.stdenv.system}")
+          cabal-install
         ] ++ (with prev.nodePackages; [
           typescript-language-server
           typescript
