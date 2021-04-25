@@ -59,9 +59,6 @@
       nixosConfigurations.heater = nixosSystem (import ./systems/heater.nix inputs);
       heater = self.nixosConfigurations.heater.config.system.build.toplevel;
 
-      nixosConfigurations.crystalsRig = nixosSystem (import ./systems/crystals-rig.nix);
-      crystalsRig = self.nixosConfigurations.crystalsRig.config.system.build.toplevel;
-
       nixosConfigurations.mark = nixosSystem (import ./systems/mark.nix inputs);
       mark = self.nixosConfigurations.mark.config.system.build.toplevel;
 

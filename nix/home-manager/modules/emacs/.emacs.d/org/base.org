@@ -759,6 +759,18 @@
     (require 'org-alert)
     (require 'notifications)
   #+END_SRC
+
+  Log state changes to a ~LOGBOOK~ section, not into a random spot.
+
+  #+BEGIN_SRC emacs-lisp
+    (setq org-log-into-drawer t)
+  #+END_SRC
+
+  Enable ~org-task-svg~ to export a scheduled task into a nice SVG.
+
+  #+BEGIN_SRC emacs-lisp
+    (require 'org-task-generate-calendar-view)
+  #+END_SRC
    
   Increase org-preview size
    
