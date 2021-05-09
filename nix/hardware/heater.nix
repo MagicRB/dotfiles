@@ -49,49 +49,31 @@ in {
           fsType = "zfs";
         };
 	    
-      "/var/lib/hydra" =
-        {
-          device = "heater-zpool/persist/hydra/prog";
- 	        fsType = "zfs";
-        };
-
-      "/var/lib/postgresql" =
-        {
-	        device = "heater-zpool/persist/hydra/db";
-	        fsType = "zfs";
-        };
-
       "/var/lib/nomad" =
         {
           device = "heater-zpool/persist/nomad";
           fsType = "zfs";
         };
 
-      "/var/lib/docker" =
+      "/var/lib/secrets" = mkIf config.services.vault-agent.enable
         {
-          device = "heater-zpool/persist/docker";
-          fsType = "zfs";
+          device = "tmpfs";
+          fsType = "tmpfs";
+          options = [
+            "mode=0640"
+            "uid=${toString config.users.users.vault-agent.uid}"
+            "gid=${toString config.users.groups.root.gid}"
+            "noexec"
+            "rw"
+            "size=64M"
+          ];
         };
 
-      # "/var/lib/secrets" = mkIf config.services.vault-agent.enable
-      #   {
-      #     device = "tmpfs";
-      #     fsType = "tmpfs";
-      #     options = [
-      #       "mode=0640"
-      #       "uid=${toString config.users.users.vault-agent.uid}"
-      #       "gid=${toString config.users.groups.root.gid}"
-      #       "noexec"
-      #       "rw"
-      #       "size=64M"
-      #     ];
-      #   };
-
-      # "/etc/vault-agent" = mkIf config.services.vault-agent.enable
-      #   {
-      #     device = "heater-zpool/persist/vault-agent";
-      #     fsType = "zfs";
-      #   };
+      "/etc/vault-agent" = mkIf config.services.vault-agent.enable
+        {
+          device = "heater-zpool/persist/vault-agent";
+          fsType = "zfs";
+        };
 
       "/boot" =
         {
