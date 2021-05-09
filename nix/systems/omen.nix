@@ -27,7 +27,10 @@ inputs: {
 
             programs = {
               alacritty.enable = true;
-              bash.enable = true;
+              bash = {
+                enable = true;
+                enableDirenv = true;
+              };
               ssh.enable = true;
               emacs.enable = true;
               xmonad.enable = true;

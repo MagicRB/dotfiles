@@ -21,7 +21,10 @@ inputs: {
         overlays = inputs.self.overlays;
 
         programs = {
-          bash.enable = true;
+          bash = {
+            enable = true;
+            enableDirenv = true;
+          };
         };
       };
 

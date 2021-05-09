@@ -12,12 +12,22 @@ in
       type = types.bool;
       default = true;
     };
+
+    enableDirenv = mkEnableOption "Enable direnv";
   };
     
   config = mkIf cfg.enable {
-    home.packages = mkIf cfg.emacsclient-remote [
-      pkgs.magic_rb.emacsclient-remote
+    home.packages = mkMerge [
+      (mkIf cfg.emacsclient-remote [
+        pkgs.magic_rb.emacsclient-remote
+      ])
+      (mkIf cfg.enableDirenv [
+        pkgs.direnv
+      ])
     ];
+
+    programs.direnv.enable = mkIf cfg.enableDirenv true;
+    programs.direnv.enableNixDirenvIntegration = mkIf cfg.enableDirenv true;
 
     home.file = {
       ".bashrc".source = nglib.writeSubstitutedFile {
@@ -26,6 +36,7 @@ in
         substitutes = {
           "exa" = "${pkgs.exa}";
           "bat" = "${pkgs.bat}";
+          "direnvEnabled" = if cfg.enableDirenv then "true" else "false";
         };
       };
     };
