@@ -21,6 +21,12 @@ in
       emacs-all-the-icons-fonts
     ];
 
+    home.activation.emacsStraightVerions = config.lib.dag.entryAfter
+      ["writeBoundary"] ''
+        mkdir -p ~/.emacs.d/straight/versions
+        ln -sfn ~/dotfiles/nix/home-manager/modules/emacs/straight-versions.el ~/.emacs.d/straight/versions/default.el
+    '';
+    
     home.file = {
       ".emacs".source = ./.emacs;
       ".emacs.d/org" = {

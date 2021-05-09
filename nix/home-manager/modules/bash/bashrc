@@ -43,46 +43,6 @@ e() {
 
 [[ ! -z "${INSIDE_EMACS+x}" ]] && alias vim="e"
 
-SSH=$(which ssh)
-ssh() {
-    if [[ ! -z "${INSIDE_EMACS+x}" ]]
-    then
-	"${SSH}" \
-	    -o "SendEnv INSIDE_EMACS" \
-	    -o "StreamLocalBindUnlink yes" \
-	    -o "ControlMaster auto" \
-	    -o "ControlPath ~/.ssh/controlmasters/%r@%h:%p" \
-	    -Nf \
-	    -R ~/.ssh/emacs-server:/run/user/1000/emacs/server \
-	    $1
-	"${SSH}" \
-	    -S ~/.ssh/controlmasters/%r@%h:%p \
-	    -o 'SendEnv=INSIDE_EMACS' \
-	    $@
-    else
-	"${SSH}" $@
-    fi
-}
-xssh() {
-    if [[ ! -z "${INSIDE_EMACS+x}" ]]
-    then
-	"${SSH}" \
-	    -o "SendEnv INSIDE_EMACS" \
-	    -o "StreamLocalBindUnlink yes" \
-	    -o "ControlMaster auto" \
-	    -o "ControlPath ~/.ssh/controlmasters/%r@%h:%p" \
-	    -Nf \
-	    -R ~/.ssh/emacs-server:/run/user/1000/emacs/server \
-	    $1
-	"${SSH}" \
-	    -S ~/.ssh/controlmasters/%r@%h:%p \
-	    -o 'SendEnv=INSIDE_EMACS' \
-	    -X \
-	    $@
-    else
-	"${SSH}" -X $@
-    fi
-}
 
 if [[ "@direnvEnabled@" == "true" ]] ; then
     eval "$(direnv hook bash)"
