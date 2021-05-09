@@ -90,6 +90,7 @@ in
             "${cfg.userName}" = {
               group = cfg.groupName;
               uid = cfg.uid;
+	      isSystemUser = true;
             };
           };
           groups = {
