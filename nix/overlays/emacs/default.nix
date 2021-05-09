@@ -35,6 +35,7 @@ in
           (rWrapper.override { packages = []; })
 
           gnumake
+          ccls
         ] ++ [
           rnix-lsp
         ] ++ [

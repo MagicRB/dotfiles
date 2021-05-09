@@ -250,6 +250,17 @@
     #+END_SRC
 
 * Languages
+*** C/C++
+
+    Enable ~ccls~.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package ccls
+	:straight t
+	:hook (c-mode . lsp)
+	      (c++-mode . lsp))
+    #+END_SRC
+    
 *** Nix Expression Language
 
     Enable ~nix-mode~.
@@ -427,6 +438,17 @@
 	:mode ("\\.rs\\'" . rustic-mode))
     #+END_SRC
 * LSP
+*** envrc
+
+    Enable ~envrc~, which changes ENVs on a per buffer basis.
+
+    #+BEGIN_SRC emacs-lisp
+      (use-package envrc
+	:straight t
+	:init
+	(envrc-global-mode))
+    #+END_SRC
+    
 *** lsp-mode
      
     Increase GC threshold to avoid random freezes on garbage collection.
