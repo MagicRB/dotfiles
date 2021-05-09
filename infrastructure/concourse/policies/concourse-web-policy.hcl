@@ -14,6 +14,6 @@ path "kv/data/concourse/db" {
   capabilities = ["read"]
 }
 
-path "kv/data/concourse/pipelines/*" {
+path "kv/data/concourse/pipelines/+/+/*" {
   capabilities = ["read"]
 }
