@@ -81,6 +81,10 @@
         shh = import ./overlays/shh;
       };
 
+      nixosModules = {
+        vault-agent = import ./nixos-modules/vault-agent.nix;
+      };
+
       packages =
         forAllSystems (system:
           let
