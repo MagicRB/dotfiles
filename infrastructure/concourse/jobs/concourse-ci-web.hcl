@@ -107,13 +107,18 @@ fi
 EOF
 	destination = "${NOMAD_SECRETS_DIR}/main.sh"
       }
+
+      resources {
+	cpu = 3000
+	memory = 512 
+      }
     }
 
     task "web" {
       driver = "docker"
 
       config {
-	image = "concourse/concourse@sha256:fa136abb336f2c2aed8d41d21b382d364c3387c24f3fdef15c720c292c9216d4"
+	image = "concourse/concourse@sha256:9adc59ea1ccdb2d0262451d30ff0298dc92139ba7cfb8bfd99b1a469441594e0"
 	command = "web"
 	ports = ["http", "tsa"]
       }
@@ -129,34 +134,37 @@ EOF
 
       template {
 	data = <<EOF
-{{ with secret "kv/data/concourse/web" }}
-CONCOURSE_ADD_LOCAL_USER={{ .Data.data.local_user_name }}:{{ .Data.data.local_user_pass }}
-CONCOURSE_MAIN_TEAM_LOCAL_USER={{ .Data.data.local_user_name }}
-{{ end }}
+[[ with secret "kv/data/concourse/web" ]]
+CONCOURSE_ADD_LOCAL_USER=[[ .Data.data.local_user_name ]]:[[ .Data.data.local_user_pass ]]
+CONCOURSE_MAIN_TEAM_LOCAL_USER=[[ .Data.data.local_user_name ]]
+[[ end ]]
 
-CONCOURSE_SESSION_SIGNING_KEY={{ env "NOMAD_SECRETS_DIR" }}/session_signing_key
-CONCOURSE_TSA_HOST_KEY={{ env "NOMAD_SECRETS_DIR" }}/tsa_host_key
-CONCOURSE_TSA_AUTHORIZED_KEYS={{ env "NOMAD_SECRETS_DIR" }}/authorized_worker_keys
+CONCOURSE_SESSION_SIGNING_KEY=[[ env "NOMAD_SECRETS_DIR" ]]/session_signing_key
+CONCOURSE_TSA_HOST_KEY=[[ env "NOMAD_SECRETS_DIR" ]]/tsa_host_key
+CONCOURSE_TSA_AUTHORIZED_KEYS=[[ env "NOMAD_SECRETS_DIR" ]]/authorized_worker_keys
 
 CONCOURSE_EXTERNAL_URL=http://blowhole.in.redalder.org:8019/
 
 CONCOURSE_POSTGRES_HOST=127.0.0.1
 CONCOURSE_POSTGRES_PORT=5432
-{{ with secret "kv/data/concourse/db" }}
-CONCOURSE_POSTGRES_DATABASE={{ .Data.data.database }}
-CONCOURSE_POSTGRES_USER={{ .Data.data.user }}
-CONCOURSE_POSTGRES_PASSWORD={{ .Data.data.password }}
-{{ end }}
+[[ with secret "kv/data/concourse/db" ]]
+CONCOURSE_POSTGRES_DATABASE=[[ .Data.data.database ]]
+CONCOURSE_POSTGRES_USER=[[ .Data.data.user ]]
+CONCOURSE_POSTGRES_PASSWORD=[[ .Data.data.password ]]
+[[ end ]]
 
 CONCOURSE_VAULT_URL=https://vault.in.redalder.org:8200/
-CONCOURSE_VAULT_CA_CERT={{ env "NOMAD_SECRETS_DIR" }}/vault.crt
-CONCOURSE_VAULT_PATH_PREFIX=/concourse/pipelines
+CONCOURSE_VAULT_CA_CERT=[[ env "NOMAD_SECRETS_DIR" ]]/vault.crt
+CONCOURSE_VAULT_PATH_PREFIX=kv/concourse/pipelines
 
-CONCOURSE_VAULT_CLIENT_TOKEN={{ env "VAULT_TOKEN" }}
+CONCOURSE_VAULT_CLIENT_TOKEN=[[ env "VAULT_TOKEN" ]]
 CONCOURSE_VAULT_LOOKUP_TEMPLATES=/{{.Team}}/{{.Pipeline}}/{{.Secret}},/{{.Team}}/{{.Secret}}
 EOF
 	destination = "${NOMAD_SECRETS_DIR}/data.env"
 	env = true
+
+	left_delimiter = "[["
+	right_delimiter = "]]"
       }
 
       template {
@@ -192,6 +200,11 @@ EOF
 	destination = "${NOMAD_SECRETS_DIR}/authorized_worker_keys"
 	change_mode = "signal"
 	change_signal = "SIGHUP"
+      }
+
+      resources {
+	cpu = 3000
+	memory = 512 
       }
     }
   }

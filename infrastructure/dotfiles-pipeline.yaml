@@ -45,7 +45,7 @@ jobs:
               out=$(pwd)
               cd src/nix
 
-              nix -v --log-format raw -L  --experimental-features 'nix-command flakes' build --out-link $out/nix.tar.gz .#dockerImages.x86_64-linux.nix.build
+              nix -vv --log-format raw -L  --experimental-features 'nix-command flakes' build --out-link $out/nix.tar.gz .#dockerImages.x86_64-linux.nix.build
     - put: push-nix-image
       params:
         image: nix.tar.gz
