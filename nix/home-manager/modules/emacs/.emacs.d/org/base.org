@@ -1329,3 +1329,9 @@
 	(counsel-switch-buffer))
     #+END_SRC   
 
+*** PGTK neo2 fix
+  #+BEGIN_SRC emacs-lisp
+    (put 'none 'modifier-value 0)
+    (setq x-hyper-keysym 'none)
+  #+END_SRC
+
