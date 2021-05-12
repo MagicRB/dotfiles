@@ -43,6 +43,7 @@ in
     lightdm = mkEnableOption "Enable lightdm";
     setSkLayout = mkEnableOption "Set SK layout";
     emacsCtrl = mkEnableOption "Rebind CapsLock to Ctrl";
+    qwertyNeo2 = mkEnableOption "Add custom qwerty neo layout.";
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -85,6 +86,13 @@ in
       services.xserver = {
         layout = mkIf xserver-enable "us,sk";
         xkbVariant = mkIf xserver-enable ",qwerty";
+      };
+    })
+    (mkIf cfg.qwertyNeo2 {
+      services.xserver.extraLayouts."qwerty_neo" = {
+        description = "QWERTY neo2 layout.";
+        languages = [ "de" ];
+        symbolsFile = ./qwerty_neo.xkb;
       };
     })
     (mkIf cfg.emacsCtrl {

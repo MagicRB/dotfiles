@@ -101,7 +101,5 @@
               sss-cli = mkPkg "sss-cli";
               shh = mkPkg "shh";
             });
-
-      # halfFlakes = rlib.custom;
     };
 }
