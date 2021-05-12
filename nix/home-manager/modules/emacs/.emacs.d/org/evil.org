@@ -13,18 +13,9 @@
 		("j" . evil-backward-char)
 		("k" . evil-previous-line)
 		("l" . evil-next-line)
-		(";" . evil-forward-char)
-		:map evil-motion-state-map
-		("<left>" . 'ignore)
-		("<right>" . 'ignore)
-		("<up>" . 'ignore)
-		("<down>" . 'ignore)
+		("ö" . evil-forward-char)
 		:map evil-insert-state-map
-                ("C-;" . 'evil-insert-digraph)
-		("<left>" . 'ignore)
-		("<right>" . 'ignore)
-		("<up>" . 'ignore)
-		("<down>" . 'ignore))
+                ("C-;" . 'evil-insert-digraph))
     :config
     (evil-mode 1)
     (with-eval-after-load "treemacs"
@@ -32,7 +23,7 @@
       (evil-define-key 'treemacs treemacs-mode-map (kbd "j") 'ignore)
       (evil-define-key 'treemacs treemacs-mode-map (kbd "k") 'treemacs-previous-line)
       (evil-define-key 'treemacs treemacs-mode-map (kbd "l") 'treemacs-next-line)
-      (evil-define-key 'treemacs treemacs-mode-map (kbd ";") 'ignore))
+      (evil-define-key 'treemacs treemacs-mode-map (kbd "ö") 'ignore))
     ;; :q should kill the current buffer rather than quitting emacs entirely
     (evil-ex-define-cmd "q" 'kill-this-buffer)
     ;; Need to type out :quit to close emacs
@@ -106,12 +97,12 @@
 	 (define-key map "j" 'evil-window-left)
 	 (define-key map "k" 'evil-window-up)
 	 (define-key map "l" 'evil-window-down)
-	 (define-key map ";" 'evil-window-right)
+	 (define-key map "ö" 'evil-window-right)
 
 	 (define-key map "J" 'evil-window-move-far-left)
 	 (define-key map "K" 'evil-window-move-very-top)
 	 (define-key map "L" 'evil-window-move-very-bottom)
-	 (define-key map ":" 'evil-window-move-far-right)
+	 (define-key map "ö" 'evil-window-move-far-right)
 
 	 (define-key map "2" 'evil-window-vsplit)
 	 (define-key map "3" 'evil-window-split)

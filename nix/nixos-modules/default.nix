@@ -10,7 +10,7 @@
     ./pulseaudio.nix
     ./vault-agent.nix
     ./sshd-emacs.nix
-    ./xserver.nix
+    ./xserver
     ../hardware/default.nix
   ];
 }

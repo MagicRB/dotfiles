@@ -101,6 +101,7 @@ inputs: {
 
           setSkLayout = true;
           emacsCtrl = true;
+          qwertyNeo2 = true;
         };
 
         pins = {
