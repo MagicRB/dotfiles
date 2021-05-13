@@ -102,7 +102,7 @@
 	 (define-key map "J" 'evil-window-move-far-left)
 	 (define-key map "K" 'evil-window-move-very-top)
 	 (define-key map "L" 'evil-window-move-very-bottom)
-	 (define-key map "ö" 'evil-window-move-far-right)
+	 (define-key map "Ö" 'evil-window-move-far-right)
 
 	 (define-key map "2" 'evil-window-vsplit)
 	 (define-key map "3" 'evil-window-split)
