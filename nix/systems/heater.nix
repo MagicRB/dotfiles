@@ -168,7 +168,7 @@ inputs: {
           services.sshd.enable = true;
 
           services.nomad = {
-            enable = true;
+            enable = false; # Consul conflict, services go yeet
             enableDocker = false;
             dropPrivileges = false;
 
