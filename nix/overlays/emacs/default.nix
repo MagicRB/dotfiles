@@ -29,7 +29,7 @@ in
 
           ghostscript
           imagemagick
-          (texlive.combine { inherit (texlive) dvisvgm scheme-small preview siunitx amsmath ulem dvipng wrapfig cancel capt-of bytefield; }) # gensymb is not here, dont add
+          (texlive.combine { inherit (texlive) dvisvgm scheme-small preview siunitx amsmath ulem dvipng wrapfig cancel capt-of bytefield chemfig simplekv; }) # gensymb is not here, dont add
           texlab
 
           (rWrapper.override { packages = []; })

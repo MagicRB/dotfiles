@@ -811,6 +811,10 @@
 		 '("" "bytefield" t))
     (add-to-list 'org-latex-packages-alist
 		 '("" "siunitx" t))
+    (add-to-list 'org-latex-packages-alist
+		 '("" "chemfig" t))
+    (add-to-list 'org-latex-packages-alist
+		 '("" "simplekv" t))
 
     (eval-after-load "preview"
       '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
