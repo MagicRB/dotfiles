@@ -41,8 +41,6 @@ in
     };
     xmonad = mkEnableOption "Enable xmonad";
     lightdm = mkEnableOption "Enable lightdm";
-    setSkLayout = mkEnableOption "Set SK layout";
-    emacsCtrl = mkEnableOption "Rebind CapsLock to Ctrl";
     qwertyNeo2 = mkEnableOption "Add custom qwerty neo layout.";
   };
 
@@ -82,22 +80,17 @@ in
         nvidiaBusId = cfg.nvidia.nvidiaBusId;
       };
     })
-    (mkIf cfg.setSkLayout {
-      services.xserver = {
-        layout = mkIf xserver-enable "us,sk";
-        xkbVariant = mkIf xserver-enable ",qwerty";
-      };
-    })
     (mkIf cfg.qwertyNeo2 {
-      services.xserver.extraLayouts."qwerty_neo" = {
-        description = "QWERTY neo2 layout.";
-        languages = [ "de" ];
-        symbolsFile = ./qwerty_neo.xkb;
-      };
-    })
-    (mkIf cfg.emacsCtrl {
       services.xserver = {
-        xkbOptions = mkIf xserver-enable "grp:lalt_lshift_toggle ctrl:nocaps";
+        layout = "de";
+        xkbVariant = "neo_qwerty";
+        xkbOptions = "ctrl:swap_lalt_lctl_lwin, altwin:menu_win";
+
+        extraLayouts."neo_qwerty" = {
+          description = "QWERTY neo2 layout.";
+          languages = [ "de" ];
+          symbolsFile = ./qwerty_neo.xkb;
+        };
       };
     })
   ]);
