@@ -66,8 +66,6 @@ inputs: {
               gpu = "nvidia";
               xmonad = true;
 
-              setSkLayout = true;
-              emacsCtrl = true;
               qwertyNeo2 = true;
             };
 

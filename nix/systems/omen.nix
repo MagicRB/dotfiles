@@ -99,8 +99,6 @@ inputs: {
             nvidiaBusId = "PCI:1:0:0";
           };
 
-          setSkLayout = true;
-          emacsCtrl = true;
           qwertyNeo2 = true;
         };
 
