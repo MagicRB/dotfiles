@@ -21,6 +21,7 @@ in
       supportedFilesystems = [ "zfs" ];
       kernelParams = [
         "zfs.zfs_arc_max=214748368"
+        "intel_pstate=active"
       ];
       kernelPackages = pkgs.linuxPackages_latest;
     };
@@ -64,6 +65,21 @@ in
           fsType = "ext4";
         };
 
+      "/mnt/net/Magic_RB" =
+        {
+          fsType = "nfs";
+          device = "10.64.0.2:/Magic_RB";
+          options = [
+            "noauto"
+            "x-systemd.automount"
+            "x-systemd.device-timeout=10"
+            "timeo=14"
+            "hard"
+            "intr"
+            "noatime"
+            "x-systemd.after=wireguard-wg0.service"
+          ];
+        };
 
       "/boot/efi" =
         { device = "/dev/disk/by-partlabel/efi-WL157385";
