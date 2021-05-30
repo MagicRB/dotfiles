@@ -1,5 +1,5 @@
 (import ./oci-nixos.nix)
   {
-    hostname = "tweedledee";
+    hostName = "tweedledee";
     hostId = "92620a6f";
   }
