@@ -29,7 +29,7 @@ inputs: {
           flakes.enable = true;
         };
 
-        services.sshd = {
+        services.openssh = {
           enable = true;
           passwordAuthentication = true;
           permitRootLogin = "no";
