@@ -6,7 +6,14 @@ in
 {
   options = {};
 
-  imports = [ ./heater.nix ./mark.nix ./omen.nix ./recovery-usb.nix ];
+  imports =
+    [ ./heater.nix
+      ./mark.nix
+      ./omen.nix
+      ./recovery-usb.nix
+      (import ./oci-nixos.nix "tweedledum")
+      (import ./oci-nixos.nix "tweedledee")
+    ];
 
   config = {
     assertions = [

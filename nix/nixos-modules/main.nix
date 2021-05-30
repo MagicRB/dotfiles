@@ -18,6 +18,9 @@ in {
       extraGroups = [ "wheel" "audio" ]
                      ++ (optional nm-enable "network-manager")
                     ++ (optional docker-enable "docker");
+
+      openssh.authorizedKeys.keys =
+        [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVkFvalffJ/SMjJGG3WPiqCqFygnWzhGUaeALBIoCsJ (none)" ];
     };
     
     groups.main = {

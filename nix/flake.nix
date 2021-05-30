@@ -59,6 +59,12 @@
       nixosConfigurations.heater = nixosSystem (import ./systems/heater.nix inputs);
       heater = self.nixosConfigurations.heater.config.system.build.toplevel;
 
+      nixosConfigurations.tweedledee = nixosSystem (import ./systems/tweedledee.nix inputs);
+      tweedledee = self.nixosConfigurations.tweedledee.config.system.build.toplevel;
+
+      nixosConfigurations.tweedledum = nixosSystem (import ./systems/tweedledum.nix inputs);
+      tweedledum = self.nixosConfigurations.tweedledum.config.system.build.toplevel;
+
       nixosConfigurations.mark = nixosSystem (import ./systems/mark.nix inputs);
       mark = self.nixosConfigurations.mark.config.system.build.toplevel;
 
