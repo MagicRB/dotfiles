@@ -1,4 +1,4 @@
-{ hostName, hostId }:
+{ hostName }:
 inputs: {
   system = "x86_64-linux";
 
@@ -44,7 +44,7 @@ inputs: {
           # interfaces.enp3s0.useDHCP = true;
 
           firewall.enable = true;
-          inherit hostId hostName;
+          inherit hostName;
         };
 
         time.timeZone = "Europe/Bratislava";
