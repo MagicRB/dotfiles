@@ -16,7 +16,7 @@ in
     devices = mkOption {
       description = "GRUB devices for legacy";
       default = [];
-      type = types.list;
+      type = with types; listOf string;
     };
   };
 
