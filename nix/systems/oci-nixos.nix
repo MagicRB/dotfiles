@@ -9,8 +9,8 @@ inputs: {
         magic_rb = {
           grub = {
             enable = true;
-            efi.enable = false;
-            devices = [ "/dev/disk/by-id/scsi-360646ec4d8e14b45b588dcafaf0b511b" ];
+            efi.enable = true;
+            devices = [ "nodev" ];
           };
 
           pins = {

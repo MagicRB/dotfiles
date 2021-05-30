@@ -1,13 +1,14 @@
 hostname:
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, modulesPath, ... }@all:
 with lib;
 let
   cfg = config.magic_rb.hardware."${hostname}";
+  qemu-guest = import (modulesPath + "/profiles/qemu-guest.nix") all;
 in
 {
   options.magic_rb.hardware."${hostname}" = mkEnableOption "";
 
-  config = mkIf cfg {
+  config = mkIf cfg ({
     boot = {
       kernelPackages = pkgs.linuxPackages_latest;
       loader.grub.extraConfig = ''
@@ -15,6 +16,10 @@ in
         terminal_input --append serial
         terminal_output --append serial
       '';
+
+      initrd.kernelModules = [
+        "nvme"
+      ];
     };
 
     swapDevices = [
@@ -33,8 +38,8 @@ in
       "/boot/efi" =
         {
           device = "/dev/disk/by-uuid/4478-6009";
-          fsType = "ext4";
+          fsType = "vfat";
         };
     };
-  };
+  } // qemu-guest); 
 }
