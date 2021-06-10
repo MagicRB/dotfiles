@@ -2,12 +2,13 @@ Host *
      ControlMaster auto
      ControlPath ~/.ssh/controlmasters/%r@%h:%p
      ControlPersist 300s
-     SendEnv INSIDE_EMACS
+     ServerAliveInterval 30
 
 Host 192.168.0.250
      Port 2222
 
 Host *redalder.org 192.168.0.250
      ExitOnForwardFailure yes
+     SendEnv INSIDE_EMACS
      RemoteForward /home/main/.ssh/emacs-server /run/user/1000/emacs/server
    
