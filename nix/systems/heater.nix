@@ -37,6 +37,7 @@ inputs: {
                     enableDirenv = true;
                   };
                   shh.enable = true;
+                  ssh.enable = true;
                   emacs.enable = true;
                   xmonad.enable = true;
                   gpg.enable = true;
@@ -96,6 +97,10 @@ inputs: {
           };
 
           programs.steam.enable = true;
+
+          boot.binfmt.emulatedSystems = [
+            "aarch64-linux"
+          ];
           
           services.vault-agent = {
             enable = true;
