@@ -16,37 +16,43 @@ alias cat='@bat@/bin/bat'
 
 export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
 
-EMACSCLIENT="`command -v -- emacsclient >/dev/null 2>&1 && printf emacsclient || printf emacsclient-$(uname -m)`"
-E() {
-    if [[ ! -z "${INSIDE_EMACS+x}" ]] && [[ ! -z "${SSH_CONNECTION+x}" ]]
-    then
-	emacsclient-remote --sudo "$1"
-    elif [[ ! -z "${INSIDE_EMACS}" ]]
-    then
-	"${EMACSCLIENT}" -a emacs "/sudo::/${1}"
+emacsclient() {
+    if [[ -e "$HOME/.ssh/emacs-server" ]] ; then
+
+	params=()
+	sudo=0
+	nowait=0
+
+	host=$(echo $SSH_CONNECTION | cut -d' ' -f3)
+	port=$(echo $SSH_CONNECTION | cut -d' ' -f4)
+
+	for p in "${@}"; do
+	    if [[ "${p}" == "-s" || "${p}" == "--sudo" ]]; then
+		sudo=1
+	    elif [[ "${p}" == "-n" || "${p}" == "--no-wait" ]]; then
+		params+=( "-nowait" )
+	    else
+		if [[ ${sudo} -eq 1 ]]; then
+		    params+=( "-file /ssh:${USER}@${host}#${port}|sudo::"$(realpath -m "${p}") )
+		else
+		    params+=( "-file /ssh:${USER}@${host}#${port}:"$(realpath "${p}") )
+		fi
+	    fi
+	done
+
+	if [[ ${nowait} -eq 0 ]] ; then
+	    printf 'Waiting for Emacs...\n'
+	fi
+
+	echo "${params[@]}" | nc -U "$HOME/.ssh/emacs-server" >/dev/null 2>&1
     else
-	"${EMACSCLIENT}" -t -a emacs "/sudo::/${1}"
+	env emacsclient "${@}"
     fi
 }
-e() {
-    if [[ ! -z "${INSIDE_EMACS+x}" ]] && [[ ! -z "${SSH_CONNECTION+x}" ]]
-    then
-	emacsclient-remote "$1"
-    elif [[ ! -z "${INSIDE_EMACS}" ]]
-    then
-	"${EMACSCLIENT}" -a emacs "${1}"
-    else
-	"${EMACSCLIENT}" -t -a emacs "${1}"
-    fi
-}
 
+alias e='emacsclient'
+alias E='emacsclient -s'
 
-[[ ! -z "${INSIDE_EMACS+x}" ]] && alias vim="e"
-
-
-if [[ "@direnvEnabled@" == "true" ]] ; then
-    eval "$(direnv hook bash)"
-fi
 
 ## Set prompt
 
@@ -65,4 +71,8 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]] \
     && [[ -n ${EMACS_VTERM_PATH} ]] \
     && [[ -f ${EMACS_VTERM_PATH}/etc/emacs-vterm-bash.sh ]]; then
 	source ${EMACS_VTERM_PATH}/etc/emacs-vterm-bash.sh
+fi
+
+if [[ "@direnvEnabled@" == "true" ]] ; then
+    eval "$(direnv hook bash)"
 fi
