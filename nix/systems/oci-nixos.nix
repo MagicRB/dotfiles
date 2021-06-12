@@ -65,17 +65,12 @@ inputs: {
           config = (inputs.nixng.lib "${pkgs.stdenv.system}").generators.toNginx
             [
               {
-                daemon = "off";
                 worker_processes = 2;
 
                 events."" = {
                   use = "epoll";
                   worker_connections = 128;
                 };
-
-                error_log = [ "/dev/stderr" "warn" ];
-
-                pid = "/run/nginx/nginx.pid";
 
                 http."" = {
                   server_tokens = "off";
@@ -84,7 +79,7 @@ inputs: {
                     [ "${pkgs.nginx}/conf/mime.types" ]
                   ];
                   charset = "utf-8";
-                  access_log = [ "/dev/stdout" "combined" ];
+                  access_log = "off";
 
                   server."" = {
                     listen = [ "80" "default_server" ];
@@ -96,7 +91,7 @@ inputs: {
                       return = "404";
                     };
 
-                    location."/cache" = {
+                    location."/cache/" = {
                       root = "/var/nix-cache";
                     };
                   };
