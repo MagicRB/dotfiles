@@ -18,6 +18,9 @@ in
     home.packages = with pkgs; [
       cfg.package
       fira-code
+      (iosevka-bin.override { variant = "aile"; })
+      (iosevka-bin.override { variant = "etoile"; })
+      (iosevka-bin.override { variant = ""; })
       emacs-all-the-icons-fonts
     ];
 
