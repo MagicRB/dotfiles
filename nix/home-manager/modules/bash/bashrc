@@ -14,7 +14,16 @@ alias grep='grep --color=auto'
 alias ls='@exa@/bin/exa'
 alias cat='@bat@/bin/bat'
 
-export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
+if [ -z "${SHLVL_INIT+x}" ]; then
+    export SHLVL_INIT=1 SHLVL=1
+fi
+
+
+if [ "$SHLVL" = 1 ]; then
+    export PS1="\u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
+else
+    export PS1="$SHLVL: \u@\[\e[37m\]\h\[\e[m\]:\[\e[32m\]\w\[\e[m\]\[\e[31m\]\\$\[\e[m\] "
+fi
 
 emacsclient() {
     if [[ -e "$HOME/.ssh/emacs-server" ]] ; then
