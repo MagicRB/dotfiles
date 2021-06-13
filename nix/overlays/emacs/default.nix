@@ -19,8 +19,6 @@ in
           nodePackages.pyright
           python38Full
 
-          rust-analyzer
-          
           hunspellWithDicts
           
           w3m
@@ -35,7 +33,7 @@ in
           (rWrapper.override { packages = []; })
 
           gnumake
-          ccls
+          clang-tools
         ] ++ [
           rnix-lsp
         ] ++ [
