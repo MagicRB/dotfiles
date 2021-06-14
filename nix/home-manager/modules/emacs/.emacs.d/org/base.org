@@ -122,7 +122,7 @@ First make =load-theme= unload all currently loaded themes and reapply fonts aft
   #+END_SRC
    
   Create a function, which applies my font settings, and call it. Also branch on whether PGtk is in use, as fonts are a
-  bit bigger with it. Also enable variable pitch fonts, ~Iosenvka~ is really nice.
+  bit bigger with it. Also enable variable pitch fonts, ~Iosevka~ is really nice.
 
   #+BEGIN_SRC emacs-lisp
     (setq magic_rb/fixed-width-font "Iosevka Term Extended")
@@ -138,8 +138,6 @@ First make =load-theme= unload all currently loaded themes and reapply fonts aft
         (set-face-attribute 'variable-pitch nil :family magic_rb/variable-pitch-font :height 1.0))
       (magic_rb/apply-fonts))
   #+END_SRC
-
-  #+RESULTS:
    
   Load Modus Vivendi, but change the background color to not-black, it's a bit less depressing and in my opinion nicer
   on the eyes.
