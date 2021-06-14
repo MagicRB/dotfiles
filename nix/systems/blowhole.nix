@@ -25,6 +25,7 @@ inputs: {
             enable = true;
             enableDirenv = true;
           };
+          ssh.enable = true;
         };
       };
 
