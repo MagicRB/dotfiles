@@ -24,6 +24,7 @@ in
         "intel_pstate=active"
       ];
       kernelPackages = pkgs.linuxPackages_latest;
+      zfs.enableUnstable = true;
     };
 
     hardware.enableRedistributableFirmware = true;
