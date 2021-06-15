@@ -26,8 +26,7 @@ else
 fi
 
 emacsclient() {
-    if [[ -e "$HOME/.ssh/emacs-server" ]] ; then
-
+    if [[ -e "$HOME/.ssh/emacs-server" ]] && [[ -z ${INSIDE_EMACS+x} ]] ; then
 	params=()
 	sudo=0
 	nowait=0
