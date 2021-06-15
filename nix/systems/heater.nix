@@ -4,7 +4,7 @@ inputs: {
   modules = [
     ../nixos-modules/default.nix
     inputs.home-manager.nixosModules.home-manager
-    ({ pkgs, config, ... }:
+    ({ pkgs, config, lib, ... }:
       let
         inherit (config.magic_rb.pkgs) nixpkgs-unstable;
       in
@@ -168,7 +168,12 @@ inputs: {
             };
           };
 
-          services.sshd.enable = true;
+          services.openssh = {
+            enable = true;
+            extraConfig = ''
+              AcceptEnv INSIDE_EMACS
+            '';
+          };
 
           services.nomad = {
             enable = false; # Consul conflict, services go yeet
@@ -182,6 +187,7 @@ inputs: {
             extraSettingsPaths = [ "/var/secrets/nomad.hcl" ];
           };
 
+          systemd.services.wireguard-wg0.wantedBy = lib.mkForce [ ];
           networking = {
             firewall = {
               allowedUDPPorts = [ 6666 ];

@@ -129,7 +129,12 @@ inputs: {
 
       programs.steam.enable = true;
 
-      services.sshd.enable = true;
+      services.openssh = {
+        enable = true;
+        extraConfig = ''
+          AcceptEnv INSIDE_EMACS
+        '';
+      };
 
       networking = {
         hostName = "omen";
