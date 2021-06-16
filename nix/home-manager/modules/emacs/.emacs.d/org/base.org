@@ -987,14 +987,15 @@ parts, separate them with a ~<SPC>~.
     :hook (after-init . all-the-icons-ivy-rich-mode))
 #+END_SRC
 
-~ivy-rich~ add more stuff into =switch-to-buffer=, but has some issues when working over TRAMP. It gets a little
-slow. TODO
+~ivy-rich~ add more stuff into =switch-to-buffer=. Enable ~ivy-rich-project-root-cache-mode~ globally, helps with TRAMP
+performance tremendously.
    
 #+BEGIN_SRC emacs-lisp
   (use-package ivy-rich
     :straight t
     :config
-    (ivy-rich-mode 1))
+    (ivy-rich-mode 1)
+    :hook (ivy-rich-mode . ivy-rich-project-root-cache-mode))
 #+END_SRC
 
 ~ivy-hydra~ adds Helm like extended actions.
