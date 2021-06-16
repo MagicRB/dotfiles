@@ -64,6 +64,12 @@ point in time.
   (setq ispell-program-name "hunspell")
 #+END_SRC
 
+Fetch the ~SSH_AUTH_PATH~ from ~.profile~.
+
+#+BEGIN_SRC emacs-lisp
+  (setenv "SSH_AUTH_SOCK" (shell-command-to-string ". ~/.profile && echo $SSH_AUTH_SOCK"))
+#+END_SRC
+
 * Look & Feel
 ** Color Themes
     
