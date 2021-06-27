@@ -103,9 +103,7 @@ Config {
         , Run Date           "<fc=#eaeaea>%F (%a) %T</fc>" "date" 10
 
         -- keyboard layout indicator
-        , Run Kbd            [ ("sk(qwerty)"         , "sk_SK")
-                             , ("us"         , "en_US")
-                             ]
+        , Run Kbd            [ ]
         , Run StdinReader
         ]
    }
