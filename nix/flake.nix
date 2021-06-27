@@ -95,14 +95,14 @@
         forAllSystems (system:
           let
             mkPkg' =
-              nixpkgs: name: package: (import nixpkgs { inherit system; overlays = [ self.overlays."${name}" ]; }).magic_rb."${package}";
-            mkPkg = name: mkPkg' nixpkgs name name;
+              pkgs: name: package: (import pkgs { inherit system; overlays = [ self.overlays."${name}" ]; }).magic_rb."${package}";
+            mkPkg = name: mkPkg' nixpkgs-unstable name name;
           in
             {
               emacs = mkPkg "emacs";
               emacsclient-remote = mkPkg "emacsclient-remote";
               gpg-key = mkPkg "gpg-key";
-              gpg-key-hs = mkPkg' nixpkgs-unstable "gpg-key" "gpg-key-hs";
+              gpg-key-hs = mkPkg' "gpg-key" "gpg-key-hs";
               screenshot = mkPkg "screenshot";
               sss-cli = mkPkg "sss-cli";
               shh = mkPkg "shh";
