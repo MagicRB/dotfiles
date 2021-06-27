@@ -100,6 +100,7 @@ inputs: {
           };
 
           qwertyNeo2 = true;
+          mimickInTty = true;
         };
 
         pins = {

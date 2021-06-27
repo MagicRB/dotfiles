@@ -42,6 +42,7 @@ in
     xmonad = mkEnableOption "Enable xmonad";
     lightdm = mkEnableOption "Enable lightdm";
     qwertyNeo2 = mkEnableOption "Add custom qwerty neo layout.";
+    mimickInTty = mkEnableOption "Mimick xkb set keyboard layouts in TTYs.";
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -82,9 +83,9 @@ in
     })
     (mkIf cfg.qwertyNeo2 {
       services.xserver = {
-        layout = "de";
-        xkbVariant = "neo_qwerty";
-        xkbOptions = "ctrl:swap_lalt_lctl_lwin, altwin:menu_win";
+        layout = "de,de";
+        xkbVariant = "neo_qwerty,koy";
+        xkbOptions = "ctrl:swap_lalt_lctl_lwin, altwin:menu_win, grp:sclk_toggle";
 
         extraLayouts."neo_qwerty" = {
           description = "QWERTY neo2 layout.";
@@ -92,6 +93,9 @@ in
           symbolsFile = ./qwerty_neo.xkb;
         };
       };
+    })
+    (mkIf cfg.mimickInTty {
+      console.useXkbConfig = true;
     })
   ]);
 }

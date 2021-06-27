@@ -259,7 +259,6 @@ myLogHook = return ()
 --
 -- By default, do nothing.
 myStartupHook = do
-  spawnOnce "setxkbmap -layout us,sk -variant ,qwerty -option 'grp:lalt_lshift_toggle' -option ctrl:nocaps"
   when @enableDunst@ (spawnOnce "@dunst@ -config @dunstConfig@")
   when @enablePicom@ (spawnOnce "@picom@ --config @picomConfig@ @experimentalBackends@")
   spawnOnce xmobarCmd

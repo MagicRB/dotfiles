@@ -68,6 +68,7 @@ inputs: {
               xmonad = true;
 
               qwertyNeo2 = true;
+              mimickInTty = true;
             };
 
             pins = {
