@@ -27,7 +27,7 @@ fi
 
 emacsclient() {
     if [[ -e "$HOME/.ssh/emacs-server" ]] && \
-	   nc -Uz "$HOME/.ssh/emacs-server" && \
+	   nc -Uz "$HOME/.ssh/emacs-server" >/dev/null 2>&1 && \
 	   [[ ! -z ${INSIDE_EMACS+x} ]] ; then
 	params=()
 	sudo=0
