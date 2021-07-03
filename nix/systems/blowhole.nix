@@ -8,16 +8,7 @@ inputs: {
       home.stateVersion = "20.09";
 
       magic_rb = {
-        pins = {
-          inherit (inputs)
-            nixpkgs
-            nixpkgs-unstable
-            nixpkgs-master
-
-            home-manager
-            nixng
-            fenix;
-        };
+        pins = inputs;
         overlays = inputs.self.overlays;
 
         programs = {

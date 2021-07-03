@@ -10,16 +10,7 @@ inputs: {
   ] ++ [
     ({ pkgs, config, ... }: {
       magic_rb = {
-        pins = {
-          inherit (inputs)
-            nixpkgs
-            nixpkgs-unstable
-            nixpkgs-master
-
-            home-manager
-            nixng
-            fenix;
-        };
+        pins = inputs;
         config = {
           allowUnfree = true;
         };

@@ -10,16 +10,7 @@ inputs: {
           imports = [ ../home-manager/modules/default.nix ];
 
           magic_rb = {
-            pins = {
-              inherit (inputs)
-                nixpkgs
-                nixpkgs-unstable
-                nixpkgs-master
-
-                home-manager
-                nixng
-                fenix;
-            };
+            pins = inputs;
             config = {
               allowUnfree = true;
             };
@@ -103,16 +94,7 @@ inputs: {
           mimickInTty = true;
         };
 
-        pins = {
-          inherit (inputs)
-            nixpkgs
-            nixpkgs-unstable
-            nixpkgs-master
-
-            home-manager
-            nixng
-            fenix;
-        };
+        pins = inputs;
         config = {
           allowUnfree = true;
         };

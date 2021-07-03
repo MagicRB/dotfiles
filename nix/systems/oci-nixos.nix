@@ -13,16 +13,7 @@ inputs: {
             devices = [ "nodev" ];
           };
 
-          pins = {
-            inherit (inputs)
-              nixpkgs
-              nixpkgs-unstable
-              nixpkgs-master
-
-              home-manager
-              nixng
-              fenix;
-          };
+          pins = inputs;
           overlays = inputs.self.overlays;
 
           hardware."${hostName}" = true;

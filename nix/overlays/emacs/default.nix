@@ -16,12 +16,8 @@ in
 
       emacsPackages = with nixpkgs-unstable; 
         [
-          nodePackages.pyright
-          python38Full
-
           hunspellWithDicts
           
-          w3m
           sqlite
           gcc
 
@@ -34,19 +30,9 @@ in
 
           gnumake
           clang-tools
-        ] ++ [
+
           rnix-lsp
-        ] ++ [
-          ghc
-          stack
-          (inputs.easy-hls-nix.defaultPackage."${prev.stdenv.system}")
-          cabal-install
-        ] ++ (with prev.nodePackages; [
-          typescript-language-server
-          typescript
-          vscode-html-languageserver-bin
-          vscode-css-languageserver-bin
-        ]);
+        ];
     };
   };
 }

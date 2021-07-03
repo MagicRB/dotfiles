@@ -94,6 +94,7 @@
         sss-cli = import ./overlays/sss-cli inputs.sss-cli;
         shh = import ./overlays/shh;
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
+        easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix; 
       };
 
       nixosModules = {
@@ -115,6 +116,7 @@
               screenshot = mkPkg "screenshot";
               sss-cli = mkPkg "sss-cli";
               shh = mkPkg "shh";
+              easy-hls-nix = mkPkg "easy-hls-nix";
             });
     };
 }

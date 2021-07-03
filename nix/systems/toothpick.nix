@@ -5,16 +5,7 @@ inputs: {
     ../nixos-modules/default.nix
     ({ lib, pkgs, config, ... }: {
       magic_rb = {
-        pins = {
-          inherit (inputs)
-            nixpkgs
-            nixpkgs-unstable
-            nixpkgs-master
-
-            home-manager
-            nixng
-            fenix;
-        };
+        pins = inputs;
         overlays = inputs.self.overlays;
 
         hardware.toothpick = true;
@@ -299,13 +290,13 @@ inputs: {
                 }
               '';
 
-                  # ca_provider = "vault"
-                  # ca_config {
-                  #   address = "https://vault.in.redalder.org:8200"
-                  #   token = "{{ file "/var/secrets/vault.token" | trimSpace }}"
-                  #   root_pki_path = "consul_root"
-                  #   intermediate_pki_path = "consul_intermediate"
-                  # }
+              # ca_provider = "vault"
+              # ca_config {
+              #   address = "https://vault.in.redalder.org:8200"
+              #   token = "{{ file "/var/secrets/vault.token" | trimSpace }}"
+              #   root_pki_path = "consul_root"
+              #   intermediate_pki_path = "consul_intermediate"
+              # }
               destination = "/var/secrets/consul.hcl";
               perms = "0644";
             }

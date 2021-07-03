@@ -1,5 +1,5 @@
 easy-hls-nix:
-prev: final:
+final: prev:
 {
   magic_rb = prev.magic_rb or {} // {
     easy-hls-nix =

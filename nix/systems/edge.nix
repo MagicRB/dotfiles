@@ -6,16 +6,7 @@ inputs: {
   configuration =
     { pkgs, ... }: {
       magic_rb = {
-        pins = {
-          inherit (inputs)
-            nixpkgs
-            nixpkgs-unstable
-            nixpkgs-master
-
-            home-manager
-            nixng
-            fenix;
-        };
+        pins = inputs;
         overlays = inputs.self.overlays;
 
         programs = {
