@@ -23,6 +23,7 @@ in
           efiUUID = "";
           swapUUID = "";
         })
+      ./toothpick.nix
     ];
 
   config = {

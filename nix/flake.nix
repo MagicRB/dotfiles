@@ -70,6 +70,9 @@
       nixosConfigurations.tweedledum = nixosSystem (import ./systems/tweedledum.nix inputs);
       tweedledum = self.nixosConfigurations.tweedledum.config.system.build.toplevel;
 
+      nixosConfigurations.toothpick = nixosSystem (import ./systems/toothpick.nix inputs);
+      toothpick = self.nixosConfigurations.toothpick.config.system.build.toplevel;
+
       nixosConfigurations.mark = nixosSystem (import ./systems/mark.nix inputs);
       mark = self.nixosConfigurations.mark.config.system.build.toplevel;
 

@@ -7,6 +7,6 @@ in
   options.magic_rb.hardware.recoveryUsb = mkEnableOption "Enable recovery USB.";
 
   config = mkIf cfg {
-    boot.supportedFilesystems = [ "zfs" ];
+    # boot.supportedFilesystems = [ "zfs" ];
   };
 }

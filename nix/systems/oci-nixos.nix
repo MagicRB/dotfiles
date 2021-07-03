@@ -27,6 +27,7 @@ inputs: {
 
           hardware."${hostName}" = true;
           flakes.enable = true;
+          sshdEmacs = true;
         };
 
         users.groups.nix-cache =
@@ -52,8 +53,6 @@ inputs: {
           permitRootLogin = "no";
 
           extraConfig = ''
-            AcceptEnv INSIDE_EMACS
-            
             Match User nix-cache
               ChrootDirectory /var/nix-cache
               ForceCommand internal-sftp -d /cache

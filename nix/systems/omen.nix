@@ -132,9 +132,6 @@ inputs: {
 
       services.openssh = {
         enable = true;
-        extraConfig = ''
-          AcceptEnv INSIDE_EMACS
-        '';
       };
 
       networking = {
@@ -159,6 +156,13 @@ inputs: {
             ];
           };
         };
+      };
+
+      security.pki.certificates = [ (builtins.readFile ../redalder.org.crt) ];
+
+      virtualisation.podman = {
+        enable = true;
+        dockerCompat = true;
       };
 
       time.timeZone = "Europe/Bratislava";
