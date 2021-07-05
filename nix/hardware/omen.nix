@@ -28,6 +28,7 @@ in
     };
 
     hardware.enableRedistributableFirmware = true;
+    hardware.nvidia.package = pkgs.linuxPackages_latest.nvidia_x11_beta;
 
     powerManagement.cpuFreqGovernor = pkgs.lib.mkDefault "schedutil";
 

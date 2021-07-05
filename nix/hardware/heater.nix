@@ -28,6 +28,8 @@ in {
       kernelPackages = pkgs.linuxPackages_latest;
     };
 
+    hardware.nvidia.package = pkgs.linuxPackages_latest.nvidia_x11_beta;
+
     powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
     fileSystems = {
