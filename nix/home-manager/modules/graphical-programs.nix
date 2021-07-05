@@ -17,8 +17,15 @@ in
       gimp
       firefox
       mpv
-    ] ++ [
-      nixpkgs-master.discord
+      (discord-canary-system.override rec {
+        isWayland = false;
+        version = "0.0.126";
+        src = fetchurl {
+          url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
+          sha256 = "sha256-EraTDRKd6t0c9U68tSRdGkeB1hfqNS4KUewEXwkL8io=";
+        };
+      })
+      element-desktop
     ];
   };
 }
