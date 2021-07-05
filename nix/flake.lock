@@ -195,7 +195,8 @@
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "sss-cli": "sss-cli",
-        "vtermModule": "vtermModule"
+        "vtermModule": "vtermModule",
+        "yusdacra-dotfiles": "yusdacra-dotfiles"
       }
     },
     "rust-analyzer-src": {
@@ -245,6 +246,22 @@
       "original": {
         "type": "git",
         "url": "https://github.com/akermu/emacs-libvterm"
+      }
+    },
+    "yusdacra-dotfiles": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1625437194,
+        "narHash": "sha256-ohKRHXBhkOxwSjd8/c6r6JvSUqnH56WiOHdsqHmuvVI=",
+        "owner": "yusdacra",
+        "repo": "nixos-config",
+        "rev": "b1d4c655f439c19ef3963004e293ebc7e718fa4d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yusdacra",
+        "repo": "nixos-config",
+        "type": "github"
       }
     }
   },

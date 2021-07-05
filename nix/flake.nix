@@ -19,6 +19,11 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     
+    yusdacra-dotfiles = {
+      url = "github:yusdacra/nixos-config";
+      flake = false;
+    };
+
     #  PACKAGES
     ## sss-cli
     sss-cli = {
@@ -85,6 +90,7 @@
         screenshot = import ./overlays/screenshot inputs.nixng.lib;
         sss-cli = import ./overlays/sss-cli inputs.sss-cli;
         shh = import ./overlays/shh;
+        discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
       };
 
       nixosModules = {
