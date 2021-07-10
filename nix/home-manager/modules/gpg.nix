@@ -28,6 +28,7 @@ in
     home.packages = with pkgs; [
       nixpkgs.magic_rb.gpg-key
       gnupg
+      pass
     ];
 
     home.file.".gpg-agent.conf".text = ''
