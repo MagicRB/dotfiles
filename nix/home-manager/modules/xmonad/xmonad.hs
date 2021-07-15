@@ -1,3 +1,4 @@
+-- -*- magic_rb/disable-lsp: t -*-
 --
 -- xmonad example config file.
 --

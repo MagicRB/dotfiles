@@ -510,12 +510,14 @@ Finally enable ~lsp-mode~.
     :straight t
     :config
     (setq lsp-prefer-flymake nil)
-    ;; (lsp-mode . lsp-lens-mode)
-    ;; :hook (tex-mode . lsp-mode)
-    ;; (lsp-mode . display-fill-column-indicator-mode)
-    ;; (python-mode . lsp)			;
-    ;; (lsp-mode . origami-mode)
-    ;; :hook (rustic . lsp-rust-analyzer-inlay-hints-mode) ;
+    (setq lsp-ui-doc-enable nil)
+  
+    (defvar magic_rb/disable-lsp nil)
+    (put 'magic_rb/disable-lsp 'safe-local-variable #'booleanp)
+    (defun magic_rb/disable-lsp-advice (&rest rest)
+      (hack-local-variables)
+      magic_rb/disable-lsp)
+    (advice-add 'lsp :before-until #'magic_rb/disable-lsp-advice)
     :config
     <<lsp-rustic>>
     ;; <<lsp-rust-analyzer>>
