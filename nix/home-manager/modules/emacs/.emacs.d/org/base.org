@@ -511,13 +511,6 @@ Finally enable ~lsp-mode~.
     :config
     (setq lsp-prefer-flymake nil)
     (setq lsp-ui-doc-enable nil)
-  
-    (defvar magic_rb/disable-lsp nil)
-    (put 'magic_rb/disable-lsp 'safe-local-variable #'booleanp)
-    (defun magic_rb/disable-lsp-advice (&rest rest)
-      (hack-local-variables)
-      magic_rb/disable-lsp)
-    (advice-add 'lsp :before-until #'magic_rb/disable-lsp-advice)
     :config
     <<lsp-rustic>>
     ;; <<lsp-rust-analyzer>>
