@@ -27,7 +27,8 @@ in
     ];
 
     programs.direnv.enable = mkIf cfg.enableDirenv true;
-    programs.direnv.enableNixDirenvIntegration = mkIf cfg.enableDirenv true;
+    programs.direnv.nix-direnv.enable = mkIf cfg.enableDirenv true;
+    programs.direnv.nix-direnv.enableFlakes = mkIf cfg.enableDirenv true;
 
     home.file = {
       ".bashrc".source = nglib.writeSubstitutedFile {
