@@ -23,12 +23,12 @@ in
         "zfs.zfs_arc_max=214748368"
         "intel_pstate=active"
       ];
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.linuxPackages_xanmod;
       zfs.enableUnstable = true;
     };
 
     hardware.enableRedistributableFirmware = true;
-    hardware.nvidia.package = pkgs.linuxPackages_latest.nvidia_x11_beta;
+    hardware.nvidia.package = pkgs.linuxPackages_xanmod.nvidia_x11_beta;
 
     powerManagement.cpuFreqGovernor = pkgs.lib.mkDefault "schedutil";
 

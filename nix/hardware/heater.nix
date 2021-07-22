@@ -25,10 +25,10 @@ in {
       initrd.kernelModules = [ "dm-snapshot" ];
       kernelModules = [ "kvm-amd" ];
       extraModulePackages = [ ];
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.linuxPackages_xanmod;
     };
 
-    hardware.nvidia.package = pkgs.linuxPackages_latest.nvidia_x11_beta;
+    hardware.nvidia.package = pkgs.linuxPackages_xanmod.nvidia_x11_beta;
 
     powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
