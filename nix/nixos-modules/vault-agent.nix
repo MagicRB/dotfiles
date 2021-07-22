@@ -1,8 +1,6 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  inherit (config.magic_rb.pkgs) nixpkgs-unstable;
-
   cfg = config.services.vault-agent;
   format = pkgs.formats.json { };
 in
@@ -13,7 +11,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = nixpkgs-unstable.vault;
+        default = pkgs.vault;
         defaultText = "nixpkgs.vault";
         description = ''
           The package used for the Vault agent and CLI.

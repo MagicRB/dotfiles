@@ -4,8 +4,6 @@ let
   hunspellWithDicts = prev.callPackage ./hunspell-with-dicts.nix {
     dicts = with prev.hunspellDicts; [ en_US ];
   };
-  nixpkgs-unstable = import inputs.nixpkgs-unstable
-    { system = prev.stdenv.system; };
 in
 {
   magic_rb = prev.magic_rb or {} // {
@@ -14,7 +12,7 @@ in
       emacsSrc = inputs.emacs;
       vtermModule = inputs.vtermModule;
 
-      emacsPackages = with nixpkgs-unstable; 
+      emacsPackages = with final; 
         [
           hunspellWithDicts
           
@@ -32,6 +30,10 @@ in
           clang-tools
 
           rnix-lsp
+
+          ghc
+          cabal-install
+          magic_rb.easy-hls-nix
         ];
     };
   };
