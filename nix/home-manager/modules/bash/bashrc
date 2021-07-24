@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[[ -e /etc/profile.d/nix.sh ]] && . /etc/profile.d/nix.sh
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 

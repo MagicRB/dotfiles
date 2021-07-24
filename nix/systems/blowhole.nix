@@ -20,6 +20,8 @@ inputs: {
         };
       };
 
+      home.packages = [ pkgs.nixFlakes ];
+
       imports = [ ../home-manager/modules/default.nix ];
     };
 }

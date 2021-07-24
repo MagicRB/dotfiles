@@ -174,7 +174,7 @@ inputs: {
           networking = {
             firewall = {
               allowedUDPPorts = [ 6666 ];
-              allowedTCPPorts = [ 22 ];
+              allowedTCPPorts = [ 22 25565 ];
             };
 
             wireguard.interfaces = {
@@ -207,7 +207,7 @@ inputs: {
         useDHCP = false;
         interfaces.enp3s0.useDHCP = true;
 
-        firewall.enable = false;
+        firewall.enable = true;
         hostId = "3457b383";
       };
 
