@@ -24,6 +24,11 @@
       flake = false;
     };
 
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     #  PACKAGES
     ## sss-cli
     sss-cli = {
@@ -50,13 +55,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
+  outputs = { self
+            , nixpkgs
+            , nixpkgs-unstable
+            , home-manager
+            , deploy-rs
+            , ...
+            }@inputs:
     let
       inherit (nixpkgs-unstable.lib) nixosSystem;
       inherit (home-manager.lib) homeManagerConfiguration;
 
-      supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+      supportedSystems = [ "x86_64-linux" ]; # add "i686-linux" "aarch64-linux" back after hls is fixed
+      forAllSystems' = systems: f: nixpkgs.lib.genAttrs systems (system: f system);
+      forAllSystems = forAllSystems' supportedSystems;
     in {
       nixosConfigurations.omen = nixosSystem (import ./systems/omen.nix inputs);
       omen = self.nixosConfigurations.omen.config.system.build.toplevel;
@@ -104,9 +116,15 @@
       packages =
         forAllSystems (system:
           let
-            mkPkg' =
-              pkgs: name: package: (import pkgs { inherit system; overlays = [ self.overlays."${name}" ]; }).magic_rb."${package}";
-            mkPkg = name: mkPkg' nixpkgs-unstable name name;
+            mkPkg'' =
+              pkgs: name: package:
+              (import pkgs { inherit system;
+                             overlays =
+                               nixpkgs.lib.mapAttrsToList
+                                 (_: v: v) self.overlays;
+                           } ).magic_rb."${package}";
+            mkPkg' = mkPkg'' nixpkgs-unstable;
+            mkPkg = name: mkPkg'' nixpkgs-unstable name name;
           in
             {
               emacs = mkPkg "emacs";
@@ -116,7 +134,7 @@
               screenshot = mkPkg "screenshot";
               sss-cli = mkPkg "sss-cli";
               shh = mkPkg "shh";
-              easy-hls-nix = mkPkg "easy-hls-nix";
+              easy-hls-nix = if system == "x86_64-linux" then mkPkg "easy-hls-nix" else (import nixpkgs-unstable { inherit system; }).hello;
             });
     };
 }
