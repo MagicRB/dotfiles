@@ -24,11 +24,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
- '(custom-enabled-themes '(doom-grubbox))
+ '(custom-enabled-themes '())
  '(custom-safe-themes
    '("2f1518e906a8b60fac943d02ad415f1d8b3933a5a7f75e307e6e9a26ef5bf570" default))
  '(package-selected-packages
-   '(evil-org org-roam chess scad-preview dockerfile-mode heaven-and-hell yaml-mode rustic scad-mode lsp-treemacs flycheck-rust telephone-line yasnippet flycheck-pos-tip flycheck magit lsp-ui all-the-icons doom-themes lsp-mode use-package treemacs-evil)))
+   '()))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -48,6 +48,62 @@
 (use-package org
   :straight t)
 
-(setq org-file-dir "~/.emacs.d/org")
-(mapc #'delete-file (directory-files org-file-dir t "\\.el$"))
-(mapc #'org-babel-load-file (directory-files org-file-dir t "\\.org$"))
+(defun magic_rb/org-transclusion-babel-load (&optional narrowed)
+  "Call `org-babel-load-file` on all transcludes in the current file."
+  (interactive "P")
+  (save-restriction
+    (let ((marker (move-marker (make-marker) (point)))
+	  (load-link (lambda ()
+		       (let* ((keyword-plist (org-transclusion-keyword-string-to-plist))
+			      (link (org-transclusion-wrap-path-to-link
+				     (plist-get keyword-plist :link)))
+
+			      (link-raw (org-element-property :raw-link link))
+			      (link-type (org-element-property :type link)))
+			 (when (string-equal link-type "id")
+			   (message "RB Loading: %s" (org-id-find-id-file link-raw))
+			   (org-babel-load-file (org-id-find-id-file link-raw)))))))
+      (unless narrowed (widen))
+      (goto-char (point-min))
+
+      ;; Handle inactive transclusions
+      (let ((regexp "^[ \t]*#\\+TRANSCLUDE:"))
+	(while (re-search-forward regexp nil t)
+	  ;; Don't transclude if within a transclusion to avoid infinite
+	  ;; recursion
+	  (unless (or (org-transclusion-within-transclusion-p)
+		      (plist-get (org-transclusion-keyword-string-to-plist)
+				 :disable-auto))
+	    (funcall load-link))))
+
+      ;; Handle active transclusions
+      (while (setq match (text-property-search-forward 'org-transclusion-type))
+	(goto-char (prop-match-beginning match))
+	(org-transclusion-remove)
+	(funcall load-link)
+	(org-transclusion-add))
+
+      (goto-char marker)
+      (move-marker marker nil) ; point nowhere for GC
+      t)))
+
+
+(setq magic_rb/org-el-init-files
+      (cl-concatenate
+       'list
+       (directory-files "~/.emacs.d/org" t "\\.el$")
+       '("~/roam/20210723212215-fill_column_and_fill_column_indicator.el")))
+
+(setq magic_rb/org-init-files
+      (cl-concatenate
+       'list
+       (directory-files "~/.emacs.d/org" t "\\.org$")
+       '("~/roam/20210723212215-fill_column_and_fill_column_indicator.org")))
+
+(defun magic_rb/delete-file-maybe (file)
+  (when (file-exists-p file)
+    (message "TEST")
+    (delete-file file)))
+
+(mapc #'magic_rb/delete-file-maybe magic_rb/org-el-init-files)
+(mapc #'org-babel-load-file magic_rb/org-init-files)

@@ -117,9 +117,9 @@
 	 (define-key map "m" 'magit)
 
 	 (define-key map "a" 'org-agenda)
-	 (define-key map "f" 'org-roam-find-file)
+	 (define-key map "f" 'org-roam-node-find)
 	 (define-key map "c" 'org-roam-capture)
-	 (define-key map "r" 'org-roam)
+	 (define-key map "r" 'org-roam-buffer-toggle)
 
 	 (define-key map "e" 'lsp-execute-code-action))
        (define-key evil-motion-state-map " " 'evil-leader-map)

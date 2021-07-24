@@ -41,13 +41,6 @@ https://github.com/alphapapa/org-web-tools
     (setq-default pdf-view-display-size 'fit-page)
     ;; automatically annotate highlights
     (setq pdf-annot-activate-created-annotations t))
-  
-					  ;  (use-package auctex
-					  ;    :ensure t)
-  
-  (use-package w3m
-    :straight t) 
-  
 #+END_SRC
 
 Enable =all-the-icons=, it's used by =treemacs= and =doom-modeline=.
@@ -686,10 +679,14 @@ database, therefore =sqlite= must be on your path, at least for Emacs.
 #+BEGIN_SRC emacs-lisp
   (use-package org-roam
     :straight t
+    :init
+    (setq org-roam-v2-ack t)
     :config
     (setq org-roam-directory "~/roam")
-    (add-hook 'after-init-hook 'org-roam-mode))
+    (add-hook 'after-init-hook 'org-roam-setup))
 #+END_SRC
+
+#+transclude: [[id:2ee63fed-5001-46d9-9935-4e58b0e7be2b][Fill Column and Fill Column Indicator]]
 
 Enable additional languages for org-babel, namely Python.
    
@@ -829,8 +826,7 @@ Enable ~org-habit~.
   (require 'org-habit)
 #+END_SRC
 
-Setup a function which resets any checkboxes under a ~TODO~ which changes state to ~DONE~. Many thanks to
-[[https://www.reddit.com/user/davidglasser][davidglasser]], who had this exact same issue and solved it on [[https://www.reddit.com/r/emacs/comments/3ltjjc/org_reset_task_when_it_repeats/cv9gbj6?utm_source=share&utm_medium=web2x&context=3][Reddit]].
+Setup a function which resets any checkboxes under a ~TODO~ which changes state to ~DONE~. Many thanks to [[https://www.reddit.com/user/davidglasser][davidglasser]], who had this exact same issue and solved it on [[https://www.reddit.com/r/emacs/comments/3ltjjc/org_reset_task_when_it_repeats/cv9gbj6?utm_source=share&utm_medium=web2x&context=3][Reddit]].
     
 #+BEGIN_SRC emacs-lisp
   (defun glasser-org-reset-check-on-repeat ()
@@ -893,8 +889,7 @@ Then a bookmark must be added into firefox with this location
 
 ** Org Variable Pitch
 
-Enable ~org-variable-pitch~, it makes ~org-mode~ feel like a proper writing instrument, I'm not sure if I like it
-though. Disable for now, cool idea, but messes with horizontal alignment...
+Enable ~org-variable-pitch~, it makes ~org-mode~ feel like a proper writing instrument, I'm not sure if I like it though. Disable for now, cool idea, but messes with horizontal alignment...
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-variable-pitch
@@ -906,10 +901,25 @@ though. Disable for now, cool idea, but messes with horizontal alignment...
 #+END_SRC
     
 ** Org ol Tree
+
 #+BEGIN_SRC emacs-lisp
   (use-package org-ol-tree
     :straight (org-ol-tree :type git :host github :repo "Townk/org-ol-tree"))
 #+END_SRC
+
+** Org Transclusion
+
+=org-transclusion= is a better version of Org's native =INCLUDE=, it allows for seamless viewing and easy exporting and tangling.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-transclusion
+    :straight  (:type git
+                      :host github
+                      :repo "nobiot/org-transclusion"
+                      :branch "main"
+                      :files ("*.el")))
+#+END_SRC
+                    
 * Smart Tabs
 
 The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
