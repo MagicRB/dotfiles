@@ -87,6 +87,36 @@
       homeConfigurations.blowhole = homeManagerConfiguration (import ./systems/blowhole.nix inputs);
       blowhole = self.homeConfigurations.blowhole.activationPackage;
 
+      allSystems =
+        let
+          pkgs = system: import nixpkgs { system = "x86_64-linux"; };
+          linkFarm = system: attrs:
+            let
+              pkgs' = pkgs system;
+            in
+              pkgs'.linkFarm "allSystems-${system}"
+                (pkgs'.lib.mapAttrsToList (n: v: { name = n; path = v; }) attrs);
+          nixos = name: self.nixosConfigurations.${name}.config.system.build.toplevel;
+          hm = name: self.homeConfigurations.${name}.activationPackage;
+        in
+          {
+            x86_64-linux = linkFarm "x86_64-linux"
+              {
+                omen = nixos "omen";
+                heater = nixos "heater";
+                tweedledee = nixos "tweedledee";
+                tweedledum = nixos "tweedledum";
+                toothpick = nixos "toothpick";
+                mark = nixos "mark";
+                recoveryUsb = nixos "recoveryUsb";
+                blowhole = hm "blowhole";
+              };
+
+          aarch64-linux = linkFarm "aarch64-linux"
+            {
+              edge = hm "edge";
+            };
+        };
 
       overlays = {
         emacs = import ./overlays/emacs/default.nix inputs;
@@ -95,8 +125,8 @@
         screenshot = import ./overlays/screenshot inputs.nixng.lib;
         sss-cli = import ./overlays/sss-cli inputs.sss-cli;
         shh = import ./overlays/shh;
-        discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
         easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix; 
+        discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
       };
 
       nixosModules = {
