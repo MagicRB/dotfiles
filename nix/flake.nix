@@ -10,7 +10,7 @@
     };
 
     nixng = {
-      url = "git+https://gitea.redalder.org/Magic_RB/NixNG";
+      url = "github:MagicRB/NixNG";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
