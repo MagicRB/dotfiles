@@ -30,11 +30,6 @@
     };
 
     #  PACKAGES
-    ## sss-cli
-    sss-cli = {
-      flake = false;
-      url = "github:dsprenkels/sss-cli";
-    };
 
     ## Emacs
     emacs-overlay = {

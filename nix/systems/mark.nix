@@ -27,7 +27,7 @@ inputs: {
         openssl
         paperkey
         monkeysphere
-        magic_rb.sss-cli
+        ssss
       ];
     })
   ];
