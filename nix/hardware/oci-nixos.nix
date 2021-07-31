@@ -12,38 +12,42 @@ in
 {
   options.magic_rb.hardware."${hostName}" = mkEnableOption "";
 
-  config = mkIf cfg ({
-    boot = {
-      kernelPackages = pkgs.linuxPackages_latest;
-      loader.grub.extraConfig = ''
-        serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
-        terminal_input --append serial
-        terminal_output --append serial
-      '';
-
-      initrd.kernelModules = [
-        "nvme"
-      ];
-    };
-
-    swapDevices = [
+  config = mkIf cfg (mkMerge
+    [
       {
-        device = "/dev/disk/by-uuid/${swapUUID}";
-      } 
-    ];
-      
-    fileSystems = {
-      "/" =
-        {
-          device = "/dev/disk/by-uuid/${rootUUID}";
-          fsType = "xfs";
+        boot = {
+          kernelPackages = pkgs.linuxPackages_latest;
+          loader.grub.extraConfig = ''
+            serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+            terminal_input --append serial
+            terminal_output --append serial
+          '';
+
+          initrd.kernelModules = [
+            "nvme"
+          ];
         };
 
-      "/boot/efi" =
-        {
-          device = "/dev/disk/by-uuid/${efiUUID}";
-          fsType = "vfat";
+        swapDevices = [
+          {
+            device = "/dev/disk/by-uuid/${swapUUID}";
+          } 
+        ];
+        
+        fileSystems = {
+          "/" =
+            {
+              device = "/dev/disk/by-uuid/${rootUUID}";
+              fsType = "xfs";
+            };
+
+          "/boot/EFI" =
+            {
+              device = "/dev/disk/by-uuid/${efiUUID}";
+              fsType = "vfat";
+            };
         };
-    };
-  } // qemu-guest); 
+      }
+      qemu-guest
+    ]); 
 }
