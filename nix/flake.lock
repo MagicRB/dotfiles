@@ -157,17 +157,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1623343959,
-        "narHash": "sha256-v6n2Hnlfczevr8/dsJW/L1sosXDjAtp0CIXH9XAtTfs=",
-        "ref": "master",
-        "rev": "fb1f1c30a87317be3859dc9b0bffd19a81a0b2a5",
-        "revCount": 88,
-        "type": "git",
-        "url": "https://gitea.redalder.org/Magic_RB/NixNG"
+        "lastModified": 1627402629,
+        "narHash": "sha256-siKI2sn7rQy8FMNfDS98rUdSD7qfhXHLzWYBL3bIaLE=",
+        "owner": "MagicRB",
+        "repo": "NixNG",
+        "rev": "02a97181eae2deca6141da7377f9c13609a73530",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://gitea.redalder.org/Magic_RB/NixNG"
+        "owner": "MagicRB",
+        "repo": "NixNG",
+        "type": "github"
       }
     },
     "nixpkgs": {
