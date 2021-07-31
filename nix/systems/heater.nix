@@ -27,7 +27,6 @@ inputs: {
                     enable = true;
                     enableDirenv = true;
                   };
-                  shh.enable = true;
                   ssh.enable = true;
                   emacs.enable = true;
                   xmonad.enable = true;

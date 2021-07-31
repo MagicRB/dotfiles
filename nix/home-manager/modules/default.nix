@@ -4,7 +4,6 @@
     ./alacritty
     ./bash
     ./ssh
-    ./shh
     ./emacs
     # ./pulseaudio
     ./xmonad
