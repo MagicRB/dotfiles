@@ -11,12 +11,11 @@ inputs: {
         hardware.toothpick = true;
         flakes.enable = true;
         sshdEmacs.enable = true;
+        vpsRemoteAccess =
+          { enable = true;
+            trustedWheel = true;
+          };
       };
-
-      nix.trustedUsers =
-        [ "@wheel" ];
-
-      services.openssh.enable = true;
 
       environment.systemPackages =
         [ pkgs.git
@@ -42,9 +41,9 @@ inputs: {
       services.nfs.server.enable = true;
 
       # create default network with `podman -r network create default`
-      virtualisation.podman = {
-        enable = true;
-      };
+      # virtualisation.podman = {
+      #  enable = true;
+      # };
 
       virtualisation.docker = {
         enable = true;
@@ -361,7 +360,7 @@ inputs: {
               }
               # thy - main
               { publicKey =
-                  "t04ttCF+EaiAcCKbJh/Z+QR0FCspmGe4BpUbKp2t+Co=";
+                  "dEwoaWN1CiCorGwogggUNhbNsXvfYgfw7GqFxvSKGBk=";
                 allowedIPs =
                   [ "10.64.0.6/32" ];
               }

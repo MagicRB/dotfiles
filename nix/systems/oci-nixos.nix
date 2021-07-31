@@ -16,9 +16,13 @@ inputs: {
           pins = inputs;
           overlays = inputs.self.overlays;
 
-          hardware."${hostName}" = true;
+          hardware.${hostName} = true;
           flakes.enable = true;
-          sshdEmacs = true;
+          sshdEmacs.enable = true;
+          vpsRemoteAccess =
+            { enable = true;
+              trustedWheel = true;
+            };
         };
 
         users.groups.nix-cache =
@@ -39,10 +43,6 @@ inputs: {
           [ pkgs.git ];
 
         services.openssh = {
-          enable = true;
-          passwordAuthentication = true;
-          permitRootLogin = "no";
-
           extraConfig = ''
             Match User nix-cache
               ChrootDirectory /var/nix-cache

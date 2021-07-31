@@ -9,6 +9,7 @@
     ./pin-nixpkgs.nix
     ./pulseaudio.nix
     ./vault-agent.nix
+    ./vps-remote-access.nix
     ./sshd-emacs.nix
     ./xserver
     ../hardware/default.nix
