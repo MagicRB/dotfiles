@@ -49,7 +49,6 @@
             , nixpkgs
             , nixpkgs-unstable
             , home-manager
-            , deploy-rs
             , ...
             }@inputs:
     let
