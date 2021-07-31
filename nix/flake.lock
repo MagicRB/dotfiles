@@ -1,24 +1,5 @@
 {
   "nodes": {
-    "deploy-rs": {
-      "inputs": {
-        "flake-compat": "flake-compat",
-        "naersk": "naersk",
-        "nixpkgs": "nixpkgs",
-        "utils": "utils"
-      },
-      "locked": {
-        "lastModified": 1625729093,
-        "narHash": "sha256-hpo8T7mlVEpHpZIYqhxqt5i/XY8eu4p66MrAg/MCuVY=",
-        "path": "/nix/store/dwmicyfrwakk1qnyfd1kmmp4yx0lsych-source",
-        "rev": "587cbcfe8d3ea05c5bb153764d3617012ef28c86",
-        "type": "path"
-      },
-      "original": {
-        "id": "deploy-rs",
-        "type": "indirect"
-      }
-    },
     "easy-hls-nix": {
       "inputs": {
         "nixpkgs": [
@@ -236,7 +217,6 @@
     },
     "root": {
       "inputs": {
-        "deploy-rs": "deploy-rs",
         "easy-hls-nix": "easy-hls-nix",
         "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
