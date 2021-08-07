@@ -129,6 +129,7 @@
         sss-cli = import ./overlays/sss-cli inputs.sss-cli;
         shh = import ./overlays/shh;
         easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix; 
+        mainsail = import ./overlays/mainsail inputs.nixng.lib;
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
       };
 
@@ -157,6 +158,7 @@
               screenshot = mkPkg "screenshot";
               sss-cli = mkPkg "sss-cli";
               shh = mkPkg "shh";
+              mainsail = mkPkg "mainsail";
               easy-hls-nix = if system == "x86_64-linux" then mkPkg "easy-hls-nix" else (import nixpkgs-unstable { inherit system; }).hello;
             });
     };

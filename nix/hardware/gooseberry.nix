@@ -23,6 +23,56 @@ in {
         {
           device = "/dev/disk/by-uuid/e8d0f836-0851-45b2-801f-8cb2bfc016ac";
           fsType = "btrfs";
+          options = [
+            "space_cache"
+            "noatime"
+            "subvol=/local/root"
+          ];
+        };
+
+      "/nix" =
+        {
+          device = "/dev/disk/by-uuid/e8d0f836-0851-45b2-801f-8cb2bfc016ac";
+          fsType = "btrfs";
+          options = [
+            "space_cache"
+            "noatime"
+            "subvol=/local/nix"
+          ];
+        };
+
+
+      "/home" =
+        {
+          device = "/dev/disk/by-uuid/e8d0f836-0851-45b2-801f-8cb2bfc016ac";
+          fsType = "btrfs";
+          options = [
+            "space_cache"
+            "noatime"
+            "subvol=/safe/home"
+          ];
+        };
+
+      "/var/lib/klipper/sdcard" =
+        {
+          device = "/dev/disk/by-uuid/e8d0f836-0851-45b2-801f-8cb2bfc016ac";
+          fsType = "btrfs";
+          options = [
+            "space_cache"
+            "noatime"
+            "subvol=/safe/klipper-sdcard"
+          ];
+        };
+
+      "/btrfs" =
+        {
+          device = "/dev/disk/by-uuid/e8d0f836-0851-45b2-801f-8cb2bfc016ac";
+          fsType = "btrfs";
+          options = [
+            "space_cache"
+            "noatime"
+            "subvol=/"
+          ];
         };
 
       "/boot" =
