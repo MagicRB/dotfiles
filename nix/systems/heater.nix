@@ -67,7 +67,7 @@ inputs: {
             };
             overlays = inputs.self.overlays;
 
-            erase-my-darlings = {
+            erase-my-darlings.zfs = {
               enable = true;
               snapshot = "heater-zpool/local/root@blank";
             };
