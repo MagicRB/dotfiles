@@ -1245,6 +1245,21 @@ Add a ignore predicate, that will ignore any files which do not end in =.org= in
   (add-to-list 'treemacs-ignored-file-predicates #'magic_rb/treemacs-ginore-org-not-org)
 #+END_SRC
 
+* Internet Stuff
+
+** ement.el
+
+=ement.el= is a Matrix client inside Emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package plz
+    :straight (plz :type git :host github :repo "alphapapa/plz.el"))
+  
+  ;; Install Ement.
+  (use-package ement
+    :straight (ement :type git :host github :repo "alphapapa/ement.el"))
+#+END_SRC
+
 * Random Bits and Bobs
 
 Set default major mode to org mode, it's much more useful than fundamental.
