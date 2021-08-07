@@ -169,28 +169,9 @@ inputs: {
             extraSettingsPaths = [ "/var/secrets/nomad.hcl" ];
           };
 
-          systemd.services.wireguard-wg0.wantedBy = lib.mkForce [ ];
           networking = {
             firewall = {
-              allowedUDPPorts = [ 6666 ];
               allowedTCPPorts = [ 22 25565 ];
-            };
-
-            wireguard.interfaces = {
-              wg0 = {
-                ips = [ "10.64.0.3/24" ];
-                listenPort = 6666;
-
-                privateKeyFile = "/var/secrets/wg0.key";
-                peers = [
-                  {
-                    publicKey = "h4g6vWjOB6RS0NbrP/Kvb2CZeutm/F+ZfDbJmEd1Dgk=";
-                    allowedIPs = [ "10.64.0.0/24" ];
-                    endpoint = "redalder.org:6666";
-                    persistentKeepalive = 25;
-                  }
-                ];
-              };
             };
           };
 
