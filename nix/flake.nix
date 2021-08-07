@@ -77,6 +77,9 @@
       nixosConfigurations.mark = nixosSystem (import ./systems/mark.nix inputs);
       mark = self.nixosConfigurations.mark.config.system.build.toplevel;
 
+      nixosConfigurations.gooseberry = nixosSystem (import ./systems/gooseberry.nix inputs);
+      gooseberry = self.nixosConfigurations.gooseberry.config.system.build.toplevel;
+
       nixosConfigurations.recoveryUsb = nixosSystem (import ./systems/recovery-usb.nix inputs);
       recoveryUsb = self.nixosConfigurations.recoveryUsb.config.system.build.toplevel;
 
@@ -114,6 +117,7 @@
           aarch64-linux = linkFarm "aarch64-linux"
             {
               edge = hm "edge";
+              gooseberry = nixos "gooseberry";
             };
         };
 

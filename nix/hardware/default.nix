@@ -24,6 +24,7 @@ in
           swapUUID = "";
         })
       ./toothpick.nix
+      ./gooseberry.nix
     ];
 
   config = {
