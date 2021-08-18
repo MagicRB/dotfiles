@@ -3,9 +3,28 @@ inputs: {
 
   modules = [
     ../nixos-modules/default.nix
+    inputs.home-manager.nixosModules.home-manager
 
     ({ pkgs, config, lib, ... }:
       {
+        home-manager.users."main" =
+          { ... }:
+          {
+            imports = [ ../home-manager/modules/default.nix ];
+
+            magic_rb = {
+              pins = inputs;
+              overlays = inputs.self.overlays;
+
+              programs.bash = {
+                enable = true;
+                enableDirenv = true;
+              };
+            };
+
+            home.stateVersion = "20.09";
+          };
+
         magic_rb = {
           grub = {
             enable = true;
