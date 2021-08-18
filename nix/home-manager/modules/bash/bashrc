@@ -58,7 +58,23 @@ emacsclient() {
 
 	echo "${params[@]}" | nc -U "$HOME/.ssh/emacs-server" >/dev/null 2>&1
     else
-	env emacsclient "${@}"
+	sudo=0
+	args=()
+
+	for p in "${@}"; do
+	    if [[ "${p}" == "-s" || "${p}" == "--sudo" ]]; then
+		sudo=1
+	    else
+		args+=( "${p}" )
+	    fi
+	done
+
+	if [[ ${sudo} -eq 1 ]]; then
+	    echo env emacsclient "/sudo::${args[0]}" "${args[@]:1}"
+	    env emacsclient "/sudo::${args[0]}" "${args[@]:1}"
+	else
+	    env emacsclient "${@}"
+	fi
     fi
 }
 
