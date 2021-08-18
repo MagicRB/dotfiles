@@ -43,6 +43,8 @@ in
         '')
         +
         (optionalString cfg.btrfs.enable ''
+          waitDevice "${cfg.btrfs.disk}"
+
           mkdir -p /mnt
 
           mount -o subvol=/ ${cfg.btrfs.disk} /mnt
