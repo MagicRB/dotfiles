@@ -1,3 +1,6 @@
 [submodule "org"]
 	path = org
 	url = https://gitea.redalder.org/Magic_RB/org
+[submodule "secret"]
+	path = secret
+	url = git@github.com:MagicRB/dotfiles-secret
