@@ -3,7 +3,9 @@ inputs: {
 
   modules = [
     ../nixos-modules/default.nix
+    inputs.dwarffs.nixosModules.dwarffs
     inputs.home-manager.nixosModules.home-manager
+
     ({ pkgs, config, lib, ... }:
       let
         inherit (config.magic_rb.pkgs) nixpkgs-unstable;
@@ -74,7 +76,10 @@ inputs: {
 
             hardware.heater = true;
             sshdEmacs.enable = true;
-            flakes.enable = true;
+            flakes = {
+              enable = true;
+              nixMaster = true;
+            };
             pulseaudio.enable = true;
           };
 

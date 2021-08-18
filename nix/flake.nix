@@ -24,6 +24,17 @@
       flake = false;
     };
 
+    dwarffs = {
+      url = "github:edolstra/dwarffs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nix.follows = "nix";
+    };
+
+    nix = {
+      url = "github:NixOS/nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     #  PACKAGES
 
     ## Emacs
@@ -128,6 +139,7 @@
         mainsail = import ./overlays/mainsail inputs.nixng.lib;
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
         winetricks = import ./overlays/winetricks;
+        dwarffs = inputs.dwarffs.overlay;
       };
 
       nixosModules = {
