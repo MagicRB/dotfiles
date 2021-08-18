@@ -33,7 +33,9 @@ in
 
           ghc
           cabal-install
-          magic_rb.easy-hls-nix
+          haskell-language-server
+
+          (symlinkJoin { name = "hledger-compat"; paths = [ hledger ]; postBuild = "ln -s $(readlink -f $out/bin/hledger) $out/bin/ledger"; })
         ];
     };
   };

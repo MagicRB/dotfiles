@@ -39,10 +39,6 @@
       url = "git+https://github.com/akermu/emacs-libvterm";
       flake = false;
     };
-    easy-hls-nix = {
-      url = "github:jkachmar/easy-hls-nix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
   };
 
   outputs = { self
@@ -160,7 +156,6 @@
               sss-cli = mkPkg "sss-cli";
               shh = mkPkg "shh";
               mainsail = mkPkg "mainsail";
-              easy-hls-nix = if system == "x86_64-linux" then mkPkg "easy-hls-nix" else (import nixpkgs-unstable { inherit system; }).hello;
               winetricks = mkPkg "winetricks";
             });
     };
