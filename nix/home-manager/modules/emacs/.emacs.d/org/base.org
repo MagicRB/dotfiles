@@ -953,7 +953,37 @@ performance tremendously.
   (use-package ivy-hydra
     :straight t)
 #+END_SRC
-   
+
+* hledger
+
+For hledger, it's possible to use =ledger-mode= instead of =hledger-mode=. We'll see how it goes. It does require some convincing though.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ledger-mode
+    :straight t
+    :config
+    (setq ledger-binary-path "hledger")
+    (setq ledger-mode-should-check-version nil)
+    (add-to-list 'auto-mode-alist '("\\.\\(h?ledger\\|journal\\|j\\)$" . ledger-mode))
+    (setq ledger-report-balance
+      (list "bal" (concat ledger-binary-path " --strict -f %(ledger-file) bal")))
+
+    (setq ledger-report-reg
+      (list "reg" (concat ledger-binary-path " --strict -f %(ledger-file) reg")))
+
+    (setq ledger-report-payee
+      (list "payee" (concat ledger-binary-path " --strict -f %(ledger-file) reg @%(payee)")))
+
+    (setq ledger-report-account
+      (list "account" (concat ledger-binary-path " --strict -f %(ledger-file) reg %(account)")))
+
+    (setq ledger-reports
+          (list ledger-report-balance
+                ledger-report-reg
+                ledger-report-payee
+                ledger-report-account)))
+#+END_SRC
+
 * Magit
 
 ~magit~ is literally the best package right after OrgMode of course. Therefore enable it.
@@ -1199,6 +1229,12 @@ Add a ignore predicate, that will ignore any files which do not end in =.org= in
 #+END_SRC
 
 * Random Bits and Bobs
+
+Set keystrokes echo to something really low, it's useful to know what you're typing.
+
+#+BEGIN_SRC emacs-lisp
+  (setq echo-keystrokes 0.01)
+#+END_SRC
 
 Set default major mode to org mode, it's much more useful than fundamental.
 
