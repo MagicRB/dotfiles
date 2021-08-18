@@ -131,6 +131,7 @@
         easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix; 
         mainsail = import ./overlays/mainsail inputs.nixng.lib;
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
+        winetricks = import ./overlays/winetricks;
       };
 
       nixosModules = {
@@ -160,6 +161,7 @@
               shh = mkPkg "shh";
               mainsail = mkPkg "mainsail";
               easy-hls-nix = if system == "x86_64-linux" then mkPkg "easy-hls-nix" else (import nixpkgs-unstable { inherit system; }).hello;
+              winetricks = mkPkg "winetricks";
             });
     };
 }
