@@ -925,8 +925,7 @@ parts, separate them with a ~<SPC>~.
   (use-package counsel
     :straight t
     :config
-    (counsel-mode 1)
-    :bind ("C-x b" . counsel-switch-buffer))
+    (counsel-mode 1))
 #+END_SRC
 
 ~ivy-rich~ and ~all-the-icons~ compatibility.
@@ -1027,7 +1026,16 @@ Enable ~projectile~.
     (projectile-mode +1)
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+END_SRC
-  
+
+Add Counsel integration for projectile.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel-projectile
+    :straight t
+    :after (ivy counsel)
+    :init (counsel-projectile-mode))
+#+END_SRC
+
 * VTerm
 
 ~vterm~ is fun, but it does not play well with ~evil~, at least by default. Therefore we need to make it
