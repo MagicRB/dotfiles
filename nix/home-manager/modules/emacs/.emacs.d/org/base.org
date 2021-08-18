@@ -149,35 +149,6 @@ First make =load-theme= unload all currently loaded themes and reapply fonts aft
     (load-theme 'modus-vivendi t)
   #+END_SRC
 
-** Dashboard DEPRECATED
-    
-Enable the Emacs dashboard, pretty much useless but much better looking than the default. And the jokes are
-funny. Also if you actually properly use =org-agenda= the /agenda of the day/ section might prove useful.
-    
-#+BEGIN_SRC emacs-lisp
-  (use-package dashboard
-    :straight t
-    :disabled t
-    :after (all-the-icons)
-    :config
-    (dashboard-setup-startup-hook)
-    (setq dashboard-items '((recents . 5)
-			    (projects . 5)
-			    (agenda . 5))
-	  dashboard-center-content t
-	  dashboard-set-heading-icons t
-	  dashboard-set-file-icons t
-	  dashboard-set-init-info t))
-#+END_SRC
-
-Inhibit startup screen and scratch buffer, it conflicts with =emacs-dashboard=
-
-#+BEGIN_SRC emacs-lisp
-  (setq inhibit-startup-screen t
-	initial-buffer-choice nil
-	initial-scratch-message ";; ready\n\n")
-#+END_SRC
-   
 ** Modeline
 
 Enable =doom-modeline=, much better than the default and unline =powerline= it's usable with TRAMP, so that's great.
@@ -922,40 +893,6 @@ Enable ~org-variable-pitch~, it makes ~org-mode~ feel like a proper writing inst
                       :files ("*.el")))
 #+END_SRC
                     
-* Smart Tabs
-
-The goal of smart tabs, is to use =<TAB>= for indentation and =<SPC>= for alignment, so for example.
-
-#+BEGIN_SRC fundemental :tangle no
-     fn main() {
-     --if 1 == 1 &&
-     --...2 == 2 &&
-     --...3 != 5 {
-     ----println!("Stugg");
-     --}
-     }
-#+END_SRC
-   
-#+BEGIN_TINY
-~--~ represents a =<TAB>= and ~.~ a =<SPC>=
-#+END_TINY
-
-And while the idea is nice, I couldn't get it to work for Rust and that's the only language I use. Therefore it's
-disable for now.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq whitespace-display-mappings
-	'((tab-mark 9 [65293] [92 9])))
-  (setq whitespace-style '(tab-mark))
-  (use-package smart-tabs-mode
-    :straight t
-    :config
-    (smart-tabs-add-language-support rust rustic-hook
-				     ((c-indent-line . c-basic-offset)
-				      (c-indent-region . c-basic-offset)))
-    (smart-tabs-insinuate 'c 'javascript 'rust))
-#+END_SRC
-   
 * Ivy
    
 Ivy is a lighter and actually maintained altrenative to Helm. I used to use helm, but I switched to it when I started
@@ -1181,15 +1118,6 @@ allows one to edit text areas in their browser in Emacs.
     :straight t
     :init
     (edit-server-start))
-#+END_SRC
-   
-* Spray
-   
-~spray~ sprays words on screen at a certain rate.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package spray
-    :straight t)
 #+END_SRC
    
 * Treemacs
