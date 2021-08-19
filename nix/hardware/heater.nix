@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, secret, ... }:
 with lib;
 let
   defaultBtrfsOpts = [

@@ -139,8 +139,6 @@
         emacsclient-remote = import ./overlays/emacsclient-remote;
         gpg-key = import ./overlays/gpg-key inputs.nixng.lib;
         screenshot = import ./overlays/screenshot inputs.nixng.lib;
-        sss-cli = import ./overlays/sss-cli inputs.sss-cli;
-        shh = import ./overlays/shh;
         easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix; 
         mainsail = import ./overlays/mainsail inputs.nixng.lib;
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
