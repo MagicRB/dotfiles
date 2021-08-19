@@ -113,8 +113,25 @@ in {
       "/mnt/net/Magic_RB" =
         {
           fsType = "nfs";
-          device = "blowhole.in.redalder.org:/Magic_RB";
+          device = "${secret.network.ips.blowhole.ip}:/Magic_RB";
+          options =
+            [ "hard"
+              "async"
+              "tcp"
+              "fsc"
+            ];
         };
+
+      "/var/cache/fscache" =
+        {
+          device = "heater-zpool/persist/cachefilesd";
+          fsType = "zfs";
+        };
+    };
+
+    services.cachefilesd = {
+      enable = true;
+      cacheDir = "/var/cache/fscache";
     };
 
     #  fileSystems."/mnt/win10" =
