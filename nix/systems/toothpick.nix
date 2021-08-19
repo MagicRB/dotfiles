@@ -3,7 +3,7 @@ inputs: {
 
   modules = [
     ../nixos-modules/default.nix
-    ({ lib, pkgs, config, ... }: {
+    ({ lib, pkgs, config, secret, ... }: {
       magic_rb = {
         pins = inputs;
         overlays = inputs.self.overlays;
@@ -30,7 +30,7 @@ inputs: {
         dropPrivileges = false;
 
         package = config.magic_rb.pkgs.nixpkgs-master.nomad_1_1;
-        extraPackages = [ pkgs.consul ];
+        extraPackages = with pkgs; [ consul glibc ];
 
         extraSettingsPaths = [ "/var/secrets/nomad.hcl" ];
       };
@@ -71,7 +71,7 @@ inputs: {
         enable = true;
         settings = {
           vault = {
-            address = "https://vault.in.redalder.org:8200";
+            address = "https://${secret.network.ips.vault.dns}:8200";
 
             client_cert = "/etc/vault-agent/vault.crt";
             client_key = "/etc/vault-agent/vault.key";
@@ -126,7 +126,7 @@ inputs: {
 
                 set -e
 
-                export VAULT_ADDR="https://vault.in.redalder.org:8200/"
+                export VAULT_ADDR="https://${secret.network.ips.vault.dns}:8200/"
                 export VAULT_TOKEN="$(vault login \
                   -method=cert \
                   -client-cert=/etc/vault-agent/vault.crt \
@@ -192,15 +192,15 @@ inputs: {
                   }
 
                   host_network "vpn" {
-                    cidr = "10.64.0.0/24"
+                    cidr = "${secret.network.networks.vpn}"
                     reserved_ports = ""
                   }
                 }
 
                 advertise {
-                  http = "10.64.0.1"
-                  rpc  = "10.64.0.1"
-                  serf = "10.64.0.1"
+                  http = "${secret.network.ips.toothpick}"
+                  rpc  = "${secret.network.ips.toothpick}"
+                  serf = "${secret.network.ips.toothpick}"
                 }
 
                 plugin "docker" {
@@ -213,7 +213,7 @@ inputs: {
 
                 vault {
                   enabled = true
-                  address = "https://vault.in.redalder.org:8200"
+                  address = "https://${secret.network.ips.vault.dns}:8200"
                   allow_unauthenticated = false
                   create_from_role = "nomad-cluster"
                 }
@@ -247,7 +247,7 @@ inputs: {
                 node_name = "toothpick"
                 data_dir = "/var/lib/consul"
 
-                retry_join_wan = [ "10.64.1.201" ]
+                retry_join_wan = [ "${secret.network.ips.blowhole.ip}" ]
 
                 server = true
 
@@ -291,7 +291,7 @@ inputs: {
 
               # ca_provider = "vault"
               # ca_config {
-              #   address = "https://vault.in.redalder.org:8200"
+              #   address = "https://${secret.network.ips.vault.dns}:8200"
               #   token = "{{ file "/var/secrets/vault.token" | trimSpace }}"
               #   root_pki_path = "consul_root"
               #   intermediate_pki_path = "consul_intermediate"
@@ -307,78 +307,23 @@ inputs: {
         hostName = "toothpick";
 
         nameservers =
-          [ "10.64.1.1"
+          [ "${secret.network.ips.woodchip}"
             "93.184.77.2"
             "67.207.67.3"
           ];
 
         wireguard = {
           enable = true;
-          interfaces."wg0" = {
-            ips =
-              [ "10.64.0.1/24" ];
-            listenPort = 6666;
-            privateKeyFile = "/var/secret/wg0.key";
+          interfaces."wg0" =
+            {
+              postSetup = ''
+                ${pkgs.iptables}/bin/iptables -I FORWARD -i wg0 -o wg0 -j ACCEPT
+              '';
 
-            postSetup = ''
-              ${pkgs.iptables}/bin/iptables -I FORWARD -i wg0 -o wg0 -j ACCEPT
-            '';
-
-            postShutdown = ''
-              ${pkgs.iptables}/bin/iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT
-            '';
-
-            peers = [
-              # heater
-              { publicKey =
-                  "ygBDTN7rLFfN69WpgVCEmIacNMWnNXZX7DWpk2PYSz4=";
-                allowedIPs =
-                  [ "10.64.0.3/32"
-                  ];
-              }
-              # blowhole
-              { publicKey =
-                  "E+0dxPdE4K+tjNDTyONG1xNQoPFvdr3tHbh25wYq9FM=";
-                allowedIPs =
-                  [ "10.64.0.2/32"
-                    "10.64.1.0/24"
-                  ];
-              }
-              # edge
-              { publicKey =
-                  "IQ7Ct49/ZsQfZ9f5je8NSJ6J++J6FFZbU9JTffyKrHg=";
-                allowedIPs =
-                  [ "10.64.0.10/32"
-                  ];
-              }
-              # vantablack
-              { publicKey =
-                  "+S551mKun3i0Ptmt++zcAYbWAGkTOINv/uKYQrTIsg0=";
-                allowedIPs =
-                  [ "10.64.0.5/32"
-                  ];
-              }
-              # thy - main
-              { publicKey =
-                  "dEwoaWN1CiCorGwogggUNhbNsXvfYgfw7GqFxvSKGBk=";
-                allowedIPs =
-                  [ "10.64.0.6/32" ];
-              }
-              # sei - laptop
-              { publicKey =
-                  "fILkxz8hoCTws8fly91q3dDqxXZjbaz1bl+r/6r9Q0M=";
-                allowedIPs =
-                  [ "10.64.0.7/32" ];
-              }
-              # omen
-              { publicKey =
-                  "pFjiXQLFe3K72RwbhCYXHy6ttZzsvYqW8PIBbro10iM=";
-                allowedIPs =
-                  [ "10.64.0.8/32"
-                  ];
-              }
-            ];
-          };
+              postShutdown = ''
+                ${pkgs.iptables}/bin/iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT
+              '';
+            } // config.magic_rb.secret.wireguard."toothpick";
         };
 
         defaultGateway = "64.225.96.1";

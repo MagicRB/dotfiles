@@ -6,7 +6,7 @@ inputs: {
     inputs.dwarffs.nixosModules.dwarffs
     inputs.home-manager.nixosModules.home-manager
 
-    ({ pkgs, config, lib, ... }:
+    ({ pkgs, config, lib, secret, ... }:
       let
         inherit (config.magic_rb.pkgs) nixpkgs-unstable;
       in
@@ -93,7 +93,7 @@ inputs: {
             enable = true;
             settings = {
               vault = {
-                address = "https://vault.in.redalder.org:8200";
+                address = "https://${secret.network.ips.vault.vpn}:8200";
 
                 client_cert = "/etc/vault-agent/client.crt";
                 client_key = "/etc/vault-agent/client.key";
@@ -120,7 +120,7 @@ inputs: {
                   source = pkgs.writeText "nomad.hcl.tpl" ''
                     client {
                       enabled = true 
-                      servers = [ "blowhole.in.redalder.org:4647" ]
+                      servers = [ "${secret.network.ips.blowhole.dns}:4647" ]
 
                       options {
                         docker.privileged.enabled = "true"
@@ -132,14 +132,14 @@ inputs: {
                     {{ with secret "kv/data/systems/heater/nomad" }}
                     vault {
                       enabled = true
-                      address = "https://vault.in.redalder.org:8200"
+                      address = "https://${secret.network.ips.vault.vpn}:8200"
                       token = "{{ .Data.data.vault_token }}"
                       allow_unauthenticated = true
                       create_from_role = "nomad-cluster"
                     }
 
                     consul {
-                      address = "blowhole.in.redalder.org:8500"
+                      address = "${secret.network.ips.blowhole.dns}:8500"
                       token = "{{ .Data.data.consul_token }}"
                     }
                     {{ end }}

@@ -5,7 +5,7 @@ inputs: {
     ../nixos-modules/default.nix
     inputs.home-manager.nixosModules.home-manager
 
-    ({ pkgs, config, lib, ... }:
+    ({ pkgs, config, lib, secret, ... }:
       {
         home-manager.users."main" =
           { ... }:
@@ -59,9 +59,8 @@ inputs: {
 
           settings = {
             authorization = {
-              trusted_clients =
-                [ "127.0.0.1" "10.64.2.201" "10.64.3.202"
-                  "10.64.0.10"
+              trusted_clients = with secret.network.ips;
+                [ "127.0.0.1" heater edge.flat edge.vpn
                 ];
             };
 
@@ -84,7 +83,7 @@ inputs: {
             '';
           };
 
-          virtualHosts."gooseberry.in.redalder.org" = {
+          virtualHosts.${secret.network.ips.gooseberry.dns} = {
             root = pkgs.magic_rb.mainsail;
 
             locations."/".extraConfig = ''

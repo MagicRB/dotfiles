@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, secret, ... }:
 with lib;
 let
   nm-enable = config.networking.networkmanager.enable;
@@ -10,7 +10,7 @@ in {
     users.main = {
       isNormalUser = true;
       home = "/home/main";
-      hashedPassword = "<REDACTED>";
+      hashedPassword = secret.passwordHashes.main.generic;
       description = "main";
 
       uid = 1000;

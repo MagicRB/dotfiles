@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
+    ../secret-lib
     ./efi-grub.nix
     ./erase-my-darlings.nix
     ./main.nix

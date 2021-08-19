@@ -4,7 +4,7 @@ inputs: {
   modules = [
     ../nixos-modules/default.nix
     inputs.home-manager.nixosModules.home-manager
-    ({ pkgs, config, ... }: {
+    ({ pkgs, config, secret, ... }: {
       home-manager.users."main" =
         { ... }: {
           imports = [ ../home-manager/modules/default.nix ];
@@ -45,7 +45,7 @@ inputs: {
         enable = true;
         settings = {
           vault = {
-            address = "https://vault.in.redalder.org:8200";
+            address = "https://${secret.network.ips.vault.dns}:8200";
 
             client_cert = "/etc/vault-agent/client.crt";
             client_key = "/etc/vault-agent/client.key";
@@ -122,22 +122,9 @@ inputs: {
         interfaces.eno1.useDHCP = true;
         hostId = "10c7ffc5";
 
-        wireguard.interfaces = {
-          wg0 = {
-            ips = [ "10.64.0.8/24" ];
-            listenPort = 6666;
+        wireguard.interfaces."wg0" = {
 
-            privateKeyFile = "/var/secrets/wg0.key";
-            peers = [
-              {
-                publicKey = "h4g6vWjOB6RS0NbrP/Kvb2CZeutm/F+ZfDbJmEd1Dgk=";
-                allowedIPs = [ "10.64.0.0/24" "10.64.1.0/24" ];
-                endpoint = "redalder.org:6666";
-                persistentKeepalive = 30;
-              }
-            ];
-          };
-        };
+        } // config.magic_rb.secret.wireguard."omen";
       };
 
       security.pki.certificates = [ (builtins.readFile ../redalder.org.crt) ];

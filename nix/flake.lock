@@ -215,6 +215,7 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "secret": "secret",
         "vtermModule": "vtermModule",
         "yusdacra-dotfiles": "yusdacra-dotfiles"
       }
@@ -234,6 +235,18 @@
         "ref": "nightly",
         "repo": "rust-analyzer",
         "type": "github"
+      }
+    },
+    "secret": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-oCBpVoYGJ5YnK2IFHMFKSniFB9Vav0qA+mA04+zkaj4=",
+        "path": "secret",
+        "type": "path"
+      },
+      "original": {
+        "path": "secret",
+        "type": "path"
       }
     },
     "vtermModule": {

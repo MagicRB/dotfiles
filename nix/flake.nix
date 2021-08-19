@@ -35,6 +35,12 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
+
+    secret = {
+      url = "path:secret";
+      flake = false;
+    };
+
     #  PACKAGES
 
     ## Emacs
