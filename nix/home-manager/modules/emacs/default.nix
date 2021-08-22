@@ -18,6 +18,7 @@ in
     home.packages = with pkgs; [
       cfg.package
       fira-code
+      ultimate-oldschool-pc-font-pack
       (iosevka-bin.override { variant = "aile"; })
       (iosevka-bin.override { variant = "etoile"; })
       (iosevka-bin.override { variant = ""; })

@@ -124,15 +124,15 @@ First make =load-theme= unload all currently loaded themes and reapply fonts aft
   bit bigger with it. Also enable variable pitch fonts, ~Iosevka~ is really nice.
 
   #+BEGIN_SRC emacs-lisp
-    (setq magic_rb/fixed-width-font "Iosevka Term")
+    (setq magic_rb/fixed-width-font "Px437 IBM VGA 8x14")
     (setq magic_rb/variable-pitch-font "Iosevka Aile")
 
     (with-eval-after-load 'dash
       (defun magic_rb/apply-fonts ()
         (interactive)
         (if (-contains? (split-string system-configuration-features) "PGTK")
-            (set-face-attribute 'default nil :family magic_rb/fixed-width-font :slant 'normal :height 130)
-          (set-face-attribute 'default nil :family magic_rb/fixed-width-font :height 130))
+            (set-face-attribute 'default nil :family magic_rb/fixed-width-font :slant 'normal :height 180)
+          (set-face-attribute 'default nil :family magic_rb/fixed-width-font :height 180))
         (set-face-attribute 'fixed-pitch nil :family magic_rb/fixed-width-font :slant 'normal :height 1.0)
         (set-face-attribute 'variable-pitch nil :family magic_rb/variable-pitch-font :height 1.0))
       (magic_rb/apply-fonts))
