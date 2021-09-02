@@ -19,10 +19,10 @@ in
       mpv
       (discord-canary-system.override rec {
         isWayland = false;
-        version = "0.0.126";
+        version = "0.0.129";
         src = fetchurl {
           url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-          sha256 = "sha256-EraTDRKd6t0c9U68tSRdGkeB1hfqNS4KUewEXwkL8io=";
+          sha256 = "sha256-c/I3MJoYYHDvLtAhNP79EIixhLS+Pvmz74kPM9reifQ=";
         };
       })
       element-desktop
