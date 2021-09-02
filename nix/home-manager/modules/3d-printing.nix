@@ -19,6 +19,7 @@ in
       cura
       inkscape
       nixpkgs-unstable.prusa-slicer
+      freecad
     ];
   };
 }
