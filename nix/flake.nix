@@ -135,7 +135,7 @@
         };
 
       overlays = {
-        emacs = import ./overlays/emacs/default.nix inputs;
+        emacs = import ./overlays/emacs-ng/default.nix inputs;
         emacsclient-remote = import ./overlays/emacsclient-remote;
         gpg-key = import ./overlays/gpg-key inputs.nixng.lib;
         screenshot = import ./overlays/screenshot inputs.nixng.lib;
