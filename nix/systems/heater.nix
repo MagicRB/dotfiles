@@ -193,10 +193,14 @@ inputs: {
             };
           };
 
-          virtualisation.podman = {
-            enable = true;
-            dockerCompat = true;
-          };
+          ## Fuck podman, 2021-08-31, `podman info` fails with a stack trace
+          ## and all containers tested fail with `Operation not supported`...
+          # virtualisation.podman = {
+          #   enable = true;
+          #   dockerCompat = true;
+          # };
+
+          virtualisation.docker.enable = true;
         })
   ] ++ [
     ({ pkgs, ... }: {
