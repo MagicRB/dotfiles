@@ -10,7 +10,10 @@ in
     package = mkOption {
       description = "Which emacs package to use.";
       type = types.package;
-      default = nixpkgs.magic_rb.emacs;
+      default =
+        (nixpkgs.magic_rb.emacs.override
+          { march = config.magic_rb.optimisation.march; })
+          .bundle;
     };
   };
 

@@ -8,6 +8,7 @@
     ./networking.nix
     ./nix-flakes.nix
     ./pin-nixpkgs.nix
+    ./optimisation.nix
     ./pulseaudio.nix
     ./vault-agent.nix
     ./vps-remote-access.nix

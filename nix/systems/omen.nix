@@ -10,6 +10,7 @@ inputs: {
           imports = [ ../home-manager/modules/default.nix ];
 
           magic_rb = {
+            optimisation.march = "skylake";
             pins = inputs;
             config = {
               allowUnfree = true;
@@ -73,6 +74,8 @@ inputs: {
       };
 
       magic_rb = {
+        optimisation.march = "skylake";
+
         grub = {
           enable = true;
           efi.enable = true;

@@ -17,6 +17,7 @@ inputs: {
               imports = [ ../home-manager/modules/default.nix ];
 
               magic_rb = {
+                optimisation.march = "znver2";
                 pins = inputs;
                 config = {
                   allowUnfree = true;
@@ -49,6 +50,7 @@ inputs: {
             };
 
           magic_rb = {
+            optimisation.march = "znver2";
             grub = {
               enable = true;
               efi.enable = true;

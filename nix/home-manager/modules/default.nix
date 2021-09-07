@@ -13,6 +13,7 @@
     ./graphical-programs.nix
     ./multimc.nix
     ./pin-nixpkgs.nix
+    ./optimisation.nix
     ./rust.nix
     ./webdev.nix
     ./wine.nix
