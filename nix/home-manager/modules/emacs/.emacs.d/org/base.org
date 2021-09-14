@@ -1170,6 +1170,12 @@ Enable ~treemacs~.
     <<treemacs-ignore-org-not-org>>)
 #+END_SRC
 
+Read input from a minibuffer not a child frame.
+
+#+BEGIN_SRC emacs-lisp
+  (setq treemacs-read-string-input 'from-minibuffer)
+#+END_SRC
+
 Load the ~doom-colors~ theme, it looks nicer.
 
 #+NAME: treemacs-doom-colors
