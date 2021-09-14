@@ -19,13 +19,14 @@ in
       mpv
       (discord-canary-system.override rec {
         isWayland = false;
-        version = "0.0.129";
+        version = "0.0.130";
         src = fetchurl {
           url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-          sha256 = "sha256-c/I3MJoYYHDvLtAhNP79EIixhLS+Pvmz74kPM9reifQ=";
+          sha256 = "sha256-UamSiwjR68Pfm3uyHaI871VaGwIKJ5DShl8uE3rvX+U=";
         };
       })
       element-desktop
+      nyxt
     ];
   };
 }
