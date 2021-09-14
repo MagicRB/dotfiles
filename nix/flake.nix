@@ -99,8 +99,8 @@
       homeConfigurations.edge = homeManagerConfiguration (import ./systems/edge.nix inputs);
       edge = self.homeConfigurations.edge.activationPackage;
 
-      homeConfigurations.blowhole = homeManagerConfiguration (import ./systems/blowhole.nix inputs);
-      blowhole = self.homeConfigurations.blowhole.activationPackage;
+      nixosConfigurations.blowhole = nixosSystem (import ./systems/blowhole.nix inputs);
+      blowhole = self.nixosConfigurations.blowhole.config.system.build.toplevel;
 
       allSystems =
         let
@@ -144,6 +144,7 @@
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
         winetricks = import ./overlays/winetricks;
         dwarffs = inputs.dwarffs.overlay;
+        nyxt = import ./overlays/nyxt inputs.nyxt.lib;
       };
 
       nixosModules = {

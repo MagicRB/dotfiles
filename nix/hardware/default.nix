@@ -25,6 +25,7 @@ in
         })
       ./toothpick.nix
       ./gooseberry.nix
+      ./blowhole.nix
     ];
 
   config = {

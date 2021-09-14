@@ -1,27 +1,51 @@
 inputs: {
   system = "x86_64-linux";
-  username = "main";
-  homeDirectory = "/home/main";
 
-  configuration =
-    { pkgs, ... }: {
-      home.stateVersion = "20.09";
+  modules = [
+    ../nixos-modules/default.nix
+    ({ pkgs, config, lib, secret, ... }:
+      let
+        inherit (config.magic_rb.pkgs) nixpkgs-unstable;
+      in
+        with lib;
+        {
+          magic_rb = {
+            pins = inputs;
+            overlays = inputs.self.overlays;
 
-      magic_rb = {
-        pins = inputs;
-        overlays = inputs.self.overlays;
+            grub = {
+              enable = true;
+              efi.enable = true;
+            };
 
-        programs = {
-          bash = {
-            enable = true;
-            enableDirenv = true;
+            hardware.blowhole = true;
+
+            sshdEmacs.enable = true;
+            flakes = {
+              enable = true;
+            };
           };
-          ssh.enable = true;
+
+          services.openssh = {
+            enable = true;
+            ports = [ 2222 ];
+          };
+        }
+    )
+    ({ ... }:
+      {
+        networking = {
+          hostName = "blowhole";
+          useDHCP = false;
+          interfaces.eno1.useDHCP = false;
+
+          firewall.enable = true;
         };
-      };
 
-      home.packages = [ pkgs.nixFlakes ];
+        time.timeZone = "Europe/Bratislava";
+        system.stateVersion = "21.05";
 
-      imports = [ ../home-manager/modules/default.nix ];
-    };
+        security.pki.certificates = [ (builtins.readFile ../redalder.org.crt) ];
+      })
+  ];
 }
