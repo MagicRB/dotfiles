@@ -1,9 +1,20 @@
 { emacs, vtermModule, nixpkgs-unstable, ... }:
 final: prev:
+
+with prev.lib;
 let
-  inherit (prev) lib callPackage stdenv;
+  inherit (prev) callPackage stdenv;
+
+  hunspellWithDicts = cfg:
+    stdenv.mkDerivation {
+      name = (appendToName "with-dicts" cfg.hunspell.package).name;
+      buildInputs = [ prev.makeWrapper ];
+      buildCommand = ''
+        makeWrapper ${cfg.hunspell.package.bin}/bin/hunspell $out/bin/hunspell --prefix DICPATH : ${makeSearchPath "share/hunspell" cfg.hunspell.dictionaries}
+      '';
+      meta = removeAttrs cfg.hunspell.package.meta ["outputsToInstall"];
+    };
 in
-with lib;
 {
   magic_rb = prev.magic_rb or {} // {
     libvterm-emacs = stdenv.mkDerivation {
@@ -23,14 +34,14 @@ with lib;
     emacs = callPackage
       (module:
       let
-        mkPkgOption = name: with lib;
+        mkPkgOption = name:
           mkOption {
             description = "`${name}` package.";
             default = prev.${name};
             type = types.package;
           };
 
-        evaled = lib.evalModules
+        evaled = evalModules
           { modules = [ module ] ++ singleton
             ({ config, ... }:
             { options = {
@@ -65,8 +76,20 @@ with lib;
                     Additional packages to add statically to the Emacs closure, requires a
                     restart of Emacs for changes to take effect.
                   '';
-                  type = with types; listOf str;
+                  type = with types; listOf package;
                   default = [];
+                };
+
+                hunspell = {
+                  enable = mkEnableOption "Enable hunspell and dictionaries";
+                  package = mkPkgOption "hunspell";
+                  dictionaries = mkOption {
+                    description = ''
+                      Dictionaries included with Hunspell.
+                    '';
+                    type = with types; listOf package;
+                    default = [];
+                  };
                 };
 
                 output = {
@@ -89,6 +112,9 @@ with lib;
               };
 
               config = {
+                additionalPackages =
+                  (optional config.hunspell.enable (hunspellWithDicts config));
+
                 output.base =
                   (callPackage (import "${nixpkgs-unstable}/pkgs/applications/editors/emacs/generic.nix"
                     {
@@ -153,7 +179,7 @@ with lib;
                       ${xorg.lndir}/bin/lndir -silent ${base} $out
                       wrapProgram $out/bin/emacs \
                         --prefix EMACSLOADPATH : ${libvterm-emacs}/lib: \
-                        --prefix PATH : ${lib.makeBinPath config.additionalPackages}
+                        --prefix PATH : ${makeBinPath config.additionalPackages}
                     '';
                   };
               };

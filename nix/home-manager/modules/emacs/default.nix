@@ -12,8 +12,11 @@ in
       type = types.package;
       default =
         (nixpkgs.magic_rb.emacs.override
-          { march = config.magic_rb.optimisation.march; })
-          .bundle;
+          { march = config.magic_rb.optimisation.march;
+            hunspell.enable = true;
+            hunspell.dictionaries = with pkgs.hunspellDicts;
+              [ en_US ];
+          }).bundle;
     };
   };
 
