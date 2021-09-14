@@ -62,6 +62,7 @@ inputs: {
       };
 
       systemd.services.vault-agent = {
+        restartTriggers = [ "/etc/vault-agent/vault.crt" "/etc/vault-agent/vault.key" ];
         serviceConfig = {
           ExecPreStart = "mkdir -p /var/secrets/ && chown -R vault-agent:secrets /var/secrets/";
         };
