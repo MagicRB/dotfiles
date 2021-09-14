@@ -240,7 +240,7 @@
     "secret": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-oCBpVoYGJ5YnK2IFHMFKSniFB9Vav0qA+mA04+zkaj4=",
+        "narHash": "sha256-RQE3Q/SQyql65711ehv1VYSk29Q5Kt4WCa/b8LCMxdk=",
         "path": "secret",
         "type": "path"
       },
