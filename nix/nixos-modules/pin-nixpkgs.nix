@@ -23,6 +23,7 @@ in
     overlays = mkOption {
       description = "Overlays which should be loaded for all versions of nixpkgs";
       type = with types; attrsOf unspecified;
+      default = {};
     };
   };
 
