@@ -21,7 +21,7 @@ with lib;
                 ./network.nix
                 ./password-hashes.nix
               ] ++
-              (if (builtins.pathExists secret) then
+              (if (builtins.tryEval { x = import secret; }).success then
                 [ secret ]
                else
                  builtins.trace "Warning! Not loading any secrets, you may get errors." []
