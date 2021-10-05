@@ -130,7 +130,7 @@ in
               LimitNOFILE = 65536;
               LimitNPROC = "infinity";
               OOMScoreAdjust = -1000;
-              Restart = "on-failure";
+              Restart = "always";
               RestartSec = 2;
               TasksMax = "infinity";
 
