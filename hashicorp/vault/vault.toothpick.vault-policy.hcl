@@ -1,7 +1,7 @@
 path "auth/cert/certs/vault.toothpick" {
   capabilities = [ "update" ]
   allowed_parameters = {
-    ttl = [ "3600" ]
+    ttl = [ "24h" ]
     policies = [ "vault.toothpick" ]
     display_name = [ "vault.toothpick" ]
     certificate = []
