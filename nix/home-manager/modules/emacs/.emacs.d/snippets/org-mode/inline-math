@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# key: mk
+# --
+$$1$${2:$(unless (string-match-p "\\\\`[,\\\\.? \\\\-].*" yas-text) " ")}$2 $0

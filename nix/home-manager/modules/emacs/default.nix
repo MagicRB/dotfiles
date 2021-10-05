@@ -11,12 +11,39 @@ in
       description = "Which emacs package to use.";
       type = types.package;
       default =
-        (nixpkgs.magic_rb.emacs.override
-          { march = config.magic_rb.optimisation.march;
-            hunspell.enable = true;
-            hunspell.dictionaries = with pkgs.hunspellDicts;
-              [ en_US ];
-          }).bundle;
+        let
+          # gensymb is not here, dont add
+          tex = with pkgs;
+            texlive.combine
+              { inherit (texlive)
+                dvisvgm
+                scheme-small
+                preview
+                siunitx
+                amsmath
+                ulem
+                dvipng
+                wrapfig
+                cancel
+                capt-of
+                bytefield
+                chemfig
+                simplekv;
+              };
+          r = with pkgs;
+            rWrapper.override
+              { packages = with rPackages; [ ggplot2 ]; };
+        in
+          (nixpkgs.magic_rb.emacs.override
+            { march = config.magic_rb.optimisation.march;
+              hunspell.enable = true;
+              hunspell.dictionaries = with pkgs.hunspellDicts;
+                [ en_US ];
+              additionalPackages = [
+                tex
+                r
+              ];
+            }).bundle;
     };
   };
 
@@ -35,7 +62,7 @@ in
         mkdir -p ~/.emacs.d/straight/versions
         ln -sfn ~/dotfiles/nix/home-manager/modules/emacs/straight-versions.el ~/.emacs.d/straight/versions/default.el
     '';
-    
+
     home.file = {
       ".emacs".source = ./.emacs;
       ".emacs.d/org" = {

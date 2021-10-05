@@ -621,6 +621,7 @@ Enable ~yasnippet~.
   (use-package yasnippet
     :straight t
     :config
+    (setq yas-snippet-dirs '("~/dotfiles/nix/home-manager/modules/emacs/.emacs.d/snippets"))
     (yas-global-mode 1))
 #+END_SRC
 

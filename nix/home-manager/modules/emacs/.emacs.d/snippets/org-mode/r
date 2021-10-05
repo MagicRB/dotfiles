@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# key: cbr
+# --
+#+BEGIN_SRC R :file r-img/$1.png :result file graphics
+$2
+#+END_SRC
+$0

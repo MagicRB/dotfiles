@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# key: /box
+# --
+${1:$(format "┌-%s-┐" (make-string (length yas-text) ?-))}
+| $1 |
+${1:$(format "└-%s-┘" (make-string (length yas-text) ?-))}
