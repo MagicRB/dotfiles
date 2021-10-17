@@ -20,6 +20,7 @@ with lib;
               [ ./wireguard.nix
                 ./network.nix
                 ./password-hashes.nix
+                ./mounts.nix
               ] ++
               (if (builtins.tryEval { x = import secret; }).success then
                 [ secret ]

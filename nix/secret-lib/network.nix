@@ -15,7 +15,7 @@ with lib;
       description = ''
         Network IPs.
       '';
-      type = with types; attrsOf str;
+      type = with types; attrsOf (oneOf [ str (attrsOf str) ]);
       default = {};
     };
   };
