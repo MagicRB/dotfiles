@@ -39,10 +39,14 @@ in
               hunspell.enable = true;
               hunspell.dictionaries = with pkgs.hunspellDicts;
                 [ en_US ];
-              additionalPackages = [
-                tex
-                r
-              ];
+              additionalPackages =
+                [ tex
+                  r
+                ] ++
+                (with pkgs;
+                  [ krita
+                    ripgrep
+                  ]);
             }).bundle;
     };
   };
@@ -50,6 +54,15 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       cfg.package
+      (makeDesktopItem {
+        name = "Org-Protocol";
+        exec = "emacsclient %u";
+        comment = "Org protocol";
+        desktopName = "org-protocol";
+        type = "Application";
+        mimeType = "x-scheme-handler/org-protocol";
+      })
+
       fira-code
       (iosevka-bin.override { variant = "aile"; })
       (iosevka-bin.override { variant = "etoile"; })
