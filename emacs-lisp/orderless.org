@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       6bbcf471-95ee-4cd5-abee-d412a1eba068
+:ROAM_REFS: https://github.com/oantolin/orderless
+:END:
+#+title: Orderless
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+This package provides an orderless completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order. Each component can match in any one of several ways: literally, as a regexp, as an initialism, in the flex style, or as multiple word prefixes. By default, regexp and literal matches are enabled.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package orderless
+    :straight t
+    :config
+    (setq completion-styles '(orderless)))
+#+END_SRC

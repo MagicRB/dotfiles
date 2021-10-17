@@ -87,23 +87,41 @@
       (move-marker marker nil) ; point nowhere for GC
       t)))
 
+(require 'cl-lib)
 
-(setq magic_rb/org-el-init-files
-      (cl-concatenate
-       'list
-       (directory-files "~/.emacs.d/org" t "\\.el$")
-       '("~/roam/20210723212215-fill_column_and_fill_column_indicator.el")))
+(use-package org-roam
+  :straight t
+  :demand t
+  :init
+  (setq org-roam-v2-ack t))
 
-(setq magic_rb/org-init-files
+(defvar magic_rb/org-init-files
       (cl-concatenate
        'list
        (directory-files "~/.emacs.d/org" t "\\.org$")
-       '("~/roam/20210723212215-fill_column_and_fill_column_indicator.org")))
+       (seq-map #'car
+	(org-roam-db-query
+	 [:select [nodes:file]
+	  :from tags
+	  :left-join nodes
+	  :on (= tags:node-id nodes:id)
+	  :where (like tag (quote "%\"emacs-load\""))])))
+      "List of org files, which should be tangled and loaded.")
+
+(defvar magic_rb/org-el-init-files
+      (cl-map 'list
+	      (lambda (file) (concat (file-name-sans-extension file) ".el"))
+	      magic_rb/org-init-files)
+      "List of generated elisp files from magic_rb/org-init-files.")
 
 (defun magic_rb/delete-file-maybe (file)
+  "If FILE exists, delete it."
   (when (file-exists-p file)
-    (message "TEST")
     (delete-file file)))
 
 (mapc #'magic_rb/delete-file-maybe magic_rb/org-el-init-files)
 (mapc #'org-babel-load-file magic_rb/org-init-files)
+
+
+(provide '.emacs)
+;;; .emacs ends here

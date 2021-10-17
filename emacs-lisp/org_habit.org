@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       28f65a55-f6b4-4c42-8b15-3e3a353c7c0a
+:ROAM_REFS: https://www.reddit.com/r/emacs/comments/3ltjjc/org_reset_task_when_it_repeats
+:END:
+#+title: Org Habit
+#+filetags: emacs-load
+
+#+BEGIN_SRC emacs-lisp :results none
+  (require 'org-habit)
+#+END_SRC
+
+Setup a function which resets any checkboxes under a ~TODO~ which changes state to ~DONE~. Many thanks to [[https://www.reddit.com/user/davidglasser][davidglasser]], who had this exact same issue and solved it on [[https://www.reddit.com/r/emacs/comments/3ltjjc/org_reset_task_when_it_repeats/cv9gbj6?utm_source=share&utm_medium=web2x&context=3][Reddit]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun glasser-org-reset-check-on-repeat ()
+    (when (and (org-get-repeat) (member org-state org-done-keywords))
+      (org-reset-checkbox-state-subtree)))
+  (add-hook 'org-after-todo-state-change-hook 'glasser-org-reset-check-on-repeat)
+#+END_SRC

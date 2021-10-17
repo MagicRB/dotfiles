@@ -1,0 +1,151 @@
+:PROPERTIES:
+:ID:       22d678ce-7a3a-486c-abfb-f6cebdd77f90
+:END:
+#+title: Org Agenda
+#+filetags: :project:emacs-load:
+
+Put state changes into the ~LOGBOOK~ section and not into a random spot.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-log-into-drawer t)
+#+END_SRC
+
+Set priority levels to A, B, and C.
+
+#+BEGIN_SRC emacs-lisp :resutls none
+  (setq org-highest-priority ?A)
+  (setq org-default-priority ?B)
+  (setq org-lowest-priority ?C)
+#+END_SRC
+
+* Dynamic Org Agenda using Org Roam DB
+#+BEGIN_NOTE
+This whole system depends on [[id:a56794cf-b8f9-4537-a390-bd7ee6bb35ae][Vulpea]]
+#+END_NOTE
+
+#+BEGIN_SRC emacs-lisp :results none
+  (with-eval-after-load "vulpea"
+#+END_SRC
+
+First we have to exclude the =agenda= tag from inheritance.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (add-to-list 'org-tags-exclude-from-inheritance "project")
+#+END_SRC
+
+Then we need a function to check whether a buffer contains any todo entry.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (defun vulpea-project-p ()
+    "Return non-nil if current buffer has any todo entry.
+  
+  TODO entries marked as done are ignored, meaning the this
+  function returns nil if current buffer contains only completed
+  tasks."
+    (org-element-map
+        (org-element-parse-buffer 'headline)
+        'headline
+      (lambda (h)
+        (eq (org-element-property :todo-type h)
+            'todo))
+      nil 'first-match))
+#+END_SRC
+
+Then we need a function which will check whether the current buffer contains any TODOs and if so, then add a roam tag to that file, so that we can easily get a list of all files with TODOs.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (add-hook 'find-file-hook #'vulpea-project-update-tag)
+(add-hook 'before-save-hook #'vulpea-project-update-tag)
+
+(defun vulpea-project-update-tag ()
+      "Update PROJECT tag in the current buffer."
+      (when (and (not (active-minibuffer-window))
+                 (vulpea-buffer-p))
+        (save-excursion
+          (goto-char (point-min))
+          (let* ((tags (vulpea-buffer-tags-get))
+                 (original-tags tags))
+            (if (vulpea-project-p)
+                (setq tags (cons "project" tags))
+              (setq tags (remove "project" tags)))
+
+            ;; cleanup duplicates
+            (setq tags (seq-uniq tags))
+
+            ;; update tags if changed
+            (when (or (seq-difference tags original-tags)
+                      (seq-difference original-tags tags))
+              (apply #'vulpea-buffer-tags-set tags))))))
+
+(defun vulpea-buffer-p ()
+  "Return non-nil if the currently visited buffer is a note."
+  (and buffer-file-name
+       (string-prefix-p
+        (expand-file-name (file-name-as-directory org-roam-directory))
+        (file-name-directory buffer-file-name))))
+#+END_SRC
+
+Now for the second last function, we need to actually return the list of files containing the =project= tag, to be consumed by org-agenda.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (defun vulpea-project-files ()
+    "Return a list of note files containing 'project' tag." ;
+    (seq-uniq
+     (seq-map
+      #'car
+      (org-roam-db-query
+       [:select [nodes:file]
+        :from tags
+        :left-join nodes
+        :on (= tags:node-id nodes:id)
+        :where (like tag (quote "%\"project\"%"))]))))
+#+END_SRC 
+
+Finally we can update the list of project files before every =org-agenda= invocation.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (defun vulpea-agenda-files-update (&rest _)
+    "Update the value of `org-agenda-files'."
+    (setq org-agenda-files (vulpea-project-files)))
+  
+  (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
+#+END_SRC
+
+** Migration
+
+To migrate existing org-roam files to this new system, run this elisp code.
+
+#+BEGIN_SRC emacs-lisp :results none :tangle no
+  (dolist (file (org-roam-list-files))
+    (message "processing %s" file)
+    (with-current-buffer (or (find-buffer-visiting file)
+                             (find-file-noselect file))
+      (vulpea-project-update-tag)
+      (save-buffer)))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :results none :exports none
+  )
+#+END_SRC
+
+* Custom Tags
+
+Define a number of custom tags to ease organisation.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (setq org-agenda-custom-commands
+        '(("h" "Agenda and Home-related tasks"
+           ((agenda "")
+            (tags-todo "home")
+            (tags "garden")))
+          ("o" "Agenda and Office-related tasks"
+           ((agenda "")
+            (tags-todo "work")
+            (tags "office")))
+          ("i" "Agenda and School-related tasks"
+           ((agenda "")
+            (tags-todo "school")
+            (tags "school")))))
+#+END_SRC
+
+** TODO Come up with more templates

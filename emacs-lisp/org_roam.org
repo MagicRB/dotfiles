@@ -1,0 +1,81 @@
+:PROPERTIES:
+:ID:       18476d68-cccb-48f4-aa77-caefe213d8bd
+:END:
+#+title: Org Roam
+#+filetags: emacs-load
+
+
+#+BEGIN_QUOTE
+Org-roam is a plain-text knowledge management system. It brings some of Roam's more powerful features into the Org-mode ecosystem.
+#+END_QUOTE
+
+#+BEGIN_WARNING
+SQLite3 must be on Emacs' PATH!
+#+END_WARNING
+
+#+BEGIN_SRC emacs-lisp :results none
+  (use-package org-roam
+    :straight t
+    :init
+    (setq org-roam-v2-ack t)
+    :config
+    (add-hook 'after-init-hook 'org-roam-setup)
+  
+    (setq org-roam-directory "~/roam")
+    (setq org-roam-capture-templates
+          `(("e" "Emacs Lisp" plain "%?"
+             :target (file+head "emacs-lisp/${slug}.org"
+                                "#+title: ${title}\n#+filetags: emacs-load")
+             :unnarrowed t)
+            ("d" "default" plain "%?"
+             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                                "#+title: ${title}\n")
+             :unnarrowed t))))
+  
+#+END_SRC
+
+* Ref Capture
+
+Using ~org-protocol~, one can capture a website from their browser directly into Org Roam.
+
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load "org-roam"
+    (require 'org-roam-protocol)
+    (setq org-roam-capture-ref-templates
+          `(("r" "ref" plain "%?"
+             :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n\n${body}")
+             :unnarrowed t))))
+#+END_SRC
+
+Then you need a desktop entry for ~org-protocol~. Such as:
+
+#+BEGIN_SRC conf-desktop 
+  [Desktop Entry]
+  Name=org-protocol
+  Exec=emacsclient %u
+  Type=Application
+  Terminal=false
+  Categories=System;
+  MimeType=x-scheme-handler/org-protocol;
+#+END_SRC
+
+or in Nix form:
+
+#+BEGIN_SRC nix
+  makeDesktopItem {
+    name = "Org-Protocol";
+    exec = "emacsclient %u";
+    comment = "Org protocol";
+    desktopName = "org-protocol";
+    type = "Application";
+    mimeType = "x-scheme-handler/org-protocol";
+  }
+#+END_SRC
+
+Lastly a bookmarklet in Firefox.
+
+#+BEGIN_SRC javascript
+  javascript:location.href ='org-protocol://roam-ref?template=r&ref=' + encodeURIComponent(location.href) + '&title=' + encodeURIComponent(document.title) + '&body=' + encodeURIComponent(window.getSelection())
+#+END_SRC
+
+

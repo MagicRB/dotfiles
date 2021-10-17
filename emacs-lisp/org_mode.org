@@ -1,0 +1,77 @@
+:PROPERTIES:
+:ID:       986ca7a5-d225-49bb-9e35-f2dffafe8aee
+:END:
+#+title: Org Mode
+#+filetags: emacs-load
+
+I used to respect the 80 column limit, but why waste all the space when it can be dynamic. In this way all of the available screen space is utilized.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (add-hook 'org-mode-hook 'visual-line-mode)
+#+END_SRC
+
+Enable "/fake/" indentation in =org-mode=, in other words, add indentation using overlays, but on disk the buffer is not indented.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+END_SRC
+
+Increase the size of headings, in my personal opinion this makes the headings stand out a bit more and therefore easier to read.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (custom-set-faces
+   '(org-level-1 ((t (:inherit outline-1 :height 1.25))))
+   '(org-level-2 ((t (:inherit outline-2 :height 1.2))))
+   '(org-level-3 ((t (:inherit outline-3 :height 1.15))))
+   '(org-level-4 ((t (:inherit outline-4 :height 1.10))))
+   '(org-level-5 ((t (:inherit outline-5 :height 1.05)))))
+#+END_SRC
+
+* Babel
+
+Enable =tangle on save=, big thanks to Diego Zamboni for his amazing booklet about /[[https://leanpub.com/lit-config/read][Literate Configuration]]/.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (add-hook 'org-mode-hook
+	 (lambda () (add-hook 'after-save-hook #'org-babel-tangle :append :local)))
+#+END_SRC
+
+After executing a source code block with =org-babel=, redisplay inline images, this speeds up the REPL-like workflow a lot.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
+#+END_SRC
+
+Enable additional babel languages.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (cl-map 'list (lambda (lang) `(,lang . t))
+           '(python R shell dot latex)))
+#+END_SRC
+
+* Latex
+
+For previews, create SVGs and not PNGs or something, use the =dvisvgm= command.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (setq org-preview-latex-default-process 'dvisvgm)
+#+END_SRC
+
+Enable =org-fragtog=. When point is on a LaTeX fragment, it will automatically remove the preview otherwise show it. 
+
+#+BEGIN_SRC emacs-lisp :results none
+  (use-package org-fragtog
+    :straight t
+    :hook ((org-mode . org-fragtog-mode))
+    :config
+    (setq org-fragtog-ignore-predicates
+          '(org-at-table-p)))
+#+END_SRC
+
+Adjust size of LaTeX previews.
+
+#+BEGIN_SRC emacs-lisp :results none
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.75))
+#+END_SRC

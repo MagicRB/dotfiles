@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       28e64740-061c-40de-ab7d-47b746736667
+:ROAM_REFS: https://github.com/raxod502/selectrum
+:END:
+#+title: Selectrum
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+Selectrum aims to provide a better completion UI using standard Emacs APIs. In essence it is an interface for selecting items from a list.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package selectrum
+    :straight t
+    :init
+    (selectrum-mode +1))
+#+END_SRC
+

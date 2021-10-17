@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       a56794cf-b8f9-4537-a390-bd7ee6bb35ae
+:END:
+#+title: Vulpea
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+A collection of functions for note taking based on org and org-roam. This repository primary goal is to be a tested library for other applications and utilities around note taking.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :results none
+  (use-package vulpea
+    :straight t)
+#+END_SRC
+

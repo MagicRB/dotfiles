@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       3e36a34a-7038-4466-847a-e4023f1f4827
+:END:
+#+title: Org Variable Pitch
+#+filetags: emacs-load
+
+
+Enable ~org-variable-pitch~, it makes ~org-mode~ feel like a proper writing instrument.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-variable-pitch
+    :straight t
+    :config
+    (set-face-attribute 'org-variable-pitch-fixed-face nil
+                        :family magic_rb/fixed-width-font)
+    :hook (org-mode . org-variable-pitch--enable))
+#+END_SRC

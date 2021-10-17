@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       d8339d6a-8b2f-43d8-bb08-a1b89db76b02
+:END:
+#+title: Embark
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+This package provides a sort of right-click contextual menu for Emacs, accessed through the embark-act command (which you should bind to a convenient key), offering you relevant actions to use on a target determined by the context:
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package embark
+    :straight t
+    :bind
+    (("C-." . embark-act)
+     ("C-;" . embark-dwim)
+     ("C-h B" . embark-bindings))
+    :init
+    (setq embark-indicators '(embark-minimal-indicator)))
+  
+#+END_SRC

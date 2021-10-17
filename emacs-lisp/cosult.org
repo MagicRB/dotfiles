@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       db1d0122-58d6-4dec-84f6-afcb52937fc7
+:END:
+#+title: Consult
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+Consult provides practical commands based on the Emacs completion function completing-read. Completion allows you to quickly select an item from a list of candidates.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp :results none
+  (use-package consult
+    :straight t
+    :bind (("C-x b" . consult-buffer)
+           ("C-x 4 b" . consult-buffer-other-window)
+           ("C-x 5 b" . consult-buffer-other-frame)
+           ;; M-s bindings (search-map)
+           ("M-s r" . consult-ripgrep)
+           ("M-s f" . consult-find))
+    :init
+    (setq consult-project-root-function #'projectile-project-root)
+    :config
+    (with-eval-after-load 'key-chord
+      (key-chord-define-global "zf" 'consult-find)
+      (key-chord-define-global "zr" 'consult-ripgrep)))
+#+END_SRC

@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       921e105a-01ff-4ab3-9478-4d967a61ff3f
+:ROAM_REFS: https://github.com/minad/marginalia
+:END:
+#+title: Marginalia
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+This package provides marginalia-mode which adds marginalia to the minibuffer completions. Marginalia are marks or annotations placed at the margin of the page of a book or in this case helpful colorful annotations placed at the margin of the minibuffer for your completion candidates.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package marginalia
+    :straight t
+    :init
+    (marginalia-mode))
+#+END_SRC
+
