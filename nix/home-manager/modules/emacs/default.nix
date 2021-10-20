@@ -28,7 +28,8 @@ in
                 capt-of
                 bytefield
                 chemfig
-                simplekv;
+                simplekv
+                collection-fontsrecommended;
               };
           r = with pkgs;
             rWrapper.override
