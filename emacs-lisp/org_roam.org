@@ -40,6 +40,9 @@ SQLite3 must be on Emacs' PATH!
     :config
     (add-hook 'after-init-hook 'org-roam-setup)
   
+    ;; Add ignore for SyncThing
+    (setq org-roam-file-exclude-regexp "\\.stversions")
+
     (setq org-roam-directory "~/roam")
     (setq org-roam-capture-templates
           `(("e" "Emacs Lisp" plain "%?"
