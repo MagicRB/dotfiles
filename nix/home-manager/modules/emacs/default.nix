@@ -16,20 +16,7 @@ in
           tex = with pkgs;
             texlive.combine
               { inherit (texlive)
-                dvisvgm
-                scheme-small
-                preview
-                siunitx
-                amsmath
-                ulem
-                dvipng
-                wrapfig
-                cancel
-                capt-of
-                bytefield
-                chemfig
-                simplekv
-                collection-fontsrecommended;
+                scheme-full;
               };
           r = with pkgs;
             rWrapper.override
