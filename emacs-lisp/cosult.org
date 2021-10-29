@@ -18,9 +18,5 @@ Consult provides practical commands based on the Emacs completion function compl
            ("M-s r" . consult-ripgrep)
            ("M-s f" . consult-find))
     :init
-    (setq consult-project-root-function #'projectile-project-root)
-    :config
-    (with-eval-after-load 'key-chord
-      (key-chord-define-global "zf" 'consult-find)
-      (key-chord-define-global "zr" 'consult-ripgrep)))
+    (setq consult-project-root-function #'projectile-project-root))
 #+END_SRC
