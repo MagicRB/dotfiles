@@ -718,24 +718,6 @@ Enable ~magit-todos~ and hook them on ~lsp-mode~ and also ~org-mode~, because it
 
 * Popper
 
-Enable ~popper~, a better version of ~popwin~, which might actually work. It groups popups by context and allows you
-to specify their exact positioning, or even a custom display function. It also seems to be better at restoring the
-previous layout.
-
-#+NAME: popper
-#+BEGIN_SRC emacs-lisp
-  (use-package popper
-    :straight (popper :type git :host github :repo "karthink/popper")
-    :init
-    (setq popper-reference-buffers
-          '("\\*Messages\\*"
-            "\\*Warnings\\*"
-            "Output\\*$"
-            help-mode
-            compilation-mode
-            rustic-compilation-mode))
-    (popper-mode +1))
-#+END_SRC
 * Projectile
 
 Enable ~projectile~.
