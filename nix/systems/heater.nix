@@ -168,14 +168,7 @@ inputs: {
                     then [ package ] ++ extraPackages
                     else [ package32 ] ++ extraPackages32;
                 })
-              ])
-            ++ [
-              (pkgs.rr.overrideAttrs (o: { src = pkgs.fetchFromGitHub { owner = "rr-debugger"; repo = "rr"; rev = "refs/heads/master"; sha256 = "sha256-q0PQxWuyAUVM4uEPzKhpMjvXWt0JfjdzCInNQfNItl8="; };} ))
-              (pkgs.util-linux.overrideAttrs (o: {
-                dontStrip = true;
-                NIX_CFLAGS_COMPILE="-O0 -ggdb";
-              }))
-            ];
+              ]);
 
           environment.enableDebugInfo = true;
 
