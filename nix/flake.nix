@@ -3,7 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-21.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs?ref=master";
-    
+
     home-manager = {
       url = "github:nix-community/home-manager?ref=release-21.05";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -18,11 +18,24 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    
+
     yusdacra-dotfiles = {
       url = "github:yusdacra/nixos-config";
       flake = false;
     };
+
+    # ====================== QMK ======================
+    poetry2nix = {
+      url = "github:nix-communit/poetry2nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    qmk = {
+      url = "https://github.com/qmk/qmk_firmware?ref=0.14.29";
+      type = "git";
+      flake = false;
+    };
+    # ====================== --- ======================
 
     dwarffs = {
       url = "github:edolstra/dwarffs";
@@ -71,6 +84,14 @@
       supportedSystems = [ "x86_64-linux" ]; # add "i686-linux" "aarch64-linux" back after hls is fixed
       forAllSystems' = systems: f: nixpkgs.lib.genAttrs systems (system: f system);
       forAllSystems = forAllSystems' supportedSystems;
+      pkgsForSystem =
+        system:
+        import nixpkgs
+          { system = "x86_64-linux";
+            overlays =
+              [ inputs.poetry2nix.overlay
+              ];
+          };
     in {
       nixosConfigurations.omen = nixosSystem (import ./systems/omen.nix inputs);
       omen = self.nixosConfigurations.omen.config.system.build.toplevel;
@@ -101,13 +122,12 @@
 
       allSystems =
         let
-          pkgs = system: import nixpkgs { system = "x86_64-linux"; };
           linkFarm = system: attrs:
             let
-              pkgs' = pkgs system;
+              pkgs = pkgsForSystem system;
             in
-              pkgs'.linkFarm "allSystems-${system}"
-                (pkgs'.lib.mapAttrsToList (n: v: { name = n; path = v; }) attrs);
+              pkgs.linkFarm "allSystems-${system}"
+                (pkgs.lib.mapAttrsToList (n: v: { name = n; path = v; }) attrs);
           nixos = name: self.nixosConfigurations.${name}.config.system.build.toplevel;
           hm = name: self.homeConfigurations.${name}.activationPackage;
         in
@@ -135,7 +155,7 @@
         emacsclient-remote = import ./overlays/emacsclient-remote;
         gpg-key = import ./overlays/gpg-key inputs.nixng.lib;
         screenshot = import ./overlays/screenshot inputs.nixng.lib;
-        easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix; 
+        easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix;
         mainsail = import ./overlays/mainsail inputs.nixng.lib;
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
         winetricks = import ./overlays/winetricks;
@@ -150,6 +170,8 @@
       packages =
         forAllSystems (system:
           let
+            pkgs = pkgsForSystem system;
+
             mkPkg'' =
               pkgs: name: package:
               (import pkgs { inherit system;
@@ -170,6 +192,18 @@
               shh = mkPkg "shh";
               mainsail = mkPkg "mainsail";
               winetricks = mkPkg "winetricks";
+
+              qmk-firmware = (pkgs.callPackage
+                (import ./extra/qmk/sp84.nix { inherit (inputs) qmk; }) {}).qmk-firmware;
             });
+
+      devShells = forAllSystems (system:
+        let pkgs = pkgsForSystem system;
+        in
+          { qmk =
+              (pkgs.callPackage
+                (import ./extra/qmk/sp84.nix { inherit (inputs) qmk; }) {}).shell;
+          }
+      );
     };
 }

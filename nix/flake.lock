@@ -203,6 +203,43 @@
         "type": "github"
       }
     },
+    "poetry2nix": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1635880413,
+        "narHash": "sha256-PczqVLL8tUSIR+sPYTmzXewVlWjGVpi0lxpdKm1vwkA=",
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "rev": "10d6b20bf1ed0f815d93138d905bb77705e71ca7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "poetry2nix",
+        "type": "github"
+      }
+    },
+    "qmk": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1635957067,
+        "narHash": "sha256-hQq20ov9ZJA5cTFPEcGAba6n7glTKHqms/oOZrufLi8=",
+        "ref": "master",
+        "rev": "712c01e98fb8583b3509cd9e03434b74c174f950",
+        "revCount": 17983,
+        "type": "git",
+        "url": "https://github.com/qmk/qmk_firmware?ref=0.14.29"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://github.com/qmk/qmk_firmware?ref=0.14.29"
+      }
+    },
     "root": {
       "inputs": {
         "dwarffs": "dwarffs",
@@ -215,6 +252,8 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "poetry2nix": "poetry2nix",
+        "qmk": "qmk",
         "secret": "secret",
         "vtermModule": "vtermModule",
         "yusdacra-dotfiles": "yusdacra-dotfiles"
