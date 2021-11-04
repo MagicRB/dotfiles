@@ -100,10 +100,10 @@ rec {
         mkdir -p keyboards/wheatfield/split75/keymaps/custom
         cp ${./keymap.c} keyboards/wheatfield/split75/keymaps/custom/keymap.c
         cp ${./rules.mk} keyboards/wheatfield/split75/rules.mk
+        cp ${./config.h} keyboards/wheatfield/split75/keymaps/custom/config.h
       '';
 
       buildPhase = ''
-        ls keyboards/wheatfield/split75/keymaps/custom
         make wheatfield/split75:custom
       '';
 
@@ -126,7 +126,6 @@ rec {
       '';
 
       installPhase = ''
-        ls
         cp wheatfield_split75_custom.hex $out
       '';
     };

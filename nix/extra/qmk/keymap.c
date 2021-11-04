@@ -15,6 +15,8 @@
  */
 
 #include QMK_KEYBOARD_H
+#include "raw_hid.h"
+#include "string.h"
 
 enum layer_names {
   BASE
@@ -59,6 +61,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     break;
 
   case CS_SWP_SWTCH:
+    {
+      raw_hid_send((uint8_t*)"swp", strlen("swp"));
+    }
     if (record->event.pressed)
       {
 	if (cs_swapped)
@@ -80,6 +85,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   return true;
 }
+
+void raw_hid_receive(uint8_t* data, uint8_t length) {
+  raw_hid_send(data, length);
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
