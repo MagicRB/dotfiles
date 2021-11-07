@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:       cc668372-8d95-461b-a7c6-3e2b51de3f40
+:END:
+#+title: LSP
+#+filetags: emacs-load
+
+* Python
+
+Using the Microsoft language server as it's the best afaik. It's weird because it doesn't lookup the path to itself via PATH but has to be statically set.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-python-ms
+    :straight t
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-python-ms)
+                           (lsp)))
+    :init
+    (setq lsp-python-ms-executable (executable-find "python-language-server")))
+#+END_SRC
+
+* C/C++
+
+This just requires hooking lsp onto ~c-mode~ and ~c++-mode~.
+
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'lsp
+    (add-hook c-mode-hook #'lsp)
+    (add-hook c++-mode-hook #'lsp))
+#+END_SRC
+
+* Haskell
+
+Enable ~haskell-mode~, and ~lsp-haskell~
+
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :straight t
+    :config
+    (add-hook 'haskell-mode-hook #'lsp)
+    (add-hook 'haskell-literate-mode-hook #'lsp))
+  (use-package lsp-haskell
+    :straight t)
+#+END_SRC
+
+Disable the ~haskell-stack-ghc~ flycheck checker, it's not used when lsp starts, but it does get loaded just before it. Loading and unloading it is slow and causes Emacs to freeze for a few seconds, so just disable it.
+
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load "flycheck"
+    (add-to-list 'flycheck-disabled-checkers 'haskell-stack-ghc))
+#+END_SRC
