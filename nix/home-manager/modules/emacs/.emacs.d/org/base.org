@@ -221,17 +221,6 @@ Load =all-the-icons=, it's required used by =treemacs= and =doom-modeline=. You 
 #+END_SRC
 
 * Language
-** C/C++
-
-Enable ~ccls~.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package ccls
-    :straight t
-    :hook (c-mode . lsp)
-    (c++-mode . lsp))
-#+END_SRC
-
 ** Nix Expression Language
 
 Enable ~nix-mode~.
@@ -242,28 +231,6 @@ Enable ~nix-mode~.
     :mode ("\\.nix\\'" . nix-mode)
     :config
     (add-hook 'nix-mode-hook #'lsp))
-#+END_SRC
-
-** Haskell Programming Language
-
-Enable ~haskell-mode~, and ~lsp-haskell~
-
-#+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
-    :straight t
-    :config
-    (add-hook 'haskell-mode-hook #'lsp)
-    (add-hook 'haskell-literate-mode-hook #'lsp))
-  (use-package lsp-haskell
-    :straight t)
-#+END_SRC
-
-Disable the ~haskell-stack-ghc~ flycheck checker, it's not used when lsp starts, but it does get loaded just before
-it. Loading and unloading it is slow and causes Emacs to freeze for a few seconds, so just disable it.
-
-#+BEGIN_SRC emacs-lisp
-  (with-eval-after-load "flycheck"
-    (add-to-list 'flycheck-disabled-checkers 'haskell-stack-ghc))
 #+END_SRC
 
 ** HashiCorp
@@ -368,33 +335,6 @@ but aside from minor indentation issues it works fine.
     :mode ("\\.ts\\'" . typescript-mode)
     :mode ("\\.tsx\\'" . typescript-mode)
     :hook (typescript-mode . lsp-mode))
-#+END_SRC
-** Scala Programming Language
-
-Enable ~scala-mode~ for =.scala=, =.sbt= and hook ~lsp-mode~ on it.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package scala-mode
-    :straight t
-    :mode ("\\.s\\(cala\\|bt\\)$" . scala-mode)
-    :hook (scala-mode . lsp-mode))
-#+END_SRC
-
-Enable ~sbt-mode~, it's used for sbt buffers.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package sbt-mode
-    :straight t
-    :commands sbt-start sbt-command
-    :config
-    ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-    ;; allows using SPACE when in the minibuffer
-    (substitute-key-definition
-     'minibuffer-complete-word
-     'self-insert-command
-     minibuffer-local-completion-map)
-    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-    (setq sbt:program-options '("-Dsbt.supershell=false")))
 #+END_SRC
 ** Rust Programming Language
 
