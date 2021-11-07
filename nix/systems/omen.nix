@@ -5,7 +5,7 @@ inputs: {
     ../nixos-modules/default.nix
     inputs.home-manager.nixosModules.home-manager
     ({ pkgs, config, secret, ... }: {
-      home-manager.users."main" =
+       home-manager.users."main" =
         { ... }: {
           imports = [ ../home-manager/modules/default.nix ];
 

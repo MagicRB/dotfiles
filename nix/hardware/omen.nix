@@ -14,6 +14,7 @@ in
         "usb_storage"
         "sr_mod"
         "rtsx_pci_sdmmc"
+        "nvme"
       ];
       initrd.kernelModules = [ ];
       kernelModules = [ "kvm-intel" ];
@@ -34,7 +35,7 @@ in
 
     fileSystems = {
       "/" =
-        { device = "omen-zpool/root";
+        { device = "omen-ssd/local/root";
           fsType = "zfs";
         };
 
@@ -53,17 +54,17 @@ in
         };
 
       "/home" =
-        { device = "omen-zpool/root/home";
+        { device = "omen-ssd/safe/home";
           fsType = "zfs";
         };
 
       "/nix" =
-        { device = "omen-zpool/root/nix";
+        { device = "omen-ssd/local/nix";
           fsType = "zfs";
         };
 
       "/boot" =
-        { device = "/dev/disk/by-partlabel/boot-WL157385";
+        { device = "/dev/disk/by-uuid/078c1885-5e0c-4bb8-bec3-5bf40785f5cd";
           fsType = "ext4";
         };
 
@@ -83,8 +84,8 @@ in
           ];
         };
 
-      "/boot/efi" =
-        { device = "/dev/disk/by-partlabel/efi-WL157385";
+      "/boot/EFI" =
+        { device = "/dev/disk/by-uuid/6F1E-8B1B";
           fsType = "vfat";
         };
     };
