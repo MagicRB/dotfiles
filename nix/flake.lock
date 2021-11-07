@@ -294,11 +294,11 @@
       "flake": false,
       "locked": {
         "narHash": "sha256-YAGVg1R+CdQIMfNRmUMBkPz9LEJXd/Bncx3sY0UYhIA=",
-        "path": "secret",
+        "path": "/home/main/dotfiles/secret",
         "type": "path"
       },
       "original": {
-        "path": "secret",
+        "path": "/home/main/dotfiles/secret",
         "type": "path"
       }
     },

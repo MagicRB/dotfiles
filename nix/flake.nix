@@ -50,7 +50,7 @@
 
 
     secret = {
-      url = "path:secret";
+      url = "path:/home/main/dotfiles/secret";
       flake = false;
     };
 
