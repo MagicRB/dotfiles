@@ -13,9 +13,11 @@ Using the Microsoft language server as it's the best afaik. It's weird because i
     :straight t
     :hook (python-mode . (lambda ()
                            (require 'lsp-python-ms)
+                           (envrc-mode)
+                           (setq-local lsp-python-ms-executable (executable-find "python-language-server"))
                            (lsp)))
-    :init
-    (setq lsp-python-ms-executable (executable-find "python-language-server")))
+    :config
+    (defvar-local lsp-python-ms-executable ""))
 #+END_SRC
 
 * C/C++
