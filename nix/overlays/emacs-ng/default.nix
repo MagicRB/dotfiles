@@ -80,6 +80,14 @@ in
                   default = [];
                 };
 
+                environment = mkOption {
+                  description = ''
+                    Set additional environment variables.
+                  '';
+                  type = with types; attrsOf (oneOf [ str path ]);
+                  default = {};
+                };
+
                 hunspell = {
                   enable = mkEnableOption "Enable hunspell and dictionaries";
                   package = mkPkgOption "hunspell";
@@ -179,7 +187,8 @@ in
                       ${xorg.lndir}/bin/lndir -silent ${base} $out
                       wrapProgram $out/bin/emacs \
                         --prefix EMACSLOADPATH : ${libvterm-emacs}/lib: \
-                        --prefix PATH : ${makeBinPath config.additionalPackages}
+                        --prefix PATH : ${makeBinPath config.additionalPackages} \
+                        ${concatStringsSep " " (mapAttrsToList (k: v: "--set " + k + " " + v) config.environment)}
                     '';
                   };
               };

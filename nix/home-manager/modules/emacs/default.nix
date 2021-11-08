@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, secret, ... }:
 with lib;
 let
   cfg = config.magic_rb.programs.emacs;
@@ -27,6 +27,9 @@ in
               hunspell.enable = true;
               hunspell.dictionaries = with pkgs.hunspellDicts;
                 [ en_US ];
+              environment =
+                { MU4E_CONTEXTS = secret.emacs.mu4eContexts;
+                };
               additionalPackages =
                 [ tex
                   r
@@ -34,6 +37,7 @@ in
                 (with pkgs;
                   [ krita
                     ripgrep
+                    mu isync
                   ]);
             }).bundle;
     };
@@ -66,6 +70,7 @@ in
 
     home.file = {
       ".emacs".source = ./.emacs;
+      ".mbsyncrc".source = secret.emacs.mbsyncrc;
       ".emacs.d/org" = {
         source = ./.emacs.d/org;
         recursive = true;

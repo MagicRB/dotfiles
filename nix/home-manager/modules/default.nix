@@ -17,5 +17,6 @@
     ./rust.nix
     ./webdev.nix
     ./wine.nix
+    ../../secret-lib
   ];
 }

@@ -21,6 +21,7 @@ with lib;
                 ./network.nix
                 ./password-hashes.nix
                 ./mounts.nix
+                ./emacs.nix
               ] ++
               (if (builtins.tryEval { x = import secret; }).success then
                 [ secret ]

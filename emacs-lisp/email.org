@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID:       b9c06fb0-a985-4649-8133-14eeeaa708bc
+:ROAM_REFS: https://jherrlin.github.io/posts/emacs-mu4e/
+:END:
+#+title: Email
+#+filetags: emacs-load
+
+Email is a complicated beast, I decided to use *mu4e* and *mbsync*.
+
+* smtpmail
+
+#+BEGIN_SRC emacs-lisp :results none
+  (require 'smtpmail)
+
+  (with-eval-after-load 'smtpmail
+    (setq smtpmail-debug-info        t
+          message-send-mail-function 'smtpmail-send-it
+          smtpmail-stream-type       'starttls))
+#+END_SRC
+
+* mu4e
+:PROPERTIES:
+:ID:       9958efaf-51b2-4cee-bf37-c363d1c56055
+:END:
+
+#+BEGIN_SRC emacs-lisp :results none
+  (let*
+      ((mu-path
+        (file-name-directory (directory-file-name (file-name-directory (executable-find "mu")))))
+       (mu-load-path (concat mu-path "share/emacs/site-lisp/mu4e/")))
+    (add-to-list 'load-path mu-load-path))
+  (require 'mu4e)
+
+  (setq auth-sources '((:source "~/.password-store/.authinfo.gpg")))
+  (setq auth-source-debug t)
+
+  (with-eval-after-load 'mu4e
+    (setq  mu4e-get-mail-command       "mbsync -a"
+           mu4e-update-interval        300
+           message-kill-buffer-on-exit t)
+
+    (with-eval-after-load 'evil
+      (define-key evil-leader-map "u" 'mu4e))
+
+    (defun magic_rb/eval-file (file)
+      "Execute FILE and return the result of the last expression."
+      (eval
+       (ignore-errors
+         (read-from-whole-string
+          (with-temp-buffer
+            (insert-file-contents file)
+            (buffer-string))))))
+
+    (setq mu4e-contexts
+          (magic_rb/eval-file (getenv "MU4E_CONTEXTS")))
+    (mu4e t))
+#+END_SRC
+
+* mu4e-alert
+
+#+BEGIN_SRC emacs-lisp
+  (use-package mu4e-alert
+    :straight t
+    :after mu4e
+    :config
+    (mu4e-alert-set-default-style 'notifications)
+    (mu4e-alert-enable-mode-line-display)
+    (mu4e-alert-enable-notifications))
+#+END_SRC

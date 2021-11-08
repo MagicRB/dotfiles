@@ -293,7 +293,7 @@
     "secret": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-YAGVg1R+CdQIMfNRmUMBkPz9LEJXd/Bncx3sY0UYhIA=",
+        "narHash": "sha256-ALiNOECvaX6soP17Ug5P0s2mjkExOnPYZoVAGOt5Apw=",
         "path": "/home/main/dotfiles/secret",
         "type": "path"
       },
