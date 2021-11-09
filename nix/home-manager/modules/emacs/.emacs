@@ -93,7 +93,8 @@
   :straight t
   :demand t
   :init
-  (setq org-roam-v2-ack t))
+  (setq org-roam-v2-ack t
+	org-roam-directory "~/roam"))
 
 (defvar magic_rb/org-init-files
       (cl-concatenate

@@ -51,9 +51,10 @@ Email is a complicated beast, I decided to use *mu4e* and *mbsync*.
             (insert-file-contents file)
             (buffer-string))))))
 
-    (setq mu4e-contexts
-          (magic_rb/eval-file (getenv "MU4E_CONTEXTS")))
-    (mu4e t))
+    (setq mu4e-contexts (magic_rb/eval-file (getenv "MU4E_CONTEXTS"))
+          ;; When Emacs is loading, mu4e will ask for which context to use. Set a default.
+          mu4e-context-policy 'pick-first)
+    (add-hook 'after-init-hook (lambda () (mu4e t))))
 #+END_SRC
 
 * mu4e-alert
