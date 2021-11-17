@@ -113,7 +113,7 @@ in {
       "/mnt/net/Magic_RB" =
         {
           fsType = "nfs";
-          device = "${secret.network.ips.blowhole.ip}:/Magic_RB";
+          device = "${secret.network.ips.blowhole.ip}:/var/nfs/Magic_RB";
           options =
             [ "hard"
               "async"
