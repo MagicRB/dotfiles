@@ -17,6 +17,7 @@ in
       gimp
       firefox
       mpv
+      slack
       (discord-canary-system.override rec {
         isWayland = false;
         version = "0.0.131";

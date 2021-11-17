@@ -3,7 +3,6 @@ inputs: {
 
   modules = [
     ../nixos-modules/default.nix
-    inputs.dwarffs.nixosModules.dwarffs
     inputs.home-manager.nixosModules.home-manager
 
     ({ pkgs, config, lib, secret, ... }:
