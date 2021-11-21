@@ -2,7 +2,7 @@
 :ID:       22d678ce-7a3a-486c-abfb-f6cebdd77f90
 :END:
 #+title: Org Agenda
-#+filetags: :project:emacs-load:
+#+filetags: :emacs-load:
 
 Put state changes into the ~LOGBOOK~ section and not into a random spot.
 
@@ -54,13 +54,15 @@ Then we need a function to check whether a buffer contains any todo entry.
 Then we need a function which will check whether the current buffer contains any TODOs and if so, then add a roam tag to that file, so that we can easily get a list of all files with TODOs.
 
 #+BEGIN_SRC emacs-lisp :results none
-  (add-hook 'find-file-hook #'vulpea-project-update-tag)
-(add-hook 'before-save-hook #'vulpea-project-update-tag)
+    (add-hook 'find-file-hook #'vulpea-project-update-tag)
+    (add-hook 'before-save-hook #'vulpea-project-update-tag)
 
-(defun vulpea-project-update-tag ()
+    (defun vulpea-project-update-tag ()
       "Update PROJECT tag in the current buffer."
+      (message "%s" (vulpea-buffer-p))
       (when (and (not (active-minibuffer-window))
                  (vulpea-buffer-p))
+        (message "2")
         (save-excursion
           (goto-char (point-min))
           (let* ((tags (vulpea-buffer-tags-get))
@@ -77,12 +79,15 @@ Then we need a function which will check whether the current buffer contains any
                       (seq-difference original-tags tags))
               (apply #'vulpea-buffer-tags-set tags))))))
 
-(defun vulpea-buffer-p ()
-  "Return non-nil if the currently visited buffer is a note."
-  (and buffer-file-name
-       (string-prefix-p
-        (expand-file-name (file-name-as-directory org-roam-directory))
-        (file-name-directory buffer-file-name))))
+    (defun vulpea-buffer-p ()
+      "Return non-nil if the currently visited buffer is a note."
+      (and buffer-file-name
+           (or (string-prefix-p
+                (expand-file-name (file-name-as-directory org-roam-directory))
+                (file-name-directory buffer-file-name))
+               (string-prefix-p
+                (expand-file-name (file-name-as-directory "~/dotfiles/emacs-lisp"))
+                (file-name-directory buffer-file-name)))))
 #+END_SRC
 
 Now for the second last function, we need to actually return the list of files containing the =project= tag, to be consumed by org-agenda.
@@ -147,5 +152,3 @@ Define a number of custom tags to ease organisation.
             (tags-todo "school")
             (tags "school")))))
 #+END_SRC
-
-** TODO Come up with more templates
