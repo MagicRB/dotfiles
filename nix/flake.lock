@@ -26,11 +26,11 @@
     "emacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1635134239,
-        "narHash": "sha256-JNsTyJZgFfBiGc8EIb9rtN7CZLRdnRsb2aEmTgmLIF8=",
+        "lastModified": 1636936906,
+        "narHash": "sha256-zSGnwou+24hpLQW2T1rYTRcy0mUGobCESWQ9WC7ADTY=",
         "owner": "flatwhatson",
         "repo": "emacs",
-        "rev": "1c90a48717e3af64b586d0be1e09e11c96ce8899",
+        "rev": "148a3cf14fec57ba7015aec7b9b0888c4ddabe7c",
         "type": "github"
       },
       "original": {
@@ -42,11 +42,11 @@
     },
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1635557938,
-        "narHash": "sha256-rRfxzQqeGBJMCccXl3zLMdR/kJ6EyTIn7bhEwJIukLs=",
+        "lastModified": 1637483579,
+        "narHash": "sha256-Q3tHigpp7TCmCEQWmJCP+iGUzS2cMEnIVToUN4YEf7k=",
         "ref": "master",
-        "rev": "9d3c41c90ff52da915e691075abe60e30dea41f5",
-        "revCount": 6032,
+        "rev": "bcd307d14aeab6a5e612c4b98bb5b68982c98597",
+        "revCount": 6158,
         "type": "git",
         "url": "https://github.com/nix-community/emacs-overlay"
       },
@@ -63,11 +63,11 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1635574994,
-        "narHash": "sha256-UahBA95bGjV9THQEPZMvonmDSFwWg/guUasD1NhDeLI=",
+        "lastModified": 1637475807,
+        "narHash": "sha256-E3nzOvlzZXwyo8Stp5upKsTCDcqUTYAFj4EC060A31c=",
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "346f10ad543268b9d184cb5533e731d112928847",
+        "rev": "960e7fef45692a4fffc6df6d6b613b0399bbdfd5",
         "type": "github"
       },
       "original": {
@@ -98,11 +98,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1634544068,
-        "narHash": "sha256-RlRQBaAHfdWqfRyHdWuDPMkplBTYwuyDQqDcNbP/Sog=",
+        "lastModified": 1637019201,
+        "narHash": "sha256-lq4gz51fx4m5FXfx1SCB444aEBeaYtLMVm3P18Wi9ls=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "ff2bed9dac84fb202bbb3c49fdcfe30c29d0b12f",
+        "rev": "bcf03fa16a1f06b8a0abb27bf49afa8d6fffe8f1",
         "type": "github"
       },
       "original": {
@@ -136,11 +136,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1635514710,
-        "narHash": "sha256-k9GaS2JIWRph+oJKH1qNSqX6Xt/lpnpNeQCiD1H44GM=",
+        "lastModified": 1637331232,
+        "narHash": "sha256-uJhnSkxUXNytAOFmDAgLhgW7JhkvOkYs5ezg73qwJPo=",
         "owner": "NixOS",
         "repo": "nix",
-        "rev": "888771b4b2f153bfbf203e07d768d577ab2343e8",
+        "rev": "9cd8cffefc65fe425c6aa07aa3bc67a8eec46087",
         "type": "github"
       },
       "original": {
@@ -171,11 +171,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1635456205,
-        "narHash": "sha256-CLZxFvwec8BhFlB5tkIq08UBDNNrijOY780UF6ubJXc=",
+        "lastModified": 1637316267,
+        "narHash": "sha256-hfAA/0W3tycKKOSwP7Xt6FXLG9h/FgCu45wdGubHtV0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "66d6ec6ed2ddc77d08cf677cc8230db39f051793",
+        "rev": "24528474d2b3370f2f23879a557ae2cc92a5d50b",
         "type": "github"
       },
       "original": {
@@ -187,11 +187,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1635583634,
-        "narHash": "sha256-Ur45nSWQYQgA/SH+ittuAuIIUBE7zsoAR/Bux89jJ/U=",
+        "lastModified": 1637495182,
+        "narHash": "sha256-a4NaKMiTFhn8pbyE55tzZ6mS7uaOYzlIMVC733OoHpc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8099b31c67ca8a0db87cc34985f0cea9e2c37cd6",
+        "rev": "28e1b1a50a22fd6f155a10fb8e0d50b126774890",
         "type": "github"
       },
       "original": {
@@ -203,11 +203,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1635403963,
-        "narHash": "sha256-0actzfzBAXvvDJ/EvPSGbtCPXUwSObQrcq0RpsPWZgA=",
+        "lastModified": 1637155076,
+        "narHash": "sha256-26ZPNiuzlsnXpt55Q44+yzXvp385aNAfevzVEKbrU5Q=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "2deb07f3ac4eeb5de1c12c4ba2911a2eb1f6ed61",
+        "rev": "715f63411952c86c8f57ab9e3e3cb866a015b5f2",
         "type": "github"
       },
       "original": {
@@ -225,11 +225,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1635880413,
-        "narHash": "sha256-PczqVLL8tUSIR+sPYTmzXewVlWjGVpi0lxpdKm1vwkA=",
+        "lastModified": 1637272463,
+        "narHash": "sha256-+SVcJZVlJo7hMuOImIVFKu88IGqky8xoHWSBG511DLg=",
         "owner": "nix-community",
         "repo": "poetry2nix",
-        "rev": "10d6b20bf1ed0f815d93138d905bb77705e71ca7",
+        "rev": "3a10eb44e376a7fd3e3a2287b0add179af610d82",
         "type": "github"
       },
       "original": {
@@ -241,11 +241,11 @@
     "qmk": {
       "flake": false,
       "locked": {
-        "lastModified": 1635957067,
-        "narHash": "sha256-hQq20ov9ZJA5cTFPEcGAba6n7glTKHqms/oOZrufLi8=",
+        "lastModified": 1637448312,
+        "narHash": "sha256-2tjOzbsT5XR0IxGE9QYGNUTxqTHkA9gmpB6685VpJk0=",
         "ref": "master",
-        "rev": "712c01e98fb8583b3509cd9e03434b74c174f950",
-        "revCount": 17983,
+        "rev": "739bf6211227254db5f8786df0c57f257d72cc78",
+        "revCount": 18085,
         "type": "git",
         "url": "https://github.com/qmk/qmk_firmware?ref=0.14.29"
       },
@@ -276,11 +276,11 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1635274542,
-        "narHash": "sha256-Cew1/WUozM3jalItPuj4cNN8GIFMvCaJ1KXoj6wrHwE=",
+        "lastModified": 1637439871,
+        "narHash": "sha256-2awQ/obzl7zqYgLwbQL0zT58gN8Xq7n+81GcMiS595I=",
         "owner": "rust-analyzer",
         "repo": "rust-analyzer",
-        "rev": "dd43f3f2d13a32199828e758ddf13176df1f17f9",
+        "rev": "4566414789310acb2617543f4b50beab4bb48e06",
         "type": "github"
       },
       "original": {
@@ -293,7 +293,7 @@
     "secret": {
       "flake": false,
       "locked": {
-        "narHash": "sha256-ALiNOECvaX6soP17Ug5P0s2mjkExOnPYZoVAGOt5Apw=",
+        "narHash": "sha256-LtNeRdj506JYExzZS35kk4MfjpLJw0622Pyng8s8aXE=",
         "path": "/home/main/dotfiles/secret",
         "type": "path"
       },
