@@ -1,0 +1,112 @@
+:PROPERTIES:
+:ID:       f941f57a-d3fc-4b4b-ac85-2ff69ef942e5
+:ROAM_REFS: https://github.com/emacs-evil/evil
+:END:
+#+title: Evil Mode
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+Evil is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions.
+#+END_QUOTE
+
+#+BEGIN_NOTE
+This requires ~general.el~.
+#+END_NOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :straight t
+    :init
+    (setq evil-want-keybinding nil)
+
+    (defvar magic_rb-koy-compat-p t "Whether k-o-y layout compatibility should be active.")
+
+    (define-minor-mode magic_rb-koy-evil-mode
+      "Enable koy compatibility for Evil."
+      :lighter " koy"
+      :keymap (make-sparse-keymap)
+      (evil-normalize-keymaps))
+    (add-hook 'evil-mode-hook 'magic_rb-koy-evil-mode)
+    (add-hook 'evil-local-mode-hook 'magic_rb-koy-evil-mode)
+
+    (general-def
+      :prefix "SPC"
+      :states '(normal motion)
+      ""  nil
+      "t" 'evil-window-left
+      "r" 'evil-window-up
+      "n" 'evil-window-down
+      "s" 'evil-window-right
+
+      "T" 'evil-window-left
+      "R" 'evil-window-up
+      "N" 'evil-window-down
+      "S" 'evil-window-right
+
+      "Y" 'treemacs
+      "y" 'treemacs-select-window
+      "a" 'treemacs-switch-workspace
+      "A" 'treemacs-edit-workspaces
+
+      "v" 'vterm
+      "m" 'magit
+
+      "h" 'org-agenda
+      "i" 'org-roam-node-find
+      "ä" 'org-roam-capture
+      "," 'org-roam-buffer-toggle
+
+      "o" 'lsp-execute-code-action)
+
+    :after (general)
+    :general
+    (:states '(motion normal)
+             :predicate 'magic_rb-koy-compat-p
+             :keymaps 'magic_rb-koy-evil-mode-map
+             "t" 'evil-backward-char
+             "r" 'evil-previous-visual-line
+             "n" 'evil-next-visual-line
+             "s" 'evil-forward-char
+             "h" 'evil-find-char-to
+             "j" 'evil-replace
+             "k" 'evil-search-next
+             "l" 'evil-substitute)
+    (:states '(insert)
+             :predicate 'magic_rb-koy-compat-p
+             :keymaps 'magic_rb-koy-evil-mode-map
+             "j" (general-key-dispatch 'self-insert-command
+                                       :timeout 0.25
+                                       "j" 'evil-normal-state))
+    :config
+    (setq evil-respect-visual-line-mode t)
+    (evil-mode)
+    ;; :q should kill the current buffer rather than quitting emacs entirely
+    (evil-ex-define-cmd "q" 'kill-this-buffer)
+    ;; Need to type out :quit to close emacs
+    (evil-ex-define-cmd "quit" 'evil-quit)
+    ;; save and close buffer
+    (defun liu233w/ex-save-kill-buffer-and-close ()
+      (interactive)
+      (save-buffer)
+      (kill-this-buffer))
+    (evil-ex-define-cmd "wq" 'liu233w/ex-save-kill-buffer-and-close))
+
+  (use-package evil-collection
+    :straight t
+    :after (evil vterm)
+    :config
+    (evil-collection-init 'vterm)
+    (defun evil-collection-vterm-escape-stay ()
+      "Go back to normal state but don't move cursor backwards.
+      Moving cursor backwards is the default vim behavior but
+      it is not appropriate in some cases like terminals."
+      (setq-local evil-move-cursor-back nil))
+
+    (add-hook 'vterm-mode-hook #'evil-collection-vterm-escape-stay))
+
+  (use-package evil-surround
+    :straight t
+    :after evil
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC

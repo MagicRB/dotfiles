@@ -1,9 +1,0 @@
-:PROPERTIES:
-:ID:       9e101583-0fa5-4df8-beed-7741803bfe5a
-:END:
-#+title: Evil Mode
-#+filetags: emacs-load
-
-#+BEGIN_SRC emacs-lisp
-#+END_SRC
-

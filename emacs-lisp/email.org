@@ -39,9 +39,6 @@ Email is a complicated beast, I decided to use *mu4e* and *mbsync*.
            mu4e-update-interval        300
            message-kill-buffer-on-exit t)
 
-    (with-eval-after-load 'evil
-      (define-key evil-leader-map "u" 'mu4e))
-
     (defun magic_rb/eval-file (file)
       "Execute FILE and return the result of the last expression."
       (eval

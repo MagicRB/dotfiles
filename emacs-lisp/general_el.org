@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       1c6981a5-4371-4657-b4ea-435497a80010
+:END:
+#+title: general.el
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+~general.el~ provides a more convenient method for binding keys in emacs (for both evil and non-evil users). Like use-package, which provides a convenient, unified interface for managing packages, general.el is intended to provide a convenient, unified interface for key definitions.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package general
+    :straight t)
+#+END_SRC

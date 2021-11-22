@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID:       8fbb19be-bb8d-4fef-8a6a-9d5a3f5d06ec
+:ROAM_REFS: https://github.com/akermu/emacs-libvterm
+:END:
+#+title: Vterm
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+Emacs-libvterm (vterm) is fully-fledged terminal emulator inside GNU Emacs based on libvterm, a C library. As a result of using compiled code (instead of elisp), emacs-libvterm is fully capable, fast, and it can seamlessly handle large outputs.
+#+END_QUOTE
+
+Vterm is "[[id:9e101583-0fa5-4df8-beed-7741803bfe5a][evil]]ified" by [[id:c27c05e6-8211-45df-a94d-a711846b8f3c][Evil Collection]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm
+    :straight t
+    :init
+#+END_SRC
+
+We first have to define a new minor mode, ~magic_rb-koy-vterm-mode~, then hook it onto the existing ~vterm-mode~
+
+#+BEGIN_SRC emacs-lisp
+  (define-minor-mode magic_rb-koy-vterm-mode
+    "Enable koy compatibility for vterm."
+    :lighter " koy"
+    :keymap (make-sparse-keymap)
+    (evil-normalize-keymaps))
+  (add-hook 'vterm-mode-hook 'magic_rb-koy-vterm-mode)
+#+END_SRC
+
+Then we actually populate the keymap using [[id:1c6981a5-4371-4657-b4ea-435497a80010][general.el]].
+
+#+BEGIN_SRC emacs-lisp
+  :after (general)
+  :general
+  (:states '(motion normal)
+           :predicate 'magic_rb-koy-compat-p
+           :keymaps 'magic_rb-koy-vterm-mode-map
+           "t" 'evil-backward-char
+           "r" 'evil-previous-visual-line
+           "n" 'evil-next-visual-line
+           "s" 'evil-forward-char
+           "h" 'evil-find-char-to
+           "j" 'evil-replace
+           "k" 'evil-search-next
+           "l" 'evil-substitute)
+  (:states '(insert)
+           :predicate 'magic_rb-koy-compat-p
+           :keymaps 'magic_rb-koy-vterm-mode-map
+           "j" (general-key-dispatch 'self-insert-command
+                                     :timeout 0.25
+                                     "j" 'evil-normal-state)))
+#+END_SRC

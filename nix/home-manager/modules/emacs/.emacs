@@ -45,6 +45,10 @@
 (straight-use-package 'use-package)
 (straight-thaw-versions)
 
+;; load general early for now
+(use-package general
+  :straight t)
+
 (use-package org
   :straight t)
 
