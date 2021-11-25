@@ -13,11 +13,11 @@ final: prev:
       });
 
     nyxt = prev.lispPackages.nyxt.overrideAttrs (old: {
-      version = "2.1.1";
+      version = "2.2.3";
       src = prev.fetchFromGitHub {
         owner = "atlas-engineer";
         repo = "nyxt";
-        rev = "2.1.1";
+        rev = "2.2.3";
         sha256 = "sha256-GdTOFu5yIIL9776kfbo+KS1gHH1xNCfZSWF5yHUB9U8=";
       };
     });

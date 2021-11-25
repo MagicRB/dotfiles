@@ -18,6 +18,7 @@ in
       firefox
       mpv
       slack
+      ungoogled-chromium
       (discord-canary-system.override rec {
         isWayland = false;
         version = "0.0.131";
