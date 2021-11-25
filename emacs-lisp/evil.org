@@ -31,7 +31,7 @@ This requires ~general.el~.
 
     (general-def
       :prefix "SPC"
-      :states '(normal motion)
+      :states '(normal motion visual)
       ""  nil
       "t" 'evil-window-left
       "r" 'evil-window-up
@@ -60,7 +60,7 @@ This requires ~general.el~.
 
     :after (general)
     :general
-    (:states '(motion normal)
+    (:states '(motion normal visual)
              :predicate 'magic_rb-koy-compat-p
              :keymaps 'magic_rb-koy-evil-mode-map
              "t" 'evil-backward-char

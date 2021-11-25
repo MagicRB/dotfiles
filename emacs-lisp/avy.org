@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       e93571d6-ae50-4aca-8b2f-6ada70655be3
+:END:
+#+title: Avy
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+~avy~ is a GNU Emacs package for jumping to visible text using a char-based decision tree. See also ~ace-jump-mode~ and ~vim-easymotion~ - ~avy~ uses the same idea.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+    :straight t
+    :general
+    (:states '(normal insert)
+             :predicate 'magic_rb-koy-compat-p
+             :keymaps '(magic_rb-koy-treemacs-mode-map magic_rb-koy-magit-mode-map magic_rb-koy-evil-mode-map)
+             "z" (general-key-dispatch 'self-insert-command
+                                       :timeout 0.25
+                                       "z" 'avy-goto-char-timer)))
+#+END_SRC

@@ -33,7 +33,7 @@ Then we actually populate the keymap using [[id:1c6981a5-4371-4657-b4ea-435497a8
 #+BEGIN_SRC emacs-lisp
   :after (general)
   :general
-  (:states '(motion normal)
+  (:states '(motion normal visual)
            :predicate 'magic_rb-koy-compat-p
            :keymaps 'magic_rb-koy-vterm-mode-map
            "t" 'evil-backward-char
