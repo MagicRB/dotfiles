@@ -71,7 +71,7 @@ toggleFloat = withFocused (\windowId -> do
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
-myKeymap c = 
+myKeymap c =
     -- launch a terminal
     [ ("M-S-<Return>", spawn "alacritty")
 
@@ -163,7 +163,7 @@ myKeymap c =
     --
     [("M-"++m++[key], screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip "wer" [0..]
-        , (f, m) <- [(W.view, ""), (W.shift, "S-")]] 
+        , (f, m) <- [(W.view, ""), (W.shift, "S-")]]
 
 
 ------------------------------------------------------------------------
@@ -226,10 +226,11 @@ myLayout = smartBorders tiled ||| smartBorders simpleTabbed ||| smartBorders emp
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+    [ -- className =? "MPlayer"        --> doFloat
+   -- , className =? "Gimp"           --> doFloat
+    -- , resource  =? "desktop_window" --> doIgnore
+    -- , resource  =? "kdesktop"       --> doIgnore
+    ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -240,7 +241,7 @@ myManageHook = composeAll
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
-myEventHook = mempty
+myEventHook = ewmhDesktopsEventHook <+> fullscreenEventHook
 
 ------------------------------------------------------------------------
 -- Status bars and logging
