@@ -25,6 +25,11 @@ inputs: {
                 trustedWheel = true;
               };
           };
+          boot.loader.grub = {
+            enable = true;
+            version = 2;
+            efiSupport = false;
+          };
 
           environment.systemPackages =
             [ pkgs.git
