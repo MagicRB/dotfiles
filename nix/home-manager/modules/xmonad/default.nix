@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
-  nglib = config.magic_rb.pins.nixng.lib pkgs.stdenv.system;
   cfg = config.magic_rb.programs.xmonad;
 in
 {
@@ -34,7 +33,7 @@ in
       dejavu_fonts
     ];
 
-    home.file.".xmonad/xmonad.hs".source = nglib.writeSubstitutedFile {
+    home.file.".xmonad/xmonad.hs".source = pkgs.writeSubstitutedFile {
       name = "xmonad.hs";
       file = ./xmonad.hs;
       substitutes = {

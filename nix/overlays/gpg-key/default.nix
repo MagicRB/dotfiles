@@ -1,8 +1,7 @@
-nglib:
 final: prev:
 {
   magic_rb = prev.magic_rb or {} // {
-    gpg-key = (nglib prev.stdenv.system).writeSubstitutedShellScriptBin {
+    gpg-key = final.writeSubstitutedShellScriptBin {
       name = "gpg-key";
       file = ./gpg-key;
       substitutes = with prev; {

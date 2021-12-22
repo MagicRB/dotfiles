@@ -7,8 +7,8 @@ final: prev:
           src = prev.fetchFromGitHub {
             owner = "joachifm";
             repo = "cl-webkit";
-            rev = "90b1469713265096768fd865e64a0a70292c733d";
-            sha256 = "sha256:0lxws342nh553xlk4h5lb78q4ibiwbm2hljd7f55w3csk6z7bi06";
+            rev = "5a1e07f7e58951b5d6c46b14bbe7df3ce79a2639";
+            sha256 = "sha256-URyas57Q5hiGcYrwn1lLgIto22MriavyqziCYEvWnQo=";
           };
       });
 
@@ -18,7 +18,7 @@ final: prev:
         owner = "atlas-engineer";
         repo = "nyxt";
         rev = "2.2.3";
-        sha256 = "sha256-GdTOFu5yIIL9776kfbo+KS1gHH1xNCfZSWF5yHUB9U8=";
+        sha256 = "sha256-FzMDGvbtXi3EUU5Ri1sSS00nOzpvO3DmgJ1fQuT6Ouw=";
       };
     });
   };

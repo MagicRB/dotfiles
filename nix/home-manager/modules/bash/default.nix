@@ -1,7 +1,6 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  nglib = config.magic_rb.pins.nixng.lib pkgs.stdenv.system;
   cfg = config.magic_rb.programs.bash;
 in
 {
@@ -31,7 +30,7 @@ in
     programs.direnv.nix-direnv.enableFlakes = mkIf cfg.enableDirenv true;
 
     home.file = {
-      ".bashrc".source = nglib.writeSubstitutedFile {
+      ".bashrc".source = pkgs.writeSubstitutedFile {
         name = ".bashrc";
         file = ./bashrc;
         substitutes = {
