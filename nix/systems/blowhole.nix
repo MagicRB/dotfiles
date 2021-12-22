@@ -350,6 +350,16 @@ inputs: {
             user = "klipper";
             group = "klipper";
 
+            package = pkgs.klipper.overrideAttrs (_:
+              { src = pkgs.fetchFromGitHub {
+                  owner = "KevinOConnor";
+                  repo = "klipper";
+                  rev = "v0.10.0";
+                  sha256 = "sha256-rbRDwchiicI+U3IIkIfpuR2/xMzZkC5n2PP335iyUKM=";
+                };
+                versin = "0.10.0";
+              });
+
             settings =
               let
                 indentGcode = with lib; gcode:
@@ -359,8 +369,8 @@ inputs: {
                   { step_pin = "P2.2";
                     dir_pin = "!P2.6";
                     enable_pin = "!P2.1";
-                    step_distance = ".0125";
-                    # step_distance = ".025";
+                    rotation_distance = "40";
+                    microsteps = "16";
                     endstop_pin = "P1.29";  # P1.28 for X-max
                     position_endstop = "0";
                     position_max = "235";
@@ -371,8 +381,8 @@ inputs: {
                   { step_pin = "P0.19";
                     dir_pin = "!P0.20";
                     enable_pin = "!P2.8";
-                    step_distance = ".0125";
-                    # step_distance: .025
+                    rotation_distance = "40";
+                    microsteps = "16";
                     endstop_pin = "P1.27";  # P1.26 for Y-max
                     position_endstop = "0";
                     position_max = "235";
@@ -384,11 +394,11 @@ inputs: {
                     step_pin = "P0.22";
                     dir_pin = "P2.11";
                     enable_pin = "!P0.21";
-                    step_distance = ".0025";
-                    #step_distance: .005
+                    rotation_distance = "8";
+                    microsteps = "16";
                     endstop_pin = "P1.25";  # P1.24 for Z-max"
-                    position_min = "-0.6";
-                    position_endstop = "-0.525";
+                    position_min = "-1.5";
+                    position_endstop = "-1.18";
                     position_max = "250";
                   };
 
@@ -396,15 +406,14 @@ inputs: {
                   { step_pin = "P2.13";
                     dir_pin = "!P0.11";
                     enable_pin = "!P2.12";
-                    #step_distance: .010526
-                    step_distance = ".006973475006276127";
-                    #step_distance: .013946950012552254
+                    rotation_distance = "21.646";
+                    microsteps = "16";
                     nozzle_diameter = "0.400";
                     filament_diameter = "1.750";
                     heater_pin = "P2.7";
-                    sensor_type = "EPCOS 100K B57560G104F";
+                    sensor_type = "PT1000";
                     sensor_pin = "P0.24";
-                    control = "pid";
+                    control = "pid"; 
                     pid_Kp = "22.2";
                     pid_Ki = "1.08";
                     pid_Kd = "114";
@@ -462,7 +471,6 @@ inputs: {
 
                 "tmc2208 stepper_x" =
                   { uart_pin = "P1.17";
-                    microsteps = "16";
                     run_current = "0.475";
                     hold_current = "0.275";
                     stealthchop_threshold = "250";
@@ -470,7 +478,6 @@ inputs: {
 
                 "tmc2208 stepper_y" =
                   { uart_pin = "P1.15";
-                    microsteps = "16";
                     run_current = "0.475";
                     hold_current = "0.275";
                     stealthchop_threshold = "250";
@@ -478,7 +485,6 @@ inputs: {
 
                 "tmc2208 stepper_z" =
                   { uart_pin = "P1.10";
-                    microsteps = "16";
                     run_current = "0.475";
                     hold_current = "0.275";
                     stealthchop_threshold = "30";
@@ -486,7 +492,6 @@ inputs: {
 
                 "tmc2208 extruder" =
                   { uart_pin = "P1.8";
-                    microsteps = "16";
                     run_current = "0.560";
                     hold_current = "0.360";
                     stealthchop_threshold = "5";
@@ -527,104 +532,103 @@ inputs: {
                 #   };
 
                 "gcode_macro M600" =
-                  { default_parameter_X = 50;
-                    default_parameter_Y = 0;
-                    default_parameter_Z = 10;
-                    gcode = indentGcode
+                  { gcode = indentGcode
                       ''
-                      SAVE_GCODE_STATE NAME=M600_state
-                      PAUSE
-                      G91
-                      G1 E-.8 F2700
-                      G1 Z{Z}
-                      G90
-                      G1 X{X} Y{Y} F3000
-                      G91
-                      G1 E-50  F1000
-                      G1 X0.1  F3000
-                      G1 E-50  F1000
-                      G1 X-0.1 F3000
-                      G1 E-50  F1000
-                      G1 X0.1  F3000
-                      G1 E-50  F1000
-                      G1 X-0.1 F3000
-                      G1 E-50  F1000
-                      G1 X0.1  F3000
-                      G1 E-50  F1000
-                      G1 X-0.1 F3000
-                      RESTORE_GCODE_STATE NAME=M600_state
-                    '';
+                        {% set x = params.X|default(50)|float %}
+                        {% set y = params.Y|default(0)|float %}
+                        {% set z = params.Z|default(10)|float %}
+                        SAVE_GCODE_STATE NAME=M600_state
+                        PAUSE
+                        G91
+                        G1 E-.8 F2700
+                        G1 Z{z}
+                        G90
+                        G1 X{x} Y{y} F3000
+                        G91
+                        G1 E-50  F1000
+                        G1 X0.1  F3000
+                        G1 E-50  F1000
+                        G1 X-0.1 F3000
+                        G1 E-50  F1000
+                        G1 X0.1  F3000
+                        G1 E-50  F1000
+                        G1 X-0.1 F3000
+                        G1 E-50  F1000
+                        G1 X0.1  F3000
+                        G1 E-50  F1000
+                        G1 X-0.1 F3000
+                        RESTORE_GCODE_STATE NAME=M600_state
+                      '';
                   };
 
                 "gcode_macro CANCEL_PRINT" = {
                   rename_existing = "BASE_CANCEL_PRINT";
                   gcode = indentGcode
                     ''
-                    TURN_OFF_HEATERS
-                    CLEAR_PAUSE
-                    SDCARD_RESET_FILE
-                    BASE_CANCEL_PRINT
-                  '';
+                      TURN_OFF_HEATERS
+                      CLEAR_PAUSE
+                      SDCARD_RESET_FILE
+                      BASE_CANCEL_PRINT
+                    '';
                 };
 
 
                 "gcode_macro PARK_WAIT" =
-                  { # Park positions
-                    default_parameter_X = "0";
-                    default_parameter_Y = "230";
-                    default_parameter_Z = "10";
-                    default_parameter_E = "20";
-
-                    # Wait time in milliseconds
-                    default_parameter_MILLIS = "5";
-                    gcode = indentGcode
+                  { gcode = indentGcode
                       ''
-                      SAVE_GCODE_STATE NAME=PAUSE_state
-                      G91
-                      G1 E-{E} F2100
-                      G1 Z{Z}
-                      G90
-                      G1 X{X} Y{Y} F6000
+                        {% set x = params.X|default(0)|float %}
+                        {% set y = params.Y|default(230)|float %}
+                        {% set z = params.Z|default(10)|float %}
+                        {% set e = params.Z|default(20)|float %}
+                        {% set millis = params.MILLIS|default(5)|float %}
 
-                      G4 P{MILLIS}
+                        SAVE_GCODE_STATE NAME=PAUSE_state
+                        G91
+                        G1 E-{e} F2100
+                        G1 Z{z}
+                        G90
+                        G1 X{x} Y{y} F6000
 
-                      G91
-                      G1 E{E} F2100
-                      G90
-                      RESTORE_GCODE_STATE NAME=PAUSE_state MOVE=1
-                    '';
+                        G4 P{millis}
+
+                        G91
+                        G1 E{e} F2100
+                        G90
+                        RESTORE_GCODE_STATE NAME=PAUSE_state MOVE=1
+                      '';
                   };
 
                 "gcode_macro PAUSE" =
                   { rename_existing = "BASE_PAUSE";
-                    default_parameter_X = "0    #edit to your park position";
-                    default_parameter_Y = "230    #edit to your park position";
-                    default_parameter_Z = "10     #edit to your park position";
-                    default_parameter_E = "20      #edit to your retract length";
                     gcode = indentGcode
                       ''
-                      SAVE_GCODE_STATE NAME=PAUSE_state
-                      BASE_PAUSE
-                      G91
-                      G1 E-{E} F2100
-                      G1 Z{Z}
-                      G90
-                      G1 X{X} Y{Y} F6000
-                    '';
+                        {% set x = params.X|default(0)|float %}
+                        {% set y = params.Y|default(230)|float %}
+                        {% set z = params.Z|default(10)|float %}
+                        {% set e = params.E|default(20)|float %}
+
+                        SAVE_GCODE_STATE NAME=PAUSE_state
+                        BASE_PAUSE
+                        G91
+                        G1 E-{e} F2100
+                        G1 Z{z}
+                        G90
+                        G1 X{x} Y{y} F6000
+                      '';
                   };
 
                 "gcode_macro RESUME" =
                   { rename_existing = "BASE_RESUME";
-                    # Printer retract length;
-                    default_parameter_E = "5";
                     gcode = indentGcode
                       ''
-                      G91
-                      G1 E{E} F2100
-                      G90
-                      RESTORE_GCODE_STATE NAME=PAUSE_state MOVE=1
-                      BASE_RESUME
-                    '';
+                        {% set e = params.Z|default(20)|float %}
+
+                        G91
+                        G1 E{e} F2100
+                        G90
+                        RESTORE_GCODE_STATE NAME=PAUSE_state MOVE=1
+                        BASE_RESUME
+                      '';
                   };
 
                 "gcode_macro PRIME_LINE" =
@@ -648,8 +652,7 @@ inputs: {
                       # Use absolute coordinates
                       G90
                       # Reset the G-Code Z offset (adjust Z offset if needed)
-                      # SET_GCODE_OFFSET Z=0.800
-                      # 0.230
+                      SET_GCODE_OFFSET Z=-0.30
                       # Home the printer
                       G28
                       # Prime line

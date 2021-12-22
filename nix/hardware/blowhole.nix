@@ -17,7 +17,7 @@ in {
         "nvme"
       ];
       zfs.enableUnstable = true;
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = pkgs.zfsUnstable.latestCompatibleLinuxPackages;
     };
 
     fileSystems = {
