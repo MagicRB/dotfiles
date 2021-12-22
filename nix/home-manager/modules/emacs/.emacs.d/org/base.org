@@ -20,16 +20,6 @@ https://github.com/alphapapa/org-web-tools
       :config
       (elcord-mode)))
 
-  (when (not (string= (system-name) "localhost"))
-    (use-package tree-sitter
-      :straight t
-      :after (tree-sitter-langs)
-      :config
-      (global-tree-sitter-mode)
-      (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-    (use-package tree-sitter-langs
-      :straight t))
-
   (use-package pdf-tools
     :straight t
     :hook (('TeX-mode-hook . visual-line-mode))

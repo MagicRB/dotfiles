@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       ba430294-f5ee-4bf7-b763-e7674f8e52ff
+:END:
+#+title: Tree Sitter
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+This is an Emacs Lisp binding for tree-sitter, an incremental parsing library. It requires Emacs 25.1 or above, built with dynamic module support.
+#+END_QUOTE
+
+#+BEGIN_SRC emacs-lisp
+  (use-package tree-sitter
+    :straight t
+    :after (tree-sitter-langs)
+    :config
+    (global-tree-sitter-mode)
+    (setq tree-sitter-load-path '("~/.emacs.d/treesitter-grammars")
+          tree-sitter-major-mode-language-alist
+          '((haskell-mode . haskell)
+            (sh-mode . bash)
+            (emacs-lisp-mode . elisp)
+            (c++-mode . cpp)
+            (c-mode . c)
+            (css-mode . css)
+            (hcl-mode . hcl)
+            (json-mode . json)
+            (nix-mode . nix)
+            (php-mode . php)
+            (python-mode . python)
+            (rustic-mode . rust)))
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+#+END_SRC

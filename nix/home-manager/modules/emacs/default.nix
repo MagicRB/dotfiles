@@ -79,6 +79,12 @@ in
         source = ./.emacs.d/lisp;
         recursive = true;
       };
+      ".emacs.d/mu4e-contexts" = {
+        source = secret.emacs.mu4eContexts;
+      };
+      ".emacs.d/treesitter-grammars" = {
+        source = pkgs.tree-sitter.withPlugins (p: builtins.attrValues p);
+      };
     };
   };
 }
