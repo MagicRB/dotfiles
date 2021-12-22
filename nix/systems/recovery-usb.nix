@@ -10,16 +10,7 @@ inputs: {
           imports = [ ../home-manager/modules/default.nix ];
 
           magic_rb = {
-            pins = {
-              inherit (inputs)
-                nixpkgs
-                nixpkgs-unstable
-                nixpkgs-master
-
-                home-manager
-                nixng
-                fenix;
-            };
+            pins = inputs;
             config = {
               allowUnfree = true;
             };
@@ -34,16 +25,7 @@ inputs: {
           home.stateVersion = "20.09";
         };
       magic_rb = {
-        pins = {
-          inherit (inputs)
-            nixpkgs
-            nixpkgs-unstable
-            nixpkgs-master
-
-            home-manager
-            nixng
-            fenix;
-        };
+        pins = inputs;
         config = {
           allowUnfree = true;
         };

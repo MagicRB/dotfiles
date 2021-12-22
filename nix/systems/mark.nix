@@ -4,9 +4,7 @@ inputs: {
   # hm."main" = import ../home-manager/profiles/mark.nix;
 
   modules = [
-    ../hardware/default.nix # manual
-    ../nixos-modules/pin-nixpkgs.nix # manual
-    ../nixos-modules/main.nix # auto
+    ../nixos-modules/default.nix
   ] ++ [
     ({ pkgs, config, ... }: {
       magic_rb = {
