@@ -3,6 +3,13 @@ with lib;
 let
   cfg = config.magic_rb.packageCollections.wine;
   inherit (config.magic_rb.pkgs) nixpkgs-unstable;
+
+  combineWines = wines:
+    map (wine: pkgs.writeShellScriptBin wine.name
+      ''
+        ${wine}/bin/wine "$@"
+      ''
+    ) wines;
 in
 {
   options.magic_rb.packageCollections.wine = {
@@ -12,8 +19,8 @@ in
   config = mkIf cfg.enable {
     home.packages = with pkgs; [
       winetricks
-    ] ++ (with nixpkgs-unstable; [
-      wineWowPackages.staging
+    ] ++ combineWines (with nixpkgs-unstable; [
+      wine-tkg wineWowPackages.staging
     ]);
   };
 }
