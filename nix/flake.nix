@@ -1,11 +1,11 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-21.05";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-21.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs?ref=master";
 
     home-manager = {
-      url = "github:nix-community/home-manager?ref=release-21.05";
+      url = "github:nix-community/home-manager?ref=release-21.11";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
@@ -54,19 +54,29 @@
       flake = false;
     };
 
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     #  PACKAGES
+
+    nix-gaming = {
+      url = "github:fufexan/nix-gaming";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
 
     ## Emacs
     emacs-overlay = {
-      url = "git+https://github.com/nix-community/emacs-overlay";
+      url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     emacs = {
-      url = "github:flatwhatson/emacs?ref=pgtk-nativecomp";
+      url = "github:emacs-mirror/emacs";
       flake = false;
     };
     vtermModule = {
-      url = "git+https://github.com/akermu/emacs-libvterm";
+      url = "github:akermu/emacs-libvterm";
       flake = false;
     };
   };
@@ -75,6 +85,7 @@
             , nixpkgs
             , nixpkgs-unstable
             , home-manager
+            , deploy-rs
             , ...
             }@inputs:
     let
@@ -92,7 +103,7 @@
               [ inputs.poetry2nix.overlay
               ];
           };
-    in {
+    in with nixpkgs.lib; {
       nixosConfigurations.omen = nixosSystem (import ./systems/omen.nix inputs);
       omen = self.nixosConfigurations.omen.config.system.build.toplevel;
 
@@ -127,7 +138,7 @@
               pkgs = pkgsForSystem system;
             in
               pkgs.linkFarm "allSystems-${system}"
-                (pkgs.lib.mapAttrsToList (n: v: { name = n; path = v; }) attrs);
+                (mapAttrsToList (n: v: { name = n; path = v; }) attrs);
           nixos = name: self.nixosConfigurations.${name}.config.system.build.toplevel;
           hm = name: self.homeConfigurations.${name}.activationPackage;
         in
@@ -141,7 +152,7 @@
                 toothpick = nixos "toothpick";
                 mark = nixos "mark";
                 recoveryUsb = nixos "recoveryUsb";
-                blowhole = hm "blowhole";
+                blowhole = nixos "blowhole";
               };
 
           aarch64-linux = linkFarm "aarch64-linux"
@@ -153,14 +164,17 @@
       overlays = {
         emacs = import ./overlays/emacs-ng/default.nix inputs;
         emacsclient-remote = import ./overlays/emacsclient-remote;
-        gpg-key = import ./overlays/gpg-key inputs.nixng.lib;
-        screenshot = import ./overlays/screenshot inputs.nixng.lib;
+        gpg-key = import ./overlays/gpg-key;
+        screenshot = import ./overlays/screenshot;
         easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix;
-        mainsail = import ./overlays/mainsail inputs.nixng.lib;
+        mainsail = import ./overlays/mainsail;
         discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
         winetricks = import ./overlays/winetricks;
         dwarffs = inputs.dwarffs.overlay;
-        nyxt = import ./overlays/nyxt inputs.nyxt.lib;
+        deploy-rs = deploy-rs.overlay;
+        # nyxt = import ./overlays/nyxt inputs.nyxt.lib;
+        nix-gaming = final: prev: foldl (acc: x: acc // (x final prev)) {} (mapAttrsToList (_: v: v) inputs.nix-gaming.overlays);
+        nixng = inputs.nixng.overlay;
       };
 
       nixosModules = {
@@ -176,7 +190,7 @@
               pkgs: name: package:
               (import pkgs { inherit system;
                              overlays =
-                               nixpkgs.lib.mapAttrsToList
+                               mapAttrsToList
                                  (_: v: v) self.overlays;
                            } ).magic_rb."${package}";
             mkPkg' = mkPkg'' nixpkgs-unstable;
@@ -205,5 +219,34 @@
                 (import ./extra/qmk/sp84.nix { inherit (inputs) qmk; }) {}).shell;
           }
       );
+
+      deploy.nodes = {
+        blowhole = {
+          hostname = "blowhole.in.redalder.org";
+          sshOpts = [ "-t" ];
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.blowhole;
+          };
+        };
+
+        toothpick = {
+          hostname = "redalder.org";
+          sshOpts = [ "-t" ];
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.toothpick;
+          };
+        };
+
+        tweedledum = {
+          hostname = "tweedledum.redalder.org";
+          sshOpts = [ "-t" ];
+          profiles.system = {
+            user = "root";
+            path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.tweedledum;
+          };
+        };
+      };
     };
 }
