@@ -397,8 +397,8 @@ inputs: {
                     rotation_distance = "8";
                     microsteps = "16";
                     endstop_pin = "P1.25";  # P1.24 for Z-max"
-                    position_min = "-1.5";
-                    position_endstop = "-1.18";
+                    position_min = "-4.5";
+                    position_endstop = "-3.5";
                     position_max = "250";
                   };
 
@@ -649,13 +649,16 @@ inputs: {
                 "gcode_macro START_PRINT" =
                   { gcode = indentGcode
                     ''
+                      {% set z = params.Z|default(0)|float %}
+
                       # Use absolute coordinates
                       G90
                       # Reset the G-Code Z offset (adjust Z offset if needed)
-                      SET_GCODE_OFFSET Z=-0.30
+                      SET_GCODE_OFFSET Z={z}
                       # Home the printer
                       G28
                       # Prime line
+                      G0 Z0
                       PRIME_LINE
                     '';
                   };
