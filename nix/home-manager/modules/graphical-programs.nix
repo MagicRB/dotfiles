@@ -19,16 +19,8 @@ in
       mpv
       slack
       ungoogled-chromium
-      (discord-canary-system.override rec {
-        isWayland = false;
-        version = "0.0.131";
-        src = fetchurl {
-          url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-          sha256 = "sha256-ZYPdE02Jq79LmvXu7KIJFugJX++Nnj0Og/mBuaP/+SA";
-        };
-      })
+      discord
       element-desktop
-      nyxt
     ];
   };
 }
