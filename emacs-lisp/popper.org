@@ -15,6 +15,7 @@ Enable ~popper~, a better version of ~popwin~, which might actually work. It gro
           '("\\*Messages\\*"
             "\\*Warnings\\*"
             "Output\\*$"
+            "\\*HS-Error\\*"
             help-mode
             compilation-mode
             rustic-compilation-mode

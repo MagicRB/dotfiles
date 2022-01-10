@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       9879bd30-7f42-433a-aaa4-269f5ef110fb
+:END:
+#+title: Elixir
+#+filetags: emacs-load
+
+#+BEGIN_QUOTE
+Elixir is a dynamic, functional language for building scalable and maintainable applications.
+#+END_QUOTE
+
+First we need a Elixir major mode.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elixir-mode
+    :straight t
+#+END_SRC
+
+Then to make [[id:cc668372-8d95-461b-a7c6-3e2b51de3f40][LSP]] work, we hook it onto ~elixir-mode~.
+
+#+BEGIN_SRC emacs-lisp
+  :hook (elixir-mode-hook . lsp)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  )
+#+END_SRC

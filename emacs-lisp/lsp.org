@@ -35,13 +35,12 @@ This just requires hooking lsp onto ~c-mode~ and ~c++-mode~.
 Enable ~haskell-mode~, and ~lsp-haskell~
 
 #+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
-    :straight t
-    :config
-    (add-hook 'haskell-mode-hook #'lsp)
-    (add-hook 'haskell-literate-mode-hook #'lsp))
-  (use-package lsp-haskell
-    :straight t)
+    (use-package haskell-mode
+      :straight t
+      :hook ((haskell-mode haskell-literate-mode) . #'lsp)
+      :hook ((haskell-mode haskell-literate-mode) . interactive-haskell-mode))
+    (use-package lsp-haskell
+      :straight t)
 #+END_SRC
 
 Disable the ~haskell-stack-ghc~ flycheck checker, it's not used when lsp starts, but it does get loaded just before it. Loading and unloading it is slow and causes Emacs to freeze for a few seconds, so just disable it.

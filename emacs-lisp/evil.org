@@ -64,13 +64,21 @@ This requires ~general.el~.
              :predicate 'magic_rb-koy-compat-p
              :keymaps 'magic_rb-koy-evil-mode-map
              "t" 'evil-backward-char
+             "T" 'evil-first-non-blank
              "r" 'evil-previous-visual-line
              "n" 'evil-next-visual-line
              "s" 'evil-forward-char
+             "S" 'evil-end-of-line
+
              "h" 'evil-find-char-to
+             "H" 'evil-find-char-to-backward
              "j" 'evil-replace
+             "J" 'evil-join
              "k" 'evil-search-next
-             "l" 'evil-substitute)
+             "K" 'evil-search-previous
+             "l" 'evil-substitute
+             "L" 'evil-change-whole-line)
+    :general
     (:states '(insert)
              :predicate 'magic_rb-koy-compat-p
              :keymaps 'magic_rb-koy-evil-mode-map
