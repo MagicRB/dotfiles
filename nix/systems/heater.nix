@@ -39,7 +39,6 @@ inputs: {
                   "3dPrinting".enable = true;
                   cmdline.enable = true;
                   graphical.enable = true;
-                  rust.enable = true;
                   webdev.enable = true;
                   wine.enable = true;
                 };

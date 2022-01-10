@@ -14,11 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
     yusdacra-dotfiles = {
       url = "github:yusdacra/nixos-config";
       flake = false;
