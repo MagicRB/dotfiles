@@ -11,7 +11,7 @@ in
 
   config = mkIf cfg.enable {
     home.packages = [
-      nixpkgs-unstable.multimc
+      (nixpkgs-unstable.multimc.override { jdk = pkgs.jdk11; })
     ];
   };
 }
