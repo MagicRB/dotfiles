@@ -54,6 +54,9 @@ inputs: {
 
           services.nfs.server = {
             enable = true;
+            lockdPort = 4001;
+            mountdPort = 4002;
+            statdPort = 4000;
           };
 
           systemd.services.consul.preStart =
@@ -177,6 +180,10 @@ inputs: {
                       path = "/mnt/jellyfin-mount";
                     };
 
+                    host_volume."sonoff" = {
+                      path = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_4c004e9c53c9eb118a9f8b4f1d69213e-if00-port0";
+                    };
+
                     enabled = true;
                   };
 
@@ -191,7 +198,6 @@ inputs: {
                       allow_privileged = true;
                     };
                   };
-
 
                   disable_update_check = true;
                   datacenter = "homelab-1";
@@ -709,12 +715,14 @@ inputs: {
                ## Vault
                8200
                ## NFS
-               2049
+               111  2049 4000 4001 4002 20048
              ];
            allowedUDPPorts =
              [ ## Consul
                8301 # LAN serf
                8302 # WAN serf
+               ## NFS
+               111  2049 4000 4001 4002 20048
              ];
            allowedUDPPortRanges =
              [ { from = 21000;
