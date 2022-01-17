@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       3709b269-1b66-44c9-b282-c97f48716c52
+:END:
+#+title: Racket
+#+filetags: emacs-load
+
+#+BEGIN_SRC emacs-lisp
+  (use-package racket-mode
+    :straight t)
+#+END_SRC
+
+#+RESULTS:
