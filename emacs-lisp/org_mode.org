@@ -27,6 +27,14 @@ Increase the size of headings, in my personal opinion this makes the headings st
    '(org-level-5 ((t (:inherit outline-5 :height 1.05)))))
 #+END_SRC
 
+* Org Mark Ring
+
+To go back to the previous mark, very useful with [[id:18476d68-cccb-48f4-aa77-caefe213d8bd][Org Roam]].
+
+#+BEGIN_SRC emacs-lisp :results none
+  (general-def org-mode-map "C-c b" 'org-mark-ring-goto)
+#+END_SRC
+
 * Babel
 
 Enable =tangle on save=, big thanks to Diego Zamboni for his amazing booklet about /[[https://leanpub.com/lit-config/read][Literate Configuration]]/.
