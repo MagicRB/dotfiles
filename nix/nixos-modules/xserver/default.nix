@@ -84,7 +84,7 @@ in
     (mkIf cfg.qwertyNeo2 {
       services.xserver = {
         layout = "de,de";
-        xkbVariant = "neo_qwerty,koy";
+        xkbVariant = "koy,neo_qwerty";
         xkbOptions = "ctrl:swap_lalt_lctl_lwin, altwin:menu_win, grp:sclk_toggle";
 
         extraLayouts."neo_qwerty" = {

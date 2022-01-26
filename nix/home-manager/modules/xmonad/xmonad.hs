@@ -59,7 +59,7 @@ myModMask       = mod4Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = map show [1..9] ++ map show [0]
+myWorkspaces    = map show [0..9]
 
 toggleFloat = withFocused (\windowId -> do
                               { floats <- gets (W.floating . windowset);
@@ -76,13 +76,10 @@ myKeymap c =
     [ ("M-S-<Return>", spawn "alacritty")
 
     -- launch dmenu
-    , ("M-p", spawn "@dmenu_run@")
-
-    -- launch gmrun
-    , ("M-S-p", spawn "gmrun")
+    , ("M-ß", spawn "@dmenu_run@")
 
     -- close focused window
-    , ("M-S-c", io (exitWith ExitSuccess))
+    , ("M-S-q", io (exitWith ExitSuccess))
 
      -- Rotate through the available layout algorithms
     , ("M-<Space>", sendMessage NextLayout)
@@ -91,43 +88,43 @@ myKeymap c =
     -- , ("M-S-Space", setLayout $ XMonad.layoutHook c)
 
     -- Resize viewed windows to the correct size
-    , ("M-n", refresh)
+    , ("M-b", refresh)
 
     -- Move focus to the next window
     , ("M-<Tab>", windows W.focusDown)
 
     -- Move focus to the next window
-    , ("M-l", windows W.focusDown)
+    , ("M-n", windows W.focusDown)
 
     -- Move focus to the previous window
-    , ("M-k", windows W.focusUp)
+    , ("M-r", windows W.focusUp)
 
     -- Move focus to the master window
-    , ("M-m", windows W.focusMaster)
+    , ("M-p", windows W.focusMaster)
 
     -- Swap the focused window and the master window
     , ("M-<RET>", windows W.swapMaster)
 
     -- Swap the focused window with the next window
-    , ("M-S-l", windows W.swapDown)
+    , ("M-S-n", windows W.swapDown)
 
     -- Swap the focused window with the previous window
-    , ("M-S-k", windows W.swapUp)
+    , ("M-S-r", windows W.swapUp)
 
     -- Shrink the master area
-    , ("M-j", sendMessage Shrink)
+    , ("M-t", sendMessage Shrink)
 
     -- Expand the master area
-    , ("M-;", sendMessage Expand)
+    , ("M-s", sendMessage Expand)
 
     -- Push window back into tiling
-    , ("M-t", toggleFloat)
+    , ("M-y", toggleFloat)
 
     -- Increment the number of windows in the master area
-    , ("M-,", sendMessage (IncMasterN 1))
+    , ("M-w", sendMessage (IncMasterN 1))
 
     -- Deincrement the number of windows in the master area
-    , ("M-.", sendMessage (IncMasterN (-1)))
+    , ("M-m", sendMessage (IncMasterN (-1)))
 
     -- , ("M-b", spawn ("pkill xmobar && " ++ xmobarCmd))
     , ("<Print>", spawn "sleep 0.1 ; @screenshot@ select")
@@ -141,10 +138,10 @@ myKeymap c =
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
-    , ("M-S-q", kill)
+    , ("M-S-k", kill)
 
     -- Restart xmonad
-    , ("M-q", spawn "xmonad --recompile; xmonad --restart")
+    , ("M-k", spawn "xmonad --recompile; xmonad --restart")
     ]
     ++
 
@@ -152,8 +149,8 @@ myKeymap c =
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
     --
-    [("M-"++m++[k], windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces c) "0123456789"
+    [("M-" ++ m ++ [k], windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces c) "1234567890"
         , (f, m) <- [(W.view, ""), (W.shift, "S-")]]
     ++
 
@@ -162,7 +159,7 @@ myKeymap c =
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
     [("M-"++m++[key], screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip "wer" [0..]
+        | (key, sc) <- zip ".o," [0..]
         , (f, m) <- [(W.view, ""), (W.shift, "S-")]]
 
 
