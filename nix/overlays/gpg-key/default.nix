@@ -5,7 +5,7 @@ final: prev:
       name = "gpg-key";
       file = ./gpg-key;
       substitutes = with prev; {
-        inherit cryptsetup busybox findutils;
+        inherit cryptsetup busybox findutils gnupg sudo;
       };
     };
 

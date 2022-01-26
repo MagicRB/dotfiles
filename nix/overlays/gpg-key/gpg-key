@@ -1,6 +1,6 @@
  # -*- mode: shell-script; -*- 
 
-export PATH=@findutils@/bin:@busybox@/bin:@cryptsetup@/bin
+export PATH=@findutils@/bin:@busybox@/bin:@cryptsetup@/bin:@gnupg@/bin:@sudo@/bin
 
 command="$1"
 
@@ -13,14 +13,17 @@ fi
 set -e
 case "$command" in
      "open")
-	 cryptsetup open /dev/disk/by-label/secret secret
+	 cryptsetup open /dev/disk/by-label/addhe addhe
 	 mkdir -p /mnt/key
 
-	 mount /dev/mapper/secret /mnt/key
+	 mount /dev/mapper/addhe /mnt/key
+	 sudo -u $SUDO_USER gpg-agent --daemon
      ;;
      "close")
+	 sudo -u $SUDO_USER pkill gpg-agent
+
 	 umount /mnt/key
-	 cryptsetup close secret
+	 cryptsetup close addhe
 
 	 rm -r /mnt/key
 	 if [ -n "$(find /mnt -maxdepth 0 -empty)" ]
