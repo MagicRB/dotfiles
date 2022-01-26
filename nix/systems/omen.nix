@@ -133,10 +133,7 @@ inputs: {
 
       security.pki.certificates = [ (builtins.readFile ../redalder.org.crt) ];
 
-      virtualisation.podman = {
-        enable = true;
-        dockerCompat = true;
-      };
+      virtualisation.docker.enable = true;
 
       time.timeZone = "Europe/Bratislava";
       system.stateVersion = "20.09";
