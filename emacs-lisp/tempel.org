@@ -1,0 +1,111 @@
+:PROPERTIES:
+:ID:       a0514202-b2ef-41a4-9d77-01efaa7e8d64
+:END:
+#+title: Tempel
+#+filetags: emacs-load
+
+#+begin_quote
+Tempel is a tiny template package for Emacs, which uses the syntax of the Emacs Tempo library. Tempo is an ancient temple of the church of Emacs. It is 27 years old, but still in good shape since it successfully resisted change over the decades. However it may look a bit dusty here and there. Therefore we present to you, Tempel, a modernized implementation of Tempo, in the form of three commands.
+#+end_quote
+
+#+begin_src emacs-lisp :noweb yes :exports none
+  (use-package tempel
+    :straight '(tempel :type git :host github :repo "minad/tempel")
+    :config
+    <<tempel-file>>
+    :init
+    <<tempel-hooks>>
+    <<tempel-keymaps>>)
+#+END_SRC
+
+Set the template file to the result of tangling [[id:3e8f0e02-dbfe-4f34-9b00-8b7ecd0a238d][Tempel - Templates]].
+
+#+name: tempel-file
+#+begin_src emacs-lisp
+  (setq tempel-file (expand-file-name "~/roam/emacs-lisp/templates.lisp"))
+#+end_src
+
+Hook ~tempel-capf~ on both ~prog-mode~ and ~text-mode~.
+
+#+name: tempel-hooks
+#+begin_src emacs-lisp
+  (defun tempel-setup-capf ()
+    (add-hook 'completion-at-point-functions #'tempel-expand -1 'local))
+
+  (add-hook 'prog-mode-hook 'tempel-setup-capf)
+  (add-hook 'text-mode-hook 'tempel-setup-capf)
+#+end_src
+
+Define keymaps, the defaults are unnecessarily hard to trigger.
+
+#+name: tempel-keymaps
+#+begin_src emacs-lisp
+  (general-define-key
+    :keymaps '(insert normal)
+    "C-n" 'nil
+    "C-p" 'nil)
+  (general-define-key
+    :keymaps 'tempel-map
+    "M-{" nil
+    "M-}" nil
+    "C-n" 'tempel-next
+    "C-p" 'tempel-previous)
+#+end_src
+
+~lsp-mode~ completely wipes ~completion-at-point-functions~, so we need re-add ~cape~ after it removes everything.
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :defer t
+    :after tempel
+    :config
+    (add-hook 'lsp-mode-hook 'tempel-setup-capf))
+#+end_src
+
+Fix LSP not getting notified about changes, can be fixed by notifying it at the of template expansion.
+
+#+begin_src emacs-lisp
+  (advice-add
+   'tempel--disable
+   :before
+   (lambda (&rest r)
+     (when lsp-mode
+       (let* ((region-start (tempel--beginning))
+              (region-end (tempel--end)))
+         (lsp-on-change region-start region-end (- region-end region-start))))))
+#+end_src
+
+To setup a post template return point, use ~(p (ignore (setq tempel-retpoint (point))))~ in a template.
+
+#+begin_src emacs-lisp
+  (defvar tempel-retpoint nil)
+  (advice-add
+   'tempel--disable
+   :before
+   (lambda (&rest r)
+     (when tempel-retpoint
+       (goto-char tempel-retpoint)
+       (setq tempel-retpoint nil))))
+#+end_src
+
+To allow for ~=>~ as template keys, ~'symbol~ won't work, but ~'evil-word~ will.
+
+#+begin_src emacs-lisp
+  (defun tempel-expand (&optional interactive)
+    "Expand exactly matching template name at point.
+  If INTERACTIVE is nil the function acts like a capf."
+    (interactive (list t))
+    (if interactive
+        (tempel--interactive #'tempel-expand)
+      (when-let* ((templates (tempel--templates))
+                  (bounds (bounds-of-thing-at-point 'evil-word))
+                  (name (buffer-substring-no-properties
+                         (car bounds) (cdr bounds)))
+                  (sym (intern-soft name))
+                  (template (assq sym templates)))
+        (setq templates (list template))
+        (list (car bounds) (cdr bounds)
+              (tempel--completion-table templates)
+              :exclusive 'no
+              :exit-function (apply-partially #'tempel--exit templates nil)))))
+#+end_src

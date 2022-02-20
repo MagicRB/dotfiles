@@ -1,0 +1,96 @@
+:PROPERTIES:
+:ID:       a4eab1d7-8928-438e-9ccc-1e3a65765534
+:END:
+#+title: Corfu
+#+filetags: emacs-load
+
+#+begin_quote
+Corfu enhances completion at point with a small completion popup. The current candidates are shown in a popup below or above the point. Corfu is the minimalistic completion-in-region counterpart of the Vertico minibuffer UI.
+#+end_quote
+
+#+begin_src emacs-lisp
+    (use-package corfu
+      :straight t
+      :custom
+      (corfu-separator ?\s) ;; M-SPC
+      :general
+      ("C-c c" 'completion-at-point)
+      :init
+      (corfu-global-mode))
+#+end_src
+
+* Company
+
+#+begin_src emacs-lisp :noweb yes :exports none
+  (use-package company
+    :defer t
+    :init
+    <<company-global-modes>>)
+#+end_src
+
+Disable ~company~ globally, because company enables itself...
+
+#+name: company-init
+#+begin_src emacs-lisp
+  (setq company-global-modes nil)
+#+end_src
+
+* LSP Mode
+
+#+begin_src emacs-lisp :noweb yes :exports none
+  (use-package lsp-mode
+    :defer t
+    :init
+    <<lsp-completion-provider>>)
+#+end_src
+
+Make ~lsp-mode~ not turn on ~company~ first thing after start, so annoying.
+
+#+name: lsp-completion-provider
+#+begin_src emacs-lisp
+  (setq lsp-completion-provider :none)
+#+end_src
+
+* Cape
+
+~cape~ provides useful ~capfs~, such as file and ispell completion, stuff that ~company~ has built-in.
+
+#+begin_src emacs-lisp :noweb yes :exports none
+  (use-package cape
+    :straight t
+    :after (corfu)
+    :init
+    <<cape-hooks>>)
+#+end_src
+
+Hook ~cape~ onto both ~text-mode~ and ~prog-mode~.
+
+#+name: cape-hooks
+#+begin_src emacs-lisp
+  (defun cape-setup-capf-prog ()
+    "Setup cape completions for prog-mode"
+    (cape-setup-capf))
+
+  (defun cape-setup-capf-text ()
+    "Setup cape completions for text-mode"
+    (add-hook 'completion-at-point-functions #'cape-ispell)
+    (cape-setup-capf))
+
+  (defun cape-setup-capf ()
+    "Setup cape completions"
+    (add-hook 'completion-at-point-functions #'cape-file)
+    (add-hook 'completion-at-point-functions #'cape-tex))
+
+  (add-hook 'prog-mode-hook 'cape-setup-capf-prog)
+  (add-hook 'text-mode-hook 'cape-setup-capf-text)
+#+end_src
+
+~lsp-mode~ completely wipes ~completion-at-point-functions~, so we need re-add ~cape~ after it removes everything.
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :defer t
+    :after cape
+    :config
+    (add-hook 'lsp-mode-hook 'cape-setup-capf))
+#+end_src

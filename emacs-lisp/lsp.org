@@ -43,7 +43,7 @@ Enable ~haskell-mode~, and ~lsp-haskell~
           lsp-haskell-plugin-import-lens-code-lens-on nil))
   (use-package lsp-haskell
     :straight t
-    :after lsp
+    :after lsp-mode
     :hook ((haskell-mode haskell-literate-mode) . #'lsp))
 #+END_SRC
 
