@@ -43,37 +43,6 @@ inputs: {
           home.stateVersion = "20.09";
         };
 
-      services.vault-agent = {
-        enable = true;
-        settings = {
-          vault = {
-            address = "https://${secret.network.ips.vault.dns}:8200";
-
-            client_cert = "/etc/vault-agent/client.crt";
-            client_key = "/etc/vault-agent/client.key";
-          };
-
-          auto_auth = {
-            method = [
-              {
-                "cert" = {
-                  name = "system-omen";
-                };
-              }
-            ];
-          };
-
-          template = [
-            {
-              source = pkgs.writeText "wg0.key.tpl" ''
-                {{ with secret "kv/data/systems/omen/wireguard" }}{{ .Data.data.private_key }}{{ end }}
-              '';
-              destination = "/var/secrets/wg0.key";
-            }
-          ];
-        };
-      };
-
       magic_rb = {
         optimisation.march = "skylake";
 
