@@ -280,7 +280,7 @@ inputs: {
             settings = {
               authorization = {
                 trusted_clients = with secret.network.ips;
-                  [ "127.0.0.1" heater edge.vpn
+                  [ "127.0.0.1" heater edge.vpn omen.vpn
                   ];
               };
 
@@ -404,15 +404,16 @@ inputs: {
                     microsteps = "16";
                     endstop_pin = "P1.25";  # P1.24 for Z-max"
                     position_min = "-4.5";
-                    position_endstop = "-3.5";
+                    position_endstop = "-2.875";
                     position_max = "250";
                   };
 
                 extruder =
                   { step_pin = "P2.13";
-                    dir_pin = "!P0.11";
+                    dir_pin = "P0.11";
                     enable_pin = "!P2.12";
-                    rotation_distance = "21.646";
+                    rotation_distance = "23.291";
+                    gear_ratio = "3:1";
                     microsteps = "16";
                     nozzle_diameter = "0.400";
                     filament_diameter = "1.750";
