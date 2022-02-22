@@ -43,7 +43,6 @@ inputs: {
             enableDocker = false;
             dropPrivileges = false;
 
-            package = config.magic_rb.pkgs.nixpkgs-master.nomad_1_1;
             extraPackages = with pkgs; [ consul glibc ];
 
             extraSettingsPaths = [ "/var/secrets/nomad.hcl" ];
@@ -355,13 +354,23 @@ inputs: {
               interfaces."wg0" =
                 {
                   postSetup = ''
-                ${pkgs.iptables}/bin/iptables -I FORWARD -i wg0 -o wg0 -j ACCEPT
-              '';
+                    ${pkgs.iptables}/bin/iptables -I FORWARD -i wg0 -o wg0 -j ACCEPT
+                  '';
 
                   postShutdown = ''
-                ${pkgs.iptables}/bin/iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT
-              '';
+                    ${pkgs.iptables}/bin/iptables -D FORWARD -i wg0 -o wg0 -j ACCEPT
+                  '';
                 } // config.magic_rb.secret.wireguard."toothpick";
+
+
+              interfaces."wg1" =
+                {
+                  postSetup = ''
+                  '';
+
+                  postShutdown = ''
+                  '';
+                } // config.magic_rb.secret.wireguard."toothpick-matej";
             };
 
             defaultGateway = "64.225.96.1";
@@ -384,6 +393,7 @@ inputs: {
                   ];
                 allowedUDPPorts =
                   [ 6666
+                    6668
                   ];
               };
 
