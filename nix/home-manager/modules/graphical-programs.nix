@@ -19,7 +19,13 @@ in
       mpv
       slack
       ungoogled-chromium
-      discord
+      (discord-canary.overrideAttrs ( old:
+        { src = pkgs.fetchurl
+          { url = "https://dl-canary.discordapp.net/apps/linux/0.0.134/discord-canary-0.0.134.tar.gz";
+            sha256 = "sha256-HyJa6lGcKMPKWffO/pnNcn8fDTJj6O4J8Y5RA23a1kM=";
+          };
+        }
+      ))
       element-desktop
     ];
   };
