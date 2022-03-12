@@ -30,7 +30,7 @@ inputs: {
               multimc.enable = false;
             };
             packageCollections = {
-              "3dPrinting".enable = false;
+              "3dPrinting".enable = true;
               cmdline.enable = true;
               graphical.enable = true;
               webdev.enable = false;
