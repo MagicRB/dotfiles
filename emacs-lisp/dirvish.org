@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       67919dd9-2aa0-4b89-8c96-0441a54e7b03
+:END:
+#+title: Dirvish
+#+filetags: emacs-load
+
+#+begin_src emacs-lisp
+  (use-package dirvish
+    :straight t)
+#+end_src
+
+#+RESULTS:

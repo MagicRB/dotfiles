@@ -38,6 +38,7 @@ in
                   [ krita
                     ripgrep
                     mu isync
+                    exa
                   ]);
             }).bundle;
     };

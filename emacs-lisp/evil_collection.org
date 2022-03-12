@@ -12,5 +12,6 @@ Evil collection is a package for compatilibity of 3rd party packages with [[id:9
   (use-package evil-collection
     :straight t
     :config
-    (with-eval-after-load 'mu4e (evil-collection-mu4e-setup)))
+    (with-eval-after-load 'mu4e (evil-collection-mu4e-setup))
+    (with-eval-after-load 'dired (evil-collection-dired-setup)))
 #+END_SRC

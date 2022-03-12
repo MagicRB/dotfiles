@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       484fd154-6f7c-4313-8f79-7b502b7a1c56
+:END:
+#+title: Dired
+#+filetags: emacs-load
+
+Dired is inclueded with Emacs since forever, I use a wrapper called [[id:67919dd9-2aa0-4b89-8c96-0441a54e7b03][dirvish]].
+
+#+begin_src emacs-lisp
+  (define-minor-mode magic_rb-koy-dired-mode
+    "Enable koy compatibility for Evil."
+    :lighter " koy"
+    :keymap (make-sparse-keymap)
+    (evil-normalize-keymaps))
+  (general-def
+    :predicate 'magic_rb-koy-compat-p
+    :keymaps 'magic_rb-koy-dired-mode-map
+    :states 'normal
+    "e" 'dired-find-file)
+  (add-hook 'dired-mode-hook 'magic_rb-koy-dired-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun magic_rb-dired-setup ()
+    "Setup dired"
+    (toggle-truncate-lines))
+  (add-hook 'dired-mode-hook 'magic_rb-dired-setup)
+#+end_src

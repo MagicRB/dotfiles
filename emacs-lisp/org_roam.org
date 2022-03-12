@@ -39,7 +39,7 @@ SQLite3 must be on Emacs' PATH!
     (setq org-roam-v2-ack t)
     :config
     (add-hook 'after-init-hook 'org-roam-setup)
-  
+
     ;; Add ignore for SyncThing
     (setq org-roam-file-exclude-regexp "\\.stversions")
 
@@ -52,8 +52,30 @@ SQLite3 must be on Emacs' PATH!
             ("d" "default" plain "%?"
              :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
-             :unnarrowed t))))
-  
+             :unnarrowed t)))
+
+    (defun magic_rb/org-roam-buffer-hook ()
+      (when (org-roam-buffer-p)
+        (make-local-variable 'org-link-frame-setup)
+        (add-to-list 'org-link-frame-setup '(file . find-file))))
+    (add-hook 'org-mode-hook 'magic_rb/org-roam-buffer-hook)
+
+    (defun magic_rb/org-roam-hook ()
+      (visual-line-mode))
+    (add-hook 'org-roam-mode-hook 'magic_rb/org-roam-hook))
+
+  (use-package shackle
+    :straight t
+    :init
+    (shackle-mode))
+
+  (with-eval-after-load 'shackle
+    (with-eval-after-load 'org-roam
+      (setq shackle-rules
+            '((org-roam-mode
+               :align right
+               :size 0.25
+               :popup t)))))
 #+END_SRC
 
 * Ref Capture
@@ -99,5 +121,3 @@ Lastly a bookmarklet in Firefox.
 #+BEGIN_SRC javascript
   javascript:location.href ='org-protocol://roam-ref?template=r&ref=' + encodeURIComponent(location.href) + '&title=' + encodeURIComponent(document.title) + '&body=' + encodeURIComponent(window.getSelection())
 #+END_SRC
-
-

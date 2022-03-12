@@ -38,17 +38,18 @@ Then we need a function to check whether a buffer contains any todo entry.
 #+BEGIN_SRC emacs-lisp :results none
   (defun vulpea-project-p ()
     "Return non-nil if current buffer has any todo entry.
-  
+
   TODO entries marked as done are ignored, meaning the this
   function returns nil if current buffer contains only completed
   tasks."
-    (org-element-map
-        (org-element-parse-buffer 'headline)
-        'headline
-      (lambda (h)
-        (eq (org-element-property :todo-type h)
-            'todo))
-      nil 'first-match))
+    (when (eq major-mode 'org-mode)
+      (org-element-map
+          (org-element-parse-buffer 'headline)
+          'headline
+        (lambda (h)
+          (eq (org-element-property :todo-type h)
+              'todo))
+        nil 'first-match)))
 #+END_SRC
 
 Then we need a function which will check whether the current buffer contains any TODOs and if so, then add a roam tag to that file, so that we can easily get a list of all files with TODOs.
@@ -59,7 +60,6 @@ Then we need a function which will check whether the current buffer contains any
 
     (defun vulpea-project-update-tag ()
       "Update PROJECT tag in the current buffer."
-      (message "%s" (vulpea-buffer-p))
       (when (and (not (active-minibuffer-window))
                  (vulpea-buffer-p))
         (message "2")
