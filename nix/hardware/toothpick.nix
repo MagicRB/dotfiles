@@ -10,7 +10,11 @@ in
   config = mkIf cfg (mkMerge
     [
       {
-        boot.loader.grub.devices = [ "/dev/vda" ];
+        boot.loader.grub =
+          { device = "/dev/vda";
+            enable = true;
+            version = 2;
+          };
         boot.initrd.kernelModules =
           [ "nvme" ];
         fileSystems."/" = { device = "/dev/vda1"; fsType = "ext4"; };
