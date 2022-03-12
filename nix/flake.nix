@@ -26,8 +26,18 @@
     };
 
     qmk = {
-      url = "https://github.com/qmk/qmk_firmware?ref=0.14.29";
+      url = "https://github.com/qmk/qmk_firmware?ref=0.16.5";
       type = "git";
+      flake = false;
+    };
+
+    bootloadHID = {
+      url = "github:whiteneon/bootloadHID";
+      flake = false;
+    };
+
+    hidapitester = {
+      url = "github:todbot/hidapitester";
       flake = false;
     };
     # ====================== --- ======================
@@ -157,6 +167,8 @@
         };
 
       overlays = {
+        bootloadHID = import ./overlays/bootloadHID inputs;
+        hidapitester = import ./overlays/hidapitester inputs;
         emacs = import ./overlays/emacs-ng/default.nix inputs;
         emacsclient-remote = import ./overlays/emacsclient-remote;
         gpg-key = import ./overlays/gpg-key;
@@ -192,6 +204,8 @@
             mkPkg = name: mkPkg'' nixpkgs-unstable name name;
           in
             {
+              bootloadHID = mkPkg "bootloadHID";
+              hidapitester = mkPkg "hidapitester";
               emacs = mkPkg "emacs";
               emacsclient-remote = mkPkg "emacsclient-remote";
               gpg-key = mkPkg "gpg-key";

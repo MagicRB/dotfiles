@@ -92,8 +92,8 @@ rec {
         repo = "qmk_firmware";
         fetchSubmodules = true;
         leaveDotGit = true;
-        sha256 = "sha256-Db+6slZR/5Rche9nrUAPKxIfYpmvoQmjMif8TI1OUqY=";
-        rev = "0.14.29";
+        sha256 = "sha256-bd+NOzwqQCDBw2FYYtGWpmja0tFhsfpdDFyZXlSM/U4=";
+        rev = "0.16.5";
       };
 
       configurePhase = ''

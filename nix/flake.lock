@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "bootloadHID": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1393653083,
+        "narHash": "sha256-JPcnPwgSFJE88YDGNTq6OsUjZjKx561pfnjxvyp2+1M=",
+        "owner": "whiteneon",
+        "repo": "bootloadHID",
+        "rev": "42c6f246b79949892268d2212e0347f27e01bd53",
+        "type": "github"
+      },
+      "original": {
+        "owner": "whiteneon",
+        "repo": "bootloadHID",
+        "type": "github"
+      }
+    },
     "deploy-rs": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -119,6 +135,22 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "hidapitester": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1646436950,
+        "narHash": "sha256-2KbNfvFStLz3eO1KKzndVmy3PiW9wjvXmY2X3ywHLJQ=",
+        "owner": "todbot",
+        "repo": "hidapitester",
+        "rev": "601c50c908515a25743558ae788129ea3b9bed16",
+        "type": "github"
+      },
+      "original": {
+        "owner": "todbot",
+        "repo": "hidapitester",
         "type": "github"
       }
     },
@@ -309,25 +341,27 @@
     "qmk": {
       "flake": false,
       "locked": {
-        "lastModified": 1645466654,
-        "narHash": "sha256-ycl4ORArobEDzH4T9iisG+NVD85x8J8cTOjPFCCPKOQ=",
+        "lastModified": 1647088945,
+        "narHash": "sha256-fjI/A3LRFShADmNhUoEnZJAPlpgxFLd3gTjsAdX7QCk=",
         "ref": "master",
-        "rev": "31f590066646b0be76d3ba9bb1b38174b46d507f",
-        "revCount": 19343,
+        "rev": "86b123141bea2e3f831a57eb115368cbbbdb2da1",
+        "revCount": 20186,
         "type": "git",
-        "url": "https://github.com/qmk/qmk_firmware?ref=0.14.29"
+        "url": "https://github.com/qmk/qmk_firmware?ref=0.16.5"
       },
       "original": {
         "type": "git",
-        "url": "https://github.com/qmk/qmk_firmware?ref=0.14.29"
+        "url": "https://github.com/qmk/qmk_firmware?ref=0.16.5"
       }
     },
     "root": {
       "inputs": {
+        "bootloadHID": "bootloadHID",
         "deploy-rs": "deploy-rs",
         "dwarffs": "dwarffs",
         "emacs": "emacs",
         "emacs-overlay": "emacs-overlay",
+        "hidapitester": "hidapitester",
         "home-manager": "home-manager",
         "nix": "nix",
         "nix-gaming": "nix-gaming",
