@@ -39,18 +39,10 @@ in
           fsType = "zfs";
         };
 
-      "/var/lib/secrets" = mkIf config.services.vault-agent.enable
+      "/var/lib/secrets" =
         {
-          device = "tmpfs";
-          fsType = "tmpfs";
-          options = [
-            "mode=0640"
-            "uid=${toString config.users.users.vault-agent.uid}"
-            "gid=${toString config.users.groups.root.gid}"
-            "noexec"
-            "rw"
-            "size=64M"
-          ];
+          device = "omen-ssd/local/secrets";
+          fsType = "zfs";
         };
 
       "/home" =
