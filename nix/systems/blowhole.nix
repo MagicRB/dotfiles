@@ -232,7 +232,7 @@ inputs: {
             { serviceConfig.ExecStart = mkForce "${config.services.vault.package}/bin/vault server -config /run/cfg/vault/vault.json";
               preStart =
                 let
-                  orig = pkgs.writeText "nomad.json" (builtins.toJSON
+                  orig = pkgs.writeText "vault.json" (builtins.toJSON
                     {
                       backend."file" = {
                         path = "/var/lib/vault";
