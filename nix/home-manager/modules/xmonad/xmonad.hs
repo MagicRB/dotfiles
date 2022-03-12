@@ -246,7 +246,7 @@ myEventHook = ewmhDesktopsEventHook <+> fullscreenEventHook
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
-myLogHook = return ()
+myLogHook = updatePointer (0.5, 0.5) (1, 1)
 
 ------------------------------------------------------------------------
 -- Startup hook
