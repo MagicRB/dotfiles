@@ -1,0 +1,157 @@
+:PROPERTIES:
+:ID:       22a6cb0e-5466-4edf-b0da-a8b76d879cf9
+:END:
+#+title: Keybindings
+#+filetags: emacs-load
+
+This file contains all keybindings of my Emacs configuration. I chose to put them all into one file for easy reference and also cross package consistency is easier to ensure when you have everything on one screen.
+
+We need to define a little predicate thing, which allows us to toggle on and off all the modifications we make on a global emacs wide basis.
+
+#+begin_src emacs-lisp
+  (defvar magic_rb-koy-compat-p t "Whether k-o-y layout compatibility should be active.")
+#+end_src
+
+In general, we bind special, custom keybindings to the ~•~ prefix key, it's KOY specific, but it works.
+
+* Evil Mode
+
+These are the keybinding related to [[id:f941f57a-d3fc-4b4b-ac85-2ff69ef942e5][evil mode]], they're split into the *primary* group and into any package-compatibility keybindings.
+
+** Primary
+
+First we need to define a new minor mode, that we can toggle, to disable the edits we make when necessary.
+
+#+begin_src emacs-lisp
+  (define-minor-mode magic_rb-koy-evil-mode
+    "Enable koy compatibility for Evil."
+    :lighter " koy"
+    :keymap (make-sparse-keymap)
+    (evil-normalize-keymaps))
+#+end_src
+
+Then we hook our minor mode on ~evil-mode-hook~ and ~evil-local-mode-hook~, but only after ~evil-mode~ is loaded.
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'evil
+   (add-hook 'evil-mode-hook 'magic_rb-koy-evil-mode)
+   (add-hook 'evil-local-mode-hook 'magic_rb-koy-evil-mode))
+#+end_src
+
+*** Quick access leader
+
+This is a quick access leader which opens menu's and things. It may be worth moving out the window movements. I'm still debating whether ~SPC~ is the best leader, it has some issuas.
+
+#+begin_src emacs-lisp
+  (general-def
+    :prefix "SPC"
+    :states '(normal motion visual)
+    ""  nil
+    "t" 'evil-window-left
+    "r" 'evil-window-up
+    "n" 'evil-window-down
+    "s" 'evil-window-right
+
+    "T" 'evil-window-left
+    "R" 'evil-window-up
+    "N" 'evil-window-down
+    "S" 'evil-window-right
+
+    "Y" 'treemacs
+    "y" 'treemacs-select-window
+    "a" 'treemacs-switch-workspace
+    "A" 'treemacs-edit-workspaces
+
+    "v" 'vterm
+    "m" 'magit
+
+    "h" 'org-agenda
+    "i" 'org-roam-node-find
+    "ä" 'org-roam-capture
+    "," 'org-roam-buffer-toggle
+
+    "o" 'lsp-execute-code-action)
+#+end_src
+
+*** Evil KOY fixups
+
+KOY requires some changes, mainly around making ~trns~ available as movement keys like ~hjkl~.
+
+#+begin_src emacs-lisp
+  (general-def
+    :states '(motion normal visual)
+    :predicate 'magic_rb-koy-compat-p
+    :keymaps 'magic_rb-koy-evil-mode-map
+    "t" 'evil-backward-char
+    "T" 'evil-first-non-blank
+    "r" 'evil-previous-visual-line
+    "n" 'evil-next-visual-line
+    "s" 'evil-forward-char
+    "S" 'evil-end-of-line
+
+    "h" 'evil-find-char-to
+    "H" 'evil-find-char-to-backward
+    "j" 'evil-replace
+    "J" 'evil-join
+    "k" 'evil-search-next
+    "K" 'evil-search-previous
+    "l" 'evil-substitute
+    "L" 'evil-change-whole-line)
+#+end_src
+
+In insert mode we want to be able to press ~jj~ in rapid succession to exit back into normal mode.
+
+#+begin_src emacs-lisp
+  (general-def
+    :states '(insert)
+    :predicate 'magic_rb-koy-compat-p
+    :keymaps 'magic_rb-koy-evil-mode-map
+    "j" (general-key-dispatch 'self-insert-command
+          :timeout 0.25
+          "j" 'evil-normal-state))
+#+end_src
+
+* Quick Accessors
+
+#+begin_src emacs-lisp
+  (define-minor-mode magic_rb-accessor-mode
+    "Enable accessors."
+    :lighter " accessors"
+    :keymap (make-sparse-keymap)
+    :global t
+    (evil-normalize-keymaps))
+
+  (magic_rb-accessor-mode)
+
+  (general-def
+    :keymap 'magic_rb-accessor-mode-map
+    :prefix "•"
+    "" nil
+    "•" '(insert "•"))
+#+end_src
+
+** AVY
+
+[[id:e93571d6-ae50-4aca-8b2f-6ada70655be3][Avy]] is cool, it's a "I'm looking at where I wanna jump to, so jump there." kind of package.
+
+#+begin_src emacs-lisp
+  (general-def
+    :keymap 'magic_rb-accessor-mode-map
+    :prefix "•"
+    "z" 'avy-goto-char-timer)
+#+end_src
+
+** Consult
+
+Consult has cool file switching utililties, like ~consult-ripgrep~.
+
+#+begin_src emacs-lisp
+  (general-def
+    :keymap 'magic_rb-accessor-mode-map
+    :prefix "•"
+    "r" 'consult-ripgrep
+    "f" 'consult-find
+    "l" 'consult-line)
+#+end_src
+
+#+RESULTS:
