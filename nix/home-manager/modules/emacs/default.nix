@@ -53,7 +53,7 @@ in
         comment = "Org protocol";
         desktopName = "org-protocol";
         type = "Application";
-        mimeType = "x-scheme-handler/org-protocol";
+        mimeTypes = [ "x-scheme-handler/org-protocol" ];
       })
 
       fira-code
