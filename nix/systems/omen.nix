@@ -4,7 +4,7 @@ inputs: {
   modules = [
     ../nixos-modules/default.nix
     inputs.home-manager.nixosModules.home-manager
-    ({ pkgs, config, secret, ... }: {
+    ({ pkgs, lib, config, secret, ... }: {
        home-manager.users."main" =
         { ... }: {
           imports = [ ../home-manager/modules/default.nix ];
@@ -43,6 +43,16 @@ inputs: {
           home.stateVersion = "20.09";
         };
 
+       specialisation.nvidia-sync =
+         { configuration =
+             { magic_rb.xserver.nvidia =
+                 { primeSync = true;
+                   primeOffload = lib.mkForce false;
+                 };
+             };
+           inheritParentConfig = true;
+         };
+
       magic_rb = {
         optimisation.march = "skylake";
 
@@ -57,7 +67,7 @@ inputs: {
           xmonad = true;
 
           nvidia = {
-            prime = true;
+            primeOffload = true;
 
             intelBusId = "PCI:0:2:0";
             nvidiaBusId = "PCI:1:0:0";

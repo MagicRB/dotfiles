@@ -23,7 +23,8 @@ in
       description = "NVidia section";
       type = types.submodule {
         options = {
-          prime = mkEnableOption "NVidia PRIME support";
+          primeOffload = mkEnableOption "NVidia PRIME sync support";
+          primeSync = mkEnableOption "NVidia PRIME offload support";
           
           intelBusId = mkOption {
             type = types.str;
@@ -65,17 +66,25 @@ in
       };
 
       hardware = {
+        opengl.enable = true;
         opengl.driSupport32Bit = true;
       };
     }
     (mkIf (cfg.gpu == "nvidia") {
       services.xserver.videoDrivers = [ "nvidia" ];
+      hardware.nvidia.modesetting.enable = mkIf cfg.nvidia.primeSync true;
 
-      environment.systemPackages = mkIf (cfg.nvidia.prime)
+      services.xserver.deviceSection = mkIf cfg.nvidia.primeSync ''
+        Option "Coolbits" "28"
+        Option "UseEvents" "on"
+      '';
+
+      environment.systemPackages = mkIf cfg.nvidia.primeOffload
         [ nvidia-offload pkgs.libglvnd ];
 
-      hardware.nvidia.prime = mkIf cfg.nvidia.prime {
-        offload.enable = true;
+      hardware.nvidia.prime = mkIf (cfg.nvidia.primeSync || cfg.nvidia.primeOffload) {
+        sync.enable = cfg.nvidia.primeSync;
+        offload.enable = cfg.nvidia.primeOffload;
         
         intelBusId = cfg.nvidia.intelBusId;
         nvidiaBusId = cfg.nvidia.nvidiaBusId;
