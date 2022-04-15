@@ -21,8 +21,10 @@ in
       extraModulePackages = [ ];
       supportedFilesystems = [ "zfs" ];
       kernelParams = [
-        "zfs.zfs_arc_max=214748368"
+        "zfs.zfs_arc_max=8589934592"
         "intel_pstate=active"
+        "nvidia.NVreg_EnablePCIeGen3=1"
+        "nvidia.NVreg_UsePageAttributeTable=1"
       ];
       kernelPackages = pkgs.zfsUnstable.latestCompatibleLinuxPackages;
       zfs.enableUnstable = true;
