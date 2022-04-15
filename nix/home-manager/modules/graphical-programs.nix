@@ -27,6 +27,9 @@ in
         }
       ))
       element-desktop
+
+      xournalpp
+      pavucontrol
     ];
   };
 }
