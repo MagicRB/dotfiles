@@ -20,7 +20,7 @@ in
     home.packages = with pkgs; [
       winetricks
     ] ++ combineWines (with nixpkgs-unstable; [
-      wine-tkg wineWowPackages.staging
+      wineWowPackages.staging
     ]);
   };
 }
