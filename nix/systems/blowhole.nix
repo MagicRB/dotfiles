@@ -59,6 +59,11 @@ inputs: {
             statdPort = 4000;
           };
 
+          systemd.services.consul.serviceConfig =
+            { LimitNOFILE = "infinity";
+              LimitNPROC = "infinity";
+            };
+
           systemd.services.consul.preStart =
             let
               orig = pkgs.writeText "consul.json" (builtins.toJSON
@@ -66,6 +71,7 @@ inputs: {
                   datacenter = "homelab-1";
                   data_dir = "/var/lib/consul";
                   encrypt = "%%consul-encrypt.key%%";
+                  log_level = "DEBUG";
 
                   server = true;
 
@@ -718,8 +724,14 @@ inputs: {
                ## NFS
                111  2049 4000 4001 4002 20048
              ];
+           allowedTCPPortRanges =
+             [ { from = 21000;
+                 to = 21999;
+               }
+             ];
            allowedUDPPorts =
              [ ## Consul
+               8600 # DNS
                8301 # LAN serf
                8302 # WAN serf
                ## NFS
@@ -727,7 +739,7 @@ inputs: {
              ];
            allowedUDPPortRanges =
              [ { from = 21000;
-                 to = 21255;
+                 to = 21999;
                }
              ];
           };

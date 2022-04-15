@@ -399,11 +399,13 @@ inputs: {
 
               interfaces."wg0" = {
                 allowedTCPPorts =
-                  [ 8501
-                    8502
-                    8301
-                    8302
-                    8300
+                  [ ## Consul
+                    8600 # DNS
+                    8500 # HTTP
+                    8502 # gRPC
+                    8300 # server
+                    8301 # LAN serf
+                    8302 # WAN serf
                     10000
                   ];
                 allowedTCPPortRanges =
@@ -412,8 +414,10 @@ inputs: {
                     to = 21255;
                   }];
                 allowedUDPPorts =
-                  [ 8301
-                    8302
+                  [ ## Consul
+                    8600 # DNS
+                    8301 # LAN serf
+                    8302 # WAN serf
                   ];
                 allowedUDPPortRanges =
                   [ {
