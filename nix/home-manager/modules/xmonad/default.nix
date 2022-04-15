@@ -19,6 +19,12 @@ in
       default = true;
     };
 
+    enableKeynav = mkOption {
+      description = "Enable keynav";
+      type = types.bool;
+      default = true;
+    };
+
     picomExperimentalBackends = mkOption {
       description = "Enable experimental backends in picom";
       type = types.bool;
@@ -32,6 +38,8 @@ in
       font-awesome
       dejavu_fonts
     ];
+
+    home.file.".keynavrc".source = ./keynavrc;
 
     home.file.".xmonad/xmonad.hs".source = pkgs.writeSubstitutedFile {
       name = "xmonad.hs";
@@ -50,6 +58,9 @@ in
         "enablePicom" = if cfg.enablePicom then "True" else "False";
         "picomConfig" = ./picom.conf;
         "experimentalBackends" = if cfg.picomExperimentalBackends then "--experimental-backends" else "";
+
+        "keynav" = "${pkgs.keynav}/bin/keynav";
+        "enableKeynav" = if cfg.enableKeynav then "True" else "False";
       };
     };
   };

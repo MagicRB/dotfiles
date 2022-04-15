@@ -1,0 +1,28 @@
+# -*- mode: text -*-
+
+clear
+ctrl+s start, grid 3x3
+Escape           end
+u                end
+
+g                warp, click 1, end
+c                warp, click 3, end
+d                warp, click 4
+b                warp, click 5
+l                warp, end
+
+
+t                move-left
+r                move-up
+n                move-down
+s                move-right
+
+period           cell-select 1x1
+o                cell-select 2x1
+comma            cell-select 3x1
+a                cell-select 1x2
+e                cell-select 2x2
+i                cell-select 3x2
+q                cell-select 1x3
+adiaeresis       cell-select 2x3
+udiaeresis       cell-select 3x3

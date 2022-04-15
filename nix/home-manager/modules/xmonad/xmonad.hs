@@ -20,6 +20,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.NoBorders
 import XMonad.Util.WorkspaceCompare
 import XMonad.Hooks.DynamicLog
+import XMonad.Actions.UpdatePointer
 
 import Control.Monad
 
@@ -259,6 +260,7 @@ myLogHook = updatePointer (0.5, 0.5) (1, 1)
 myStartupHook = do
   when @enableDunst@ (spawnOnce "@dunst@ -config @dunstConfig@")
   when @enablePicom@ (spawnOnce "@picom@ --config @picomConfig@ @experimentalBackends@")
+  when @enableKeynav@ (spawnOnce "@keynav@")
   spawnOnce xmobarCmd
 
 myPP = def
