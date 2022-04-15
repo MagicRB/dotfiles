@@ -404,13 +404,13 @@ inputs: {
                     microsteps = "16";
                     endstop_pin = "P1.25";  # P1.24 for Z-max"
                     position_min = "-4.5";
-                    position_endstop = "-2.875";
+                    position_endstop = "1.275";
                     position_max = "250";
                   };
 
                 extruder =
                   { step_pin = "P2.13";
-                    dir_pin = "P0.11";
+                    dir_pin = "!P0.11";
                     enable_pin = "!P2.12";
                     rotation_distance = "23.291";
                     gear_ratio = "3:1";
