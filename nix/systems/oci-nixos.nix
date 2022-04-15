@@ -54,7 +54,7 @@ inputs: {
         services.nginx = {
           enable = true;
 
-          config = (inputs.nixng.lib "${pkgs.stdenv.system}").generators.toNginx
+          config = (inputs.nixng.nglib pkgs.lib).generators.toNginx
             [
               {
                 worker_processes = 2;
