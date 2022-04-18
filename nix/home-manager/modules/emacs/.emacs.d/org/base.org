@@ -14,12 +14,6 @@ https://github.com/alphapapa/org-web-tools
 
 #+NAME: base
 #+BEGIN_SRC emacs-lisp
-  (when (not (string= (system-name) "fractal"))
-    (use-package elcord
-      :straight t
-      :config
-      (elcord-mode)))
-
   (use-package pdf-tools
     :straight t
     :hook (('TeX-mode-hook . visual-line-mode))
@@ -55,89 +49,32 @@ Fetch the ~SSH_AUTH_PATH~ from ~.profile~.
 
 * Look & Feel
 ** Color Themes
-
-Enable =doom-themes=, with bold and italics. Then apply the =doom-colors= theme to Treemacs and improve org's native
-fontification somewhat.
+Create a function, which applies my font settings, and call it. Also branch on whether PGtk is in use, as fonts are a
+bit bigger with it. Also enable variable pitch fonts, ~Iosevka~ is really nice.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package doom-themes
-    :straight t
-    :config
-    ;; Global settings (defaults)
-    (setq doom-themes-enable-bold t
-          doom-themes-enable-italic t
-          doom-themes-treemacs-enable-variable-pitch nil)
+  (setq magic_rb/fixed-width-font "Iosevka Term")
+  (setq magic_rb/variable-pitch-font "Iosevka Aile")
 
-    ;; Enable Treemacs doom theme
-    (setq doom-themes-treemacs-theme "doom-colors")
-    (doom-themes-treemacs-config)
-
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config))
+  (with-eval-after-load 'dash
+    (defun magic_rb/apply-fonts ()
+      (interactive)
+      (if (-contains? (split-string system-configuration-features) "PGTK")
+          (set-face-attribute 'default nil :family magic_rb/fixed-width-font :slant 'normal :height 130)
+        (set-face-attribute 'default nil :family magic_rb/fixed-width-font :height 130))
+      (set-face-attribute 'fixed-pitch nil :family magic_rb/fixed-width-font :slant 'normal :height 1.0)
+      (set-face-attribute 'variable-pitch nil :family magic_rb/variable-pitch-font :height 1.0))
+    (magic_rb/apply-fonts))
 #+END_SRC
 
-You can also enable visual bell on error, or =C-g=, probably other events. But I don't like. So it's disabled :.
+Load Modus Vivendi, but change the background color to not-black, it's a bit less depressing and in my opinion nicer
+on the eyes.
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (doom-themes-visual-bell-config)
+#+BEGIN_SRC emacs-lisp
+  (setq modus-vivendi-theme-override-colors-alist
+        '(("bg-main" . "#111519")))
+  (load-theme 'modus-vivendi t)
 #+END_SRC
-
-First make =load-theme= unload all currently loaded themes and reapply fonts afterwards, then create a
-=magic_rb/theme-select= hydra bound to =F6=.  Available themes are:
-- =od= for /Doom One Dark/
-- =ol= for /Doom One Light/
-- =mv= for /Modus Vivendi/
-- =mo= for /Modus Operandi/
-
-  #+BEGIN_SRC emacs-lisp
-    (with-eval-after-load 'hydra
-      (defun magic_rb/unload-all-themes ()
-        "Unloads all themes."
-        (mapc #'disable-theme custom-enabled-themes))
-
-      (advice-add 'load-theme :before #'(lambda (orig-fun &rest args) (magic_rb/unload-all-themes)))
-      (advice-add 'load-theme :after #'(lambda (orig-fun &rest args) (magic_rb/apply-fonts)))
-
-      (defhydra magic_rb/theme-select (:color blue)
-        ("od" (progn
-                (load-theme 'doom-one t)))
-        ("ol" (progn
-                (load-theme 'doom-one-light t)))
-        ("mv" (progn
-                (load-theme 'modus-vivendi t)))
-        ("mo" (progn
-                (load-theme 'modus-operandi t))))
-      (global-set-key (kbd "<f6>") 'magic_rb/theme-select/body))
-  #+END_SRC
-
-  Create a function, which applies my font settings, and call it. Also branch on whether PGtk is in use, as fonts are a
-  bit bigger with it. Also enable variable pitch fonts, ~Iosevka~ is really nice.
-
-  #+BEGIN_SRC emacs-lisp
-    (setq magic_rb/fixed-width-font "Iosevka Term")
-    (setq magic_rb/variable-pitch-font "Iosevka Aile")
-
-    (with-eval-after-load 'dash
-      (defun magic_rb/apply-fonts ()
-        (interactive)
-        (if (-contains? (split-string system-configuration-features) "PGTK")
-            (set-face-attribute 'default nil :family magic_rb/fixed-width-font :slant 'normal :height 130)
-          (set-face-attribute 'default nil :family magic_rb/fixed-width-font :height 130))
-        (set-face-attribute 'fixed-pitch nil :family magic_rb/fixed-width-font :slant 'normal :height 1.0)
-        (set-face-attribute 'variable-pitch nil :family magic_rb/variable-pitch-font :height 1.0))
-      (magic_rb/apply-fonts))
-  #+END_SRC
-
-  #+RESULTS:
-
-  Load Modus Vivendi, but change the background color to not-black, it's a bit less depressing and in my opinion nicer
-  on the eyes.
-
-  #+BEGIN_SRC emacs-lisp
-    (setq modus-vivendi-theme-override-colors-alist
-          '(("bg-main" . "#111519")))
-    (load-theme 'modus-vivendi t)
-  #+END_SRC
 
 ** Modeline
 
@@ -158,16 +95,6 @@ running Emacs in daemon mode.
   (add-hook 'after-make-frame-hook
             (lambda ()
               (setq doom-modeline-icon (display-graphic-p))))
-#+END_SRC
-
-Show battery status and time in modeline. But don't show load average. Useful when using EXWM, without a external
-bar.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (display-time-mode)
-  (setq display-time-load-average nil)
-
-  (display-battery-mode)
 #+END_SRC
 
 Only show buffer encoding conditionally, there's no reason to have ~LF UTF-8~ down there, rather only show when the
@@ -419,64 +346,6 @@ Finally enable ~lsp-mode~.
     <<lsp-scala-tramp>>)
 #+END_SRC
 
-** TRAMP support
-
-None of the LSP client packages (many are included with ~lsp-mode~) don't feature remote client definitions. It's
-rather easy to add them. I've only added the one necessary for Javascript and Scala as that are the only languages
-
-#+NAME: lsp-typescript-tramp
-#+BEGIN_SRC emacs-lisp :tangle no
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-tramp-connection (lambda ()
-                                                            `("typescript-language-server"
-                                                              "--tsserver-path"
-                                                              "tsserver"
-                                                              ,@lsp-clients-typescript-server-args)))
-                    :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
-                    :priority -2
-                    :completion-in-comments? t
-                    :initialization-options (lambda ()
-                                              (list :plugins lsp-clients-typescript-plugins
-                                                    :logVerbosity lsp-clients-typescript-log-verbosity
-                                                    :tsServerPath (lsp-package-path 'typescript)))
-                    :ignore-messages '("readFile .*? requested by TypeScript but content not available")
-                    :server-id 'ts-ls
-                    :remote? t))
-#+END_SRC
-
-#+NAME: lsp-scala-tramp
-#+BEGIN_SRC emacs-lisp :tangle no
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-tramp-connection 'lsp-metals--server-command)
-                    :major-modes '(scala-mode)
-                    :priority -1
-                    :initialization-options '((decorationProvider . t)
-                                              (inlineDecorationProvider . t)
-                                              (didFocusProvider . t)
-                                              (executeClientCommandProvider . t)
-                                              (doctorProvider . "html")
-                                              (statusBarProvider . "on")
-                                              (debuggingProvider . t)
-                                              (treeViewProvider . t))
-                    :notification-handlers (ht ("metals/executeClientCommand" #'lsp-metals--execute-client-command)
-                                               ("metals/publishDecorations" #'lsp-metals--publish-decorations)
-                                               ("metals/treeViewDidChange" #'lsp-metals-treeview--did-change)
-                                               ("metals-model-refresh" #'lsp-metals--model-refresh)
-                                               ("metals/status" #'lsp-metals--status-string))
-                    :action-handlers (ht ("metals-debug-session-start" (-partial #'lsp-metals--debug-start :json-false))
-                                         ("metals-run-session-start" (-partial #'lsp-metals--debug-start t)))
-                    :server-id 'metals
-                    :remote? t
-                    :initialized-fn (lambda (workspace)
-                                      (lsp-metals--add-focus-hooks)
-                                      (with-lsp-workspace workspace
-                                        (lsp--set-configuration
-                                         (lsp-configuration-section "metals"))))
-                    :after-open-fn (lambda ()
-                                     (add-hook 'lsp-on-idle-hook #'lsp-metals--did-focus nil t))
-                    :completion-in-comments? t))
-#+END_SRC
-
 ** lsp-pyright
 
 Enable ~lsp-pyright~, the best Python language server, all of them are a bit lackluster, this one is the best
@@ -486,31 +355,6 @@ option.
   (use-package lsp-pyright
     :straight t
     :hook (python-mode . lsp))
-#+END_SRC
-
-** lsp-metals
-
-Enable ~lsp-metals~ for Scala. It's actually really good and makes emacs into a very competent IDE.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-metals
-    :straight t
-    :config)
-#+END_SRC
-
-** company
-
-Enable ~company~, I'd expect it to be loaded by default, but apparently not.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :straight t
-    :config
-    ;; aligns annotation to the right hand side
-    (setq company-tooltip-align-annotations t)
-    (setq company-show-numbers t)
-    (add-hook 'evil-normal-state-entry-hook #'company-abort) ;; make aborting less annoying
-    (add-hook 'after-init-hook 'global-company-mode))
 #+END_SRC
 
 ** lsp-ui
@@ -541,18 +385,6 @@ Enable ~flycheck~ for in-buffer hints and errors and warning and things.
   (use-package flycheck
     :straight t
     :init (global-flycheck-mode))
-#+END_SRC
-
-** yasnippet
-
-Enable ~yasnippet~.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :straight t
-    :config
-    (setq yas-snippet-dirs '("~/dotfiles/nix/home-manager/modules/emacs/.emacs.d/snippets"))
-    (yas-global-mode 1))
 #+END_SRC
 
 ** origami
@@ -605,49 +437,6 @@ For hledger, it's possible to use =ledger-mode= instead of =hledger-mode=. We'll
                 ledger-report-account)))
 #+END_SRC
 
-* Magit
-
-~magit~ is literally the best package right after OrgMode of course. Therefore enable it.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :straight t)
-#+END_SRC
-
-Also enable ~evil-magit~ for evil-style keybindings in Magit.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-magit
-    :straight t
-    :after (evil magit)
-    :config
-    (setq evil-magit-state 'motion)
-    (evil-define-key 'motion magit-status-mode-map ";" 'magit-log)
-    (evil-define-key 'motion magit-status-mode-map "k" 'evil-previous-line)
-    (evil-define-key 'motion magit-status-mode-map "l" 'evil-next-line)
-    (evil-define-key 'normal magit-status-mode-map "l" 'evil-next-line)
-    (evil-define-key 'visual magit-status-mode-map "l" 'evil-next-line)
-
-    (evil-define-key 'motion magit-log-mode-map ";" 'magit-log)
-    (evil-define-key 'motion magit-log-mode-map "k" 'evil-previous-line)
-    (evil-define-key 'motion magit-log-mode-map "l" 'evil-next-line)
-    (evil-define-key 'normal magit-log-mode-map "l" 'evil-next-line)
-    (evil-define-key 'visual magit-log-mode-map "l" 'evil-next-line))
-#+END_SRC
-
-Enable ~magit-todos~ and hook them on ~lsp-mode~ and also ~org-mode~, because it acts like a project local
-~org-agenda~, sort of.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package magit-todos
-    :straight t
-    :hook
-    (lsp-mode . hl-todo-mode)
-    (org-mode . hl-todo-mode))
-#+END_SRC
-
-* Popper
-
 * Projectile
 
 Enable ~projectile~.
@@ -658,33 +447,6 @@ Enable ~projectile~.
     :config
     (projectile-mode +1)
     (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-#+END_SRC
-
-* Edit Server
-
-This awesome package when paired with a free software browser extension, available for both [[https://chrome.google.com/webstore/detail/edit-with-emacs/ljobjlafonikaiipfkggjbhkghgicgoh][Chromium]] and [[https://addons.mozilla.org/en-US/firefox/addon/edit-with-emacs1/][Firefox]],
-allows one to edit text areas in their browser in Emacs.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package edit-server
-    :straight t
-    :init
-    (edit-server-start))
-#+END_SRC
-
-* Internet Stuff
-
-** ement.el
-
-=ement.el= is a Matrix client inside Emacs.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package plz
-    :straight (plz :type git :host github :repo "alphapapa/plz.el"))
-
-  ;; Install Ement.
-  (use-package ement
-    :straight (ement :type git :host github :repo "alphapapa/ement.el"))
 #+END_SRC
 
 * Random Bits and Bobs
