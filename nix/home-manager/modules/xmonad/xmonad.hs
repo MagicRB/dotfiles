@@ -21,6 +21,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Util.WorkspaceCompare
 import XMonad.Hooks.DynamicLog
 import XMonad.Actions.UpdatePointer
+import XMonad.Actions.FloatKeys
 
 import Control.Monad
 
@@ -44,12 +45,6 @@ myFocusFollowsMouse = True
 myClickJustFocuses :: Bool
 myClickJustFocuses = False
 
--- modMask lets you specify which modkey you want to use. The default
--- is mod1Mask ("left alt").  You may also consider using mod3Mask
--- ("right alt"), which does not conflict with emacs keybindings. The
--- "windows key" is usually mod4Mask.
---
-myModMask       = mod4Mask
 
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
@@ -68,6 +63,8 @@ toggleFloat = withFocused (\windowId -> do
                                 then withFocused $ windows . W.sink
                                 else float windowId })
 
+modm :: KeyMask
+modm = mod4Mask
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -77,7 +74,7 @@ myKeymap c =
     [ ("M-S-<Return>", spawn "alacritty")
 
     -- launch dmenu
-    , ("M-ß", spawn "@dmenu_run@")
+    , ("M-e", spawn "@dmenu_run@")
 
     -- close focused window
     , ("M-S-q", io (exitWith ExitSuccess))
@@ -143,6 +140,16 @@ myKeymap c =
 
     -- Restart xmonad
     , ("M-k", spawn "xmonad --recompile; xmonad --restart")
+
+    -- float keys
+     , ("M-g", withFocused (keysResizeWindow (-10,  0) (0, 0)))
+     , ("M-c", withFocused (keysResizeWindow (  0, 10) (0, 0)))
+     , ("M-l", withFocused (keysResizeWindow (  0,-10) (0, 0)))
+     , ("M-ß", withFocused (keysResizeWindow ( 10,  0) (0, 0)))
+     , ("M-S-g", withFocused (xMoveWindow (-10,  0)))
+     , ("M-S-c", withFocused (xMoveWindow (  0, 10)))
+     , ("M-S-l", withFocused (xMoveWindow (  0,-10)))
+     , ("M-S-ß", withFocused (xMoveWindow ( 10,  0)))
     ]
     ++
 
@@ -162,6 +169,14 @@ myKeymap c =
     [("M-"++m++[key], screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip ".o," [0..]
         , (f, m) <- [(W.view, ""), (W.shift, "S-")]]
+    where
+      xMoveWindow
+        :: (Position, Position)
+        -> Window
+        -> X ()
+      xMoveWindow (x, y) w = withDisplay (\d -> do
+        (_, ox, oy, _, _, _, _) <- io $ getGeometry d w
+        io $ moveWindow d w (ox + x) (oy + y))
 
 
 ------------------------------------------------------------------------
@@ -291,7 +306,7 @@ defaults = let c = def {
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
         clickJustFocuses   = myClickJustFocuses,
-        modMask            = myModMask,
+        modMask            = modm,
         workspaces         = myWorkspaces,
 
       -- key bindings
