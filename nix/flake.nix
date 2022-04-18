@@ -168,6 +168,7 @@
 
       overlays = {
         bootloadHID = import ./overlays/bootloadHID inputs;
+        bitlbee = import ./overlays/bitlbee;
         hidapitester = import ./overlays/hidapitester inputs;
         emacs = import ./overlays/emacs-ng/default.nix inputs;
         emacsclient-remote = import ./overlays/emacsclient-remote;
@@ -175,7 +176,7 @@
         screenshot = import ./overlays/screenshot;
         easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix;
         mainsail = import ./overlays/mainsail;
-        discord-canary = import "${inputs.yusdacra-dotfiles}/overlays/discord-canary-system.nix";
+        discord-canary = import ./overlays/discord-canary;
         winetricks = import ./overlays/winetricks;
         dwarffs = inputs.dwarffs.overlay;
         deploy-rs = deploy-rs.overlay;
@@ -205,6 +206,7 @@
           in
             {
               bootloadHID = mkPkg "bootloadHID";
+              bitlbee = mkPkg "bitlbee";
               hidapitester = mkPkg "hidapitester";
               emacs = mkPkg "emacs";
               emacsclient-remote = mkPkg "emacsclient-remote";
