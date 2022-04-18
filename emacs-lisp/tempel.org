@@ -12,7 +12,7 @@ Tempel is a tiny template package for Emacs, which uses the syntax of the Emacs 
   (use-package tempel
     :straight '(tempel :type git :host github :repo "minad/tempel")
     :config
-    <<tempel-file>>
+    <<tempel-path>>
     :init
     <<tempel-hooks>>
     <<tempel-keymaps>>)
@@ -20,9 +20,9 @@ Tempel is a tiny template package for Emacs, which uses the syntax of the Emacs 
 
 Set the template file to the result of tangling [[id:3e8f0e02-dbfe-4f34-9b00-8b7ecd0a238d][Tempel - Templates]].
 
-#+name: tempel-file
+#+name: tempel-path
 #+begin_src emacs-lisp
-  (setq tempel-file (expand-file-name "~/roam/emacs-lisp/templates.lisp"))
+  (setq tempel-path (expand-file-name "~/roam/emacs-lisp/templates.lisp"))
 #+end_src
 
 Hook ~tempel-capf~ on both ~prog-mode~ and ~text-mode~.
@@ -30,7 +30,7 @@ Hook ~tempel-capf~ on both ~prog-mode~ and ~text-mode~.
 #+name: tempel-hooks
 #+begin_src emacs-lisp
   (defun tempel-setup-capf ()
-    (add-hook 'completion-at-point-functions #'tempel-expand -1 'local))
+    (add-hook 'completion-at-point-functions #'tempel-complete -1 'local))
 
   (add-hook 'prog-mode-hook 'tempel-setup-capf)
   (add-hook 'text-mode-hook 'tempel-setup-capf)

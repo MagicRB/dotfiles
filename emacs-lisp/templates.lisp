@@ -67,11 +67,6 @@ org-mode
 (comment "#+begin_comment" n> r> n> "#+end_comment")
 (verse "#+begin_verse" n> r> n> "#+end_verse")
 (src "#+begin_src " p n> r> n> "#+end_src")
-
-({- "stuff")
-(=> "stuff")
-(-- "stuff")
-
 (elisp "#+begin_src emacs-lisp" n> r> n "#+end_src"
        :post (progn (tempel-done) (org-edit-src-code)))
 

@@ -92,14 +92,13 @@
   (comment "#+begin_comment" n> r> n> "#+end_comment")
   (verse "#+begin_verse" n> r> n> "#+end_verse")
   (src "#+begin_src " p n> r> n> "#+end_src")
-
-  ({- "stuff")
-  (=> "stuff")
-  (-- "stuff")
-
   (elisp "#+begin_src emacs-lisp" n> r> n "#+end_src"
          :post (progn (tempel-done) (org-edit-src-code)))
 #+END_SRC
+
+#+begin_example
+test-suite
+#+end_example
 
 #+BEGIN_SRC lisp
   haskell-mode
@@ -126,5 +125,4 @@
        (s fname) " " (p "pattern") " = " (p "undefined"))
   ; guarded fn
   (<- (p "x") " <- " (p "undefined"))
-
 #+END_SRC

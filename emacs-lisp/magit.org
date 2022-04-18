@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       aa25248c-197c-4bf5-8fc1-aea93008e194
+:END:
+#+title: Magit
+#+filetags: emacs-load
+
+
+~magit~ is literally the best package right after OrgMode of course. Therefore enable it.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :straight t)
+#+END_SRC
+
+Also enable ~evil-magit~ for evil-style keybindings in Magit.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-magit
+    :straight t
+    :after (evil magit)
+    :config)
+#+END_SRC

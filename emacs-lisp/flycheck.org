@@ -1,0 +1,63 @@
+:PROPERTIES:
+:ID:       334a4188-93e6-4378-b22d-b0c302fc26a1
+:END:
+#+title: Flycheck
+#+filetags: emacs-load
+
+* Flycheck Posframe
+
+Display flycheck messages in a posframe.
+
+#+begin_src emacs-lisp noweb: yes
+  (use-package flycheck-posframe
+    :straight t
+    :config
+    (setq flycheck-posframe-position 'frame-bottom-right-corner)
+    <<flycheck-display-errors-delay>>
+    <<lsp-ui-sideline-show-diagnostics>>
+    :hook (flycheck-mode . flycheck-posframe-mode))
+#+end_src
+
+Flycheck calls ~flycheck-display-errors-function~ every ~flycheck-display-errors-delay~.
+
+#+name: flycheck-display-errors-delay
+#+begin_src emacs-lisp
+  (setq flycheck-display-errors-delay 0.1)
+#+end_src
+
+Since we get errors and such in a posframe, we don't need them in the sideline.
+
+#+name: lsp-ui-sideline-show-diagnostics
+#+begin_src emacs-lisp
+  (setq lsp-ui-sideline-show-diagnostics nil)
+#+end_src
+
+Since flycheck recalls ~flycheck-display-errors-function~ on every point movement, it creates this really ugly flicker and also lags a bit,
+so if the diagnostic message didn't change, filter out the call.
+
+#+name: flycheck-posframe-change-filter
+#+begin_src emacs-lisp
+  (defvar flycheck-posframe-last-error-list '())
+
+  (advice-add
+   'flycheck-posframe-hidehandler
+   :override
+   (lambda (info)
+     (if (not (equal
+                 (flycheck-overlay-errors-at (point))
+                 flycheck-posframe-last-error-list))
+         (progn
+           (setq flycheck-posframe-last-error-list nil)
+           t)
+       nil))
+   '((name . "flycheck-error-display-filter")))
+
+  (advice-add
+   'flycheck-posframe-show-posframe
+   :before-while
+   (lambda (diagnostic)
+     (let ((last-list flycheck-posframe-last-error-list))
+       (setq flycheck-posframe-last-error-list diagnostic)
+       (if (equal diagnostic last-list) nil t)))
+   '((name . "flycheck-error-display-filter")))
+#+end_src
