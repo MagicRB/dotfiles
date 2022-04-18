@@ -13,7 +13,7 @@ fi
 set -e
 case "$command" in
      "open")
-	 cryptsetup open /dev/disk/by-label/addhe addhe
+	 cryptsetup open /dev/md/addhe addhe
 	 mkdir -p /mnt/key
 
 	 mount /dev/mapper/addhe /mnt/key
