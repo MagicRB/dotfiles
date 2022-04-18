@@ -27,7 +27,6 @@ in
 
     programs.direnv.enable = mkIf cfg.enableDirenv true;
     programs.direnv.nix-direnv.enable = mkIf cfg.enableDirenv true;
-    programs.direnv.nix-direnv.enableFlakes = mkIf cfg.enableDirenv true;
 
     home.file = {
       ".bashrc".source = pkgs.writeSubstitutedFile {

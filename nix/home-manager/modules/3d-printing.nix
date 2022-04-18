@@ -14,21 +14,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev:
-        { python3Packages = prev.python3Packages.override (attrs:
-            { overrides = final: prev:
-              { pivy = prev.pivy.overrideAttrs (attrs:
-                { postPatch = ''
-                    substituteInPlace distutils_cmake/CMakeLists.txt --replace \$'{SoQt_INCLUDE_DIRS}' \
-                    \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
-                  '';
-                });
-              };
-            });
-        }
-      )
-    ];
 
     home.packages = with pkgs; [
       openscad

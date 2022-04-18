@@ -362,15 +362,7 @@ inputs: {
             user = "klipper";
             group = "klipper";
 
-            package = pkgs.klipper.overrideAttrs (_:
-              { src = pkgs.fetchFromGitHub {
-                  owner = "KevinOConnor";
-                  repo = "klipper";
-                  rev = "v0.10.0";
-                  sha256 = "sha256-rbRDwchiicI+U3IIkIfpuR2/xMzZkC5n2PP335iyUKM=";
-                };
-                versin = "0.10.0";
-              });
+            package = pkgs.klipper;
 
             settings =
               let

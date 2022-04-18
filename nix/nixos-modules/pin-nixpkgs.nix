@@ -34,7 +34,7 @@ in
           registry = mapAttrs (_: v: {
             flake = v; 
           }) cfg.pins;
-          nixPath = mapAttrsToList (n: v: "${n}=${v}") cfg.pins;
+          # nixPath = mapAttrsToList (n: v: "${n}=${v}") cfg.pins;
         };
       })
     (optionalAttrs
