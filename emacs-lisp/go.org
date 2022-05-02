@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       efc50bb2-7197-4225-b4d2-66aed96a5104
+:END:
+#+title: Go
+#+filetags: emacs-load
+
+Go is a horrible language, but for some reason all the DevOps things are written in it.
+
+#+begin_src emacs-lisp
+  (use-package go-mode
+    :straight t)
+#+end_src

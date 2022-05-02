@@ -98,7 +98,7 @@ To allow for ~=>~ as template keys, ~'symbol~ won't work, but ~'evil-word~ will.
     (if interactive
         (tempel--interactive #'tempel-expand)
       (when-let* ((templates (tempel--templates))
-                  (bounds (bounds-of-thing-at-point 'evil-word))
+                  (bounds (bounds-of-thing-at-point 'word))
                   (name (buffer-substring-no-properties
                          (car bounds) (cdr bounds)))
                   (sym (intern-soft name))

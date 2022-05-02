@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       f4a10ea3-a1df-42cc-b436-08d859272679
+:END:
+#+title: Daylies
+#+filetags: emacs-load
+
+Daylies, are like scratch buffers, but they are saved. So I can shove stuff in them and they are nicely kept for later reference. Kind of INBOX.
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+               (with-current-buffer "*scratch*"
+                (org-mode)
+                (set-visited-file-name
+                 (format "~/roam/daylies/%s.org"
+                         (format-time-string "%Y-%m-%d")))
+                (rename-buffer "*scratch*"))))
+#+end_src
+

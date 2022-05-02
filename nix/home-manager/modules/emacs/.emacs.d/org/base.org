@@ -374,7 +374,6 @@ need disabling.
     (add-to-list 'lsp-ui-doc-frame-parameters '(no-accept-focus . t))
     (add-to-list 'company-box-frame-parameters '(no-accept-focus . t))
     (setq mouse-autoselect-window nil))
-  (add-hook 'after-init-hook 'global-company-mode)
 #+END_SRC
 
 ** flycheck

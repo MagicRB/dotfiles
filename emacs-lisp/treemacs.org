@@ -24,60 +24,6 @@ Read input from a minibuffer not a child frame.
   (setq treemacs-read-string-input 'from-minibuffer)
 #+END_SRC
 
-Load the ~doom-colors~ theme, it looks nicer.
-
-#+BEGIN_SRC emacs-lisp
-  (setq doom-themes-treemacs-theme "doom-colors")
-  (doom-themes-treemacs-config)
-  (treemacs-load-theme 'doom-colors)
-#+END_SRC
-
 #+BEGIN_SRC emacs-lisp :exports none
   )
-#+END_SRC
-
-* Evil
-Treemacs is nice, but [[id:9e101583-0fa5-4df8-beed-7741803bfe5a][evil]] Treemacs is even nicer! Enable Evil compatibility and my custom koy compatibility.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package treemacs-evil
-    :after (treemacs evil)
-    :straight t
-    :init
-#+END_SRC
-
-We first have to define a new minor mode, ~magic_rb-koy-treemacs-mode~, then hook it onto the existing ~treemacs-mode~
-
-#+BEGIN_SRC emacs-lisp
-  (define-minor-mode magic_rb-koy-treemacs-mode
-    "Enable koy compatibility for Treemacs."
-    :lighter " koy"
-    :keymap (make-sparse-keymap)
-    (evil-normalize-keymaps))
- (add-hook 'treemacs-mode-hook 'magic_rb-koy-treemacs-mode)
-#+END_SRC
-
-Then we actually populate the keymap using [[id:1c6981a5-4371-4657-b4ea-435497a80010][general.el]].
-
-#+BEGIN_SRC emacs-lisp
-  :after (general)
-  :general
-  (:states 'treemacs
-           :predicate 'magic_rb-koy-compat-p
-           :keymaps 'magic_rb-koy-treemacs-mode-map
-           "t" 'ignore
-           "r" 'treemacs-previous-line
-           "n" 'treemacs-next-line
-           "l" 'ignore))
-#+END_SRC
-
-* LSP
-Integration between Treemacs and [[id:cc668372-8d95-461b-a7c6-3e2b51de3f40][LSP]]. Needs some work still.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package lsp-treemacs
-    :straight t
-    :after (lsp-mode treemacs)
-    :config
-    (lsp-treemacs-sync-mode 1))
 #+END_SRC

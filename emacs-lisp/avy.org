@@ -10,12 +10,5 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package avy
-    :straight t
-    :general
-    (:states '(normal insert)
-             :predicate 'magic_rb-koy-compat-p
-             :keymaps '(magic_rb-koy-treemacs-mode-map magic_rb-koy-magit-mode-map magic_rb-koy-evil-mode-map)
-             "z" (general-key-dispatch 'self-insert-command
-                                       :timeout 0.25
-                                       "z" 'avy-goto-char-timer)))
+    :straight t)
 #+END_SRC

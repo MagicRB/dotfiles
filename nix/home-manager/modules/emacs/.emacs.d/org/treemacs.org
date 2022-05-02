@@ -1,7 +1,10 @@
 * Treemacs
 
+#+begin_src emacs-lisp
+#+end_src
+
 #+NAME: treemacs
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package treemacs
     :straight t
     :config

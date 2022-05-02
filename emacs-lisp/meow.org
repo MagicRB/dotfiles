@@ -1,0 +1,112 @@
+:PROPERTIES:
+:ID:       b88618f2-258f-4f3a-93f7-46fd45bc833f
+:END:
+#+title: Meow
+#+filetags: emacs-load
+
+Meow is a modal editing framework, it's a bit like evil but also very different. This keymap is setup for KOY.
+
+#+begin_src emacs-lisp
+  (defun meow-setup ()
+    (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+    (general-def
+      :keymaps 'meow-insert-state-keymap
+      "j" (general-key-dispatch 'self-insert-command
+            :timeout 0.25
+            "j" 'meow-insert-exit))
+    (meow-motion-overwrite-define-key
+     '("r" . meow-prev)
+     '("n" . meow-next)
+     '("<escape>" . ignore))
+    (meow-leader-define-key
+     ;; SPC j/k will run the original command in MOTION state.
+     '("r" . "H-r")
+     '("n" . "H-n")
+     ;; Use SPC (0-9) for digit arguments.
+     '("1" . meow-digit-argument)
+     '("2" . meow-digit-argument)
+     '("3" . meow-digit-argument)
+     '("4" . meow-digit-argument)
+     '("5" . meow-digit-argument)
+     '("6" . meow-digit-argument)
+     '("7" . meow-digit-argument)
+     '("8" . meow-digit-argument)
+     '("9" . meow-digit-argument)
+     '("0" . meow-digit-argument)
+     '("/" . meow-keypad-describe-key)
+     '("?" . meow-cheatsheet))
+    (meow-normal-define-key
+     '("0" . meow-expand-0)
+     '("9" . meow-expand-9)
+     '("8" . meow-expand-8)
+     '("7" . meow-expand-7)
+     '("6" . meow-expand-6)
+     '("5" . meow-expand-5)
+     '("4" . meow-expand-4)
+     '("3" . meow-expand-3)
+     '("2" . meow-expand-2)
+     '("1" . meow-expand-1)
+     '("-" . negative-argument)
+     '("d" . meow-reverse)
+     '("w" . meow-inner-of-thing)
+     '("m" . meow-bounds-of-thing)
+     '("z" . meow-beginning-of-thing)
+     '("f" . meow-end-of-thing)
+     '("h" . meow-append)
+     '("H" . meow-open-below)
+     '("ö" . meow-back-word)
+     '("Ö" . meow-back-symbol)
+     '("ä" . meow-change)
+     '("e" . meow-delete)
+     '("E" . meow-backward-delete)
+     '("o" . meow-next-word)
+     '("O" . meow-next-symbol)
+     '("i" . meow-find)
+     '("u" . meow-cancel-selection)
+     '("U" . meow-grab)
+     '("c" . meow-insert)
+     '("C" . meow-open-above)
+
+     '("t" . meow-left)
+     '("T" . meow-left-expand)
+     '("r" . meow-prev)
+     '("R" . meow-prev-expand)
+     '("n" . meow-next)
+     '("N" . meow-next-expand)
+     '("s" . meow-right)
+     '("S" . meow-right-expand)
+
+     '("p" . meow-join)
+     '("b" . meow-search)
+     '("l" . meow-block)
+     '("L" . meow-to-block)
+     '("ß" . meow-clipboard-yank)
+     '("k" . meow-quit)
+     '("K" . meow-goto-line)
+     '("," . meow-replace)
+     '("–" . meow-swap-grab)
+     '("a" . meow-clipboard-kill)
+     '("y" . meow-till)
+     '("g" . meow-undo)
+     '("G" . meow-undo-in-selection)
+     '("ü" . avy-goto-char-timer)
+     '("." . meow-mark-word)
+     '("•" . meow-mark-symbol)
+     '("q" . meow-line)
+     '("Q" . meow-goto-line)
+     '("v" . meow-clipboard-save)
+     '("V" . meow-sync-grab)
+     '("x" . meow-pop-selection)
+     '("D" . repeat)
+     '("<escape>" . ignore)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package meow
+    :straight t
+    :config
+    (meow-setup)
+    (meow-global-mode 1))
+#+end_src
+
+* General.el amendment

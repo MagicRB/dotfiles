@@ -8,7 +8,7 @@
 
 Display flycheck messages in a posframe.
 
-#+begin_src emacs-lisp noweb: yes
+#+begin_src emacs-lisp :noweb yes
   (use-package flycheck-posframe
     :straight t
     :config

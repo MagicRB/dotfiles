@@ -11,12 +11,3 @@
   (use-package magit
     :straight t)
 #+END_SRC
-
-Also enable ~evil-magit~ for evil-style keybindings in Magit.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-magit
-    :straight t
-    :after (evil magit)
-    :config)
-#+END_SRC
