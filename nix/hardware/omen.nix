@@ -85,7 +85,7 @@ in
     };
 
     swapDevices = [
-      { device = "/dev/disk/by-partlabel/swap-WL157385"; }
+      # { device = "/dev/disk/by-partlabel/swap-WL157385"; }
     ];
   };
 }

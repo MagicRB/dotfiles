@@ -31,6 +31,13 @@ with lib;
               type = str;
             };
 
+            postSetup = mkOption {
+              description = ''
+                Post setup script.
+              '';
+              type = coercedTo (listOf str) (concatStringsSep "\n") lines;
+            };
+
             peers = mkOption {
               description = ''
                 List of peers.

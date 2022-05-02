@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 with lib;
 
 {
@@ -22,6 +22,8 @@ with lib;
                 ./password-hashes.nix
                 ./mounts.nix
                 ./emacs.nix
+                ({...}:
+                  { _module.args.pkgs = pkgs; })
               ] ++
               (if (builtins.tryEval { x = import secret; }).success then
                 [ secret ]
