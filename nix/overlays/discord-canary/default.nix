@@ -5,13 +5,14 @@ final: prev: {
       old: let
         binaryName = "DiscordCanary";
       in rec {
-        version = "0.0.123";
+        version = "0.0.134";
         src =
           prev.fetchurl
           {
             url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-            sha256 = "0bijwfsd9s4awqkgxd9c2cxh7y5r06vix98qjp0dkv63r6jig8ch";
+            sha256 = "00-sha256";
           };
+
         installPhase = ''
           mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
           mv * $out/opt/${binaryName}
