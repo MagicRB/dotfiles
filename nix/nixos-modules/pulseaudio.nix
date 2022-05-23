@@ -14,7 +14,14 @@ in
     hardware = {
       pulseaudio = {
         enable = true;
+        # extraModules = mkIf bluetooth-enable [ pkgs.pulseaudio-modules-bt ];
         package = mkIf bluetooth-enable pkgs.pulseaudioFull;
+        daemon.config = {
+          default-sample-rate = 96000;
+          default-sample-format = "s32le";
+          resample-method = "speex-float-5";
+          nice-level = -19;
+        };
       };
       pulseaudio.support32Bit = true;
     };
