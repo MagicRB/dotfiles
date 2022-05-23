@@ -30,7 +30,10 @@ inputs: {
                     enableDirenv = true;
                   };
                   ssh.enable = true;
-                  emacs.enable = true;
+                  emacs = {
+                    enable = true;
+                    enableMu4e = true;
+                  };
                   xmonad.enable = true;
                   gpg.enable = true;
                   multimc.enable = true;

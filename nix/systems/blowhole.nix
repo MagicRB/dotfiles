@@ -205,6 +205,14 @@ inputs: {
                     };
                   };
 
+                  plugin."nomad-driver-containerd" = {
+                    config = {
+                      enabled = true;
+                      containerd_runtime = "io.containerd.runc.v2";
+                      stats_interval = "5s";
+                    };
+                  };
+
                   disable_update_check = true;
                   datacenter = "homelab-1";
                   data_dir = "/var/lib/nomad";
@@ -224,13 +232,13 @@ inputs: {
             enableDocker = false;
             dropPrivileges = false;
 
-            extraPackages = with pkgs; [ consul glibc ];
+            extraPackages = with pkgs; [ consul glibc config.nix.package git ];
             extraSettingsPaths = singleton "/run/cfg/nomad/nomad.json";
+            extraSettingsPlugins = [ pkgs.nomad-driver-containerd-nix ];
           };
 
-          virtualisation.docker = {
-            enable = true;
-          };
+          virtualisation.docker.enable = true;
+          virtualisation.containerd.enable = true;
 
           systemd.tmpfiles.rules = singleton "d /run/cfg/vault 0750 vault vault 1d";
 
@@ -402,7 +410,7 @@ inputs: {
                     microsteps = "16";
                     endstop_pin = "P1.25";  # P1.24 for Z-max"
                     position_min = "-4.5";
-                    position_endstop = "1.275";
+                    position_endstop = "0.775";
                     position_max = "250";
                   };
 

@@ -133,6 +133,9 @@
       homeConfigurations.edge = homeManagerConfiguration (import ./systems/edge.nix inputs);
       edge = self.homeConfigurations.edge.activationPackage;
 
+      homeConfigurations.maturita = homeManagerConfiguration (import ./systems/maturita.nix inputs);
+      maturita = self.homeConfigurations.maturita.activationPackage;
+
       nixosConfigurations.blowhole = nixosSystem (import ./systems/blowhole.nix inputs);
       blowhole = self.nixosConfigurations.blowhole.config.system.build.toplevel;
 

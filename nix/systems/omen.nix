@@ -24,7 +24,10 @@ inputs: {
                 enableDirenv = true;
               };
               ssh.enable = true;
-              emacs.enable = true;
+              emacs = {
+                enable = true;
+                enableMu4e = true;
+              };
               xmonad.enable = true;
               gpg.enable = true;
               multimc.enable = false;
@@ -113,6 +116,7 @@ inputs: {
       security.pki.certificates = [ (builtins.readFile ../redalder.org.crt) ];
 
       virtualisation.docker.enable = true;
+      virtualisation.containerd.enable = true;
 
       time.timeZone = "Europe/Bratislava";
       system.stateVersion = "20.09";
