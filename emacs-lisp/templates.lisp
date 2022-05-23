@@ -60,6 +60,8 @@ c-mode :condition (re-search-backward "^\\w*$" (line-beginning-position) 'noerro
 
 org-mode
 
+(pnl "p.n.l.")
+
 (title "#+title: " p n "#+author: Daniel Mendler" n "#+language: en" n n)
 (quote "#+begin_quote" n> r> n> "#+end_quote")
 (example "#+begin_example" n> r> n> "#+end_example")

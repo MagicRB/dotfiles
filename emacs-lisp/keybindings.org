@@ -27,12 +27,20 @@ Then we hook our minor mode on ~meow-mode-hook~, but only after ~meow-mode~ is l
     :keymaps '(magic_rb/userbind-mode-map)
     :prefix "C-c"
     "o f" 'org-roam-node-find
-    "o c" 'org-roam-node-create
+    "o i" 'org-roam-node-insert
+    "o t" 'org-roam-tag-add
+    "o T" 'org-roam-tag-remove
+    "o r" 'org-roam-ref-add
+    "o R" 'org-roam-ref-remove
+    "o c" 'org-roam-capture
+    "o b" 'org-roam-buffer-toggle
     "o a" 'org-agenda
+
 
     "j f" 'consult-find
     "j r" 'consult-ripgrep
     "j l" 'consult-line
+    "j b" 'consult-project-buffer
 
     "p v" 'projectile-run-vterm
     "p m" 'projectile-vc

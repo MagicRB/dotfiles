@@ -53,6 +53,8 @@ SQLite3 must be on Emacs' PATH!
              :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                                 "#+title: ${title}\n")
              :unnarrowed t)))
+    ;; Add more informative completion interface
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
 
     (defun magic_rb/org-roam-buffer-hook ()
       (when (org-roam-buffer-p)

@@ -7,6 +7,7 @@ in
 {
   options.magic_rb.programs.emacs = {
     enable = mkEnableOption "Enable emacs with my config";
+    enableMu4e = mkEnableOption "Enable mu4e in emacs. WARNING: requires secrets";
     package = mkOption {
       description = "Which emacs package to use.";
       type = types.package;
@@ -28,7 +29,7 @@ in
               hunspell.dictionaries = with pkgs.hunspellDicts;
                 [ en_US ];
               environment =
-                { MU4E_CONTEXTS = secret.emacs.mu4eContexts;
+                { MU4E_CONTEXTS = mkIf cfg.enableMu4e secret.emacs.mu4eContexts;
                 };
               additionalPackages =
                 [ tex
@@ -71,7 +72,9 @@ in
 
     home.file = {
       ".emacs".source = ./.emacs;
-      ".mbsyncrc".source = secret.emacs.mbsyncrc;
+      ".mbsyncrc" = mkIf cfg.enableMu4e {
+        source = secret.emacs.mbsyncrc;
+      };
       ".emacs.d/org" = {
         source = ./.emacs.d/org;
         recursive = true;
@@ -80,7 +83,7 @@ in
         source = ./.emacs.d/lisp;
         recursive = true;
       };
-      ".emacs.d/mu4e-contexts" = {
+      ".emacs.d/mu4e-contexts" = mkIf cfg.enableMu4e {
         source = secret.emacs.mu4eContexts;
       };
       ".emacs.d/treesitter-grammars" = {

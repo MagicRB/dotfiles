@@ -16,7 +16,7 @@ Corfu enhances completion at point with a small completion popup. The current ca
       :general
       ("C-c c" 'completion-at-point)
       :init
-      (corfu-global-mode))
+      (global-corfu-mode))
 #+end_src
 
 * Company
