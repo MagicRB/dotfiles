@@ -33,6 +33,10 @@ Disable element cache for now, it freaks out all the damn time. God forbid I mak
   (setq org-element-use-cache nil)
 #+end_src
 
+#+begin_src emacs-lisp
+  (setf org-blank-before-new-entry '((heading . t) (plain-list-item . nil)))
+#+end_src
+
 * Org Mark Ring
 
 To go back to the previous mark, very useful with [[id:18476d68-cccb-48f4-aa77-caefe213d8bd][Org Roam]].

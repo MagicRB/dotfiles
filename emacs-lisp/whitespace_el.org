@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       8cfa2b1a-9004-4fa0-8ca4-72876ece7d70
+:END:
+#+title: whitespace.el
+#+filetags: emacs-load
+
+Highlight trailing whitespace.
+
+#+begin_src emacs-lisp
+    (use-package whitespace
+      :config
+      (setq whitespace-style '(face tabs trailing))
+      (face-spec-set
+       'whitespace-tabs
+       '((t :background "red"))
+       'face-defface-spec)
+      (face-spec-set
+       'whitespace-trailing
+       '((t :background "red"))
+       'face-defface-spec)
+      (global-whitespace-mode))
+#+end_src

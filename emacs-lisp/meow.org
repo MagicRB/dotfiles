@@ -89,7 +89,7 @@ Meow is a modal editing framework, it's a bit like evil but also very different.
      '("y" . meow-till)
      '("g" . meow-undo)
      '("G" . meow-undo-in-selection)
-     '("ü" . avy-goto-char-timer)
+     '("ü" . avy-goto-char-2)
      '("." . meow-mark-word)
      '("•" . meow-mark-symbol)
      '("q" . meow-line)

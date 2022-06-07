@@ -52,7 +52,7 @@ Then we hook our minor mode on ~meow-mode-hook~, but only after ~meow-mode~ is l
     "w s" 'windmove-right
 
     "b i" 'indent-region
-    "b c" 'comment-dwin
+    "b c" 'comment-dwim
 
     "l l" 'lsp
     "l r" 'lsp-workspace-restart

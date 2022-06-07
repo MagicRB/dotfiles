@@ -54,7 +54,7 @@ SQLite3 must be on Emacs' PATH!
                                 "#+title: ${title}\n")
              :unnarrowed t)))
     ;; Add more informative completion interface
-    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:30}" 'face 'org-tag)))
 
     (defun magic_rb/org-roam-buffer-hook ()
       (when (org-roam-buffer-p)
@@ -123,3 +123,19 @@ Lastly a bookmarklet in Firefox.
 #+BEGIN_SRC javascript
   javascript:location.href ='org-protocol://roam-ref?template=r&ref=' + encodeURIComponent(location.href) + '&title=' + encodeURIComponent(document.title) + '&body=' + encodeURIComponent(window.getSelection())
 #+END_SRC
+
+* Export
+#+begin_src emacs-lisp :tangle no :results none
+  (require 'org-roam-export)
+
+  (setq org-publish-project-alist
+        '(("org"
+           :base-directory "~/roam/"
+           :publishing-function org-html-publish-to-html
+           :publishing-directory "~/roam/published"
+           :section-numbers nil
+           :with-toc t
+           )))
+
+  (org-publish "org" t)
+#+end_src
