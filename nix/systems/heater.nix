@@ -83,7 +83,6 @@ inputs: {
             sshdEmacs.enable = true;
             flakes = {
               enable = true;
-              nixMaster = true;
             };
             pulseaudio.enable = true;
           };
