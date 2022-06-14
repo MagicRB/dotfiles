@@ -6,7 +6,7 @@ inputs: {
     inputs.home-manager.nixosModules.home-manager
     ({ pkgs, lib, config, secret, ... }: {
        home-manager.users."main" =
-        { ... }: {
+         { ... }: {
           imports = [ ../home-manager/modules/default.nix ];
 
           magic_rb = {
@@ -44,7 +44,15 @@ inputs: {
           services.syncthing.enable = true;
               
           home.stateVersion = "20.09";
-        };
+         };
+       _module.args.nixinate = {
+         host = "10.64.0.8";
+         sshUser = "main";
+         buildOn = "local";
+         substituteOnTarget = true;
+         hermetic = false;
+       };
+
 
        specialisation.nvidia-sync =
          { configuration =

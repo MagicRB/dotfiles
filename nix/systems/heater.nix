@@ -207,6 +207,7 @@ inputs: {
           # };
 
           virtualisation.docker.enable = true;
+          virtualisation.containerd.enable = true;
 
           hardware.firmware = [ pkgs.firmwareLinuxNonfree ];
         })

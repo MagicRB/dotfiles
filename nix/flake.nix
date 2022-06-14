@@ -3,6 +3,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-21.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
     nixpkgs-master.url = "github:NixOS/nixpkgs?ref=master";
+    nixinate.url = "github:MagicRB/nixinate";
 
     home-manager = {
       url = "github:nix-community/home-manager?ref=master";
@@ -55,7 +56,7 @@
 
 
     secret = {
-      url = "path:/home/main/dotfiles/secret";
+      url = "git+ssh://git@github.com/MagicRB/dotfiles-secret";
       flake = false;
     };
 
@@ -96,6 +97,7 @@
             , nixpkgs-unstable
             , home-manager
             , deploy-rs
+            , nixinate
             , ...
             }@inputs:
     let
@@ -143,6 +145,8 @@
 
       nixosConfigurations.blowhole = nixosSystem (import ./systems/blowhole.nix inputs);
       blowhole = self.nixosConfigurations.blowhole.config.system.build.toplevel;
+
+      apps = nixinate.nixinate.x86_64-linux self;
 
       allSystems =
         let

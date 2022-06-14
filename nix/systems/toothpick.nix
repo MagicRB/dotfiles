@@ -13,6 +13,14 @@ inputs: {
           '';
       in
         {
+          _module.args.nixinate = {
+            host = "redalder.org";
+            sshUser = "main";
+            buildOn = "local";
+            substituteOnTarget = true;
+            hermetic = false;
+          };
+
           magic_rb = {
             pins = inputs;
             overlays = inputs.self.overlays;

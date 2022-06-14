@@ -36,6 +36,7 @@ with lib;
                 Post setup script.
               '';
               type = coercedTo (listOf str) (concatStringsSep "\n") lines;
+              default = "";
             };
 
             peers = mkOption {
