@@ -410,7 +410,7 @@ inputs: {
                     microsteps = "16";
                     endstop_pin = "P1.25";  # P1.24 for Z-max"
                     position_min = "-4.5";
-                    position_endstop = "0.775";
+                    position_endstop = "1.290";
                     position_max = "250";
                   };
 
@@ -481,6 +481,7 @@ inputs: {
                 ### Mainsail
                 pause_resume = {};
                 display_status = {};
+                endstop_phase = {};
 
                 "tmc2208 stepper_x" =
                   { uart_pin = "P1.17";

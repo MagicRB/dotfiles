@@ -64,6 +64,11 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
+    nomad-driver-containerd-nix = {
+      url = "git+https://gitea.redalder.org/Magic_RB/nomad-driver-containerd-nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     #  PACKAGES
 
     nix-gaming = {
@@ -178,6 +183,7 @@
         gpg-key = import ./overlays/gpg-key;
         screenshot = import ./overlays/screenshot;
         easy-hls-nix = import ./overlays/easy-hls-nix inputs.easy-hls-nix;
+        uboot-clara-hd = import ./overlays/uboot-clara-hd;
         mainsail = import ./overlays/mainsail;
         discord-canary = import ./overlays/discord-canary;
         winetricks = import ./overlays/winetricks;
@@ -186,6 +192,7 @@
         # nyxt = import ./overlays/nyxt inputs.nyxt.lib;
         nix-gaming = final: prev: foldl (acc: x: acc // (x final prev)) {} (mapAttrsToList (_: v: v) inputs.nix-gaming.overlays);
         nixng = inputs.nixng.overlay;
+        nomad-driver-containerd-nix = inputs.nomad-driver-containerd-nix.overlay;
       };
 
       nixosModules = {
@@ -213,6 +220,7 @@
               hidapitester = mkPkg "hidapitester";
               emacs = mkPkg "emacs";
               emacsclient-remote = mkPkg "emacsclient-remote";
+              uboot-clara-hd = mkPkg "uboot-clara-hd";
               gpg-key = mkPkg "gpg-key";
               gpg-key-hs = mkPkg' "gpg-key" "gpg-key-hs";
               screenshot = mkPkg "screenshot";

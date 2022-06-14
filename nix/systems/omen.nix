@@ -108,6 +108,8 @@ inputs: {
         interfaces.eno1.useDHCP = true;
         hostId = "10c7ffc5";
 
+        firewall.allowedTCPPorts = [ 22000 ];
+
         wireguard.interfaces."wg0" = {
 
         } // config.magic_rb.secret.wireguard."omen";

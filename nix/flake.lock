@@ -308,11 +308,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1652077393,
-        "narHash": "sha256-+/pLohePbSL+HVqze5FduuxBXRbM10GfDhJqIjwG1wY=",
+        "lastModified": 1654022303,
+        "narHash": "sha256-GftC/1H5PcEoeW0leKoPKDbwMJ3x8kGCHyNleBrNAc0=",
         "ref": "master",
-        "rev": "2c0b2a539c0171a9eec9deb5819f56f4a4554c1e",
-        "revCount": 328,
+        "rev": "6d99de29b6d3e3f06382990648277671f34774f2",
+        "revCount": 331,
         "type": "git",
         "url": "https://gitea.redalder.org/Magic_RB/nomad-driver-containerd-nix"
       },
