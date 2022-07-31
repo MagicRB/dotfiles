@@ -5,6 +5,10 @@
 #+title: Selectrum
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 #+BEGIN_QUOTE
 Selectrum aims to provide a better completion UI using standard Emacs APIs. In essence it is an interface for selecting items from a list.
 #+END_QUOTE

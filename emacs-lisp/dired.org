@@ -4,6 +4,10 @@
 #+title: Dired
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 Dired is inclueded with Emacs since forever, I use a wrapper called [[id:67919dd9-2aa0-4b89-8c96-0441a54e7b03][dirvish]].
 
 #+begin_src emacs-lisp

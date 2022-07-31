@@ -5,6 +5,10 @@
 #+title: Email
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 Email is a complicated beast, I decided to use *mu4e* and *mbsync*.
 
 * smtpmail

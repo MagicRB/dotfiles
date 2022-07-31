@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+# -*- mode: shell-script; -*-
+
+export PATH=@scrot@/bin:@xclip@/bin:@busybox@/bin
+
+OPT="${1:-screen}"
+
+case "$OPT" in
+	screen)
+		scrot '/tmp/%F_%T_$wx$h.png' -e 'mkdir -p ~/screenshot/ ; mv $f ~/screenshot ; xclip -selection clipboard -target image/png -i ~/screenshot/`basename $f`'
+		;;
+	select)
+		scrot '/tmp/%F_%T_$wx$h.png' -f -s -e 'mkdir -p ~/screenshot/ ; mv $f ~/screenshot ; xclip -selection clipboard -target image/png -i ~/screenshot/`basename $f`'
+		;;
+	focused)
+		scrot '/tmp/%F_%T_$wx$h.png' -f -e 'mkdir -p ~/screenshot/ ; mv $f ~/screenshot ; xclip -selection clipboard -target image/png -i ~/screenshot/`basename $f`'
+		;;
+esac

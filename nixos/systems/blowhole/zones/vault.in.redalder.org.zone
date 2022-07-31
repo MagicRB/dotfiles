@@ -1,0 +1,15 @@
+$ORIGIN in.redalder.org.
+$TTL 5m
+
+vault		IN	SOA	ns.in.redalder.org.	root.redalder.org.	(
+				9			; serial
+				4h			; refresh
+				15m			; retry
+				8h			; expire
+				4m)			; negativa caching TTL
+		IN	NS	ns.redalder.org
+		IN	A 	10.64.1.201
+
+$ORIGIN vault.in.redalder.org.
+
+blowhole	IN	A	10.64.1.201

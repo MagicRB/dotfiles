@@ -4,6 +4,10 @@
 #+title: Go
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 Go is a horrible language, but for some reason all the DevOps things are written in it.
 
 #+begin_src emacs-lisp

@@ -4,6 +4,10 @@
 #+title: Tree Sitter
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 #+BEGIN_QUOTE
 This is an Emacs Lisp binding for tree-sitter, an incremental parsing library. It requires Emacs 25.1 or above, built with dynamic module support.
 #+END_QUOTE

@@ -4,6 +4,10 @@
 #+title: Keybindings
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 This file contains all keybindings of my Emacs configuration. I chose to put them all into one file for easy reference and also cross package consistency is easier to ensure when you have everything on one screen.
 
 First we need to define a new minor mode.
@@ -37,7 +41,7 @@ Then we hook our minor mode on ~meow-mode-hook~, but only after ~meow-mode~ is l
     "o a" 'org-agenda
 
 
-    "j f" 'consult-find
+    "j f" 'consult-fd
     "j r" 'consult-ripgrep
     "j l" 'consult-line
     "j b" 'consult-project-buffer
@@ -46,15 +50,24 @@ Then we hook our minor mode on ~meow-mode-hook~, but only after ~meow-mode~ is l
     "p m" 'projectile-vc
     "p s" 'projectile-switch-project
 
+    "r c" 'popper-cycle
+    "r p" 'popper-toggle-latest
+    "r t" 'popper-toggle-type
+
     "w t" 'windmove-left
     "w r" 'windmove-up
     "w n" 'windmove-down
     "w s" 'windmove-right
+    "w a" 'ace-window
 
     "b i" 'indent-region
     "b c" 'comment-dwim
 
     "l l" 'lsp
     "l r" 'lsp-workspace-restart
-    "l e" 'lsp-execute-code-action)
+    "l e" 'lsp-execute-code-action
+    :keymaps '(special-mode-map)
+    :prefix ""
+    "q" 'nil
+    "k" 'quit-window)
 #+end_src

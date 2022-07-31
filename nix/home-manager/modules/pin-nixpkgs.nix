@@ -1,1 +1,0 @@
-../../nixos-modules/pin-nixpkgs.nix

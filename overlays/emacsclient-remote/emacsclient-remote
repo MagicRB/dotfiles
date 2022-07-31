@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+# Open file on a remote Emacs server.
+# https://andy.wordpress.com/2013/01/03/automatic-emacsclient/ with added sudo.
+
+params=()
+sudo=0
+local=0
+
+host=$(echo $SSH_CONNECTION | cut -d' ' -f3)
+port=$(echo $SSH_CONNECTION | cut -d' ' -f4)
+
+for p in "${@}"; do
+    if [[ "${p}" == "-n" ]]; then
+        params+=( "${p}" )
+    elif [[ "${p}" == "-c" ]]; then
+        params+=( "${p}" )
+    elif [[ "${p:0:1}" == "+" ]]; then
+        params+=( "${p}" )
+    elif [[ "${p}" == "--sudo" ]]; then
+        sudo=1
+    elif [[ "${p}" == "--local" ]]; then
+        # Use local server, for use with --sudo.
+        local=1
+    else
+        # Setting field separator to newline so that filenames with spaces will
+        # not be split up into 2 array elements.
+        OLDIFS=${IFS}
+        IFS=$'\n'
+
+        if [[ $(id -u) -eq 0 || ${sudo} -eq 1 ]]; then
+            if [[ ${local} -eq 0 ]]; then
+                params+=( "/ssh:${USER}@${host}#${port}|sudo::"$(realpath -m "${p}") )
+            else
+                params+=( "/sudo:localhost:"$(realpath -m "${p}") )
+            fi
+        else
+            params+=( "/ssh:${USER}@${host}#${port}:"$(realpath "${p}") )
+        fi
+
+        IFS=${OLDIFS}
+    fi
+done
+
+"emacsclient-$(uname -m)" -s ~/.ssh/emacs-server "${params[@]}"

@@ -1,6 +1,11 @@
+; SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+;
+; SPDX-License-Identifier: LGPL-3.0-or-later
+
 fundamental-mode ;; Available everywhere
 
 (today (format-time-string "%Y-%m-%d"))
+(heredoc "<<EOF\n" p "EOF\n")
 
 prog-mode
 

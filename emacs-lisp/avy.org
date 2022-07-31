@@ -4,6 +4,10 @@
 #+title: Avy
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 #+BEGIN_QUOTE
 ~avy~ is a GNU Emacs package for jumping to visible text using a char-based decision tree. See also ~ace-jump-mode~ and ~vim-easymotion~ - ~avy~ uses the same idea.
 #+END_QUOTE

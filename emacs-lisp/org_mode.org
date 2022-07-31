@@ -4,6 +4,10 @@
 #+title: Org Mode
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 I used to respect the 80 column limit, but why waste all the space when it can be dynamic. In this way all of the available screen space is utilized.
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -77,7 +81,7 @@ For previews, create SVGs and not PNGs or something, use the =dvisvgm= command.
   (setq org-preview-latex-default-process 'dvisvgm)
 #+END_SRC
 
-Enable =org-fragtog=. When point is on a LaTeX fragment, it will automatically remove the preview otherwise show it. 
+Enable =org-fragtog=. When point is on a LaTeX fragment, it will automatically remove the preview otherwise show it.
 
 #+BEGIN_SRC emacs-lisp :results none
   (use-package org-fragtog

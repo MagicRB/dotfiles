@@ -4,6 +4,10 @@
 #+title: Filling and unfilling paragraphs
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 #+begin_src emacs-lisp
   ;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
   (defun unfill-paragraph (&optional region)

@@ -4,6 +4,10 @@
 #+title: Org Roam
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 #+BEGIN_NOTE
 When exporting, running ~(org-id-update-id-locations (directory-files-recursively org-roam-directory ".org"))~
 #+END_NOTE
@@ -95,7 +99,7 @@ Using ~org-protocol~, one can capture a website from their browser directly into
 
 Then you need a desktop entry for ~org-protocol~. Such as:
 
-#+BEGIN_SRC conf-desktop 
+#+BEGIN_SRC conf-desktop
   [Desktop Entry]
   Name=org-protocol
   Exec=emacsclient %u

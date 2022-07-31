@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+# -*- mode: shell-script; -*-
+
+export PATH=@findutils@/bin:@busybox@/bin:@cryptsetup@/bin:@gnupg@/bin:@sudo@/bin
+
+command="$1"
+
+if [ "$(id -u)" != "0" ]
+then
+    echo "You must this script as root."
+    exit 1
+fi
+
+set -e
+case "$command" in
+     "open")
+	 cryptsetup open /dev/disk/by-uuid/5b9ffbde-4b39-4645-8d9f-1ffac72c6724 addhe
+	 mkdir -p /mnt/key
+
+	 mount /dev/mapper/addhe /mnt/key
+	 sudo -u $SUDO_USER gpg-agent --daemon
+     ;;
+     "close")
+	 sudo -u $SUDO_USER pkill gpg-agent
+
+	 umount /mnt/key
+	 cryptsetup close addhe
+
+	 rm -r /mnt/key
+	 if [ -n "$(find /mnt -maxdepth 0 -empty)" ]
+	 then
+	     rm -r /mnt
+	 fi
+     ;;
+     *)
+	 cat <<EOF
+open - open key
+close - close key
+EOF
+     ;;
+esac

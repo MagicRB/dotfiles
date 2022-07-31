@@ -4,6 +4,10 @@
 #+title: Embark
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 #+BEGIN_QUOTE
 This package provides a sort of right-click contextual menu for Emacs, accessed through the embark-act command (which you should bind to a convenient key), offering you relevant actions to use on a target determined by the context:
 #+END_QUOTE
@@ -17,5 +21,5 @@ This package provides a sort of right-click contextual menu for Emacs, accessed 
      ("C-h B" . embark-bindings))
     :init
     (setq embark-indicators '(embark-minimal-indicator)))
-  
+
 #+END_SRC

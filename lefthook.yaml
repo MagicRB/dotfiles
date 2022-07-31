@@ -1,0 +1,7 @@
+pre-commit:
+  commands:
+    alejandra:
+      glob: "*.nix"
+      run: alejandra {all_files} </dev/null
+    reuse:
+      run: reuse lint

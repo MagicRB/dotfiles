@@ -4,6 +4,10 @@
 #+title: Popper
 #+filetags: emacs-load
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 Enable ~popper~, a better version of ~popwin~, which might actually work. It groups popups by context and allows you to specify their exact positioning, or even a custom display function. It also seems to be better at restoring the previous layout.
 
 #+NAME: popper

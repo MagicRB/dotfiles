@@ -4,6 +4,10 @@
 #+title: Org Agenda
 #+filetags: :emacs-load:
 
+# SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
+#
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
 Put state changes into the ~LOGBOOK~ section and not into a random spot.
 
 #+BEGIN_SRC emacs-lisp
@@ -104,7 +108,7 @@ Now for the second last function, we need to actually return the list of files c
         :left-join nodes
         :on (= tags:node-id nodes:id)
         :where (like tag (quote "%\"project\"%"))]))))
-#+END_SRC 
+#+END_SRC
 
 Finally we can update the list of project files before every =org-agenda= invocation.
 
@@ -112,7 +116,7 @@ Finally we can update the list of project files before every =org-agenda= invoca
   (defun vulpea-agenda-files-update (&rest _)
     "Update the value of `org-agenda-files'."
     (setq org-agenda-files (vulpea-project-files)))
-  
+
   (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
 #+END_SRC
 

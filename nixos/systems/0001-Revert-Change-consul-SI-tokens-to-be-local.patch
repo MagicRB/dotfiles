@@ -1,0 +1,25 @@
+From ba55d4ee4e05fd7b5c885ad91132a333651c80e1 Mon Sep 17 00:00:00 2001
+From: main <magic_rb@redalder.org>
+Date: Sat, 30 Jul 2022 15:48:33 +0200
+Subject: [PATCH] Revert "Change consul SI tokens to be local"
+
+This reverts commit 7bfb482b1ef3a1bf0138c2f9e00700466127c3fc.
+---
+ nomad/consul.go | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/nomad/consul.go b/nomad/consul.go
+index 7eac19ff8..3c238a8c8 100644
+--- a/nomad/consul.go
++++ b/nomad/consul.go
+@@ -290,7 +290,6 @@ func (c *consulACLsAPI) CreateToken(ctx context.Context, sir ServiceIdentityRequ
+ 		Description:       sir.Description(),
+ 		ServiceIdentities: []*api.ACLServiceIdentity{{ServiceName: service}},
+ 		Namespace:         sir.ConsulNamespace,
+-		Local:             true,
+ 	}
+ 
+ 	// Ensure we are under our rate limit.
+-- 
+2.36.1
+
