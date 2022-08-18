@@ -131,6 +131,8 @@
 
       mkdir /run/restic/cartman
       ${pkgs.zfs-relmount}/bin/zfs-relmount mount-snapshot storfa/ds1/cartman /run/restic/cartman "''${snapshot}"
+
+      export RESTIC_PROGRESS_FPS=1
     '';
     backupCleanupCommand = ''
       ${pkgs.zfs-relmount}/bin/zfs-relmount umount storfa/ds1/cartman /run/restic/cartman

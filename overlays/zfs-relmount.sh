@@ -66,7 +66,7 @@ case $action in
         recursive_perform "${zfs_src}" "${dst_dir}" 'mount -o X-mount.mkdir -t zfs "${volume}"@'"${snapshot}"' "${dir}"'
         ;;
     "umount")
-        zls_src="${1}"
+        zfs_src="${1}"
         dst_dir="${2}"
 
         recursive_perform "${zfs_src}" "${dst_dir}" 'umount -t zfs "${dir}"'
