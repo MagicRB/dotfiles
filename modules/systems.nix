@@ -7,6 +7,7 @@
   withSystem,
   self,
   roots,
+  config,
   ...
 }:
 with lib; let
@@ -60,8 +61,4 @@ with lib; let
     foldr mergeAttrs {} systemConfigurations;
 in {
   flake.nixosConfigurations = eachNixosSystem "${roots.nixos}/systems";
-
-  perSystem = {pkgs, system, ...}: {
-    apps = inputs.nixinate.nixinate.${system} self;
-  };
 }

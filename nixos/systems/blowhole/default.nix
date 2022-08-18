@@ -21,6 +21,8 @@
         ./vault.nix
         ./bind.nix
         ./vault-agent.nix
+        ./nas.nix
+        ./firewall.nix
       ];
 
       home-manager.users."main" = {...}: {
@@ -37,7 +39,7 @@
       };
 
       _module.args.nixinate = {
-        host = "10.64.1.201";
+        host = "192.168.0.71";
         sshUser = "main";
         buildOn = "local";
         substituteOnTarget = true;
@@ -58,12 +60,7 @@
       networking = {
         hostName = "blowhole";
         useDHCP = false;
-        interfaces.eno1.useDHCP = true;
-
-        nameservers = [
-          # Needed for DNS to resolv in containerd containers
-          "10.64.1.1"
-        ];
+        interfaces.enp7s0f1.useDHCP = true;
 
         firewall = {
           enable = true;

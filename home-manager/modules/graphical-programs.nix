@@ -26,7 +26,7 @@ in {
       mpv
       slack
       ungoogled-chromium
-      fufexan-discord-canary
+      webcord
       element-desktop
 
       xournalpp

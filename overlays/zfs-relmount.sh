@@ -4,14 +4,13 @@
 #
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
-zfs_src="${1}"
-dst_dir="${2}"
-
 function recurse_children()
 {
     local volume="${1}"
     local dir="${2}"
     local relmount="${3}"
+    local children="${4}"
+    local action="${5}"
 
     for child in $children
     do
@@ -20,14 +19,15 @@ function recurse_children()
             continue
         fi
 
-        mount_wc "${child}" "${dir}/$(basename "${child}")"
+        recursive_perform "${child}" "${dir}/$(basename "${child}")" "${action}"
     done
 }
 
-function mount_wc()
+function recursive_perform()
 {
     local volume="${1}"
     local dir="${2}"
+    local action="${3}"
 
     local relmount="$(zfs get -Ho value :relmount "${volume}")"
     local children="$(zfs list -Hrd 1 "${volume}" -o name | tr '\n' ' ')"
@@ -36,16 +36,47 @@ function mount_wc()
     then
         case "${relmount}" in
             "yes")
-                mount -o X-mount.mkdir -t zfs "${volume}" "${dir}"
-                recurse_children "${volume}" "${dir}" "${relmount}"
-            ;;
+                eval "${action}"
+                recurse_children "${volume}" "${dir}" "${relmount}" "${children}" "${action}"
+                ;;
             "pass")
-                recurse_children "${volume}" "${dir}" "${relmount}"
-            ;;
+                recurse_children "${volume}" "${dir}" "${relmount}" "${children}" "${action}"
+                ;;
             "*")
-            ;;
+                ;;
         esac
     fi
 }
 
-mount_wc "${zfs_src}" "${dst_dir}"
+action="${1}"
+shift 1
+
+case $action in
+    "mount")
+        zfs_src="${1}"
+        dst_dir="${2}"
+
+        recursive_perform "${zfs_src}" "${dst_dir}" 'mount -o X-mount.mkdir -t zfs "${volume}" "${dir}"'
+        ;;
+    "mount-snapshot")
+        zfs_src="${1}"
+        dst_dir="${2}"
+        snapshot="${3}"
+
+        recursive_perform "${zfs_src}" "${dst_dir}" 'mount -o X-mount.mkdir -t zfs "${volume}"@'"${snapshot}"' "${dir}"'
+        ;;
+    "umount")
+        zls_src="${1}"
+        dst_dir="${2}"
+
+        recursive_perform "${zfs_src}" "${dst_dir}" 'umount -t zfs "${dir}"'
+        ;;
+    "snapshot")
+        root="${1}"
+        snapshot="${2}"
+
+        recursive_perform "${root}" "${root}" 'zfs snapshot "${volume}"@'"${snapshot}"
+        ;;
+    "*")
+        ;;
+esac

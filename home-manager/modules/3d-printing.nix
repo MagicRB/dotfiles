@@ -24,7 +24,7 @@ in {
       openscad
       cura
       inkscape
-      prusa-slicer
+#       prusa-slicer
       freecad
     ];
   };

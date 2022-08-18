@@ -31,7 +31,7 @@
     deploy-rs.inputs.utils.follows = "flake-utils";
     deploy-rs.inputs.flake-compat.follows = "flake-compat";
 
-    nomad-driver-containerd-nix.url = "git+https://gitea.redalder.org/Magic_RB/nomad-driver-containerd-nix";
+    nomad-driver-containerd-nix.url = "github:MagicRB/nomad-driver-containerd-nix"; # "git+https://gitea.redalder.org/Magic_RB/nomad-driver-containerd-nix";
     nomad-driver-containerd-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-gaming.url = "github:fufexan/nix-gaming";
@@ -45,6 +45,48 @@
     flake-parts.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-utils.url = "github:numtide/flake-utils";
+
+    webcord-flake.url = "github:fufexan/webcord-flake";
+    webcord-flake.inputs.nixpkgs.follows = "nixpkgs";
+    webcord-flake.inputs.dream2nix.follows = "dream2nix";
+    webcord-flake.inputs.webcord.follows = "webcord";
+
+    dream2nix.url = "github:nix-community/dream2nix";
+    dream2nix.inputs.nixpks.follows = "nixpkgs";
+    dream2nix.inputs.alejandra.follows = "alejandra";
+    dream2nix.inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+    dream2nix.inputs.flake-utils-pre-commit.follows = "flake-utils";
+
+    alejandra.url = "github:kamadorueda/alejandra";
+    alejandra.inputs.nixpkgs.follows = "nixpkgs";
+    alejandra.inputs.fenix.follows = "fenix";
+    alejandra.inputs.flakeCompat.follows = "flake-compat";
+
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
+    pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
+
+    nil.url = "github:oxalica/nil";
+    nil.inputs.nixpkgs.follows = "nixpkgs";
+    nil.inputs.flake-utils.follows = "flake-utils";
+
+    webcord.url = "github:SpacingBat3/WebCord";
+    webcord.flake = false;
+
+    fenix.url = "github:nix-community/fenix";
+    fenix.flake = false;
+
+    devshell.url = "github:numtide/devshell";
+    devshell.flake = false;
+
+    gomod2nix.url = "github:tweag/gomod2nix";
+    gomod2nix.flake = false;
+
+    mach-nix.url = "github:DavHau/mach-nix";
+    mach-nix.flake = false;
+
+    crane.url = "github:ipetkov/crane";
+    crane.flake = false;
 
     flake-compat.url = "github:edolstra/flake-compat";
     flake-compat.flake = false;
@@ -81,39 +123,35 @@
     self,
     flake-parts,
     nixpkgs,
+    nixinate,
     ...
-  } @ inputs:
-  # let
-  #   inherit (nixpkgs-unstable.lib) nixosSystem;
-  #   inherit (home-manager.lib) homeManagerConfiguration;
-  #   supportedSystems = [ "x86_64-linux" ]; # add "i686-linux" "aarch64-linux" back after hls is fixed
-  #   forAllSystems' = systems: f: nixpkgs.lib.genAttrs systems (system: f system);
-  #   forAllSystems = forAllSystems' supportedSystems;
-  #   pkgsForSystem =
-  #     system:
-  #     import nixpkgs
-  #       { system = "x86_64-linux";
-  #         overlays =
-  #           [ inputs.poetry2nix.overlay
-  #           ];
-  #       };
-  # in
-    flake-parts.lib.mkFlake
-    {
-      inherit self;
-      specialArgs = {
-        roots.nixos = ./. + "/nixos";
-        roots.flake = ./.;
-        roots.home-manager = ./. + "/home-manager";
-      };
-    }
-    {
+  }:
+    let
       systems = ["x86_64-linux" "aarch64-linux"];
+      flake =
+        flake-parts.lib.mkFlake
+        {
+          inherit self;
+          specialArgs = {
+            roots.nixos = ./. + "/nixos";
+            roots.flake = ./.;
+            roots.home-manager = ./. + "/home-manager";
+          };
+        }
+        {
+          inherit systems;
 
-      imports = [
-        ./modules
-      ];
-    };
+          imports = [
+            ./modules
+          ];
+        };
+    in
+      flake // {
+        apps = nixpkgs.lib.genAttrs systems (system:
+          (nixinate.nixinate.${system} self)
+          // flake.apps.${system}
+        );
+      };
   #   nixosConfigurations.omen = nixosSystem (import ./systems/omen.nix inputs);
   #   omen = self.nixosConfigurations.omen.config.system.build.toplevel;
 

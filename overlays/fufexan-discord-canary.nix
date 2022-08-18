@@ -8,10 +8,10 @@
     fufexan-dotfiles,
     nixpkgs,
   } @ inputs: final: prev: {
-    fufexan-discord-canary = (import (fufexan-dotfiles + "/pkgs/default.nix") inputs final prev).discord-electron-openasar.override {
-      isWayland = false;
-      inherit (prev.discord-canary) src pname version;
-      binaryName = "DiscordCanary";
-    };
+    # fufexan-discord-canary = (import (fufexan-dotfiles + "/pkgs/default.nix") inputs final prev).discord-electron-openasar.override {
+    #   isWayland = false;
+    #   inherit (prev.discord-canary) src pname version;
+    #   binaryName = "DiscordCanary";
+    # };
   };
 }

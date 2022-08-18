@@ -33,6 +33,12 @@ in {
       ];
       initrd.kernelModules = ["dm-snapshot"];
       kernelModules = ["i2c-dev" "kvm-amd"];
+      kernelParams = [
+        "zfs.zfs_arc_max=8589934592"
+        "nvidia.NVreg_EnablePCIeGen3=1"
+        "nvidia.NVreg_UsePageAttributeTable=1"
+        "nvidia-drm.modeset=1"
+      ];
       extraModulePackages = [];
       kernelPackages = kernel;
     };
@@ -81,80 +87,45 @@ in {
       };
 
       "/mnt/cartman" = {
-        device = "storfa/ds1/cartman";
-        fsType = "zfs";
+        device = "192.168.0.71:/mnt/cartman";
+        fsType = "nfs";
+        options = [ "_netdev" "hard" "async" ];
       };
 
       "/mnt/kyle" = {
-        device = "storfa/ds1/kyle";
-        fsType = "zfs";
+        device = "192.168.0.71:/mnt/kyle";
+        fsType = "nfs";
+        options = [ "_netdev" "hard" "async" ];
+
       };
 
       "/mnt/stan" = {
-        device = "storfa/ds1/stan";
-        fsType = "zfs";
-      };
-
-      "/mnt/net/Magic_RB" = {
+        device = "192.168.0.71:/mnt/stan";
         fsType = "nfs";
-        device = "${secret.network.ips.blowhole.ip}:/var/nfs/Magic_RB";
-        options = [
-          "hard"
-          "async"
-          "tcp"
-          "fsc"
-        ];
+        options = [ "_netdev" "hard" "async" ];
       };
 
-      "/var/cache/fscache" = {
-        device = "heater-zpool/persist/cachefilesd";
-        fsType = "zfs";
-      };
+      # "/mnt/net/Magic_RB" = {
+      #   fsType = "nfs";
+      #   device = "${secret.network.ips.blowhole.ip}:/var/nfs/Magic_RB";
+      #   options = [
+      #     "hard"
+      #     "async"
+      #     "tcp"
+      #     "fsc"
+      #   ];
+      # };
+
+      # "/var/cache/fscache" = {
+      #   device = "heater-zpool/persist/cachefilesd";
+      #   fsType = "zfs";
+      # };
     };
 
-    systemd.services.mnt-kyle-zfs-relmount = {
-      requires = ["mnt-kyle.mount"];
-      after = ["mnt-kyle.mount"];
-
-      path = with pkgs; [zfs utillinux];
-
-      serviceConfig = {
-        RemainAfterExit = true;
-        Type = "oneshot";
-        ExecStart = "${pkgs.zfs-relmount}/bin/zfs-relmount storfa/ds1/kyle /mnt/kyle";
-      };
-    };
-
-    systemd.services.mnt-cartman-zfs-relmount = {
-      requires = ["mnt-cartman.mount"];
-      after = ["mnt-cartman.mount"];
-
-      path = with pkgs; [zfs utillinux];
-
-      serviceConfig = {
-        RemainAfterExit = true;
-        Type = "oneshot";
-        ExecStart = "${pkgs.zfs-relmount}/bin/zfs-relmount storfa/ds1/cartman /mnt/cartman";
-      };
-    };
-
-    systemd.services.mnt-stan-zfs-relmount = {
-      requires = ["mnt-stan.mount"];
-      after = ["mnt-stan.mount"];
-
-      path = with pkgs; [zfs utillinux];
-
-      serviceConfig = {
-        RemainAfterExit = true;
-        Type = "oneshot";
-        ExecStart = "${pkgs.zfs-relmount}/bin/zfs-relmount storfa/ds1/stan /mnt/stan";
-      };
-    };
-
-    services.cachefilesd = {
-      enable = true;
-      cacheDir = "/var/cache/fscache";
-    };
+    # services.cachefilesd = {
+    #   enable = true;
+    #   cacheDir = "/var/cache/fscache";
+    # };
 
     swapDevices = [];
   };

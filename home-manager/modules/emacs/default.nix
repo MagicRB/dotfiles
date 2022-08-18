@@ -51,6 +51,7 @@ in {
                 isync
                 exa
                 fd
+                rnix-lsp
               ]);
           })
         .bundle;

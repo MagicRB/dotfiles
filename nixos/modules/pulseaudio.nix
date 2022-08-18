@@ -16,22 +16,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    sound.enable = true;
-    hardware = {
-      pulseaudio = {
-        enable = true;
-
-        package = mkIf bluetooth-enable pkgs.pulseaudioFull;
-        daemon.config = {
-          default-sample-rate = 96000;
-          default-sample-format = "s32le";
-          resample-method = "speex-float-5";
-          nice-level = -19;
-        };
-      };
-      pulseaudio.support32Bit = true;
+    security.rtkit.enable = true;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = true;
     };
-
-    systemd.user.services.pulseaudio.enable = true;
   };
 }
