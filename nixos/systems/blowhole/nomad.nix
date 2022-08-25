@@ -133,7 +133,7 @@ in
   virtualisation.docker.enable = true;
   virtualisation.docker.daemon.settings = {
     dns = [
-      "10.64.1.1"
+      "10.64.2.1"
     ];
   };
   virtualisation.containerd.enable = true;

@@ -123,10 +123,10 @@ in
         file = ./zones/vault.in.redalder.org.zone;
         master = true;
       };
-      # "hosts.in.redalder.org" = {
-      #   file = ./zones/hosts.in.redalder.org.zone;
-      #   master = true;
-      # };
+      "hosts.in.redalder.org" = {
+        file = ./zones/hosts.in.redalder.org.zone;
+        master = true;
+      };
     };
 
     cacheNetworks = [
@@ -134,6 +134,7 @@ in
       "10.64.2.0/24"
       "10.64.1.0/24"
       "10.64.0.0/24"
+      "172.26.64.0/20"
     ];
     extraConfig = ''
       ${loggingConfig}

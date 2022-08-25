@@ -3,11 +3,11 @@ provider "vault" {
 }
 
 provider "consul" {
-  address = "http://10.64.1.201:8500"
+  address = "http://10.64.2.1:8500"
 }
 
 provider "nomad" {
-  address = "http://10.64.1.201:4646"
+  address = "http://10.64.2.1:4646"
 }
 
 provider "external" {}
@@ -76,7 +76,7 @@ resource "vault_consul_secret_backend" "consul" {
   path        = "consul"
   description = "Manages the Consul backend"
 
-  address = "10.64.1.201:8500"
+  address = "10.64.2.1:8500"
   token = consul_acl_token.vault-management-token.id
 }
 
