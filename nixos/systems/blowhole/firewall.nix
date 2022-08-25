@@ -83,7 +83,13 @@ in
 
     interfaces = {
       # Don't do DHCP on the LAN interface
-      "${lan}".useDHCP = false;
+      "${lan}" = {
+        useDHCP = false;
+        ipv4.addresses = [{
+          address = "10.64.2.1";
+          prefixLength = 24;
+        }];
+      };
       # But do DHCP on the WAN interface
       "${wan}".useDHCP = true;
     };
@@ -127,8 +133,16 @@ in
 
               iifname "nomad" oifname "nomad" accept comment "Allow Nomad to do whatever it wants in its interface"
               iifname { "${lan}", "lo" } accept comment "Allow local network to access the router"
-              iifname { "${wan}", "${doVPN}", "nomad" } jump input_out
+              iifname { "${wan}", "${doVPN}", "nomad", "docker0" } jump input_out
               iifname { "${doVPN}" } jump input_doVPN
+
+              # Allow containers to reach the DNS server
+              iifname { "nomad", "docker0" } tcp dport 53 accept
+              iifname { "nomad", "docker0" } udp dport 53 accept
+
+              # Allow containers to reach the NFS server
+              iifname { "docker0" } tcp dport { 111, 2049, 4000, 4001, 4002, 20048 } accept comment "NFS traffic"
+              iifname { "docker0" } udp dport { 111, 2049, 4000, 4001, 4002, 20048 } accept comment "NFS traffic"
 
               meta nftrace set 1
             }
@@ -144,7 +158,7 @@ in
             }
 
             chain forward {
-              type filter hook forward priority filter; policy drop;
+              type filter hook forward priority 10; policy drop;
 
               # Enable flow offloading for better throughput
               # ip protocol { tcp, udp } flow offload @f
@@ -154,12 +168,33 @@ in
               oifname { "${wan}" } tcp dport 53 drop
               oifname { "${wan}" } udp dport 53 drop
 
-              iifname { "${lan}" } oifname { "${wan}" } accept comment "Allow trusted LAN to WAN"
-              iifname { "${wan}" } oifname { "${lan}" } ct state established, related accept comment "Allow established back to LANs"
+              # Allow trusted LAN to WAN"
+              iifname { "${lan}" } oifname { "${wan}" } accept
+              iifname { "${wan}" } oifname { "${lan}" } ct state established, related accept
+
+
               iifname { "nomad" } oifname { "${doVPN}", "${lan}" } accept
               iifname { "${doVPN}", "${lan}" } oifname { "nomad" } accept
               iifname { "${doVPN}" } oifname { "${lan}" } accept
               iifname { "${lan}" } oifname { "${doVPN}" } accept
+
+              # Allow containers to reach WAN
+              iifname { "nomad" } oifname { "${wan}" } accept
+              iifname { "${wan}" } oifname { "nomad" } ct state established, related accept
+
+              # Allow containers to reach the DNS and NFS server
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip daddr 10.64.2.1 tcp dport { 53 } accept
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip saddr 10.64.2.1 tcp sport { 53 } accept
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip daddr 10.64.2.1 tcp dport { 111, 2049, 4000, 4001, 4002, 20048 } accept
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip saddr 10.64.2.1 tcp sport { 111, 2049, 4000, 4001, 4002, 20048 } accept
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip daddr 10.64.2.1 udp dport { 53 } accept
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip saddr 10.64.2.1 udp sport { 53 } accept
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip daddr 10.64.2.1 udp dport { 111, 2049, 4000, 4001, 4002, 20048 } accept
+              iifname { "nomad", "docker0" } oifname { "${lan}" } ip saddr 10.64.2.1 udp sport { 111, 2049, 4000, 4001, 4002, 20048 } accept
+
+
+              # Rules to make CNI happy
+              meta mark and 0x01 == 0x01 accept
 
               meta nftrace set 1
             }
@@ -204,6 +239,12 @@ in
           cat $tmpfile | iptables-restore
           nft -f "${config.networking.nftables.rulesetFile}"
           rm $tmpfile
+
+          iptables -D FORWARD -j MARK --set-mark 0x01 || true
+          iptables -D FORWARD -j MARK --set-mark 0x00 || true
+
+          iptables -I FORWARD -j MARK --set-mark 0x01
+          iptables -A FORWARD -j MARK --set-mark 0x00
         '';
       in {
         ExecStart = mkForce rulesScript;
@@ -220,6 +261,12 @@ in
 
           cat $tmpfile | iptables-restore
           rm $tmpfile
+
+          iptables -D FORWARD -j MARK --set-mark 0x01 || true
+          iptables -D FORWARD -j MARK --set-mark 0x00 || true
+
+          iptables -I FORWARD -j MARK --set-mark 0x01
+          iptables -A FORWARD -j MARK --set-mark 0x00
         '');
       };
   };
