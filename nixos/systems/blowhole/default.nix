@@ -32,14 +32,14 @@
       magic_rb = {
         grub = {
           enable = true;
-          efi.enable = true;
+          devices = [ "/dev/disk/by-id/ata-Apacer_AS350_128GB_2021020103001990" ];
         };
 
         hardware.blowhole = true;
       };
 
       _module.args.nixinate = {
-        host = "192.168.0.71";
+        host = "10.64.2.1";
         sshUser = "main";
         buildOn = "local";
         substituteOnTarget = true;

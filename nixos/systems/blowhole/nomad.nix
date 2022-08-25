@@ -19,6 +19,7 @@ in
       });
 
     settings = {
+      bind_addr = secret.network.ips.blowhole.ip;
       server = {
         enabled = true;
       };
@@ -55,6 +56,9 @@ in
 
       client = {
         cni_path = "${pkgs.cni-plugins}/bin";
+
+        min_dynamic_port = 20000;
+        max_dynamic_port = 32000;
 
         options = {
           "docker.privileged.enabled" = "true";

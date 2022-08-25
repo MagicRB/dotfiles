@@ -34,10 +34,6 @@ in {
           device = "/dev/disk/by-uuid/738acc32-3e2e-4986-987c-40264153d5bf";
           fsType = "ext4";
         };
-        "/boot/EFI" = {
-          device = "/dev/disk/by-uuid/246F-0E65";
-          fsType = "vfat";
-        };
         "/" = {
           device = "blowhole-zpool/local/root";
           fsType = "zfs";
