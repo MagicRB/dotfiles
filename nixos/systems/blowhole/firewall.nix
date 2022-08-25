@@ -1,9 +1,15 @@
 { pkgs, config, lib, ... }:
 with lib;
 let
-  wan = "enp7s0f1";
   lan = "enp7s0f0";
+  wan = "enp7s0f1";
   doVPN = "do_vpn0";
+
+  nomad = mapAttrs (const toString) {
+    inherit (config.services.hashicorp.nomad.settings.client)
+      min_dynamic_port
+      max_dynamic_port;
+  };
 in
 {
   boot.kernel.sysctl = {
@@ -22,10 +28,56 @@ in
     # "net.ipv6.conf.${name}.autoconf" = 1;
   };
 
+  services.stubby = {
+    enable = true;
+    settings = {
+      resolution_type = "GETDNS_RESOLUTION_STUB";
+      dns_transport_list = [
+        "GETDNS_TRANSPORT_TLS"
+      ];
+      tls_authentication = "GETDNS_AUTHENTICATION_REQUIRED";
+      tls_query_padding_blocksize = 256;
+      edns_client_subnet_private = 1;
+      idle_timeout = 10000;
+      listen_addresses = [
+        "127.0.0.1@5353"
+      ];
+      dnssec_return_status = "GETDNS_EXTENSION_TRUE";
+      appdata_dir = "/var/cache/stubby";
+      round_robin_upstreams = 1;
+      upstream_recursive_servers = [
+        {
+          address_data = "9.9.9.9";
+          tls_auth_name = "dns9.quad9.net";
+          tls_pubkey_pinset = {
+            digest = "sha384";
+            value = "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfYvXHQOFDRglszQcKaEn1KwBJUiKoPHqArnYUSwIaqxyVuz6Paagn0kJVY6s/rlzF1wC+3jMJJGUb0MjiQ4dZg==";
+          };
+        }
+      ];
+    };
+  };
+
+  services.dhcpd4 = {
+    enable = true;
+    interfaces = [ "${lan}" ];
+    extraConfig = ''
+        option domain-name-servers 10.64.2.1;
+        option subnet-mask 255.255.255.0;
+
+        subnet 10.64.2.0 netmask 255.255.255.0 {
+          option broadcast-address 10.64.2.255;
+          option routers 10.64.2.1;
+          interface ${lan};
+          range 10.64.2.128 10.64.2.254;
+        }
+      '';
+  };
+
   networking = {
     useDHCP = false;
     hostName = "blowhole";
-    nameservers =  [ "8.8.8.8" ];
+    nameservers =  [ "10.64.2.1" ];
     # Disable the in-built iptable based firewall
     firewall.enable = mkForce false;
 
@@ -48,45 +100,126 @@ in
 
     nftables = {
       enable = true;
-       ruleset = ''
-        table ip filter {
-          chain input_out {
-            ct state { established, related } accept comment "Allow established traffic"
-            icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
+      ruleset = ''
+          table ip nf_filter {
+            chain input_out {
+              ct state { established, related } accept comment "Allow established traffic"
+              icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
+            }
+
+            chain input_doVPN {
+              tcp dport { 4646, 4647, 4648 } accept comment "Nomad traffic"
+              tcp dport { 8600, 8500, 8502, 8300, 8301, 8302 } accept comment "Consul traffic"
+              tcp dport { 8200 } accept comment "Vault traffic"
+              tcp dport { 111, 2049, 4000, 4001, 4002, 20048 } accept comment "NFS traffic"
+              tcp dport ${nomad.min_dynamic_port}-${nomad.max_dynamic_port} accept comment "Consul Connect sidecar traffic"
+
+              udp dport { 8600, 8301, 8302 } comment "Consul traffic"
+              udp dport { 111, 2049, 4000, 4001, 4002, 20048 } accept comment "NFS traffic"
+              udp dport ${nomad.min_dynamic_port}-${nomad.max_dynamic_port} accept comment "Consul Connect sidecar traffic"
+            }
+
+            chain input {
+              type filter hook input priority 0; policy drop;
+
+              tcp dport 22 accept comment "Accept SSH traffic always"
+              iifname != "lo" tcp dport 5353 drop comment "Drop traffic to stubby always except for localhost to localhost traffic"
+
+              iifname "nomad" oifname "nomad" accept comment "Allow Nomad to do whatever it wants in its interface"
+              iifname { "${lan}", "lo" } accept comment "Allow local network to access the router"
+              iifname { "${wan}", "${doVPN}", "nomad" } jump input_out
+              iifname { "${doVPN}" } jump input_doVPN
+
+              meta nftrace set 1
+            }
+
+            chain output {
+              type filter hook input priority 0; policy accept;
+
+              # Drop all DNS traffic if leaving through "wan"
+              oifname { "${wan}" } tcp dport 53 drop
+              oifname { "${wan}" } udp dport 53 drop
+              # Allow DoT traffic to leave through "wan" if it comes from "lo"
+              iifname != { "lo" } oifname { "${wan}" } tcp dport 853 drop
+            }
+
+            chain forward {
+              type filter hook forward priority filter; policy accept;
+
+              # Enable flow offloading for better throughput
+              # ip protocol { tcp, udp } flow offload @f
+
+              # Drop all DNS or DoT traffic if forwarded through "wan"
+              oifname { "${wan}" } tcp dport 853 drop
+              oifname { "${wan}" } tcp dport 53 drop
+              oifname { "${wan}" } udp dport 53 drop
+
+              iifname { "${lan}" } oifname { "${wan}" } accept comment "Allow trusted LAN to WAN"
+              iifname { "${wan}" } oifname { "${lan}" } ct state established, related accept comment "Allow established back to LANs"
+              iifname { "nomad" } oifname { "${doVPN}", "${lan}" } accept
+              iifname { "${doVPN}", "${lan}" } oifname { "nomad" } accept
+
+              meta nftrace set 1
+            }
           }
 
-          chain input {
-            type filter hook input priority 0; policy drop;
+          table ip nf_nat {
+            chain postrouting {
+              type nat hook postrouting priority 100; policy accept;
+              oifname "${wan}" masquerade
+            }
 
-            tcp dport 22 accept comment "Accept SSH traffic always"
-
-            iifname { "${lan}" } accept comment "Allow local network to access the router"
-            iifname { "${wan}", "${doVPN}" } jump input_out
+            chain prerouting {
+              type nat hook prerouting priority 100; policy accept;
+            }
           }
 
-          chain forward {
-            type filter hook forward priority filter; policy drop;
-            iifname { "${lan}" } oifname { "${wan}" } accept comment "Allow trusted LAN to WAN"
-            iifname { "${wan}" } oifname { "${lan}" } ct state established, related accept comment "Allow established back to LANs"
+          table ip6 nf_filter {
+            chain input {
+              type filter hook input priority 0; policy drop;
+            }
+            chain forward {
+              type filter hook forward priority 0; policy drop;
+            }
           }
-        }
-
-        table ip nat {
-          chain postrouting {
-            type nat hook postrouting priority 100; policy accept;
-            oifname "${wan}" masquerade
-          }
-        }
-
-        table ip6 filter {
-          chain input {
-            type filter hook input priority 0; policy drop;
-          }
-          chain forward {
-            type filter hook forward priority 0; policy drop;
-          }
-        }
-      '';
+        '';
     };
   };
+
+  systemd.services.nftables = {
+    serviceConfig =
+      let
+        rulesScript = pkgs.writeShellScript "nftables-rules" ''
+          set -ex
+          export PATH=${pkgs.nftables}/bin:${pkgs.iptables}/bin:${pkgs.bash}/bin:$PATH
+
+          tmpfile="$(mktemp)"
+          iptables-save -t filter >> $tmpfile
+          iptables-save -t nat >> $tmpfile
+
+          nft flush ruleset
+
+          cat $tmpfile | iptables-restore
+          nft -f "${config.networking.nftables.rulesetFile}"
+          rm $tmpfile
+        '';
+      in {
+        ExecStart = mkForce rulesScript;
+        ExecReload = mkForce rulesScript;
+        ExecStop = mkForce (pkgs.writeShellScript "nftables-flush" ''
+          set -ex
+          export PATH=${pkgs.nftables}/bin:${pkgs.iptables}/bin:${pkgs.bash}/bin:$PATH
+
+          tmpfile="$(mktemp)"
+          iptables-save -t filter >> $tmpfile
+          iptables-save -t nat >> $tmpfile
+
+          nft flush ruleset
+
+          cat $tmpfile | iptables-restore
+          rm $tmpfile
+        '');
+      };
+  };
 }
+
