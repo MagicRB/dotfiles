@@ -31,6 +31,7 @@ in {
         "intel_pstate=active"
         "nvidia.NVreg_EnablePCIeGen3=1"
         "nvidia.NVreg_UsePageAttributeTable=1"
+        "nvidia-drm.modeset=1"
       ];
       kernelPackages = pkgs.zfsUnstable.latestCompatibleLinuxPackages;
       zfs.enableUnstable = true;
