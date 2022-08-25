@@ -144,7 +144,7 @@ in
             }
 
             chain forward {
-              type filter hook forward priority filter; policy accept;
+              type filter hook forward priority filter; policy drop;
 
               # Enable flow offloading for better throughput
               # ip protocol { tcp, udp } flow offload @f
@@ -158,6 +158,8 @@ in
               iifname { "${wan}" } oifname { "${lan}" } ct state established, related accept comment "Allow established back to LANs"
               iifname { "nomad" } oifname { "${doVPN}", "${lan}" } accept
               iifname { "${doVPN}", "${lan}" } oifname { "nomad" } accept
+              iifname { "${doVPN}" } oifname { "${lan}" } accept
+              iifname { "${lan}" } oifname { "${doVPN}" } accept
 
               meta nftrace set 1
             }
