@@ -179,8 +179,8 @@ in
               iifname { "${lan}" } oifname { "${doVPN}" } accept
 
               # Allow containers to reach WAN
-              iifname { "nomad" } oifname { "${wan}" } accept
-              iifname { "${wan}" } oifname { "nomad" } ct state established, related accept
+              iifname { "nomad", "docker0" } oifname { "${wan}" } accept
+              iifname { "${wan}" } oifname { "nomad", "docker0" } ct state established, related accept
 
               # Allow containers to reach the DNS and NFS server
               iifname { "nomad", "docker0" } oifname { "${lan}" } ip daddr 10.64.2.1 tcp dport { 53 } accept
