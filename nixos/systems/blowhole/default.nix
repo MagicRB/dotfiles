@@ -23,6 +23,7 @@
         ./vault-agent.nix
         ./nas.nix
         ./firewall.nix
+        ./ical2org.nix
       ];
 
       home-manager.users."main" = {...}: {

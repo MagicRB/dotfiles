@@ -107,7 +107,7 @@ Now for the second last function, we need to actually return the list of files c
         :from tags
         :left-join nodes
         :on (= tags:node-id nodes:id)
-        :where (like tag (quote "%\"project\"%"))]))))
+        :where (or (like tag '"%project%") (like tag '"%project-forced%"))]))))
 #+END_SRC
 
 Finally we can update the list of project files before every =org-agenda= invocation.

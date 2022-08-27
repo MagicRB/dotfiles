@@ -31,6 +31,7 @@ with lib; {
               ./password-hashes.nix
               ./mounts.nix
               ./emacs.nix
+              ./ical2org.nix
               ({...}: {_module.args.pkgs = pkgs;})
             ]
             ++ (
