@@ -19,11 +19,14 @@
       ];
 
       _module.args.nixinate = {
-        host = "10.64.1.203";
+        host = "10.64.2.129";
         sshUser = "main";
         buildOn = "local";
         substituteOnTarget = true;
         hermetic = false;
+        nixOptions = [
+          "--override-input secret path://$HOME/dotfiles/secret"
+        ];
       };
 
       nixpkgs.config.allowUnfree = true;

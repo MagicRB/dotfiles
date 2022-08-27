@@ -478,11 +478,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1654871893,
-        "narHash": "sha256-a1e49vvdEapkG9tbC0WLEemLGXbMR6hEBeW22aGwueQ=",
+        "lastModified": 1661626515,
+        "narHash": "sha256-8fKOVsNo5ttumGBHr5waoxkB35E30H89FsG9FLD2Xq4=",
         "owner": "MagicRB",
         "repo": "nixinate",
-        "rev": "b5683029f90759425ee919afa359e618f57f127b",
+        "rev": "24cdd335eea41b9e880a175314b8d94e9fdff011",
         "type": "github"
       },
       "original": {

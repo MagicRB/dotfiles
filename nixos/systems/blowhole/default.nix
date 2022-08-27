@@ -45,6 +45,9 @@
         buildOn = "local";
         substituteOnTarget = true;
         hermetic = false;
+        nixOptions = [
+          "--override-input secret path://$HOME/dotfiles/secret"
+        ];
       };
 
       services.nfs.server = {
