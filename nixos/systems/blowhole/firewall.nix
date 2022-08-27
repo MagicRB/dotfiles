@@ -77,7 +77,10 @@ in
   networking = {
     useDHCP = false;
     hostName = "blowhole";
+
+    resolvconf.useLocalResolver = false;
     nameservers =  [ "10.64.2.1" ];
+
     # Disable the in-built iptable based firewall
     firewall.enable = mkForce false;
 
