@@ -55,11 +55,44 @@
         lockdPort = 4001;
         mountdPort = 4002;
         statdPort = 4000;
+        exports = ''
+          /var/nfs/jellyfin/cache             172.17.0.0/24(rw,subtree_check,async,no_root_squash,crossmnt)
+          /var/nfs/jellyfin/config            172.17.0.0/24(rw,subtree_check,async,no_root_squash,crossmnt)
+          /var/nfs/jellyfin/media             172.17.0.0/24(rw,subtree_check,async,no_root_squash,crossmnt)
+
+          /var/nfs/gitea-data                 172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/gitea-db                   172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+
+          /var/nfs/hydra-data                 172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/hydra-nix                  172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/hydra-db                   172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+
+          /var/nfs/minecraft/atm6             172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+
+          /var/nfs/ingress-letsencrypt        10.64.0.1(rw,subtree_check,async,no_root_squash)
+
+          /var/nfs/Magic_RB                   10.64.2.129(rw,subtree_check,async)
+          /mnt/cartman                        10.64.2.129(rw,subtree_check,async,crossmnt)
+          /mnt/kyle                           10.64.2.129(rw,subtree_check,async,crossmnt)
+          /mnt/stan                           10.64.2.129(rw,subtree_check,async,crossmnt)
+
+          /var/nfs/home-assistant_hass        172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/home-assistant_mosquitto   172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/home-assistant_zigbee2mqtt 172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+
+          /var/nfs/syncthing/data             172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/syncthing/config           172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/syncthing/storage          172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+
+          /var/nfs/dovecot/maildir            172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/getmail/getmail.d          172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+
+          /var/nfs/baikal/specific            172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+          /var/nfs/baikal/config              172.17.0.0/24(rw,subtree_check,async,no_root_squash)
+        '';
       };
 
       # systemd.tmpfiles.rules = singleton "d /run/cfg/vault 0750 vault vault 1d";
-
-      environment.etc.exports.enable = false;
 
       networking = {
         hostName = "blowhole";
