@@ -69,6 +69,11 @@ in {
         fsType = "zfs";
       };
 
+      "/var/lib/syncthing" = {
+        device = "heater-zpool/persist/syncthing";
+        fsType = "zfs";
+      };
+
       "/etc/vault-agent" =
         mkIf config.services.vault-agent.enable
         {
@@ -87,45 +92,24 @@ in {
       };
 
       "/mnt/cartman" = {
-        device = "192.168.0.71:/mnt/cartman";
+        device = "10.64.2.1:/mnt/cartman";
         fsType = "nfs";
         options = [ "_netdev" "hard" "async" ];
       };
 
       "/mnt/kyle" = {
-        device = "192.168.0.71:/mnt/kyle";
+        device = "10.64.2.1:/mnt/kyle";
         fsType = "nfs";
         options = [ "_netdev" "hard" "async" ];
 
       };
 
       "/mnt/stan" = {
-        device = "192.168.0.71:/mnt/stan";
+        device = "10.64.2.1:/mnt/stan";
         fsType = "nfs";
         options = [ "_netdev" "hard" "async" ];
       };
-
-      # "/mnt/net/Magic_RB" = {
-      #   fsType = "nfs";
-      #   device = "${secret.network.ips.blowhole.ip}:/var/nfs/Magic_RB";
-      #   options = [
-      #     "hard"
-      #     "async"
-      #     "tcp"
-      #     "fsc"
-      #   ];
-      # };
-
-      # "/var/cache/fscache" = {
-      #   device = "heater-zpool/persist/cachefilesd";
-      #   fsType = "zfs";
-      # };
     };
-
-    # services.cachefilesd = {
-    #   enable = true;
-    #   cacheDir = "/var/cache/fscache";
-    # };
 
     swapDevices = [];
   };

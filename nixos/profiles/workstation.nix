@@ -59,6 +59,12 @@ with lib; {
     };
   };
 
+  services.syncthing = {
+    enable = true;
+    user = "main";
+    group = "main";
+  };
+
   nixpkgs.config.allowUnfree = true;
   services.sshd.enable = true;
 
