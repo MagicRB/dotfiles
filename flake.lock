@@ -775,11 +775,11 @@
     "secret": {
       "flake": false,
       "locked": {
-        "lastModified": 1661202053,
-        "narHash": "sha256-lElKuG+zgjHHiz8ATRFutf8bsVmV5dFE1iCb5JvgSG8=",
+        "lastModified": 1661458161,
+        "narHash": "sha256-FsnHsjd7J1GMZIJZ2xNUeS1QXr7+fOLXAP2g2+sQQPs=",
         "ref": "refs/heads/master",
-        "rev": "27fb30c05de14f268d657a21aedd9b053d41e11f",
-        "revCount": 15,
+        "rev": "36790fbf7b4fb19860b2f7e3b28dc41512f601d8",
+        "revCount": 18,
         "type": "git",
         "url": "ssh://git@github.com/MagicRB/dotfiles-secret"
       },
