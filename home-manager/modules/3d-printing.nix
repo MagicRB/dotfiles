@@ -27,5 +27,13 @@ in {
 #       prusa-slicer
       freecad
     ];
+
+    home.file.".local/share/OpenSCAD/libraries/BOSL2".source =
+      pkgs.fetchFromGitHub {
+        owner = "revarbat";
+        repo = "BOSL2";
+        rev = "85e6dcd4835d019c8b582c03cf6e41bf83199cd1";
+        sha256 = "sha256-fuOBp8231ODF4mRzilBfb/JePG+8ANdxkiHbA6a4wts=";
+      };
   };
 }
