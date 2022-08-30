@@ -100,7 +100,7 @@
   (verse "#+begin_verse" n> r> n> "#+end_verse")
   (src "#+begin_src " p n> r> n> "#+end_src")
   (elisp "#+begin_src emacs-lisp" n> r> n "#+end_src"
-         :post (progn (tempel-done) (org-edit-src-code)))
+         :post (progn (org-edit-src-code)))
 #+END_SRC
 
 #+begin_example

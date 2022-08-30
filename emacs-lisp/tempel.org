@@ -95,21 +95,15 @@ To setup a post template return point, use ~(p (ignore (setq tempel-retpoint (po
 To allow for ~=>~ as template keys, ~'symbol~ won't work, but ~'evil-word~ will.
 
 #+begin_src emacs-lisp
-  (defun tempel-expand (&optional interactive)
-    "Expand exactly matching template name at point.
-  If INTERACTIVE is nil the function acts like a capf."
-    (interactive (list t))
-    (if interactive
-        (tempel--interactive #'tempel-expand)
-      (when-let* ((templates (tempel--templates))
-                  (bounds (bounds-of-thing-at-point 'word))
-                  (name (buffer-substring-no-properties
-                         (car bounds) (cdr bounds)))
-                  (sym (intern-soft name))
-                  (template (assq sym templates)))
-        (setq templates (list template))
-        (list (car bounds) (cdr bounds)
-              (tempel--completion-table templates)
-              :exclusive 'no
-              :exit-function (apply-partially #'tempel--exit templates nil)))))
+  (defun tempel--prefix-bounds ()
+  "Return prefix bounds."
+  (if tempel-trigger-prefix
+      (let ((end (point))
+            (beg (save-excursion
+                   (search-backward tempel-trigger-prefix
+                                    (line-beginning-position) 'noerror))))
+        (when (and beg (save-excursion
+                         (not (re-search-backward "\\s-" beg 'noerror))))
+          (cons (+ beg (length tempel-trigger-prefix)) end)))
+    (bounds-of-thing-at-point 'word)))
 #+end_src

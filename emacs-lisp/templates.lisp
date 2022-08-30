@@ -1,7 +1,3 @@
-; SPDX-FileCopyrightText: 2022 Richard Brežák <richard@brezak.sk>
-;
-; SPDX-License-Identifier: LGPL-3.0-or-later
-
 fundamental-mode ;; Available everywhere
 
 (today (format-time-string "%Y-%m-%d"))
@@ -75,7 +71,7 @@ org-mode
 (verse "#+begin_verse" n> r> n> "#+end_verse")
 (src "#+begin_src " p n> r> n> "#+end_src")
 (elisp "#+begin_src emacs-lisp" n> r> n "#+end_src"
-       :post (progn (tempel-done) (org-edit-src-code)))
+       :post (progn (org-edit-src-code)))
 
 haskell-mode
 
